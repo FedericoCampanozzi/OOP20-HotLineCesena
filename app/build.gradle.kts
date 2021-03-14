@@ -6,35 +6,60 @@
  * User Manual available at https://docs.gradle.org/6.8.3/userguide/building_java_projects.html
  */
 
+final var SEP = File.separator
+
+final var javaFxVersion = "15.0.1"
+final var fxmodules = listOf("base", "controls", "fxml", "media", "graphics")
+final var platforms = listOf("win", "linux", "mac")
+
 plugins {
+	java
     application
     eclipse
+    id("org.openjfx.javafxplugin") version "0.0.9" // https://github.com/openjfx/javafx-gradle-plugin
+    id("com.github.spotbugs") version "4.7.0"
+    checkstyle
 }
 
 repositories {
     jcenter()
     mavenCentral()
-    
-    // jMonkeyEngine artifacts on Bintray
-    maven {
-        url = uri("https://dl.bintray.com/jmonkeyengine/org.jmonkeyengine")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
     }
 }
 
+spotbugs {
+    excludeFilter.set(project.file("..${SEP}config${SEP}spotbugs${SEP}excludes.xml"))
+}
+
+javafx {
+	version = javaFxVersion
+    modules("javafx.controls", "javafx.fxml", "javafx.media")
+}
+
 dependencies {
-    // Use JUnit Jupiter API for testing.
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
-
-    // Use JUnit Jupiter Engine for testing.
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
-
+	// Google Guava
     implementation("com.google.guava:guava:29.0-jre")
-    
-    // jMonkeyEngine artifacts
-    compileOnly("org.jmonkeyengine:jme3-core:3.3.2-stable")
-	runtimeOnly("org.jmonkeyengine:jme3-desktop:3.3.2-stable")
-	runtimeOnly("org.jmonkeyengine:jme3-lwjgl:3.3.2-stable")
-	runtimeOnly("org.jmonkeyengine:jme3-niftygui:3.3.2-stable")
+
+	// Cross-platform JavaFX modules
+    for (mod in fxmodules) {
+        for (plat in platforms) {
+            implementation("org.openjfx:javafx-${mod}:${javaFxVersion}:${plat}")
+        }
+    }
+
+    // JUnit Jupiter
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    // TestFX for JavaFX testing
+    testImplementation("org.testfx:testfx-core:4.0.16-alpha")
+    testImplementation("org.testfx:testfx-junit5:4.0.16-alpha")
+    // Hamcrest
+    testImplementation("org.hamcrest:hamcrest:2.2")
 
 }
 
