@@ -45,6 +45,10 @@ dependencies {
 	// Google Guava
     implementation("com.google.guava:guava:29.0-jre")
 
+    // Apache Commons
+    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation("org.apache.commons:commons-io:1.3.2")
+
 	// Cross-platform JavaFX modules
     for (mod in fxmodules) {
         for (plat in platforms) {
@@ -64,7 +68,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("hotlinecesena.App")
+    mainClass.set("hotlinecesena.controller.GameController")
 }
 
 tasks.test {
