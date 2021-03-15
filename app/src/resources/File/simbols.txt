@@ -1,0 +1,8 @@
+#simbolo;risorsa grafica
+W;wall_real.png
+ ;floor_real.png
+P;player.png
+E;enemy.png
+R;floor.png
+T;table.png
+C;chair.png
