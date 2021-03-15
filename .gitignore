@@ -29,5 +29,10 @@ hs_err_pid*
 build
 
 bin
+app/bin
 .classpath
 .eclipse-pmd
+./.settings
+org.eclipse.core.resources.prefs
+org.eclipse.core.runtime.prefs
+org.eclipse.jdt.core.prefs
