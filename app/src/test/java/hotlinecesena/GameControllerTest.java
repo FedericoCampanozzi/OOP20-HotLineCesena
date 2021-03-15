@@ -4,12 +4,15 @@
 package hotlinecesena;
 
 import org.junit.jupiter.api.Test;
+
+import hotlinecesena.controller.GameController;
+
 import static org.junit.jupiter.api.Assertions.*;
 
-class AppTest {
+class GameControllerTest {
     @Test
     void appHasAGreeting() {
-        App classUnderTest = new App();
+        GameController classUnderTest = new GameController();
         assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
     }
 }
