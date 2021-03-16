@@ -4,30 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import hotlinecesena.model.entities.State;
 import hotlinecesena.model.entities.components.Component;
-import hotlinecesena.model.entities.components.MovementComponent;
-import hotlinecesena.util.Point2D;
 
 public abstract class AbstractActor implements Actor {
 
     private final Map<Class<?>, Component> components = new HashMap<>();
-    private State state = ActorStateList.IDLE;
-
-    @Override
-    public Point2D<Double, Double> getPosition() {
-        return this.getComponent(MovementComponent.class).getPosition();
-    }
-
-    @Override
-    public State getState() {
-        return this.state;
-    }
-
-    @Override
-    public void setState(final State s) {
-        this.state = s;
-    }
 
     @Override
     public <C extends Component> C getComponent(final Class<C> compInterface) {
