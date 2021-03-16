@@ -8,4 +8,8 @@ public interface MovementComponent extends Component {
 
     void rotate(Point2D<Double, Double> v);
 
+    Point2D<Double, Double> getPosition();
+
+    Point2D<Double, Double> getFacingAngle();
+
 }
