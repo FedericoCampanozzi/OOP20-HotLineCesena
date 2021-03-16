@@ -1,5 +1,7 @@
 package hotlinecesena.model.entities.actors;
 
+import java.util.NoSuchElementException;
+
 import hotlinecesena.model.entities.GameEntity;
 import hotlinecesena.model.entities.components.Component;
 
@@ -22,7 +24,7 @@ public interface Actor extends GameEntity {
      * @param <C>
      * @param component {@link Component} to be added.
      * @throws IllegalStateException if this actor already contains a component
-     * implementing either the same interface or a superinterface.
+     * implementing an interface which directly extends Component.
      * For example, suppose we have an actor that possesses a component implementing CombatComponent.
      * We now wish to add a component implementing the AdvancedCombatComponent interface, which in turn
      * extends the aforementioned CombatComponent interface. Since a CombatComponent is already attached
@@ -37,5 +39,5 @@ public interface Actor extends GameEntity {
      * @return the component matching the interface passed as input.
      * @throws NoSuchElementException if no component implementing {@code compInterface} is found.
      */
-    <C extends Component> C getComponent(Class<C> compInterface);
+    <C extends Component> C getComponent(Class<C> compInterface) throws NoSuchElementException;
 }
