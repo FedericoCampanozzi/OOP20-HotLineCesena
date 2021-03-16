@@ -2,7 +2,6 @@ package hotlinecesena.model.entities.actors;
 
 import java.util.NoSuchElementException;
 
-import hotlinecesena.model.entities.GameEntity;
 import hotlinecesena.model.entities.components.Component;
 
 /**
@@ -14,7 +13,7 @@ import hotlinecesena.model.entities.components.Component;
  * </p>
  */
 
-public interface Actor extends GameEntity {
+public interface Actor {
 
     /**
      * <p>
