@@ -17,8 +17,6 @@ plugins {
     application
     eclipse
     id("org.openjfx.javafxplugin") version "0.0.9" // https://github.com/openjfx/javafx-gradle-plugin
-    id("com.github.spotbugs") version "4.7.0"
-    checkstyle
 }
 
 repositories {
@@ -30,10 +28,6 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(11))
     }
-}
-
-spotbugs {
-    excludeFilter.set(project.file("..${SEP}config${SEP}spotbugs${SEP}excludes.xml"))
 }
 
 javafx {
@@ -55,6 +49,9 @@ dependencies {
             implementation("org.openjfx:javafx-${mod}:${javaFxVersion}:${plat}")
         }
     }
+    
+    // Ashley framework
+    implementation("com.badlogicgames.ashley:ashley:1.7.3")
 
     // JUnit Jupiter
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
