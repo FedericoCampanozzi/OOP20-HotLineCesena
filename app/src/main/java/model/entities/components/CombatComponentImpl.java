@@ -1,4 +1,4 @@
-package hotlinecesena.model.entities.components;
+package model.entities.components;
 
 public class CombatComponentImpl extends AbstractComponent implements CombatComponent {
 

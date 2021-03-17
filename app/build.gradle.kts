@@ -68,7 +68,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("hotlinecesena.controller.GameController")
+    mainClass.set("application.Main")
 }
 
 tasks.test {

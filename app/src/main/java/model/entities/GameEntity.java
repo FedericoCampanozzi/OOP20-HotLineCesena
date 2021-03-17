@@ -1,6 +1,6 @@
-package hotlinecesena.model.entities;
+package model.entities;
 
-import hotlinecesena.util.Point2D;
+import util.Point2D;
 
 public interface GameEntity {
 

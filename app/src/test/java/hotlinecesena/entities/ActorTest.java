@@ -7,11 +7,11 @@ import java.util.NoSuchElementException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import hotlinecesena.model.entities.actors.AbstractActor;
-import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.components.CombatComponent;
-import hotlinecesena.model.entities.components.CombatComponentImpl;
-import hotlinecesena.model.entities.components.MovementComponent;
+import model.entities.actors.AbstractActor;
+import model.entities.actors.Actor;
+import model.entities.components.CombatComponent;
+import model.entities.components.CombatComponentImpl;
+import model.entities.components.MovementComponent;
 
 class ActorTest {
 
