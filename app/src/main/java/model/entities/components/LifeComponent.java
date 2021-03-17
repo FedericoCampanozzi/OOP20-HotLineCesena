@@ -1,4 +1,4 @@
-package hotlinecesena.model.entities.components;
+package model.entities.components;
 
 public interface LifeComponent extends Component {
 
