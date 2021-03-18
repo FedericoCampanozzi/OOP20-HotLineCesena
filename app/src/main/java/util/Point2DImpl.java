@@ -1,4 +1,4 @@
-package hotlinecesena.util;
+package util;
 
 import org.apache.commons.lang3.tuple.Pair;
 

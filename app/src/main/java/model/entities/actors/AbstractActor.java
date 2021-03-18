@@ -1,10 +1,10 @@
-package hotlinecesena.model.entities.actors;
+package model.entities.actors;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import hotlinecesena.model.entities.components.Component;
+import model.entities.components.Component;
 
 public abstract class AbstractActor implements Actor {
 

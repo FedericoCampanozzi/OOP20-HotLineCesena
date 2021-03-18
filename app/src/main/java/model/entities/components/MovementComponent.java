@@ -1,6 +1,6 @@
-package hotlinecesena.model.entities.components;
+package model.entities.components;
 
-import hotlinecesena.util.Point2D;
+import util.Point2D;
 
 public interface MovementComponent extends Component {
 
