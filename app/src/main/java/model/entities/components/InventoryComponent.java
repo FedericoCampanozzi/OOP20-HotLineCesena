@@ -1,10 +1,10 @@
-package hotlinecesena.model.entities.components;
+package model.entities.components;
 
 import java.util.List;
 import java.util.Optional;
 
-import hotlinecesena.model.entities.items.Item;
-import hotlinecesena.model.entities.items.Weapon;
+import model.entities.items.Item;
+import model.entities.items.Weapon;
 
 public interface InventoryComponent extends Component {
 
