@@ -2,7 +2,7 @@ package hotlinecesena.controller;
 
 import java.io.IOException;
 
-import model.DALImpl;
+import hotlinecesena.model.DALImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 

@@ -1,4 +1,4 @@
-package model;
+package hotlinecesena.model;
 
 import java.util.Arrays;
 import java.util.HashMap;

@@ -1,8 +1,8 @@
-package model.entities.actors;
+package hotlinecesena.model.entities.actors;
 
 import java.util.NoSuchElementException;
 
-import model.entities.components.Component;
+import hotlinecesena.model.entities.components.Component;
 
 /**
  * <p>

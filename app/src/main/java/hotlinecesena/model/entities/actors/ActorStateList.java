@@ -1,6 +1,6 @@
-package model.entities.actors;
+package hotlinecesena.model.entities.actors;
 
-import model.entities.State;
+import hotlinecesena.model.entities.State;
 
 /**
  * 
