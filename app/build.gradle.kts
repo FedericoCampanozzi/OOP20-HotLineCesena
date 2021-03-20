@@ -49,9 +49,6 @@ dependencies {
             implementation("org.openjfx:javafx-${mod}:${javaFxVersion}:${plat}")
         }
     }
-    
-    // Ashley framework
-    implementation("com.badlogicgames.ashley:ashley:1.7.3")
 
     // JUnit Jupiter
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
