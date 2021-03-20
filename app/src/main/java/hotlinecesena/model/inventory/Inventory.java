@@ -18,11 +18,9 @@ public interface Inventory {
     
     Optional<Weapon> getEquippedWeapon();
     
-    void reloadWeapon();
-
-    void removeItem(int index, int quantity);
+    void setEquippedWeapon(int index);
     
-    void removeWeapon(int index);
+    void reloadWeapon();
 
     void dropItem(int index);
 
