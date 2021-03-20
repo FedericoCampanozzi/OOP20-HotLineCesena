@@ -1,42 +1,28 @@
 package hotlinecesena.model.entities.actors;
 
-import java.util.NoSuchElementException;
+import hotlinecesena.model.entities.Entity;
+import hotlinecesena.model.inventory.Inventory;
+import javafx.geometry.Point2D;
 
-import hotlinecesena.model.entities.components.Component;
+public interface Actor extends Entity {
 
-/**
- * <p>
- * Heavily inspired by https://github.com/divotkey/ecs
- * </p>
- * <p>
- * Represents a container of {@link Component}s.
- * </p>
- */
+    void move(Point2D direction, Point2D velocity);
 
-public interface Actor {
+    void rotate(double angle);
+    
+    void attack();
+    
+    void reload();
 
-    /**
-     * <p>
-     * Adds a {@link Component} to this actor.
-     * </p>
-     * 
-     * @param <C>
-     * @param component {@link Component} to be added.
-     * @throws IllegalStateException if this actor already contains a component
-     * implementing an interface which directly extends Component.
-     * For example, suppose we have an actor that possesses a component implementing CombatComponent.
-     * We now wish to add a component implementing the AdvancedCombatComponent interface, which in turn
-     * extends the aforementioned CombatComponent interface. Since a CombatComponent is already attached
-     * to our actor, this method will fail, throwing an exception.
-     */
-    <C extends Component> void addComponent(C component) throws IllegalStateException;
+    double getAngle();
 
-    /**
-     * 
-     * @param <C>
-     * @param compInterface .class object of the interface implemented by the desired component.
-     * @return the component matching the interface passed as input.
-     * @throws NoSuchElementException if no component implementing {@code compInterface} is found.
-     */
-    <C extends Component> C getComponent(Class<C> compInterface) throws NoSuchElementException;
+    void takeDamage(double damage);
+    
+    double getCurrentHealth();
+    
+    Inventory getInventory();
+
+    ActorState getState();
+    
+    void setState(ActorState s);
 }

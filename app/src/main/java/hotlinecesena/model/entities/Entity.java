@@ -5,5 +5,7 @@ import javafx.geometry.Point2D;
 public interface Entity {
     
     Point2D getPosition();
+    
+    void setPosition(Point2D pos);
 
 }
