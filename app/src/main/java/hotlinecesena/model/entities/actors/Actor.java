@@ -11,9 +11,9 @@ import hotlinecesena.model.inventory.Inventory;
 public interface Actor extends Entity {
 
     /**
-     * Makes this actor move to a certain direction at a specified speed.
+     * Makes this actor move in a certain direction at a specified speed.
      * 
-     * @param direction the direction the actor will move to.
+     * @param direction the direction the actor will move in.
      * @param speed the speed at which the actor will move.
      */
     void move(Direction direction, double speed);
