@@ -16,6 +16,7 @@ public class GameController extends Application {
     
 	public static void main(String[] args) throws IOException {
 		DALImpl.getInstance();
+		launch(args);
 	}
 
 	@Override
