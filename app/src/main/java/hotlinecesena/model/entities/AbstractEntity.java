@@ -2,6 +2,10 @@ package hotlinecesena.model.entities;
 
 import javafx.geometry.Point2D;
 
+/**
+ * 
+ * Template for generic entities.
+ */
 public abstract class AbstractEntity implements Entity {
     
     private Point2D position;
@@ -15,8 +19,11 @@ public abstract class AbstractEntity implements Entity {
         return this.position;
     }
     
-    @Override
-    public void setPosition(final Point2D pos) {
+    /**
+     * 
+     * @param pos
+     */
+    protected void setPosition(final Point2D pos) {
         this.position = pos;
     }
 
