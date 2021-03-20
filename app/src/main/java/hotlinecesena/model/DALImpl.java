@@ -1,6 +1,7 @@
 package hotlinecesena.model;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,10 @@ import static java.util.stream.Collectors.*;
 
 public class DALImpl {
 
+	// List<Enemy>
+	// Player
+	// Mission
+	
 	private static DALImpl singleton = null;
 
 	private final Map<Character, String> simbols;
@@ -34,9 +39,10 @@ public class DALImpl {
 	}
 
 	public static DALImpl getInstance() throws IOException {
-		if (singleton == null)
+		if (singleton == null) {
 			singleton = new DALImpl();
-
+		}
+		
 		return singleton;
 	}
 
@@ -45,7 +51,7 @@ public class DALImpl {
 
 		String[] splitted;
 		final Map<Key, Value> map = new HashMap<Key, Value>();
-		final List<String> cnt = FileUtils.readLines(new File(filePath), "UTF-8");
+		final List<String> cnt = FileUtils.readLines(new File(filePath));
 		for (String line : cnt) {
 			System.out.println(line);
 			if (line.charAt(0) == '#')
@@ -57,6 +63,13 @@ public class DALImpl {
 		return map;
 	}
 
+	
+	public Map<String, Pair<Integer, Integer>> getRanking(){
+		return this.ranking;
+	}
+	public Map<String, List<String>> getAllMessage(){
+		return this.messages;
+	}
 	// this method will be removed when implements map_generator
 	private void readGameMap() throws IOException {
 
@@ -64,7 +77,7 @@ public class DALImpl {
 		int iCar = 0;
 
 		System.out.println("\nREAD map.md");
-		List<String> cnt = FileUtils.readLines(new File(resFileFolder + File.separator + "map.txt"), "UTF-8");
+		Collection<String> cnt = FileUtils.readLines(new File(resFileFolder + File.separator + "map.txt"), "UTF-8");
 		for (String line : cnt) {
 			System.out.println(line);
 			if (line.charAt(0) == '#')
