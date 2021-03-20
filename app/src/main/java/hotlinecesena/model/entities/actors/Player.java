@@ -10,6 +10,8 @@ public interface Player extends Actor {
     void pickUpWeapon(Weapon w, int index);
     
     void useItem(int index);
+    
+    void equipWeapon(int index);
 
     void dropItem(int index);
     
