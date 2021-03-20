@@ -1,6 +1,6 @@
 package hotlinecesena.model.inventory;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.Optional;
 import hotlinecesena.model.entities.items.Firearm;
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
-import hotlinecesena.model.items.Ammunition;
+import hotlinecesena.model.entities.items.Ammunition;
 
 /**
  * 
@@ -17,6 +17,7 @@ import hotlinecesena.model.items.Ammunition;
  */
 public class NaiveInventoryImpl implements Inventory {
     
+    private static final int NO_AMMO = 0;
     private Optional<Item> ownedItem;
     private Optional<Weapon> ownedWeapon;
     private final Map<Ammunition, Integer> ownedAmmo;
@@ -24,11 +25,11 @@ public class NaiveInventoryImpl implements Inventory {
     public NaiveInventoryImpl() {
         this.ownedItem = Optional.empty();
         this.ownedWeapon = Optional.empty();
-        this.ownedAmmo = new HashMap<>();
+        this.ownedAmmo = new EnumMap<>(Ammunition.class);
     }
     
     public NaiveInventoryImpl(final Optional<Item> item, final Optional<Weapon> weapon,
-            final Map<Ammunition, Integer> ammo) {
+            final EnumMap<Ammunition, Integer> ammo) {
         this.ownedItem = item;
         this.ownedWeapon = weapon;
         this.ownedAmmo = ammo;
@@ -68,6 +69,11 @@ public class NaiveInventoryImpl implements Inventory {
     }
 
     @Override
+    public void addAmmo(Ammunition ammo, int quantity) {
+        this.ownedAmmo.put(ammo, this.ownedAmmo.getOrDefault(ammo, NO_AMMO) + quantity);
+    }
+
+    @Override
     public List<Optional<Item>> getOwnedItems() {
         return List.of(this.ownedItem);
     }
@@ -96,9 +102,9 @@ public class NaiveInventoryImpl implements Inventory {
         if (this.ownedWeapon.isPresent() && this.ownedWeapon.get() instanceof Firearm) {
             final Firearm gun = (Firearm) this.ownedWeapon.get();
             final int current = gun.getCurrentAmmo();
-            final int owned = this.ownedAmmo.getOrDefault(gun.getCompatibleAmmo(), 0);
+            final int owned = this.ownedAmmo.getOrDefault(gun.getCompatibleAmmo(), NO_AMMO);
             
-            if (owned > 0 && current < gun.getMagazineSize()) {
+            if (owned > NO_AMMO && current < gun.getMagazineSize()) {
                 final int needed = gun.getMagazineSize() - current;
                 
                 if (owned >= needed) {
@@ -106,7 +112,7 @@ public class NaiveInventoryImpl implements Inventory {
                     this.ownedAmmo.put(gun.getCompatibleAmmo(), owned - needed);
                 } else {
                     gun.reload(owned);
-                    this.ownedAmmo.put(gun.getCompatibleAmmo(), 0);
+                    this.ownedAmmo.put(gun.getCompatibleAmmo(), NO_AMMO);
                 }
             }
         }
