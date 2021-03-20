@@ -62,7 +62,6 @@
          <children>
             <ImageView fitHeight="400.0" fitWidth="260.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@/Images/MenuBackground.png" />
                </image>
             </ImageView>
          </children>
