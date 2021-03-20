@@ -14,4 +14,11 @@ public interface Entity {
      * @return this entity's coordinates on the game map.
      */
     Point2D getPosition();
+    
+    /**
+     * Gets the angle this actor is currently facing.
+     * 
+     * @return the actor's angle.
+     */
+    double getAngle();
 }
