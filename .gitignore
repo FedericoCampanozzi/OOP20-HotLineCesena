@@ -33,3 +33,4 @@ app/bin
 .classpath
 .eclipse-pmd
 ./.settings
+org.eclipse.*
