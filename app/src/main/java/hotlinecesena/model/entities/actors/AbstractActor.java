@@ -11,7 +11,7 @@ public abstract class AbstractActor extends AbstractEntity implements Actor {
 
     private final double maxHealth;
     
-    private double health;
+    private double currentHealth;
     private double angle;
     private ActorState state = ActorStateList.IDLE;
     private final Inventory inventory;
@@ -19,7 +19,7 @@ public abstract class AbstractActor extends AbstractEntity implements Actor {
     
     protected AbstractActor(final Point2D pos, final double maxHealth, final double angle, final Inventory inv) {
         super(pos);
-        this.maxHealth = this.health = maxHealth;
+        this.maxHealth = this.currentHealth = maxHealth;
         this.angle = angle;
         this.inventory = inv;
     }
@@ -58,8 +58,8 @@ public abstract class AbstractActor extends AbstractEntity implements Actor {
 
     @Override
     public void takeDamage(double damage) {
-        if (this.health > 0) {
-            this.health = this.health > damage ? this.health - damage : 0;
+        if (this.currentHealth > 0) {
+            this.currentHealth = this.currentHealth > damage ? this.currentHealth - damage : 0;
         }
     }
     
@@ -70,7 +70,7 @@ public abstract class AbstractActor extends AbstractEntity implements Actor {
 
     @Override
     public double getCurrentHealth() {
-        return this.health;
+        return this.currentHealth;
     }
     
     @Override
