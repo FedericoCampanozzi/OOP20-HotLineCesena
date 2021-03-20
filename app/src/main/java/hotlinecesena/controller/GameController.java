@@ -10,11 +10,12 @@ public class GameController extends Application {
 
 	public static void main(String[] args) throws IOException {
 		DALImpl.getInstance();
+		
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+		launch(args);
 	}
 	
     public Object getGreeting() {
