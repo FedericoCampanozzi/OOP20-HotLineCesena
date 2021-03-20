@@ -1,11 +1,9 @@
 package hotlinecesena.model.entities.actors;
 
-import hotlinecesena.model.entities.State;
-
 /**
  * 
  */
-public enum ActorStateList implements State {
+public enum ActorStateList implements ActorState {
 
 	/**
 	 * Actor is receiving no input.

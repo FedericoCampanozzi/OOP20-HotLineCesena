@@ -1,31 +1,80 @@
 package hotlinecesena.model.entities.actors;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import hotlinecesena.model.entities.AbstractEntity;
+import hotlinecesena.model.inventory.Inventory;
+import javafx.geometry.Point2D;
 
-import hotlinecesena.model.entities.components.Component;
+public abstract class AbstractActor extends AbstractEntity implements Actor {
 
-public abstract class AbstractActor implements Actor {
-
-    private final Map<Class<?>, Component> components = new HashMap<>();
+    private double health;
+    private double angle;
+    private ActorState state = ActorStateList.IDLE; // TODO: Will replace with a finite-state machine (State pattern)
+    private final Inventory inventory;
+    
+    
+    protected AbstractActor(final Point2D pos, final double health, final double angle, final Inventory inv) {
+        super(pos);
+        this.health = health;
+        this.angle = angle;
+        this.inventory = inv;
+    }
+    
 
     @Override
-    public <C extends Component> C getComponent(final Class<C> compInterface) {
-        return Optional.ofNullable(compInterface.cast(this.components.get(compInterface))).orElseThrow();
+    public void move(Point2D direction, Point2D velocity) {
+        final Point2D oldPos = this.getPosition();
+        this.setPosition(new Point2D(oldPos.getX() + direction.getX() * velocity.getX(),
+                                     oldPos.getY() + direction.getY() * velocity.getY()));
     }
 
     @Override
-    //TODO Find a nicer way to implement this?
-    public <C extends Component> void addComponent(final C component) throws IllegalStateException {
-        var compInterface = component.getClass().getInterfaces()[0];
-
-        // Checks whether this component's interface (or a superinterface of it) is already present.
-        if (this.components.keySet()
-                .stream()
-                .anyMatch(cl -> cl.isAssignableFrom(compInterface))) {
-            throw new IllegalStateException("A component of the same interface is already attached.");
+    public void rotate(double angle) {
+        this.angle -= angle;
+    }
+    
+    @Override
+    public void attack() {
+        final var weapon = this.inventory.getEquippedWeapon();
+        if (weapon.isPresent()) {
+            weapon.get().activate();
         }
-        this.components.put(compInterface, component);
     }
+    
+    @Override
+    public void reload() {
+        this.inventory.reloadWeapon();
+    }
+
+    @Override
+    public double getAngle() {
+        return this.angle;
+    }
+
+    @Override
+    public void takeDamage(double damage) {
+        if (this.health > 0) {
+            this.health = this.health > damage ? this.health - damage : 0;
+        }
+    }
+
+    @Override
+    public double getCurrentHealth() {
+        return this.health;
+    }
+    
+    @Override
+    public Inventory getInventory() {
+        return this.inventory;
+    }
+
+    @Override
+    public ActorState getState() {
+        return this.state;
+    }
+    
+    @Override
+    public void setState(ActorState s) {
+        this.state = s;
+    }
+
 }
