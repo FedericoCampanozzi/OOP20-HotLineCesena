@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.items.Item;
-import hotlinecesena.model.entities.items.UsableItem;
+import hotlinecesena.model.entities.items.Usable;
 import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
@@ -13,8 +13,9 @@ public class PlayerImpl extends AbstractActor implements Player {
     
     private final Map<ActorState, Double> noiseLevels;
 
-    public PlayerImpl(Point2D pos, double health, double angle, Inventory inv, Map<ActorState, Double> noise) {
-        super(pos, health, angle, inv);
+    public PlayerImpl(final Point2D pos, final double angle, final double speed,
+            final double maxHealth, final Inventory inv, final Map<ActorState, Double> noise) {
+        super(pos, angle, speed, maxHealth, inv);
         this.noiseLevels = noise;
     }
 
@@ -31,8 +32,8 @@ public class PlayerImpl extends AbstractActor implements Player {
     @Override
     public void useItem(int index) {
         final Optional<Item> item = this.getInventory().getOwnedItems().get(index);
-        if (item.isPresent() && item.get() instanceof UsableItem) {
-            ((UsableItem) item.get()).use(this);
+        if (item.isPresent() && item.get() instanceof Usable) {
+            ((Usable) item.get()).use(Optional.of(null));
         }
     }
     

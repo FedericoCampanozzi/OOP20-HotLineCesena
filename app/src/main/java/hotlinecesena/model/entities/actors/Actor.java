@@ -9,29 +9,6 @@ import hotlinecesena.model.inventory.Inventory;
  *
  */
 public interface Actor extends Entity {
-
-    /**
-     * Makes this actor move in a certain direction at a specified speed.
-     * 
-     * @param direction the direction the actor will move in.
-     * @param speed the speed at which the actor will move.
-     */
-    void move(Direction direction, double speed);
-
-    /**
-     * 
-     * Sets the angle this actor will face.
-     * 
-     * @param angle
-     */
-    void setAngle(double angle);
-    
-    /**
-     * Gets the angle this actor is currently facing.
-     * 
-     * @return the actor's angle.
-     */
-    double getAngle();
     
     /**
      * 
