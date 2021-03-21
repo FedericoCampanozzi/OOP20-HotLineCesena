@@ -24,10 +24,9 @@ repositories {
     mavenCentral()
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
+java {                                      
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 javafx {
@@ -62,7 +61,7 @@ dependencies {
 }
 
 application {
-    mainClass.set("application.Main")
+    mainClass.set("hotlinecesena.controller.core.Launcher")
 }
 
 tasks.test {
