@@ -14,10 +14,6 @@ import org.apache.commons.io.FileUtils;
 import static java.util.stream.Collectors.*;
 
 public class DALImpl {
-
-	// List<Enemy>
-	// Player
-	// Mission
 	
 	private static DALImpl singleton = null;
 
@@ -26,9 +22,11 @@ public class DALImpl {
 	private final Map<String, Pair<Integer, Integer>> ranking;
 	private final Map<String, List<String>> messages;
 	private final String resFileFolder = System.getProperty("user.dir") + File.separator + "src" + File.separator +
-			"resources" + File.separator + "File";
+			"main" + File.separator +"resources" + File.separator + "File";
+	private final Map<String, String> guiPath = new HashMap<String, String>();
 
 	private DALImpl() throws IOException {
+		System.out.println("\nStart DAL reading \n");
 		this.simbols = mapFileTo(resFileFolder + File.separator + "simbols.txt",
 				(String[] splitted) -> splitted[0].charAt(0), (String[] splitted) -> splitted[1]);
 		this.ranking = mapFileTo(resFileFolder + File.separator + "ranking.txt", (String[] splitted) -> splitted[0],
@@ -36,6 +34,8 @@ public class DALImpl {
 		this.messages = mapFileTo(resFileFolder + File.separator + "messages.txt", (String[] splitted) -> splitted[0],
 				(String[] splitted) -> Arrays.asList(splitted).stream().skip(0).collect(toList()));
 		readGameMap();
+		readGuiFile();
+		System.out.println("\nEnd DAL reading \n");
 	}
 
 	public static DALImpl getInstance() throws IOException {
@@ -53,7 +53,6 @@ public class DALImpl {
 		final Map<Key, Value> map = new HashMap<Key, Value>();
 		final List<String> cnt = FileUtils.readLines(new File(filePath));
 		for (String line : cnt) {
-			System.out.println(line);
 			if (line.charAt(0) == '#')
 				continue;
 			splitted = line.split(";");
@@ -76,8 +75,8 @@ public class DALImpl {
 		int iLine = 0;
 		int iCar = 0;
 
-		System.out.println("\nREAD map.md");
-		Collection<String> cnt = FileUtils.readLines(new File(resFileFolder + File.separator + "map.txt"), "UTF-8");
+		System.out.println("\nREAD map.txt");
+		Collection<String> cnt = FileUtils.readLines(new File(resFileFolder + File.separator + "map.txt"));
 		for (String line : cnt) {
 			System.out.println(line);
 			if (line.charAt(0) == '#')
@@ -94,5 +93,20 @@ public class DALImpl {
 			}
 			iLine++;
 		}
+	}
+	
+	private void readGuiFile() throws IOException{
+		
+		System.out.println("\nREAD FXML");
+		for(final File f : new File(System.getProperty("user.dir") + File.separator + "src" + File.separator +
+				"main" + File.separator + "resources" + File.separator + "GUI").listFiles()) {
+			final String relPath = new File(f.getParent()).getName() + File.separator + f.getName(); 
+			System.out.println(f.getName() + " -> " + relPath);
+			this.guiPath.put(f.getName(), relPath);
+		}
+	}
+	
+	public Map<String,String> getGuiPath(){
+		return this.guiPath;
 	}
 }

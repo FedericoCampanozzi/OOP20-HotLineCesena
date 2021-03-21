@@ -22,7 +22,8 @@ public class GameController extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception{
 		stg = primaryStage;
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource("hotlinecesena/view/StartMenuView.fxml"));
+		
+        Parent root = FXMLLoader.load(ClassLoader.getSystemResource(DALImpl.getInstance().getGuiPath().get("StartMenuView.fxml")));
 
         // Stage configuration
         primaryStage.setTitle("HotLine Cesena");
