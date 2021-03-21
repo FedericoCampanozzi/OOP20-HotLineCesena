@@ -1,8 +1,10 @@
-package hotlinecesena.controller;
+package hotlinecesena.controller.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import java.io.IOException;
+
+import hotlinecesena.controller.GameController;
 
 public class StartMenuController {
 	
@@ -25,7 +27,7 @@ public class StartMenuController {
 		System.out.println("'Options' button pressed");
 		
 		GameController gameScene = new GameController();
-		gameScene.changeScene("fxml/OptionsView.fxml");
+		gameScene.changeScene("OptionsView.fxml");
 	}
 	
 	public void exitClick() throws IOException {

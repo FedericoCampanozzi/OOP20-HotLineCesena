@@ -1,80 +1,159 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #352063;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotlinecesena.controller.OptionsController">
-   <right>
-      <SplitPane dividerPositions="0.3316582914572864" orientation="VERTICAL" prefHeight="400.0" prefWidth="342.0" style="-fx-background-color: #352063;" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #352063;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="hotlinecesena.controller.view.OptionsController">
+   <children>
+      <BorderPane prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <center>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="156.0" layoutY="90.0" prefHeight="196.0" prefWidth="339.0" text="Options" textAlignment="CENTER" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <HBox layoutX="71.0" layoutY="72.0" prefHeight="313.0" prefWidth="598.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox layoutX="7.0" layoutY="-37.0" prefHeight="313.0" prefWidth="199.0" style="-fx-border-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="17.0" prefWidth="197.0" style="-fx-border-color: #ffffff;" text="Audio" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font name="Arial Black" size="20.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label prefHeight="17.0" prefWidth="197.0" text="Volume" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font name="Arial" size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <Slider layoutX="3.0" layoutY="1.0" prefHeight="14.0" prefWidth="197.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.5" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="17.0" prefWidth="197.0" text="100%" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <Separator prefHeight="3.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="197.0" selected="true" text="Enable music" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </RadioButton>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <RadioButton mnemonicParsing="false" prefHeight="17.0" prefWidth="197.0" selected="true" text="Enable sounds" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </RadioButton>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox layoutX="74.0" layoutY="-20.0" prefHeight="313.0" prefWidth="199.0" style="-fx-border-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="17.0" prefWidth="197.0" style="-fx-border-color: #ffffff;" text="Graphic" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font name="Arial Black" size="20.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label prefHeight="17.0" prefWidth="197.0" text="Resolution" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                    <AnchorPane>
+                                       <children>
+                                          <ComboBox prefHeight="25.0" prefWidth="197.0" promptText="Resolution" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane prefHeight="200.0" prefWidth="200.0">
+                           <children>
+                              <VBox layoutX="26.0" layoutY="14.0" prefHeight="313.0" prefWidth="200.0" style="-fx-border-color: #ffffff;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <AnchorPane>
+                                       <children>
+                                          <Label alignment="CENTER" prefHeight="17.0" prefWidth="198.0" style="-fx-border-color: #ffffff;" text="Controls" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                             <font>
+                                                <Font name="Arial Black" size="20.0" />
+                                             </font>
+                                          </Label>
+                                       </children>
+                                    </AnchorPane>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </HBox>
+               </children>
+            </AnchorPane>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="50.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="backButton" layoutX="531.0" layoutY="7.0" mnemonicParsing="false" onAction="#backClick" text="Back" textAlignment="CENTER">
                      <font>
-                        <Font name="Arial Black" size="53.0" />
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </AnchorPane>
+         </bottom>
+         <top>
+            <AnchorPane prefHeight="70.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" layoutX="133.0" layoutY="14.0" prefHeight="75.0" prefWidth="600.0" text="Options" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <font>
+                        <Font name="Arial Black" size="48.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
-               <children>
-                  <Pane prefHeight="66.0" prefWidth="340.0" AnchorPane.bottomAnchor="197.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-1.0" AnchorPane.topAnchor="0.0">
-                     <children>
-                        <Button id="audioButton" fx:id="audioButton" alignment="CENTER" contentDisplay="CENTER" layoutX="124.0" layoutY="12.0" mnemonicParsing="false" onAction="#audioClick" text="Audio" textAlignment="CENTER">
-                           <font>
-                              <Font name="Arial Black" size="20.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="-1.0" layoutY="66.0" prefHeight="66.0" prefWidth="340.0">
-                     <children>
-                        <Button id="graphicButton" fx:id="graphicButton" alignment="CENTER" contentDisplay="CENTER" layoutX="113.0" layoutY="12.0" mnemonicParsing="false" onAction="#graphicClick" text="Graphic" textAlignment="CENTER">
-                           <font>
-                              <Font name="Arial Black" size="20.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="-1.0" layoutY="198.0" prefHeight="65.0" prefWidth="340.0">
-                     <children>
-                        <Button id="backButton" fx:id="backButton" alignment="CENTER" contentDisplay="CENTER" layoutX="128.0" layoutY="11.0" mnemonicParsing="false" onAction="#backClick" text="Back" textAlignment="CENTER">
-                           <font>
-                              <Font name="Arial Black" size="20.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-                  <Pane layoutX="-1.0" layoutY="132.0" prefHeight="66.0" prefWidth="340.0">
-                     <children>
-                        <Button id="backButton" fx:id="controlsButton" alignment="CENTER" contentDisplay="CENTER" layoutX="110.0" layoutY="12.0" mnemonicParsing="false" onAction="#controlsClick" text="Controls" textAlignment="CENTER">
-                           <font>
-                              <Font name="Arial Black" size="20.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </Pane>
-               </children>
-            </AnchorPane>
-        </items>
-      </SplitPane>
-   </right>
-   <left>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <ImageView fitHeight="400.0" fitWidth="262.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@/Images/MenuBackground.png" />
-               </image>
-            </ImageView>
-         </children>
-      </AnchorPane>
-   </left>
-</BorderPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
