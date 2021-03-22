@@ -1,6 +1,6 @@
 package hotlinecesena.model.entities.actors;
 
-import hotlinecesena.model.entities.Entity;
+import hotlinecesena.model.entities.MovableEntity;
 import hotlinecesena.model.inventory.Inventory;
 
 /**
