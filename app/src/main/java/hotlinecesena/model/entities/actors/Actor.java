@@ -8,7 +8,7 @@ import hotlinecesena.model.inventory.Inventory;
  * Animated entity that is able to perform a set of basic actions.
  *
  */
-public interface Actor extends Entity {
+public interface Actor extends MovableEntity {
     
     /**
      * 
