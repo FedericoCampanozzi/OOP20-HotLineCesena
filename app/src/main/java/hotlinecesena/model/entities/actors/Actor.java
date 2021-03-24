@@ -1,6 +1,6 @@
 package hotlinecesena.model.entities.actors;
 
-import hotlinecesena.model.entities.Entity;
+import hotlinecesena.model.entities.MovableEntity;
 import hotlinecesena.model.inventory.Inventory;
 
 /**
@@ -8,7 +8,7 @@ import hotlinecesena.model.inventory.Inventory;
  * Animated entity that is able to perform a set of basic actions.
  *
  */
-public interface Actor extends Entity {
+public interface Actor extends MovableEntity {
     
     /**
      * 
@@ -27,6 +27,13 @@ public interface Actor extends Entity {
      * @param damage
      */
     void takeDamage(double damage);
+    
+    /**
+     * Heals this actor by a certain amount of health points.
+     * 
+     * @param hp
+     */
+    void heal(double hp);
     
     /**
      * Returns the maximum health value for this actor.
@@ -54,12 +61,12 @@ public interface Actor extends Entity {
      * 
      * @return 
      */
-    ActorState getState();
+    ActorStateList getState();
     
     /**
      * Sets this actor's {@link ActorState} to {@code s}.
      * 
      * @param s
      */
-    void setState(ActorState s);
+    void setState(ActorStateList s);
 }
