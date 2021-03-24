@@ -1,31 +1,27 @@
 package hotlinecesena.model.inventory;
 
-import java.util.List;
 import java.util.Optional;
 
-import hotlinecesena.model.entities.items.Ammunition;
 import hotlinecesena.model.entities.items.Item;
-import hotlinecesena.model.entities.items.Weapon;
 
+/**
+ * 
+ * Needs to define a reloading time.
+ *
+ */
 public interface Inventory {
     
-    void addItem(Item item, int index);
+    void add(Item item);
     
-    void addWeapon(Weapon w, int index);
+    Optional<Item> getUsable();
     
-    void addAmmo(Ammunition ammo, int quantity);
+    Optional<Item> getEquipped();
     
-    List<Optional<Item>> getOwnedItems();
-    
-    List<Optional<Weapon>> getOwnedWeapons();
-    
-    Optional<Weapon> getEquippedWeapon();
-    
-    void setEquippedWeapon(int index);
-    
-    void reloadWeapon();
+    void reloadEquipped();
 
-    void dropItem(int index);
-
-    void dropWeapon(int index);
+    void dropUsable();
+    
+    void dropEquipped();
+    
+    boolean isReloading();
 }
