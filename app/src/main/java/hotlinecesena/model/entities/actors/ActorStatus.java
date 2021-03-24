@@ -3,17 +3,17 @@ package hotlinecesena.model.entities.actors;
 /**
  * 
  */
-public enum ActorStateList implements ActorState {
+public enum ActorStatus {
 
 	/**
-	 * Actor is receiving no input.
+	 * Actor is either moving or receiving no input.
 	 */
-    IDLE,
+    NORMAL,
     
     /**
-	 * Actor is moving.
+	 * Actor is reloading.
 	 */
-    MOVING,
+    RELOADING,
     
     /**
 	 * Actor is attacking.

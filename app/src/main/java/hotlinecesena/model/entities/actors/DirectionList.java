@@ -6,7 +6,8 @@ public enum DirectionList implements Direction {
     NORTH(new Point2D(0, -1)),
     SOUTH(new Point2D(0, 1)),
     EAST(new Point2D(1, 0)),
-    WEST(new Point2D(-1, 0));
+    WEST(new Point2D(-1, 0)),
+    NONE(Point2D.ZERO);
 
     private Point2D dir;
     

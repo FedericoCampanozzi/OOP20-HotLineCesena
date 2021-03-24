@@ -29,6 +29,13 @@ public interface Actor extends MovableEntity {
     void takeDamage(double damage);
     
     /**
+     * Heals this actor by a certain amount of health points.
+     * 
+     * @param hp
+     */
+    void heal(double hp);
+    
+    /**
      * Returns the maximum health value for this actor.
 
      * @return the maximum health value.
@@ -50,16 +57,16 @@ public interface Actor extends MovableEntity {
     Inventory getInventory();
 
     /**
-     * Returns this actor's current {@link ActorState} value.
+     * Returns this actor's current {@link ActorStatus} value.
      * 
      * @return 
      */
-    ActorState getState();
+    ActorStatus getActorStatus();
     
     /**
-     * Sets this actor's {@link ActorState} to {@code s}.
+     * Sets this actor's {@link ActorStatus} to {@code s}.
      * 
      * @param s
      */
-    void setState(ActorState s);
+    void setActorStatus(ActorStatus s);
 }

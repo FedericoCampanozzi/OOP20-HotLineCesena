@@ -21,4 +21,12 @@ public interface Entity {
      * @return the actor's angle.
      */
     double getAngle();
+
+    /**
+     * 
+     * Sets the angle this entity will face.
+     * 
+     * @param angle
+     */
+    void setAngle(double angle);
 }
