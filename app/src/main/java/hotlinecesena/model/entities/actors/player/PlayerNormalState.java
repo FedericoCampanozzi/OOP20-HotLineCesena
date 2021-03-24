@@ -4,7 +4,7 @@ import static hotlinecesena.model.entities.actors.player.CommandType.*;
 
 import java.util.Set;
 
-import hotlinecesena.model.entities.actors.ActorStateList;
+import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.state.AbstractState;
 import javafx.geometry.Point2D;
 
@@ -21,7 +21,7 @@ public class PlayerNormalState extends AbstractState<Player> {
 
         if (receivedCommands.contains(RELOAD)) {
             // During the next update, ReloadingState will begin the reloading action and start a "timer".
-            this.getActor().setState(ActorStateList.RELOADING);
+            this.getActor().setActorStatus(ActorStatus.RELOADING);
         // Handling all remaining commands which do not trigger a state change.
         } else {
             if (receivedCommands.contains(ATTACK)) {

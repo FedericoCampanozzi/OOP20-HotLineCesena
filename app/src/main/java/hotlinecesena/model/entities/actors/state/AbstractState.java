@@ -8,7 +8,7 @@ import static hotlinecesena.model.entities.actors.player.CommandType.MOVE_WEST;
 import java.util.Set;
 
 import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.actors.ActorStateList;
+import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.player.CommandType;
 import javafx.geometry.Point2D;
@@ -22,12 +22,12 @@ public abstract class AbstractState<A extends Actor> implements State {
         this.actor = actor;
     }
 
-    /**
-     * Template method.
+    /*
+     * Template method
      */
     public final void handle(final Pair<Set<CommandType>, Point2D> commandsToHandle, final double timeElapsed) {
         if (this.actor.getCurrentHealth() == 0) {
-            this.actor.setState(ActorStateList.DEAD);
+            this.actor.setActorStatus(ActorStatus.DEAD);
         } else {
             this.handleAllowedCommands(commandsToHandle.getKey(), commandsToHandle.getValue(), timeElapsed);
         }

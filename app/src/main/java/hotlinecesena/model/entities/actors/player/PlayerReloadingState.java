@@ -2,7 +2,7 @@ package hotlinecesena.model.entities.actors.player;
 
 import java.util.Set;
 
-import hotlinecesena.model.entities.actors.ActorStateList;
+import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.state.AbstractState;
 import javafx.geometry.Point2D;
 
@@ -25,7 +25,7 @@ public class PlayerReloadingState extends AbstractState<Player> {
             this.reloadTimeRemaining -= timeElapsed;
         } else {
             this.getActor().reload();
-            this.getActor().setState(ActorStateList.NORMAL);
+            this.getActor().setActorStatus(ActorStatus.NORMAL);
             this.reloadTimeRemaining = RELOADING_TIME;
         }
     }
