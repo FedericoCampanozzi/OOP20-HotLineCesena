@@ -11,7 +11,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     private final double maxHealth;
     private double currentHealth;
-    private ActorStateList state = ActorStateList.NORMAL;
+    private ActorStatus state = ActorStatus.NORMAL;
     private final Inventory inventory;
 
     protected AbstractActor(final Point2D pos, final double angle, final double speed,
@@ -66,12 +66,12 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     @Override
-    public ActorStateList getState() {
+    public ActorStatus getActorStatus() {
         return this.state;
     }
 
     @Override
-    public void setState(ActorStateList s) {
+    public void setActorStatus(ActorStatus s) {
         this.state = s;
     }
 }
