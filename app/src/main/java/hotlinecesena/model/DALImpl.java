@@ -1,7 +1,6 @@
 package hotlinecesena.model;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +17,7 @@ public class DALImpl {
 	private static DALImpl singleton = null;
 
 	private final Map<Character, String> simbols;
-	private final Map<Pair<Integer, Integer>, Character> gameMap = new HashMap<>();
+	private final Map<Pair<Integer, Integer>, Character> gameMap;
 	private final Map<String, Pair<Integer, Integer>> ranking;
 	private final Map<String, List<String>> messages;
 	private final String resFileFolder = System.getProperty("user.dir") + File.separator + "src" + File.separator +
@@ -26,16 +25,16 @@ public class DALImpl {
 	private final Map<String, String> guiPath = new HashMap<String, String>();
 
 	private DALImpl() throws IOException {
-		System.out.println("\nStart DAL reading \n");
 		this.simbols = mapFileTo(resFileFolder + File.separator + "simbols.txt",
 				(String[] splitted) -> splitted[0].charAt(0), (String[] splitted) -> splitted[1]);
 		this.ranking = mapFileTo(resFileFolder + File.separator + "ranking.txt", (String[] splitted) -> splitted[0],
 				(String[] splitted) -> new Pair<>(Integer.parseInt(splitted[1]), Integer.parseInt(splitted[2])));
 		this.messages = mapFileTo(resFileFolder + File.separator + "messages.txt", (String[] splitted) -> splitted[0],
 				(String[] splitted) -> Arrays.asList(splitted).stream().skip(0).collect(toList()));
-		readGameMap();
+		
 		readGuiFile();
-		System.out.println("\nEnd DAL reading \n");
+		
+		this.gameMap = new hotlinecesena.controller.generator.WorldGeneratorImpl().build().getMap();
 	}
 
 	public static DALImpl getInstance() throws IOException {
@@ -51,7 +50,7 @@ public class DALImpl {
 
 		String[] splitted;
 		final Map<Key, Value> map = new HashMap<Key, Value>();
-		final List<String> cnt = FileUtils.readLines(new File(filePath));
+		final String[] cnt = FileUtils.readFileToString(new File(filePath)).split("\n");
 		for (String line : cnt) {
 			if (line.charAt(0) == '#')
 				continue;
@@ -61,15 +60,21 @@ public class DALImpl {
 
 		return map;
 	}
-
+	
+	public Map<Character, String> getSimbols(){
+		return this.simbols;
+	}
 	
 	public Map<String, Pair<Integer, Integer>> getRanking(){
 		return this.ranking;
 	}
+	
 	public Map<String, List<String>> getAllMessage(){
 		return this.messages;
 	}
+	
 	// this method will be removed when implements map_generator
+	/*
 	private void readGameMap() throws IOException {
 
 		int iLine = 0;
@@ -94,6 +99,7 @@ public class DALImpl {
 			iLine++;
 		}
 	}
+	*/
 	
 	private void readGuiFile() throws IOException{
 		
@@ -108,5 +114,9 @@ public class DALImpl {
 	
 	public Map<String,String> getGuiPath(){
 		return this.guiPath;
+	}
+	
+	public Map<Pair<Integer, Integer>, Character> getGameMap(){
+		return this.gameMap;
 	}
 }
