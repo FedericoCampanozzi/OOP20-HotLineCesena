@@ -29,17 +29,13 @@ public abstract class AbstractEntity implements Entity {
         this.position = pos;
     }
     
+    @Override
     public double getAngle() {
         return this.angle;
     }
-    
-    /**
-     * 
-     * Sets the angle this entity will face.
-     * 
-     * @param angle
-     */
-    protected void setAngle(final double angle) {
+
+    @Override
+    public void setAngle(final double angle) {
         this.angle = angle;
     }
 
