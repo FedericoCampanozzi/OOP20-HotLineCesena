@@ -43,17 +43,17 @@ public class WorldGeneratorImpl {
 		private final int h;
 		private Pair<Integer, Integer> relation = new Pair<>(0, 0);
 		
-		public Room(final int d) {
+		public Room(final int w, final int h, final int d) {
 			
-			w = rnd.nextInt(10) + 5;
-			h = rnd.nextInt(10) + 5;
+			this.w = w;
+			this.h = h;
 			
 			for (int i = 0; i < w; i++) {
 				for (int j = 0; j < h; j++) {
 					if (i == 0 || j == 0 || i == w - 1 || j == h - 1) {
 						map.put(new Pair<>(i, j), 'W');
 					} else {
-						map.put(new Pair<>(i, j), ' ');
+						map.put(new Pair<>(i, j), '.');
 					}
 				}
 			}
@@ -78,7 +78,7 @@ public class WorldGeneratorImpl {
 					this.connections.put(create, pii);
 				}
 			}
-
+			/*
 			String debug = w + " X " + h + " -> " + this.connections.keySet().toString() + "\n";
 
 			for (int i = 0; i < w; i++) {
@@ -89,6 +89,12 @@ public class WorldGeneratorImpl {
 			}
 
 			System.out.println(debug);
+			*/
+		}
+		
+		public Room(final int wMin, final int hMin, final int dMin,
+				final int wMax, final int hMax, final int dMax) {
+			this(rnd.nextInt(wMax) + wMin, rnd.nextInt(hMax) + hMin, rnd.nextInt(dMax) + dMin);
 		}
 		
 		public int getWidth() {
@@ -106,8 +112,51 @@ public class WorldGeneratorImpl {
 		public void setRelation(Pair<Integer, Integer> relation) {
 			this.relation = Utilities.sumPair(this.relation, relation);
 		}
+
+		@Override
+		public String toString() {
+			return "Room [w=" + w + ",h=" + h + "," + this.connections.keySet().toString() + "]";
+		}
+		
+		public String toStringLow() {
+			return "Room [w=" + w + ",h=" + h + "," + this.connections.size() + "]";
+		}
 	}
 	
+	private class RoomLinking {
+		private int fstIndex;
+		private int scdIndex;
+		private DOOR fstDoor;
+		private DOOR scdDoor;
+		
+		public RoomLinking(int fstIndex, int scdIndex, DOOR fstDoor, DOOR scdDoor) {
+			this.fstIndex = fstIndex;
+			this.scdIndex = scdIndex;
+			this.fstDoor = fstDoor;
+			this.scdDoor = scdDoor;
+		}
+
+		public Room getFirstRoom(List<Room> list) {
+			return list.get(fstIndex);
+		}
+
+		public Room getSecondRoom(List<Room> list) {
+			return list.get(scdIndex);
+		}
+
+		public DOOR getFirstDoor() {
+			return this.fstDoor;
+		}
+
+		public DOOR getSecondDoor() {
+			return this.scdDoor;
+		}
+		
+	}
+	
+	private final static int MAX_POSSIBILITY = 100;
+	private final static int MAP_PADDING = 2;
+
 	private Random rnd = new Random();
 	
 	//Low level description
@@ -117,75 +166,114 @@ public class WorldGeneratorImpl {
 	private List<Room> baseRooms = new ArrayList<>();
 	private List<Room> rooms = new ArrayList<>();
 	private int xMin, xMax, yMin, yMax;
-	
-	private WorldGeneratorImpl(final Map<Pair<Integer, Integer>, Character> m) {
-		this.map = m;
+
+	public int getMinX() {
+		return this.xMin;
 	}
 
-	public WorldGeneratorImpl() {
-		xMin = Integer.MAX_VALUE;
-		yMin = Integer.MAX_VALUE;
-		xMax = 0;
-		yMin = 0;
+	public int getMinY() {
+		return this.yMin;
+	}
+
+	public int getMaxX() {
+		return this.xMax;
+	}
+
+	public int getMaxY() {
+		return this.yMax;
+	}
+
+	private WorldGeneratorImpl(final int xMin, final int yMin, final int yMax,
+			final int xMax, final Map<Pair<Integer, Integer>, Character> m) {
+		this.map = m;
+		this.xMin = xMin;
+		this.xMax = xMax;
+		this.yMin = yMin;
+		this.yMax = yMax;
+	}
+
+	public WorldGeneratorImpl(final int wMin, final int hMin, final int dMin,
+			final int wMax, final int hMax, final int dMax,
+			final int nRooms, final int nBaseRooms ) {
 		
-		List<Room> freeRooms = new ArrayList<>();
-		
-		baseRooms.add(new Room(4));
-		
-		for (int i = 0; i < 15; i++) {
-			baseRooms.add(new Room(rnd.nextInt(4) + 1));
+		if((wMin >= wMax) || (hMin >= hMax) || (dMin >= dMax) || dMin<=1 || dMax>=4) {
+			new IllegalArgumentException("La stanza - quindi la mappa non puo' essere creata");
 		}
 		
+		xMin = Integer.MAX_VALUE;
+		yMin = Integer.MAX_VALUE;
+		xMax = Integer.MIN_VALUE;
+		yMax = Integer.MIN_VALUE;
+		
+		final List<Room> freeRooms = new ArrayList<>();
+		final List<RoomLinking> possibleRoomsLinking = new ArrayList<>();
+
+		baseRooms.add(new Room(5,5,4));
+		
+		for (int i = 0; i < nBaseRooms; i++) {
+			baseRooms.add(new Room(wMin, hMin, dMin, wMax, hMax, dMax));
+		}
 		
 		this.rooms.add(this.baseRooms.get(0));
 		
-		for(int i = 0; i < 5; i++) {
-			for(Room r : this.rooms) {
-				if(r.connections.size() != 0) {
-					freeRooms.add(r);
+		for (int p = 0; p < MAX_POSSIBILITY; p++) {
+			freeRooms.clear();
+			possibleRoomsLinking.clear();
+			
+			if(this.rooms.size() >= nRooms) {
+				break;
+			}
+			
+			for (Room room : this.rooms) {
+				if (room.connections.size() != 0) {
+					freeRooms.add(room);
 				}
 			}
 			
-			for(Room r : freeRooms) {
-				for(Room att : this.baseRooms) {
-					List<DOOR> attPoss = new ArrayList<>();
-					for(DOOR d : att.connections.keySet()) {
-						if(r.connections.containsKey(DOOR.getInverse(d))) {
-							attPoss.add(DOOR.getInverse(d));
+			for (int freeRoomIndex = 0; freeRoomIndex < freeRooms.size(); freeRoomIndex++) {
+				for (int baseRoomIndex = 0; baseRoomIndex < this.baseRooms.size(); baseRoomIndex++) {
+
+					for (DOOR d : this.baseRooms.get(baseRoomIndex).connections.keySet()) {
+
+						if (freeRooms.get(freeRoomIndex).connections.containsKey(DOOR.getInverse(d))) {
+							possibleRoomsLinking.add(new RoomLinking(freeRoomIndex, baseRoomIndex, DOOR.getInverse(d), d));
 						}
-					}
-					
-					if(attPoss.size() != 0) {
-						DOOR d =  attPoss.get(rnd.nextInt(attPoss.size()));
-						
-						generateRoom(r);
-						
-						if (d == DOOR.LEFT) {
-							att.setRelation(new Pair<>(-att.getWidth() + 1, 0));
-						} else if (d == DOOR.RIGHT) {
-							att.setRelation(new Pair<>(r.getWidth() + 1, 0));
-						} else if (d == DOOR.BOT) {
-							att.setRelation(new Pair<>(0, -att.getHeight() + 1));
-						} else if (d == DOOR.TOP) {
-							att.setRelation(new Pair<>(0, r.getHeight() - 1));
+
+						if (possibleRoomsLinking.size() == MAX_POSSIBILITY) {
+							break;
 						}
-						
-						generateRoom(att);
-						
-						break;
 					}
 				}
 			}
+			
+			if(possibleRoomsLinking.size() != 0) {
+				RoomLinking link = possibleRoomsLinking.get(rnd.nextInt(possibleRoomsLinking.size()));
+				
+				generateRoom(link.getFirstRoom(freeRooms));
+				if (link.getFirstDoor() == DOOR.LEFT) {
+					link.getSecondRoom(this.baseRooms).setRelation(new Pair<>(-link.getSecondRoom(this.baseRooms).getWidth(), 0));
+				} else if (link.getFirstDoor()  == DOOR.RIGHT) {
+					link.getSecondRoom(this.baseRooms).setRelation(new Pair<>(link.getSecondRoom(this.baseRooms).getWidth() + link.getFirstRoom(freeRooms).getWidth(), 0));
+				} else if (link.getFirstDoor() == DOOR.BOT) {
+					link.getSecondRoom(this.baseRooms).setRelation(new Pair<>(0, -link.getSecondRoom(this.baseRooms).getHeight()));
+				} else if (link.getFirstDoor() == DOOR.TOP) {
+					link.getSecondRoom(this.baseRooms).setRelation(new Pair<>(0, link.getFirstRoom(freeRooms).getHeight() + link.getFirstRoom(freeRooms).getHeight()));
+				}
+				generateRoom(link.getSecondRoom(this.baseRooms));
+			}
+			
+			Collections.shuffle(this.rooms);
+			Collections.shuffle(this.baseRooms);
 		}
-		
-		System.out.println("Create");
+
+		//System.out.println("Create");
 	}
 	
 	private void generateRoom(Room r) {
 		boolean can = true;
 		
 		for(Entry<Pair<Integer,Integer>, Character> p2 : r.map.entrySet()) {
-			if(p2.getValue() == ' ' && this.map.containsKey(Utilities.sumPair(r.getRelation(), p2.getKey()))) {
+			if(this.map.containsKey(Utilities.sumPair(r.getRelation(), p2.getKey()))) {
 				can = false;
 				break;
 			}
@@ -198,35 +286,53 @@ public class WorldGeneratorImpl {
 				
 				if(pii.getKey() < xMin) {
 					xMin = pii.getKey();
-				} else if(pii.getKey() > xMax) {
+				}
+				if(pii.getKey() > xMax) {
 					xMax = pii.getKey();
 				}
 				
 				if(pii.getValue() < yMin) {
 					yMin = pii.getValue();
-				} else if(pii.getValue() > yMax) {
+				} 
+				if(pii.getValue() > yMax) {
 					yMax = pii.getValue();
 				}
 			}
+			rooms.add(r);
 		}
+		
 	}
 	
 	public WorldGeneratorImpl build() {
 		
-		System.out.println("Build");
+		//System.out.println("Build : [" + xMin + "," + yMin  + "] [" + xMax + ","  + yMax + "]");
+		this.xMin = xMin - MAP_PADDING;
+		this.xMax = xMax + MAP_PADDING;
+		this.yMax = yMax + MAP_PADDING;
+		this.yMin = yMin - MAP_PADDING;
 		
-		//fill empty position with blank
-		for (int i = yMin; i < yMax; i++) {
-			for (int j = xMin; j < xMax; j++) {
-				if(this.map.get(new Pair<>(i,j)) == null) {
-					this.map.put(new Pair<>(i,j) , '_');
+		//fill empty position with blank and correct door with do link
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+				
+				if (this.map.get(new Pair<>(i, j)) == null) {
+					this.map.put(new Pair<>(i, j), ' ');
 				}
+				
+				if (this.map.get(new Pair<>(i, j)) == 'D' && (
+						this.map.get(new Pair<>(i + 1, j)) == null || this.map.get(new Pair<>(i + 1, j)) == ' ' ||
+						this.map.get(new Pair<>(i - 1, j)) == null || this.map.get(new Pair<>(i - 1, j)) == ' ' ||
+						this.map.get(new Pair<>(i, j + 1)) == null ||this.map.get(new Pair<>(i, j + 1)) == ' ' ||
+						this.map.get(new Pair<>(i, j - 1)) == null || this.map.get(new Pair<>(i, j - 1)) == ' ')) {
+					this.map.put(new Pair<>(i, j), '+');
+				}
+				
 			}
 		}
-
-		System.out.println("end build");
 		
-		return new WorldGeneratorImpl(this.map);
+		//System.out.println("end build");
+
+		return new WorldGeneratorImpl(this.xMin, this.yMin, this.yMax, this.xMax, this.map);
 	}
 	
 	public Map<Pair<Integer, Integer>, Character> getMap() {
