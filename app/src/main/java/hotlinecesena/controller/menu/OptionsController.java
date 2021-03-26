@@ -1,4 +1,4 @@
-package hotlinecesena.controller.view;
+package hotlinecesena.controller.menu;
 
 import java.io.IOException;
 
