@@ -1,0 +1,3 @@
+monitorX;java.lang.Integer;1024
+monitorY;java.lang.Integer;1090
+isFullScreen;java.lang.Boolean;True
