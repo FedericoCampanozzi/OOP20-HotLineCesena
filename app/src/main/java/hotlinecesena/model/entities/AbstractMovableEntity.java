@@ -11,6 +11,9 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
         this.speed = speed;
     }
 
+    /**
+     * Can be overridden by subclasses if a different movement logic is required.
+     */
     @Override
     public void move(Point2D direction) {
         final Point2D oldPos = this.getPosition();
@@ -18,12 +21,12 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     }
 
     @Override
-    public double getSpeed() {
+    public final double getSpeed() {
         return this.speed;
     }
 
     @Override
-    public void setSpeed(double speed) {
+    public final void setSpeed(double speed) {
         this.speed = speed;
     }
 
