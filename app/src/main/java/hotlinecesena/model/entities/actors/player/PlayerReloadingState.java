@@ -3,30 +3,40 @@ package hotlinecesena.model.entities.actors.player;
 import java.util.Set;
 
 import hotlinecesena.model.entities.actors.ActorStatus;
-import hotlinecesena.model.entities.actors.state.AbstractState;
 import javafx.geometry.Point2D;
 
-public class PlayerReloadingState extends AbstractState<Player> {
+/**
+ * 
+ * Handles logics when the player is reloading their weapon.
+ * <br>
+ * While in this state, the player is most vulnerable and cannot attack.
+ *
+ */
+public class PlayerReloadingState extends AbstractState {
 
-    private static final double RELOADING_TIME = 2.0; //TODO Temporary
+    private static final double RELOADING_TIME = 2.0; //TODO Temporary, to be replaced by weapon reload time
     private double reloadTimeRemaining;
 
     public PlayerReloadingState(Player player) {
         super(player);
-        this.reloadTimeRemaining = RELOADING_TIME;
+        this.resetTimer();
     }
 
     @Override
-    protected void handleAllowedCommands(Set<CommandType> receivedCommands, Point2D rotation, double timeElapsed) {
+    protected void handleAllowedActions(Set<PlayerAction> receivedCommands, Point2D rotation, double timeElapsed) {
         this.handleMovement(receivedCommands, timeElapsed);
         this.handleRotation(rotation);
 
         if (this.reloadTimeRemaining > 0.0) {
             this.reloadTimeRemaining -= timeElapsed;
         } else {
-            this.getActor().reload();
-            this.getActor().setActorStatus(ActorStatus.NORMAL);
-            this.reloadTimeRemaining = RELOADING_TIME;
+            this.getPlayer().reload();
+            this.getPlayer().setActorStatus(ActorStatus.NORMAL);
+            this.resetTimer();
         }
+    }
+
+    private void resetTimer() {
+        this.reloadTimeRemaining = RELOADING_TIME;
     }
 }
