@@ -1,6 +1,6 @@
-package hotlinecesena.model.entities.actors.Enemy;
+package hotlinecesena.model.entities.actors.enemy;
 
-import hotlinecesena.model.entities.actors.Enemy.AI.AI;
+import hotlinecesena.model.entities.actors.enemy.ai.AI;
 
 public interface Enemy {
 

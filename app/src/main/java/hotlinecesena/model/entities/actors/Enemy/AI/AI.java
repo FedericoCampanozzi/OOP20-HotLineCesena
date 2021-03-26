@@ -1,4 +1,4 @@
-package hotlinecesena.model.entities.actors.Enemy.AI;
+package hotlinecesena.model.entities.actors.enemy.ai;
 
 import hotlinecesena.model.entities.actors.DirectionList;
 import javafx.geometry.Point2D;

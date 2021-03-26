@@ -1,9 +1,9 @@
-package hotlinecesena.model.entities.actors.Enemy;
+package hotlinecesena.model.entities.actors.enemy;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.inventory.Inventory;
-import hotlinecesena.model.entities.actors.Enemy.AI.AI;
-import hotlinecesena.model.entities.actors.Enemy.AI.AIImpl;
+import hotlinecesena.model.entities.actors.enemy.ai.AI;
+import hotlinecesena.model.entities.actors.enemy.ai.AIImpl;
 import javafx.geometry.Point2D;
 
 public class EnemyImpl extends AbstractActor implements Enemy {

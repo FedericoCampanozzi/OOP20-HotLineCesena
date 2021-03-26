@@ -1,4 +1,4 @@
-package hotlinecesena.model.entities.actors.Enemy;
+package hotlinecesena.model.entities.actors.enemy;
 
 /**
  * 

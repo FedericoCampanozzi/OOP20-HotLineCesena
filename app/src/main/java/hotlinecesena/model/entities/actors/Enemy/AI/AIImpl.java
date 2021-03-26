@@ -1,8 +1,8 @@
-package hotlinecesena.model.entities.actors.Enemy.AI;
+package hotlinecesena.model.entities.actors.enemy.ai;
 
 import hotlinecesena.model.entities.actors.DirectionList;
-import hotlinecesena.model.entities.actors.Enemy.EnemyType;
-import hotlinecesena.model.entities.actors.Enemy.AI.Strategy.*;
+import hotlinecesena.model.entities.actors.enemy.ai.strategy.*;
+import hotlinecesena.model.entities.actors.enemy.EnemyType;
 import javafx.geometry.Point2D;
 
 public class AIImpl implements AI{

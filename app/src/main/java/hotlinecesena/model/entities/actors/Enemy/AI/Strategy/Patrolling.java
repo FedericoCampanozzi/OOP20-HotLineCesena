@@ -1,4 +1,4 @@
-package hotlinecesena.model.entities.actors.Enemy.AI.Strategy;
+package hotlinecesena.model.entities.actors.enemy.ai.strategy;
 
 import java.util.Stack;
 import hotlinecesena.model.entities.actors.DirectionList;
