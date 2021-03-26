@@ -21,7 +21,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-public class PlayerControllerFactoryFX implements PlayerControllerFactory {
+public final class PlayerControllerFactoryFX implements PlayerControllerFactory {
     
     // TODO: All temporary, will replace with values given by DAL
     private static final double STARTING_ANGLE = 90;

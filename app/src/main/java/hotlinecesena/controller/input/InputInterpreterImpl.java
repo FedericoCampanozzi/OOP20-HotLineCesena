@@ -8,7 +8,15 @@ import java.util.stream.Collectors;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
-public class InputInterpreterImpl<C extends Enum<C>, K extends Enum<K>, M extends Enum<M>>
+/**
+ * 
+ * Interpreter implementation. Made it as generic as humanly possible.
+ *
+ * @param <C> set of commands that the Model can understand
+ * @param <K> keyboard key codes
+ * @param <M> mouse button codes
+ */
+public final class InputInterpreterImpl<C extends Enum<C>, K extends Enum<K>, M extends Enum<M>>
     implements InputInterpreter<C, K, M> {
 
     private final Map<K, C> keyBindings;

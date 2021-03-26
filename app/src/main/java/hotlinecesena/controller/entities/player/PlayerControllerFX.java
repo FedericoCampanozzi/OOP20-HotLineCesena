@@ -9,7 +9,7 @@ import hotlinecesena.view.entities.PlayerView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-public class PlayerControllerFX implements PlayerController {
+public final class PlayerControllerFX implements PlayerController {
 
     private final Player player;
     private final InputInterpreter<PlayerAction, KeyCode, MouseButton> input;

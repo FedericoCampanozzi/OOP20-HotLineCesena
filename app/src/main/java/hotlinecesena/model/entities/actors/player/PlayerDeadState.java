@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
  * It must ignore all commands coming from the controller.
  *
  */
-public class PlayerDeadState extends AbstractState {
+public final class PlayerDeadState extends AbstractState {
 
     public PlayerDeadState(Player player) {
         super(player);

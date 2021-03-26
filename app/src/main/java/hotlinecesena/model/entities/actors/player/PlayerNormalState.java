@@ -15,7 +15,7 @@ import javafx.geometry.Point2D;
  * while in this state.
  *
  */
-public class PlayerNormalState extends AbstractState {
+public final class PlayerNormalState extends AbstractState {
 
     public PlayerNormalState(final Player player) {
         super(player);

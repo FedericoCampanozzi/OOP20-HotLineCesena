@@ -16,7 +16,7 @@ import javafx.scene.input.MouseButton;
  * Specific implementation created to listen for inputs in JavaFX.
  *
  */
-public class InputListenerFX implements InputListener<KeyCode, MouseButton> {
+public final class InputListenerFX implements InputListener<KeyCode, MouseButton> {
 
     private final Set<KeyCode> keyboardInputs = new HashSet<>();
     private final Set<MouseButton> mouseInputs = new HashSet<>();

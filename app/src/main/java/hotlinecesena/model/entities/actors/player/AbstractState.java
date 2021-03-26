@@ -13,6 +13,11 @@ import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
+/**
+ * 
+ * Abstract base to extend when implementing a new State.
+ *
+ */
 public abstract class AbstractState implements State {
 
     private final Player player;
@@ -46,30 +51,29 @@ public abstract class AbstractState implements State {
     /**
      * "Shortcut" method for handling movement commands only.
      * 
-     * @param movements
+     * @param actions
      * @param timeElapsed
      */
-    protected void handleMovement(final Set<PlayerAction> movements, final double timeElapsed) {
+    protected final void handleMovement(final Set<PlayerAction> actions, final double timeElapsed) {
         Point2D newMovementDir = DirectionList.NONE.get();
-        if (movements.contains(MOVE_NORTH)) {
+        if (actions.contains(MOVE_NORTH)) {
             newMovementDir = newMovementDir.add(DirectionList.NORTH.get());
         }
-        if (movements.contains(MOVE_SOUTH)) {
+        if (actions.contains(MOVE_SOUTH)) {
             newMovementDir = newMovementDir.add(DirectionList.SOUTH.get());
         }
-        if (movements.contains(MOVE_EAST)) {
+        if (actions.contains(MOVE_EAST)) {
             newMovementDir = newMovementDir.add(DirectionList.EAST.get());
         }
-        if (movements.contains(MOVE_WEST)) {
+        if (actions.contains(MOVE_WEST)) {
             newMovementDir = newMovementDir.add(DirectionList.WEST.get());
         }
 
         if (!newMovementDir.equals(DirectionList.NONE.get())) {
-            final double magnitude = newMovementDir.magnitude();
-            if (magnitude > 1) {
+            if (newMovementDir.magnitude() > 1) {
                 /*
-                 * If we don't normalize the vector, then the actor speed would amount to
-                 * ||(1, 1)|| * actor.getSpeed() if it were to e.g. attempt to move south-east.
+                 * If we don't normalize the vector, then the player speed would amount to
+                 * ||(1, 1)|| * player.getSpeed() if they were to e.g. attempt to move south-east.
                  */
                 newMovementDir = MathUtils.normalizeDiagonalMovement(newMovementDir);
             }
@@ -82,7 +86,7 @@ public abstract class AbstractState implements State {
      * 
      * @param rotation
      */
-    protected void handleRotation(final Point2D rotation) {
+    protected final void handleRotation(final Point2D rotation) {
         final double oldAngle = this.player.getAngle();
         final double newAngle = Math.atan2(rotation.getY(), rotation.getX());
         if (oldAngle != newAngle) {
@@ -94,7 +98,7 @@ public abstract class AbstractState implements State {
      * Returns the player instance.
      * @return
      */
-    protected Player getPlayer() {
+    protected final Player getPlayer() {
         return this.player;
     }
 }

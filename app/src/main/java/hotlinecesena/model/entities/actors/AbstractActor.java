@@ -7,6 +7,11 @@ import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
+/**
+ * 
+ * Base class to extend when creating new Actor specializations.
+ *
+ */
 public abstract class AbstractActor extends AbstractMovableEntity implements Actor {
 
     private final double maxHealth;

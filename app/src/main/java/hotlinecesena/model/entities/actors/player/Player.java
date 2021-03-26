@@ -19,7 +19,7 @@ public interface Player extends Actor {
     void pickUp();
     
     /**
-     * Uses a usable item currently held in the inventory.
+     * Uses items found on ground.
      */
     void use();
 

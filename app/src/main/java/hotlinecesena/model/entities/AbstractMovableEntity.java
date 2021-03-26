@@ -2,6 +2,11 @@ package hotlinecesena.model.entities;
 
 import javafx.geometry.Point2D;
 
+/**
+ * 
+ * Template for generic entities capable of moving.
+ *
+ */
 public abstract class AbstractMovableEntity extends AbstractEntity implements MovableEntity {
     
     private double speed;

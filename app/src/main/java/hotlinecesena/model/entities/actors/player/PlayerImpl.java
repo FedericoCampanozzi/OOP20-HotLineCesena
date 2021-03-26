@@ -9,7 +9,7 @@ import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
-public class PlayerImpl extends AbstractActor implements Player {
+public final class PlayerImpl extends AbstractActor implements Player {
 
     private final Map<ActorStatus, Double> noiseLevels;
     // Flyweight?

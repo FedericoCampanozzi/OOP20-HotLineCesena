@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
  * While in this state, the player is most vulnerable and cannot attack.
  *
  */
-public class PlayerReloadingState extends AbstractState {
+public final class PlayerReloadingState extends AbstractState {
 
     private static final double RELOADING_TIME = 2.0; //TODO Temporary, to be replaced by weapon reload time
     private double reloadTimeRemaining;
