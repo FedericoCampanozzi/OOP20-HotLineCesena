@@ -14,7 +14,7 @@ import javafx.util.Pair;
 public interface Player extends Actor {
 
     /**
-     * Picks up a nearby item or weapon, if there are any.
+     * Picks up nearby items, weapons or ammo, if there are any.
      */
     void pickUp();
     
@@ -22,16 +22,6 @@ public interface Player extends Actor {
      * Uses a usable item currently held in the inventory.
      */
     void use();
-    
-    /**
-     * Drops a usable item from the inventory.
-     */
-    void dropUsable();
-    
-    /**
-     * Drops an equipped from the inventory.
-     */
-    void dropEquipped();
 
     /**
      * 
@@ -40,10 +30,10 @@ public interface Player extends Actor {
     double getNoiseRadius();
     
     /**
-     * Delegates the handling of all commands to the State objects.
+     * Handles all commands received by the controller.
      * 
      * @param commandsToHandle
      * @param timeElapsed
      */
-    void handleCurrentState(Pair<Set<CommandType>, Point2D> commandsToHandle, double timeElapsed);
+    void handle(Pair<Set<PlayerAction>, Point2D> commandsToHandle, double timeElapsed);
 }
