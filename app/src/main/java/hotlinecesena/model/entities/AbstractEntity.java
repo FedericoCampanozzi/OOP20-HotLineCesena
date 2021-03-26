@@ -17,7 +17,7 @@ public abstract class AbstractEntity implements Entity {
     }
 
     @Override
-    public Point2D getPosition() {
+    public final Point2D getPosition() {
         return this.position;
     }
     
@@ -25,17 +25,17 @@ public abstract class AbstractEntity implements Entity {
      * 
      * @param pos
      */
-    protected void setPosition(final Point2D pos) {
+    protected final void setPosition(final Point2D pos) {
         this.position = pos;
     }
     
     @Override
-    public double getAngle() {
+    public final double getAngle() {
         return this.angle;
     }
 
     @Override
-    public void setAngle(final double angle) {
+    public final void setAngle(final double angle) {
         this.angle = angle;
     }
 

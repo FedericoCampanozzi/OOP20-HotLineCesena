@@ -6,22 +6,16 @@ import hotlinecesena.model.entities.items.Item;
 
 /**
  * 
- * Needs to define a reloading time.
+ * Also needs to define a reloading time.
  *
  */
 public interface Inventory {
     
     void add(Item item);
     
-    Optional<Item> getUsable();
-    
     Optional<Item> getEquipped();
     
     void reloadEquipped();
-
-    void dropUsable();
-    
-    void dropEquipped();
     
     boolean isReloading();
 }

@@ -13,29 +13,12 @@ public class NaiveInventoryImpl implements Inventory {
     }
 
     @Override
-    public Optional<Item> getUsable() {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<Item> getEquipped() {
         return Optional.empty();
     }
 
     @Override
     public void reloadEquipped() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dropUsable() {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void dropEquipped() {
         // TODO Auto-generated method stub
 
     }

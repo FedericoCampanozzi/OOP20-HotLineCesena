@@ -1,13 +1,10 @@
 package hotlinecesena.model.entities.actors.player;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
-import hotlinecesena.model.entities.actors.state.State;
-import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
@@ -22,8 +19,8 @@ public class PlayerImpl extends AbstractActor implements Player {
             ActorStatus.DEAD, new PlayerDeadState(this)
             );
 
-    public PlayerImpl(final Point2D pos, final double angle, final double speed,
-            final double maxHealth, final Inventory inv, final Map<ActorStatus, Double> noise) {
+    public PlayerImpl(final Point2D pos, final double angle, final double speed, final double maxHealth,
+            final Inventory inv, final Map<ActorStatus, Double> noise) {
         super(pos, angle, speed, maxHealth, inv);
         this.noiseLevels = noise;
     }
@@ -41,25 +38,12 @@ public class PlayerImpl extends AbstractActor implements Player {
 
     @Override
     public void use() {
-        final Optional<Item> item = this.getInventory().getUsable();
-        if (item.isPresent() && item.get().usage().isPresent()) {
-            item.get().usage().get().accept(this);
-        }
+        // TODO
     }
 
     @Override
-    public void dropUsable() {
-        this.getInventory().dropUsable();
-    }
-
-    @Override
-    public void dropEquipped() {
-        this.getInventory().dropEquipped();
-    }
-
-    @Override
-    public void handleCurrentState(Pair<Set<CommandType>, Point2D> commandsToHandle, double timeElapsed) {
+    public void handle(Pair<Set<PlayerAction>, Point2D> actions, double timeElapsed) {
         this.stateMap.getOrDefault(this.getActorStatus(), this.stateMap.get(ActorStatus.NORMAL))
-            .handle(commandsToHandle, timeElapsed);
+            .handle(actions, timeElapsed);
     }
 }

@@ -4,10 +4,10 @@ package hotlinecesena.model.entities.actors.player;
  * 
  * List of constants used as a bridge between Model and Controller.
  * 
- * They represent commands that the player model may receive from the input manager.
+ * They represent commands that the Player may receive from its Controller class.
  *
  */
-public enum CommandType {
+public enum PlayerAction {
 
     /**
      * Move north.
@@ -37,15 +37,5 @@ public enum CommandType {
     /**
      * Reload weapon.
      */
-    RELOAD,
-    
-    /**
-     * Pick up item or weapon.
-     */
-    PICK_UP,
-    
-    /** Use item.
-     * 
-     */
-    USE;
+    RELOAD;
 }

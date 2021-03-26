@@ -11,7 +11,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     private final double maxHealth;
     private double currentHealth;
-    private ActorStatus state = ActorStatus.NORMAL;
+    private ActorStatus status = ActorStatus.NORMAL;
     private final Inventory inventory;
 
     protected AbstractActor(final Point2D pos, final double angle, final double speed,
@@ -21,6 +21,9 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         this.inventory = inv;
     }
 
+    /**
+     * Can be overridden if a concrete implementation does not require an inventory system.
+     */
     @Override
     public void attack() {
         final Optional<Item> weapon = this.inventory.getEquipped();
@@ -29,20 +32,23 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
     }
 
+    /**
+     * Can be overridden if a concrete implementation does not require an inventory system.
+     */
     @Override
     public void reload() {
         this.inventory.reloadEquipped();
     }
 
     @Override
-    public void takeDamage(double damage) {
+    public final void takeDamage(double damage) {
         if (this.currentHealth > 0) {
             this.currentHealth = this.currentHealth > damage ? this.currentHealth - damage : 0;
         }
     }
 
     @Override
-    public void heal(double hp) {
+    public final void heal(double hp) {
         if (this.currentHealth + hp <= this.maxHealth) {
             this.currentHealth += hp;
         } else {
@@ -51,27 +57,30 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     @Override
-    public double getMaxHealth() {
+    public final double getMaxHealth() {
         return this.maxHealth;
     }
 
     @Override
-    public double getCurrentHealth() {
+    public final double getCurrentHealth() {
         return this.currentHealth;
     }
 
+    /**
+     * Can be overridden if a concrete implementation does not require an inventory system.
+     */
     @Override
     public Inventory getInventory() {
         return this.inventory;
     }
 
     @Override
-    public ActorStatus getActorStatus() {
-        return this.state;
+    public final ActorStatus getActorStatus() {
+        return this.status;
     }
 
     @Override
-    public void setActorStatus(ActorStatus s) {
-        this.state = s;
+    public final void setActorStatus(ActorStatus s) {
+        this.status = s;
     }
 }
