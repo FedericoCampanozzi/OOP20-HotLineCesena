@@ -1,10 +1,11 @@
-package hotlinecesena.controller.view;
+package hotlinecesena.controller.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import java.io.IOException;
 
 import hotlinecesena.controller.GameController;
+import hotlinecesena.model.DALImpl;
 
 public class StartMenuController {
 	
@@ -21,6 +22,8 @@ public class StartMenuController {
 	
 	public void newGameClick() throws IOException {
 		System.out.println("'New game' button pressed");
+		System.out.println(DALImpl.getInstance().getGameMap());
+		System.out.println(DALImpl.getInstance().getSimbols());
 	}
 	
 	public void optionsClick() throws IOException {
