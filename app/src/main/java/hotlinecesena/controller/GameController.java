@@ -4,6 +4,7 @@ import hotlinecesena.model.DALImpl;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,8 +34,8 @@ public class GameController extends Application {
     }
 	
 	public void changeScene(String fxml) throws IOException{
-		Parent pane = FXMLLoader.load(ClassLoader.getSystemResource(DALImpl.getInstance().getGuiPath().get(fxml)));
-		stg.getScene().setRoot(pane);
+		Window owner = Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
+		owner.getScene().setRoot(FXMLLoader.load(ClassLoader.getSystemResource(DALImpl.getInstance().getGuiPath().get(fxml))));
 	}
 	
 	public void testMethodLoop(double deltaTime) {
