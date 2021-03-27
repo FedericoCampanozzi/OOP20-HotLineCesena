@@ -2,9 +2,7 @@ package hotlinecesena.controller.input;
 
 import java.util.Set;
 
-import javafx.geometry.Point2D;
-import javafx.util.Pair;
-
+import hotlinecesena.model.entities.actors.player.Command;
 /**
  * <p>
  * Converts keyboard and mouse inputs received from the View into a set of commands
@@ -15,15 +13,14 @@ import javafx.util.Pair;
  * </p>
  * To achieve this, implementations must work alongside an InputListener.
  *
- * @param <C> set of commands that the Model can understand
  * @param <K> keyboard key codes
  * @param <M> mouse button codes
  */
-public interface InputInterpreter<C extends Enum<C>, K extends Enum<K>, M extends Enum<M>> {
+public interface InputInterpreter<K extends Enum<K>, M extends Enum<M>> {
 
     /**
      * 
      * @return interpreted commands received from the View.
      */
-    Pair<Set<C>, Point2D> interpret();
+    Set<Command> interpret(double deltaTime);
 }
