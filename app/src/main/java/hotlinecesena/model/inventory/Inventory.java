@@ -18,4 +18,6 @@ public interface Inventory {
     void reloadEquipped();
     
     boolean isReloading();
+    
+    void update(double timeElapsed);
 }
