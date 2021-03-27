@@ -9,4 +9,8 @@ public class MathUtils {
     public static Point2D normalizeDiagonalMovement(final Point2D point) {
         return point.multiply(SIN_45);
     }
+    
+    public static double convertIntoRadians(final Point2D coords) {
+        return Math.atan2(coords.getY(), coords.getX());
+    }
 }
