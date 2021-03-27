@@ -52,7 +52,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
                 new NaiveInventoryImpl(),
                 Map.of()
                 );
-        final InputInterpreterImpl<PlayerAction, KeyCode, MouseButton> input = new InputInterpreterImpl<>(
+        final InputInterpreterImpl<KeyCode, MouseButton> input = new InputInterpreterImpl<>(
                 keyBindings, mouseBindings, new InputListenerFX(scene));
 
         return new PlayerControllerFX(playerModel, null, input);
