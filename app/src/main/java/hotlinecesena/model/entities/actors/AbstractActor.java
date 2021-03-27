@@ -31,9 +31,11 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      */
     @Override
     public void attack() {
-        final Optional<Item> weapon = this.inventory.getEquipped();
-        if (weapon.isPresent()) {
-            weapon.get().usage().get().accept(this);
+        if (!this.inventory.isReloading()) {
+            final Optional<Item> weapon = this.inventory.getEquipped();
+            if (weapon.isPresent()) {
+                weapon.get().usage().get().accept(this);
+            }
         }
     }
 
@@ -71,11 +73,8 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         return this.currentHealth;
     }
 
-    /**
-     * Can be overridden if a concrete implementation does not require an inventory system.
-     */
     @Override
-    public Inventory getInventory() {
+    public final Inventory getInventory() {
         return this.inventory;
     }
 
