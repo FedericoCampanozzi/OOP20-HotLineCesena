@@ -10,13 +10,13 @@ public enum DirectionList implements Direction {
     NONE(Point2D.ZERO);
 
     private Point2D dir;
-    
+
     DirectionList(final Point2D dir) {
         this.dir = dir;
     }
+
     @Override
     public Point2D get() {
         return this.dir;
     }
-
 }
