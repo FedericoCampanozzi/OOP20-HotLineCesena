@@ -1,8 +1,10 @@
 package hotlinecesena.controller.entities.player;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 import hotlinecesena.controller.input.InputInterpreter;
+import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.view.entities.PlayerView;
 import javafx.scene.input.KeyCode;
@@ -25,7 +27,10 @@ public final class PlayerControllerFX implements PlayerController {
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             player.update(deltaTime);
-            input.interpret(deltaTime).forEach(c -> c.execute(this.player));
+            Set<Command> commands = input.interpret(deltaTime);
+            if (!commands.isEmpty()) {
+                commands.forEach(c -> c.execute(this.player));
+            }
             //view.update(this.playerModel);
         };
     }
