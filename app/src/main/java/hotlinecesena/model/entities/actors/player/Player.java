@@ -1,10 +1,6 @@
 package hotlinecesena.model.entities.actors.player;
 
-import java.util.Set;
-
 import hotlinecesena.model.entities.actors.Actor;
-import javafx.geometry.Point2D;
-import javafx.util.Pair;
 
 /**
  * 
@@ -30,10 +26,10 @@ public interface Player extends Actor {
     double getNoiseRadius();
     
     /**
-     * Handles all commands received by the controller.
      * 
-     * @param commandsToHandle
+     * Updates certain player functionalities that are based on time.
+     * 
      * @param timeElapsed
      */
-    void handle(Pair<Set<PlayerAction>, Point2D> commandsToHandle, double timeElapsed);
+    void update(double timeElapsed);
 }
