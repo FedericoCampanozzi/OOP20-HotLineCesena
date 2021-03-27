@@ -23,6 +23,7 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
     private final Map<K, PlayerAction> keyBindings;
     private final Map<M, PlayerAction> mouseBindings;
     private final InputListener<K, M> listener;
+    private Point2D currentMouseCoords = Point2D.ZERO;
 
     public InputInterpreterImpl(final Map<K, PlayerAction> keyBindings, final Map<M, PlayerAction> mouseBindings,
             final InputListener<K, M> listener) {
@@ -47,7 +48,11 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
         }
 
         // Compute new angle (radians)
-        commandsToDeliver.add(p -> p.setAngle(MathUtils.convertIntoRadians(receivedInputs.getRight())));
+        final Point2D newMouseCoords = receivedInputs.getRight();
+        if (!this.currentMouseCoords.equals(newMouseCoords)) {
+            commandsToDeliver.add(p -> p.setAngle(MathUtils.convertIntoRadians(receivedInputs.getRight())));
+            this.currentMouseCoords = newMouseCoords;
+        }
 
         // Add remaining commands
         commandsToDeliver.addAll(this.computeRemainingCommands(actions));
