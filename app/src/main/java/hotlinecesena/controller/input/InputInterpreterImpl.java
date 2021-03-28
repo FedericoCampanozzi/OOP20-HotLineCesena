@@ -77,8 +77,8 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
 
     private Set<Command> computeRemainingCommands(Set<PlayerAction> actions) {
         return actions.stream()
-                .filter(a -> a.getCommand().isPresent())
-                .map(a -> a.getCommand().get())
-                .collect(Collectors.toUnmodifiableSet());
+            .filter(a -> a.getCommand().isPresent())
+            .map(a -> a.getCommand().get())
+            .collect(Collectors.toUnmodifiableSet());
     }
 }
