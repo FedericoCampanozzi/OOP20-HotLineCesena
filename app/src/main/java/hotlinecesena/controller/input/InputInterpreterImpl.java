@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
 
 /**
  * 
- * Interpreter implementation. Made it as generic as humanly possible.
+ * Interpreter implementation.
  *
  * @param <K> keyboard key codes
  * @param <M> mouse button codes
@@ -47,10 +47,10 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
             commandsToDeliver.add(p -> p.move(newMovementDir.multiply(deltaTime)));
         }
 
-        // Compute new angle (radians)
+        // Compute new angle
         final Point2D newMouseCoords = receivedInputs.getRight();
         if (!this.currentMouseCoords.equals(newMouseCoords)) {
-            commandsToDeliver.add(p -> p.setAngle(MathUtils.convertIntoRadians(receivedInputs.getRight())));
+            commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
             this.currentMouseCoords = newMouseCoords;
         }
 
