@@ -28,7 +28,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     // TODO: All temporary, will replace with values given by DAL
     private static final String SPRITE_NAME = "index.png";
     private static final double STARTING_ANGLE = 90;
-    private static final double STARTING_SPEED = 5000;
+    private static final double STARTING_SPEED = 500;
     private static final double MAX_HEALTH = 100;
     private static final Point2D STARTING_POS = Point2D.ZERO;
     private final Scene scene;

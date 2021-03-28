@@ -9,7 +9,8 @@ import javafx.scene.transform.Translate;
 
 public class SpriteViewImpl implements SpriteView {
 
-    private static final float SCALE = 0.2f; //TODO Temporary, GameController will pass this to the constructor
+    private static final double SCALE = 0.2; //TODO Temporary, GameController will pass this to the constructor
+    private static final double SPEED_SCALE = 10;
     private final ImageView image;
     private final Rotate rotate;
     private final Translate trans;
@@ -28,10 +29,10 @@ public class SpriteViewImpl implements SpriteView {
     @Override
     public void update(final Point2D entityPos, final double entityAngle) {
         rotate.setAngle(entityAngle);
-        rotate.setPivotX(entityPos.getX() + image.getImage().getWidth()/2);
-        rotate.setPivotY(entityPos.getY() + image.getImage().getHeight()/2);
-        trans.setX(entityPos.getX());
-        trans.setY(entityPos.getY());
+        rotate.setPivotX(entityPos.getX()*SPEED_SCALE + image.getImage().getWidth()/2);
+        rotate.setPivotY(entityPos.getY()*SPEED_SCALE + image.getImage().getHeight()/2);
+        trans.setX(entityPos.getX()*SPEED_SCALE);
+        trans.setY(entityPos.getY()*SPEED_SCALE);
     }
 
     @Override
