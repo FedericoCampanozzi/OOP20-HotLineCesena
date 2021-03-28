@@ -1,8 +1,15 @@
 package hotlinecesena.view.entities;
 
-import hotlinecesena.model.entities.actors.player.Player;
+import javafx.geometry.Point2D;
 
-public interface PlayerView {
+/**
+ * 
+ * 
+ *
+ */
+public interface SpriteView {
 
-    void update(Player playerModel);
+    void update(Point2D entityPos, double entityAngle);
+    
+    Point2D getSpritePosition();
 }
