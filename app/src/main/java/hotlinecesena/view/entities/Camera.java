@@ -20,5 +20,5 @@ public interface Camera {
     /**
      * Updates the camera position based on an entity's sprite coordinates.
      */
-    void update(Point2D spritePos);
+    void update(Point2D spritePos, double deltaTime);
 }
