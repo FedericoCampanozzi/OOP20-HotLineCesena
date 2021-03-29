@@ -6,7 +6,7 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-import hotlinecesena.view.entities.SpriteView;
+import hotlinecesena.view.entities.Sprite;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -25,9 +25,9 @@ public final class InputListenerFX implements InputListener<KeyCode, MouseButton
     private final Set<MouseButton> mouseInputs = new HashSet<>();
     private Point2D mouseMovement = Point2D.ZERO;
     private final Scene scene;
-    private final SpriteView playerView;
+    private final Sprite playerView;
 
-    public InputListenerFX(final Scene scene, final SpriteView view) {
+    public InputListenerFX(final Scene scene, final Sprite view) {
         this.scene = scene;
         this.playerView = view;
     }
