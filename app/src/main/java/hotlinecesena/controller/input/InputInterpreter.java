@@ -6,9 +6,9 @@ import hotlinecesena.model.entities.actors.player.Command;
 /**
  * <p>
  * Converts keyboard and mouse inputs received from the View into a set of commands
- * which the Model can understand.
+ * the Model can understand.
  * <br>
- * Its implementations must be View-agnostic, meaning that they must work with virtually
+ * Its implementations must be View-agnostic, meaning they must work with virtually
  * any graphics library without needing any modifications.
  * </p>
  * To achieve this, implementations must work alongside an InputListener.

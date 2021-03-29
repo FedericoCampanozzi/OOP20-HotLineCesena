@@ -7,7 +7,7 @@ import javafx.geometry.Point2D;
 /**
  * 
  * Listens for inputs from the View. Its implementations are bound to be View-specific, meaning
- * that a new implementation will be needed when switching to a different graphics library.
+ * a new implementation will be needed when switching to a different graphics library.
  *
  * @param <K> keyboard key codes
  * @param <M> mouse button codes
