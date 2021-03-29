@@ -1,17 +1,67 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ResourceBundle;
 
 import hotlinecesena.controller.GameController;
+import hotlinecesena.model.DALImpl;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.Slider;
+import javafx.util.Pair;
 
-public class OptionsController {
+public class OptionsController implements Initializable {
 	
-	public OptionsController() {
-		
+	private int volValue;
+	private List<Pair<Integer, Integer>> resolutions = new ArrayList<>();
+	
+	public OptionsController(){
 	}
 	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		resolutions.add(new Pair<Integer, Integer>(600,  400));
+		resolutions.add(new Pair<Integer, Integer>(800,  600));
+		resolutions.add(new Pair<Integer, Integer>(1024,  768));
+		resolutions.add(new Pair<Integer, Integer>(1280,  720));
+		resolutions.add(new Pair<Integer, Integer>(1920,  1080));
+		
+		try {
+			updatePercVolLabel(DALImpl.getInstance().getIntegerSetting("volume"));
+			volSlider.setValue(volValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}	
+	
+	@FXML
+	private Slider volSlider;
+	@FXML
+	private Label percVolLabel;
+	@FXML
+	private RadioButton musicRadioButton;
+	@FXML
+	private RadioButton soundsRadioButton;
+	@FXML
+	private RadioButton fullScreenRadioButton;
+	@FXML
+	private ComboBox<Label> resolutionComboBox;
+	@FXML
+	private Button upButton;
+	@FXML
+	private Button leftButton;
+	@FXML
+	private Button downButton;
+	@FXML
+	private Button rightButton;
 	@FXML
 	private Button backButton;
 	
@@ -20,6 +70,15 @@ public class OptionsController {
 
 		GameController gameScene = new GameController();
 		gameScene.changeScene("StartMenuView.fxml");
+	}
+	
+	public void volSliderValueChanged() throws IOException {
+		updatePercVolLabel((int) volSlider.getValue());
+	}
+	
+	private void updatePercVolLabel(int value) {
+		volValue = value;
+		percVolLabel.setText(Integer.toString(volValue) + "%");
 	}
 
 }
