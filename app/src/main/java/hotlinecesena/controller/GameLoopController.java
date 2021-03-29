@@ -35,5 +35,4 @@ public class GameLoopController {
 	public void addMethodToUpdate(final Consumer<Double> m) {
 		methods.add(m);
 	}
-
 }
