@@ -37,17 +37,17 @@ public enum PlayerAction {
     /**
      * Attack.
      */
-    ATTACK(Optional.of(p -> p.attack()), Optional.empty()),
+    ATTACK(Optional.of(Player::attack), Optional.empty()),
 
     /**
      * Reload weapon.
      */
-    RELOAD(Optional.of(p -> p.reload()), Optional.empty()),
+    RELOAD(Optional.of(Player::reload), Optional.empty()),
 
     /**
      * Activate an item on ground.
      */
-    USE(Optional.of(p -> p.use()), Optional.empty());
+    USE(Optional.of(Player::use), Optional.empty());
 
     private Optional<Command> command;
     private Optional<Direction> direction;

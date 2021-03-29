@@ -35,7 +35,7 @@ public final class PlayerControllerFX implements PlayerController {
                 commands.forEach(c -> c.execute(this.player));
             }
             view.update(player.getPosition(), player.getAngle());
-            camera.update(player.getPosition());
+            camera.update(player.getPosition(), deltaTime);
         };
     }
 
