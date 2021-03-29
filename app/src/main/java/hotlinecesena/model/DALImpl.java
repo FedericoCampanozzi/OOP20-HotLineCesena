@@ -39,7 +39,7 @@ public class DALImpl {
 		
 		readGuiFile();
 		
-		this.gameMap = new WorldGeneratorImpl(5,5,1,10,10,4,10,5).build().getMap();
+		this.gameMap = new WorldGeneratorImpl(1231,5,5,10,10,10,5).build().getMap();
 	}
 
 	public static DALImpl getInstance() throws IOException {
@@ -106,11 +106,12 @@ public class DALImpl {
 		}
 	}
 	
-	public Integer getIntegerSetting(String prop){
+	public Integer getIntegerSetting(String prop) {
 		if(settings.get(prop).getKey().equals("java.lang.Integer")) {
 			return Integer.parseInt(settings.get(prop).getValue());
 		} else {
 			throw new IllegalStateException("Cast non riuscito");
 		}
 	}
+	
 }
