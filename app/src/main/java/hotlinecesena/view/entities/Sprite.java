@@ -1,15 +1,20 @@
 package hotlinecesena.view.entities;
 
 import javafx.geometry.Point2D;
+import javafx.scene.image.Image;
 
 /**
  * 
  * 
  *
  */
-public interface SpriteView {
+public interface Sprite {
 
-    void update(Point2D entityPos, double entityAngle);
-    
+    void updatePosition(Point2D entityPos);
+
+    void updateRotation(double entityAngle);
+
+    void updateImage(Image image);
+
     Point2D getSpritePosition();
 }
