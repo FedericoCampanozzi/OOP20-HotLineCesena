@@ -68,11 +68,15 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
     }
 
     private Point2D processMovementDirection(Set<PlayerAction> actions) {
-        return actions.stream()
-            .filter(a -> a.getDirection().isPresent())
-            .map(a -> a.getDirection().get().get())
-            .reduce(Point2D.ZERO, Point2D::add)
-            .normalize();
+        Point2D direction = actions.stream()
+                .filter(a -> a.getDirection().isPresent())
+                .map(a -> a.getDirection().get().get())
+                .reduce(Point2D.ZERO, Point2D::add);
+        final double magnitude = direction.magnitude();
+        if (magnitude > 1) {
+            direction = MathUtils.normalizeWithMagnitude(direction, magnitude);
+        }
+        return direction;
     }
 
     private Set<Command> computeRemainingCommands(Set<PlayerAction> actions) {
