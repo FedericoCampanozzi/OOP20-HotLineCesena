@@ -3,7 +3,8 @@ package hotlinecesena.model.entities.actors;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.AbstractMovableEntity;
-import hotlinecesena.model.entities.items.Item;
+import hotlinecesena.model.entities.items.Weapon;
+import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -27,12 +28,32 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     /**
-     * Can be overridden if a concrete implementation does not require an inventory system.
+     * Overridden to prohibit movements when the actor is dead.
+     */
+    @Override
+    public void move(final Point2D direction) {
+        if (this.isAlive()) {
+            super.move(direction);
+        }
+    }
+
+    /**
+     * Overridden to prohibit rotations when the actor is dead.
+     */
+    @Override
+    public void setAngle(final double angle) {
+        if (this.isAlive()) {
+            super.setAngle(angle);
+        }
+    }
+
+    /**
+     * Can be overridden if a concrete implementation is not based on an inventory system.
      */
     @Override
     public void attack() {
-        if (!this.inventory.isReloading()) {
-            final Optional<Item> weapon = this.inventory.getEquipped();
+        if (this.isAlive() && !this.inventory.isReloading()) {
+            final Optional<Weapon> weapon = this.inventory.getWeapon();
             if (weapon.isPresent()) {
                 weapon.get().usage().get().accept(this);
             }
@@ -40,26 +61,30 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     /**
-     * Can be overridden if a concrete implementation does not require an inventory system.
+     * Can be overridden if a concrete implementation is not based on an inventory system.
      */
     @Override
     public void reload() {
-        this.inventory.reloadEquipped();
+        if (this.isAlive()) {
+            this.inventory.reloadWeapon();
+        }
     }
 
     @Override
     public final void takeDamage(double damage) {
-        if (this.currentHealth > 0) {
-            this.currentHealth = this.currentHealth > damage ? this.currentHealth - damage : 0;
+        if (this.isAlive()) {
+            currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
+        }
+        if (!this.isAlive()) {
+            this.status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?
+            this.publish(new DeathEvent<>(this));
         }
     }
 
     @Override
     public final void heal(double hp) {
-        if (this.currentHealth + hp <= this.maxHealth) {
-            this.currentHealth += hp;
-        } else {
-            this.currentHealth = this.maxHealth;
+        if (this.isAlive()) {
+            currentHealth = (currentHealth + hp < maxHealth) ? (currentHealth + hp) : maxHealth;
         }
     }
 
@@ -71,6 +96,10 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     @Override
     public final double getCurrentHealth() {
         return this.currentHealth;
+    }
+
+    protected final boolean isAlive() {
+        return this.currentHealth > 0;
     }
 
     @Override
