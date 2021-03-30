@@ -3,6 +3,7 @@ package hotlinecesena.model.inventory;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.items.Item;
+import hotlinecesena.model.entities.items.Weapon;
 
 /**
  * 
@@ -13,9 +14,9 @@ public interface Inventory {
     
     void add(Item item);
     
-    Optional<Item> getEquipped();
+    Optional<Weapon> getWeapon();
     
-    void reloadEquipped();
+    void reloadWeapon();
     
     boolean isReloading();
     
