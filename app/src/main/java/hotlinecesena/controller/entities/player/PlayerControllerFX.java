@@ -9,13 +9,11 @@ import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputListener;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.view.entities.Camera;
 import hotlinecesena.view.entities.Sprite;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
