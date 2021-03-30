@@ -3,47 +3,60 @@ package hotlinecesena.controller.entities.player;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.google.common.eventbus.Subscribe;
+
 import hotlinecesena.controller.input.InputInterpreter;
+import hotlinecesena.controller.input.InputListener;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.events.DeathEvent;
+import hotlinecesena.model.events.Subscriber;
+import hotlinecesena.model.events.MovementEvent;
+import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.view.entities.Camera;
 import hotlinecesena.view.entities.Sprite;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-public final class PlayerControllerFX implements PlayerController {
+public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     private final Player player;
-    private final InputInterpreter<KeyCode, MouseButton> input;
+    //TODO Listener to be held by the GameController
+    private final InputListener<KeyCode, MouseButton> listener;
+    private final InputInterpreter<KeyCode, MouseButton> interpreter;
     private final Sprite sprite;
+    //TODO Camera to be held by the GameController
     private final Camera camera;
 
     public PlayerControllerFX(final Player player, final Sprite sprite,
-            final InputInterpreter<KeyCode, MouseButton> input, final Camera camera) {
+            final InputInterpreter<KeyCode, MouseButton> interpreter, final Camera camera,
+            final InputListener<KeyCode, MouseButton> listener) {
         this.player = player;
         this.sprite = sprite;
-        this.input = input;
+        this.listener = listener;
+        this.interpreter = interpreter;
         this.camera = camera;
 
-//        setup();
+        setup();
     }
 
-//    private void setup() {
-//        this.player.register(this);
-//        this.sprite.updatePosition(this.player.getPosition());
-//        this.sprite.updateRotation(this.player.getAngle());
-//    }
+    private void setup() {
+        this.player.register(this);
+        this.sprite.updatePosition(this.player.getPosition());
+        this.sprite.updateRotation(this.player.getAngle());
+    }
 
     @Override
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             player.update(deltaTime);
-            Set<Command> commands = input.interpret(deltaTime);
+            var inputs = listener.deliverInputs();
+            System.out.println(inputs.getMiddle());
+            Set<Command> commands = interpreter.interpret(inputs, sprite.getSpritePosition(), deltaTime);
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(this.player));
             }
-            sprite.updatePosition(player.getPosition());
-            sprite.updateRotation(player.getAngle());
             camera.update(player.getPosition(), deltaTime);
         };
     }
@@ -53,18 +66,13 @@ public final class PlayerControllerFX implements PlayerController {
         return this.camera;
     }
 
-//    @Subscribe
-//    private void handleMovementEvent(MovementEvent e) {
-//        sprite.updatePosition(e.getPosition());
-//    }
-//
-//    @Subscribe
-//    private void handleRotationEvent(RotationEvent e) {
-//        sprite.updateRotation(e.getNewAngle());
-//    }
+    @Subscribe
+    private void handleMovementEvent(MovementEvent<Player> e) {
+        sprite.updatePosition(e.getPosition());
+    }
 
-//    @Subscribe
-//    private void handleDeathEvent(DeathEvent e) {
-//        sprite.updateImage(new Image("dead.png"));
-//    }
+    @Subscribe
+    private void handleRotationEvent(RotationEvent<Player> e) {
+        sprite.updateRotation(e.getNewAngle());
+    }
 }
