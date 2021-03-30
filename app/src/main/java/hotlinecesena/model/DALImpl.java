@@ -20,13 +20,14 @@ public class DALImpl {
 	
 	private final Map<String, Pair<String,String>> settings;
 	private final Map<Character, String> simbols;
-	private final Map<Pair<Integer, Integer>, Character> gameMap;
+	//private final Map<Pair<Integer, Integer>, Character> gameMap;
 	private final Map<String, Pair<Integer, Integer>> ranking;
 	private final Map<String, List<String>> messages;
 	private final String resFileFolder = System.getProperty("user.dir") + File.separator + "src" + File.separator +
 			"main" + File.separator +"resources" + File.separator + "File";
 	private final Map<String, String> guiPath = new HashMap<String, String>();
-
+	private final WorldGeneratorImpl wgi;
+	
 	private DALImpl() throws IOException {
 		this.simbols = mapFileTo(resFileFolder + File.separator + "simbols.txt",
 				(String[] splitted) -> splitted[0].charAt(0), (String[] splitted) -> splitted[1]);
@@ -38,10 +39,13 @@ public class DALImpl {
 				(String[] splitted) -> new Pair<>(splitted[1], splitted[2]));
 		
 		readGuiFile();
-		
-		this.gameMap = new WorldGeneratorImpl(5,5,1,10,10,4,10,5).build().getMap();
+		wgi = new WorldGeneratorImpl(1231,5,5,10,10,10,5).build();
 	}
 
+	public WorldGeneratorImpl getGenerator() {
+		return this.wgi;
+	}
+	
 	public static DALImpl getInstance() throws IOException {
 		if (singleton == null) {
 			singleton = new DALImpl();
@@ -93,11 +97,11 @@ public class DALImpl {
 	public Map<String,String> getGuiPath(){
 		return this.guiPath;
 	}
-	
+	/*
 	public Map<Pair<Integer, Integer>, Character> getGameMap(){
 		return this.gameMap;
 	}
-	
+	*/
 	public Boolean getBooleanSetting(String prop){
 		if(settings.get(prop).getKey().equals("java.lang.Boolean")) {
 			return Boolean.parseBoolean(settings.get(prop).getValue());
@@ -106,11 +110,12 @@ public class DALImpl {
 		}
 	}
 	
-	public Integer getIntegerSetting(String prop){
+	public Integer getIntegerSetting(String prop) {
 		if(settings.get(prop).getKey().equals("java.lang.Integer")) {
 			return Integer.parseInt(settings.get(prop).getValue());
 		} else {
 			throw new IllegalStateException("Cast non riuscito");
 		}
 	}
+	
 }

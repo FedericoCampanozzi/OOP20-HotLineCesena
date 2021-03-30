@@ -2,10 +2,10 @@ package hotlinecesena.controller.menu;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+
 import java.io.IOException;
 
 import hotlinecesena.controller.GameController;
-import hotlinecesena.model.DALImpl;
 
 public class StartMenuController {
 	
@@ -20,21 +20,19 @@ public class StartMenuController {
 	@FXML
 	private Button exitButton;
 	
+	private static GameController gameScene = new GameController();
+	
 	public void newGameClick() throws IOException {
-		System.out.println("'New game' button pressed");
-		System.out.println(DALImpl.getInstance().getGameMap());
-		System.out.println(DALImpl.getInstance().getSimbols());
+		gameScene.changeScene("worldview.fxml");
 	}
 	
 	public void optionsClick() throws IOException {
-		System.out.println("'Options' button pressed");
-		
-		GameController gameScene = new GameController();
+		// System.out.println("'Options' button pressed");
 		gameScene.changeScene("OptionsView.fxml");
 	}
 	
 	public void exitClick() throws IOException {
-		System.out.println("'Exit' button pressed");
+		// System.out.println("'Exit' button pressed");
 		System.exit(0);
 	}
 
