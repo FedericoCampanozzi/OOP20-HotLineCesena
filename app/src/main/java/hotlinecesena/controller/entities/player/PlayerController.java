@@ -1,7 +1,7 @@
 package hotlinecesena.controller.entities.player;
 
 import hotlinecesena.controller.Updatable;
-import hotlinecesena.view.entities.Camera;
+import hotlinecesena.view.Camera;
 
 public interface PlayerController extends Updatable {
 

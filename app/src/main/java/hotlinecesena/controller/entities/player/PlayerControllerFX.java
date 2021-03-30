@@ -12,7 +12,7 @@ import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
-import hotlinecesena.view.entities.Camera;
+import hotlinecesena.view.Camera;
 import hotlinecesena.view.entities.Sprite;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -50,7 +50,6 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         return deltaTime -> {
             player.update(deltaTime);
             var inputs = listener.deliverInputs();
-            System.out.println(inputs.getMiddle());
             Set<Command> commands = interpreter.interpret(inputs, sprite.getSpritePosition(), deltaTime);
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(this.player));

@@ -14,8 +14,8 @@ import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.inventory.NaiveInventoryImpl;
-import hotlinecesena.view.entities.Camera;
-import hotlinecesena.view.entities.CameraImpl;
+import hotlinecesena.view.Camera;
+import hotlinecesena.view.CameraImpl;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import javafx.geometry.Point2D;
@@ -66,16 +66,11 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
                        ActorStatus.DEAD, 0.0
                        )
                 );
-
         final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
-
         final InputListener<KeyCode, MouseButton> listener = new InputListenerFX(scene);
-
         final InputInterpreter<KeyCode, MouseButton> interpreter = new InputInterpreterImpl<>(
                 keyBindings, mouseBindings);
-
         final Camera camera = new CameraImpl(scene);
-
         return new PlayerControllerFX(playerModel, view, interpreter, camera, listener);
     }
 }

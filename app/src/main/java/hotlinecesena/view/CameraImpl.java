@@ -1,4 +1,4 @@
-package hotlinecesena.view.entities;
+package hotlinecesena.view;
 
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
