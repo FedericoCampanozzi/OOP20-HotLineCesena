@@ -18,7 +18,7 @@ public class MathUtils {
     public static Point2D normalizeWithMagnitude(final Point2D vector, double magnitude) {
         return vector.multiply(1/magnitude);
     }
-    
+
     /**
      * Converts raw mouse coordinates to degrees.
      * 
