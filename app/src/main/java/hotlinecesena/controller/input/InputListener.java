@@ -16,6 +16,8 @@ public interface InputListener<K extends Enum<K>, M extends Enum<M>> {
 
     /**
      * Delivers in a "raw" form all inputs coming from the View.
+     * @param spritePosition current position of the player's sprite on the Scene.
+     * Used to adjust player rotation.
      * @return a {@code Triple} containing sets of raw inputs.
      */
     Triple<Set<K>, Set<M>, Point2D> deliverInputs();

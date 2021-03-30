@@ -6,12 +6,10 @@ import java.util.Set;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 
-import hotlinecesena.view.entities.Sprite;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 
 /**
  * 
@@ -20,62 +18,40 @@ import javafx.scene.input.MouseEvent;
  */
 public final class InputListenerFX implements InputListener<KeyCode, MouseButton> {
 
-    private static final float DEADZONE = 65.0f;
     private final Set<KeyCode> keyboardInputs = new HashSet<>();
     private final Set<MouseButton> mouseInputs = new HashSet<>();
-    private Point2D mouseMovement = Point2D.ZERO;
-    private final Scene scene;
-    private final Sprite playerView;
+    private Point2D currentMouseCoords = Point2D.ZERO;
 
-    public InputListenerFX(final Scene scene, final Sprite view) {
-        this.scene = scene;
-        this.playerView = view;
+    public InputListenerFX(final Scene scene) {
+        this.setKeyEventHandlers(scene);
+        this.setMouseButtonHandlers(scene);
+        this.setMouseMovementHandlers(scene);
     }
 
     @Override
     public Triple<Set<KeyCode>, Set<MouseButton>, Point2D> deliverInputs() {
-        this.listenForKeyInputs();
-        this.listenForMouseButtons();
-        this.listenForMouseMovement(playerView.getSpritePosition());
-        return new ImmutableTriple<>(this.keyboardInputs, this.mouseInputs, this.mouseMovement);
+        return new ImmutableTriple<>(this.keyboardInputs, this.mouseInputs, this.currentMouseCoords);
     }
 
-    private void listenForKeyInputs() {
-        scene.setOnKeyReleased(e -> {
-            this.unregister(this.keyboardInputs, e.getCode());
-        });
-        scene.setOnKeyPressed(e -> {
-            this.register(this.keyboardInputs, e.getCode());
-        });
+//    private EventHandler<? super KeyEvent> handleOnKeyReleased() {
+//        return e -> this.unregister(this.keyboardInputs, e.getCode());
+//    }
+
+    private void setKeyEventHandlers(final Scene scene) {
+        scene.setOnKeyReleased(e -> this.unregister(this.keyboardInputs, e.getCode()));
+        scene.setOnKeyPressed(e -> this.register(this.keyboardInputs, e.getCode()));
     }
 
-    private void listenForMouseButtons() {
-        scene.setOnMouseReleased(e -> {
-            this.unregister(this.mouseInputs, e.getButton());
-        });
-        scene.setOnMousePressed(e -> {
-            this.register(this.mouseInputs, e.getButton());
-        });
+    private void setMouseButtonHandlers(final Scene scene) {
+        scene.setOnMouseReleased(e -> this.unregister(this.mouseInputs, e.getButton()));
+        scene.setOnMousePressed(e -> this.register(this.mouseInputs, e.getButton()));
     }
 
-    private void listenForMouseMovement(final Point2D spritePosition) {
+    private void setMouseMovementHandlers(final Scene scene) {
         //Mouse moved, no buttons pressed
-        scene.setOnMouseMoved(e -> {
-            this.mouseMovement = this.retrieveMouseCoordinates(e, spritePosition);
-        });
+        scene.setOnMouseMoved(e -> this.currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY()));
         //Mouse moved and buttons pressed
-        scene.setOnMouseDragged(e -> {
-            this.mouseMovement = this.retrieveMouseCoordinates(e, spritePosition);
-        });
-    }
-
-    private Point2D retrieveMouseCoordinates(MouseEvent e, Point2D spritePosition) {
-        // Ignore mouse movements if too close to the player
-        if (spritePosition.distance(e.getSceneX(), e.getSceneY()) > DEADZONE) {
-            return new Point2D(e.getSceneX() - spritePosition.getX(),
-                               e.getSceneY() - spritePosition.getY());
-        }
-        return this.mouseMovement;
+        scene.setOnMouseDragged(e -> this.currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY()));
     }
 
     private <T extends Enum<T>> void register(Set<T> field, T code) {
