@@ -7,15 +7,17 @@ import java.util.Map;
 
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
+import hotlinecesena.controller.input.InputListener;
 import hotlinecesena.controller.input.InputListenerFX;
+import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.inventory.NaiveInventoryImpl;
 import hotlinecesena.view.entities.Camera;
 import hotlinecesena.view.entities.CameraImpl;
-import hotlinecesena.view.entities.SpriteView;
-import hotlinecesena.view.entities.SpriteViewImpl;
+import hotlinecesena.view.entities.Sprite;
+import hotlinecesena.view.entities.SpriteImpl;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -24,12 +26,12 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 
 public final class PlayerControllerFactoryFX implements PlayerControllerFactory {
-    
+
     // TODO: All temporary, will replace with values given by DAL
     private static final String SPRITE_NAME = "index.png";
-    private static final double STARTING_ANGLE = 90;
-    private static final double STARTING_SPEED = 500;
     private static final double MAX_HEALTH = 100;
+    private static final double SPEED = 500;
+    private static final double STARTING_ANGLE = 270;
     private static final Point2D STARTING_POS = Point2D.ZERO;
     private final Scene scene;
     private final Pane pane;
@@ -53,18 +55,27 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     @Override
     public PlayerController createPlayerController() {
         final Player playerModel = new PlayerImpl(
-                STARTING_POS, STARTING_ANGLE, STARTING_SPEED, MAX_HEALTH,
+                STARTING_POS,
+                STARTING_ANGLE,
+                SPEED,
+                MAX_HEALTH,
                 new NaiveInventoryImpl(),
-                Map.of()
+                Map.of(ActorStatus.NORMAL, 0.0,
+                       ActorStatus.ATTACKING, 10.0,
+                       ActorStatus.RELOADING, 3.0,
+                       ActorStatus.DEAD, 0.0
+                       )
                 );
 
-        final SpriteView view = new SpriteViewImpl(new Image(SPRITE_NAME), pane);
+        final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
 
-        final InputInterpreter<KeyCode, MouseButton> input = new InputInterpreterImpl<>(
-                keyBindings, mouseBindings, new InputListenerFX(scene, view));
+        final InputListener<KeyCode, MouseButton> listener = new InputListenerFX(scene);
+
+        final InputInterpreter<KeyCode, MouseButton> interpreter = new InputInterpreterImpl<>(
+                keyBindings, mouseBindings);
 
         final Camera camera = new CameraImpl(scene);
 
-        return new PlayerControllerFX(playerModel, view, input, camera);
+        return new PlayerControllerFX(playerModel, view, interpreter, camera, listener);
     }
 }
