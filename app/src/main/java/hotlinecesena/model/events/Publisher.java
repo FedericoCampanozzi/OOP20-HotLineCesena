@@ -14,7 +14,7 @@ public interface Publisher {
     void register(Subscriber subscriber);
     
     /**
-     * Unrestigers a previously registered {@link Subscriber}.
+     * Unregisters a previously registered {@link Subscriber}.
      * @param subscriber
      */
     void unregister(Subscriber subscriber);
