@@ -1,6 +1,6 @@
 package hotlinecesena.controller.input;
 
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutableTriple;
@@ -18,8 +18,8 @@ import javafx.scene.input.MouseButton;
  */
 public final class InputListenerFX implements InputListener<KeyCode, MouseButton> {
 
-    private final Set<KeyCode> keyboardInputs = new HashSet<>();
-    private final Set<MouseButton> mouseInputs = new HashSet<>();
+    private final Set<KeyCode> keyboardInputs = EnumSet.noneOf(KeyCode.class);
+    private final Set<MouseButton> mouseInputs = EnumSet.noneOf(MouseButton.class);
     private Point2D currentMouseCoords = Point2D.ZERO;
 
     public InputListenerFX(final Scene scene) {

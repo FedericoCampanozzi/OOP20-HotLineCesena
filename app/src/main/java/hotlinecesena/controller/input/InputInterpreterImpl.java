@@ -1,5 +1,6 @@
 package hotlinecesena.controller.input;
 
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -20,7 +21,7 @@ import javafx.geometry.Point2D;
  * @param <M> mouse button codes
  */
 public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
-    implements InputInterpreter<K, M> {
+implements InputInterpreter<K, M> {
 
     private static final float DEADZONE = 65.0f;
     private final Map<K, PlayerAction> keyBindings;
@@ -35,7 +36,7 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
     @Override
     public Set<Command> interpret(final Triple<Set<K>, Set<M>, Point2D> inputs, final Point2D spritePosition,
             final double deltaTime) {
-        final Set<PlayerAction> actions = new HashSet<>();
+        final Set<PlayerAction> actions = EnumSet.noneOf(PlayerAction.class);
         final Set<Command> commandsToDeliver = new HashSet<>();
 
         actions.addAll(convertBindings(inputs.getLeft(), this.keyBindings));
@@ -60,12 +61,12 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
         return commandsToDeliver;
     }
 
-    // Converts all bindings into Commands
+    // Converts all bindings into PlayerActions
     private <X extends Enum<X>> Set<PlayerAction> convertBindings(Set<X> inputs, Map<X, PlayerAction> bindings) {
         return inputs.stream()
             .filter(bindings::containsKey)
             .map(bindings::get)
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(Collectors.toCollection(() -> EnumSet.noneOf(PlayerAction.class))); // stackoverflow.com/a/35178448
     }
 
     // Computes the new direction
