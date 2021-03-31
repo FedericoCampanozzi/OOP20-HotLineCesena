@@ -82,8 +82,8 @@ public class AIImpl implements AI{
     }
     
     private boolean isInArea(Point2D target, int radius) {
-        return target.getX() >= this.current.getX() - radius && target.getX() <= this.current.getX() + radius
-                && target.getY() >= this.current.getY() - radius && target.getY() <= this.current.getY() + radius;
+        return (target.getX() - this.current.getX()) * (target.getX() - this.current.getX()) +
+                (target.getY() - this.current.getY()) * (target.getY() - this.current.getY()) <= radius * radius;
     }
     
     private boolean inLineOfSight(Point2D target) {
