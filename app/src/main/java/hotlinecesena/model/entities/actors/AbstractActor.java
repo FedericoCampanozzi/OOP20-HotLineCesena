@@ -77,7 +77,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
         if (!this.isAlive()) {
             this.status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?
-            this.publish(new DeathEvent<>(this));
+            this.publish(new DeathEvent(this));
         }
     }
 

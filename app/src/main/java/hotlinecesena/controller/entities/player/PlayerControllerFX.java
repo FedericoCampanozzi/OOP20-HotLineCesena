@@ -64,12 +64,12 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     @Subscribe
-    private void handleMovementEvent(MovementEvent<Player> e) {
+    private void handleMovementEvent(MovementEvent e) {
         sprite.updatePosition(e.getPosition());
     }
 
     @Subscribe
-    private void handleRotationEvent(RotationEvent<Player> e) {
+    private void handleRotationEvent(RotationEvent e) {
         sprite.updateRotation(e.getNewAngle());
     }
 }

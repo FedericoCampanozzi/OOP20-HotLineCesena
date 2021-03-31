@@ -1,15 +1,17 @@
 package hotlinecesena.model.events;
 
-public abstract class AbstractEvent<T> implements Event<T> {
+import hotlinecesena.model.entities.Entity;
 
-    private T source;
+public abstract class AbstractEvent implements Event {
 
-    protected AbstractEvent(final T source) {
+    private Entity source;
+
+    protected AbstractEvent(final Entity source) {
         this.source = source;
     }
 
     @Override
-    public T getSource() {
+    public Entity getSource() {
         return this.source;
     }
 }

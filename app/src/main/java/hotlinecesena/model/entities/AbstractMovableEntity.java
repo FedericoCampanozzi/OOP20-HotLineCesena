@@ -12,6 +12,7 @@ import javafx.geometry.Point2D;
 public abstract class AbstractMovableEntity extends AbstractEntity
 implements MovableEntity {
 
+    private static final double MOVE_NOISE = 5.0;
     private double speed;
 
     protected AbstractMovableEntity(final Point2D pos, final double angle, final double speed) {
@@ -25,7 +26,7 @@ implements MovableEntity {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.speed));
             this.setPosition(newPos);
-            this.publish(new MovementEvent<>(this, newPos));
+            this.publish(new MovementEvent(this, newPos, MOVE_NOISE));
         }
     }
 

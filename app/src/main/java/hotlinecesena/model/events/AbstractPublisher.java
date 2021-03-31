@@ -10,7 +10,7 @@ public abstract class AbstractPublisher implements Publisher {
         this.bus = new EventBus(identifier);
     }
 
-    protected void publish(Event<?> event) {
+    protected void publish(Event event) {
         this.bus.post(event);
     }
 

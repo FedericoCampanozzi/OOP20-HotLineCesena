@@ -42,7 +42,7 @@ public abstract class AbstractEntity extends AbstractPublisher implements Entity
     public void setAngle(final double angle) {
         if (this.angle != angle) {
             this.angle = angle;
-            this.publish(new RotationEvent<>(this, angle));
+            this.publish(new RotationEvent(this, angle));
         }
     }
 }
