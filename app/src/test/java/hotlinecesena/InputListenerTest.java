@@ -1,6 +1,7 @@
 package hotlinecesena;
 
 import static org.hamcrest.Matchers.*;
+
 import static org.hamcrest.MatcherAssert.*;
 
 import javafx.scene.input.KeyCode;
@@ -70,12 +71,12 @@ class InputListenerTest {
                 containsInAnyOrder(MouseButton.PRIMARY, MouseButton.SECONDARY));
 
         robot.release(KeyCode.W, KeyCode.E);
-        robot.release(MouseButton.PRIMARY);
+        robot.release(MouseButton.PRIMARY, MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
         assertThat(listener.deliverInputs().getLeft(),
-                contains(KeyCode.D));
+                allOf(contains(KeyCode.D), not(contains(KeyCode.W)), not(contains(KeyCode.E))));
         assertThat(listener.deliverInputs().getMiddle(),
-                contains(MouseButton.SECONDARY));
+                empty());
     }
 
     @Test
