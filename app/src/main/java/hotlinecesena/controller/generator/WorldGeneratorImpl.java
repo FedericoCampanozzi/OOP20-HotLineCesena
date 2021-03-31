@@ -2,157 +2,108 @@ package hotlinecesena.controller.generator;
 
 import java.util.*;
 import java.util.Map.Entry;
-
 import hotlinecesena.utilities.Utilities;
 import javafx.util.Pair;
 
 public class WorldGeneratorImpl {
 
-	private enum DOOR {
-		TOP(-1), BOT(1), LEFT(2), RIGHT(-2);
-
-		private final int id;
-
-		private DOOR(final int id) {
-			this.id = id;
-		}
-		
-		private int getId() {
-			return this.id;
-		}
-		
-		public static DOOR fromId (final int id) {
-			for(DOOR d : values()) {
-				if(id == d.getId()) {
-					return d;
-				}
-			}
-			
-			return null;
-		}
-		
-		public static DOOR getInverse(DOOR d) {
-			return DOOR.fromId(-d.getId());
-		}
-	}
-
 	private class Room {
+
 		private Map<Pair<Integer, Integer>, Character> map = new HashMap<>();
-		private Map<DOOR,Pair<Integer, Integer>> connections = new HashMap<>();
-		private final int w;
-		private final int h;
-		private Pair<Integer, Integer> relation = new Pair<>(0, 0);
-		
-		public Room(final int w, final int h, final int d) {
-			
-			this.w = w;
-			this.h = h;
-			
-			for (int i = 0; i < w; i++) {
-				for (int j = 0; j < h; j++) {
-					if (i == 0 || j == 0 || i == w - 1 || j == h - 1) {
-						map.put(new Pair<>(i, j), 'W');
+		private Pair<Integer, Integer> center = new Pair<>(0, 0);
+		private int width;
+		private int serial = 0;
+
+		public Pair<Integer, Integer> getCenter() {
+			return center;
+		}
+
+		public void setCenter(Pair<Integer, Integer> center) {
+			this.center = center;
+		}
+
+		public Room(int width, Map<Pair<Integer, Integer>, Character> map, int serial) {
+			super();
+			this.width = width;
+			this.map = map;
+			this.serial = serial;
+		}
+
+		public Room(int width, int cSize, int serial) {
+			if (width % 2 == 0) {
+				width++;
+			}
+
+			this.serial = serial;
+			this.width = width;
+			width = (width - 1) / 2;
+
+			for (int y = -width; y <= width; y++) {
+				for (int x = -width; x <= width; x++) {
+
+					if (y == -width || x == -width || y == width || x == width) {
+						map.put(new Pair<>(y, x), 'W');
 					} else {
-						map.put(new Pair<>(i, j), '.');
+						map.put(new Pair<>(y, x), '.');
 					}
 				}
 			}
-			
-			while (connections.size() < d) {
+			Set<Pair<Integer, Integer>> connections = new HashSet<>();
+			while (connections.size() < cSize) {
+				final int x = rnd.nextInt(this.width) - width;
+				final int y = rnd.nextInt(this.width) - width;
+				Pair<Integer, Integer> cPos = new Pair<>(y, x);
 
-				DOOR create = DOOR.values()[rnd.nextInt(DOOR.values().length)];
-				Pair<Integer, Integer> pii = new Pair<>(0,0);
-				
-				if (create == DOOR.LEFT) {
-					pii = new Pair<>(w / 2, 0);
-				} else if (create == DOOR.RIGHT) {
-					pii = new Pair<>(w / 2, h - 1);
-				} else if (create == DOOR.BOT) {
-					pii = new Pair<>(w - 1, h / 2);
-				} else if (create == DOOR.TOP) {
-					pii = new Pair<>(0, h / 2);
-				}
-
-				if (!this.connections.containsKey(create)) {
-					this.map.put(pii, 'D');
-					this.connections.put(create, pii);
+				if ((!cPos.equals(new Pair<Integer, Integer>(-width, -width))
+						&& !cPos.equals(new Pair<Integer, Integer>(width, width))
+						&& !cPos.equals(new Pair<Integer, Integer>(-width, width))
+						&& !cPos.equals(new Pair<Integer, Integer>(width, -width))) && !connections.contains(cPos)
+						&& this.map.get(cPos).equals('W')) {
+					this.map.put(cPos, 'D');
+					connections.add(cPos);
 				}
 			}
+			
+			//System.out.println(this.width + " x " + this.width + " [" + this.serial + "] -> " + this.connections.size() + "\n");
 		}
 		
-		public Room(final int wMin, final int hMin, final int dMin,
-				final int wMax, final int hMax, final int dMax) {
-			this(rnd.nextInt(wMax) + wMin, rnd.nextInt(hMax) + hMin, rnd.nextInt(dMax) + dMin);
+		@Override
+		public String toString() {
+			return "Room [width=" + this.width + " serial=" + this.serial + "]";
 		}
-		
+
 		public int getWidth() {
-			return this.w;
-		}
-		
-		public int getHeight() {
-			return this.h;
-		}
-		
-		public Pair<Integer, Integer> getRelation() {
-			return relation;
+			return width;
 		}
 
-		public void setRelation(Pair<Integer, Integer> relation) {
-			this.relation = Utilities.sumPair(this.relation, relation);
+		public Map<Pair<Integer, Integer>, Character> getMap() {
+			return map;
 		}
 
-		@Override
-		public String toString() {
-			return "Room [w=" + w + ",h=" + h + "," + this.connections.keySet().toString() + "]";
-		}
 		
-		public String toStringLow() {
-			return "Room [w=" + w + ",h=" + h + "," + this.connections.size() + "]";
+		public Room copy() {
+			return new Room(this.width, this.map, this.serial);
 		}
 	}
-	
-	private class RoomLinking {
-		private int fstIndex;
-		private int scdIndex;
-		private DOOR fstDoor;
-		private DOOR scdDoor;
-		
-		public RoomLinking(int fstIndex, int scdIndex, DOOR fstDoor, DOOR scdDoor) {
-			this.fstIndex = fstIndex;
-			this.scdIndex = scdIndex;
-			this.fstDoor = fstDoor;
-			this.scdDoor = scdDoor;
-		}
-		
-		public DOOR getFirstDoor() {
-			return this.fstDoor;
-		}
 
-		public DOOR getSecondDoor() {
-			return this.scdDoor;
-		}
-
-		@Override
-		public String toString() {
-			return "RoomLinking [fstIndex=" + fstIndex + ", scdIndex=" + scdIndex + ", fstDoor=" + fstDoor
-					+ ", scdDoor=" + scdDoor + "]";
-		}
-	}
-	
-	private final static int MAX_POSSIBILITY = 5;
+	private final static int MAX_POSSIBILITY = 10000;
 	private final static int MAP_PADDING = 2;
 
 	private Random rnd = new Random();
-	
-	//Low level description
+
+	// Low level description
 	private Map<Pair<Integer, Integer>, Character> map = new HashMap<>();
-	
-	//High level description
+
+	// High level description
 	private List<Room> baseRooms = new ArrayList<>();
 	private List<Room> rooms = new ArrayList<>();
-	final List<RoomLinking> linking = new ArrayList<>();
-	private int xMin, xMax, yMin, yMax;
 
+	// Debug
+	private List<Integer> serials = new ArrayList<>();
+
+	private int xMin, xMax, yMin, yMax;
+	private int seed;
+	
 	public int getMinX() {
 		return this.xMin;
 	}
@@ -168,175 +119,199 @@ public class WorldGeneratorImpl {
 	public int getMaxY() {
 		return this.yMax;
 	}
-	
-	public WorldGeneratorImpl(final int seed, final int wMin, final int hMin,
-			final int wMax, final int hMax,
-			final int nRooms, final int nBaseRooms ) {
-		
-		if((wMin >= wMax) || (hMin >= hMax)) {
+
+	public WorldGeneratorImpl(final int seed, final int wMin, final int hMin, final int wMax, final int hMax,
+			final int nRooms, final int nBaseRooms) {
+
+		if ((wMin >= wMax) || (hMin >= hMax)) {
 			new IllegalArgumentException("La stanza - quindi la mappa non puo' essere creata");
 		}
 		
-		rnd.setSeed(seed);
-		
+		this.seed = seed;
+		rnd.setSeed(this.seed);
+
+		while (this.serials.size() < nRooms + nBaseRooms) {
+			int serial = rnd.nextInt();
+			if (!this.serials.contains(serial)) {
+				this.serials.add(serial);
+			}
+		}
 		xMin = Integer.MAX_VALUE;
 		yMin = Integer.MAX_VALUE;
 		xMax = Integer.MIN_VALUE;
 		yMax = Integer.MIN_VALUE;
-		
-		final List<Room> openRooms = new ArrayList<>();
-		final List<RoomLinking> possibleRoomsLinking = new ArrayList<>();
 
-		baseRooms.add(new Room(5,5,4));
-		
 		for (int i = 0; i < nBaseRooms; i++) {
-			baseRooms.add(new Room(wMin, hMin, 1, wMax, hMax, 4));
-			//baseRooms.add(new Room(3,7,4));
+			baseRooms.add(new Room(rnd.nextInt(wMax) + wMin, 3, this.serials.get(i)));
 		}
-		
-		generateRoom(this.baseRooms.get(0));
-		
-		for (int p = 0; p < 500; p++) {
-			openRooms.clear();
-			possibleRoomsLinking.clear();
-			
-			if(this.rooms.size() >= nRooms) {
-				break;
-			}
-			
-			for (Room room : this.rooms) {
-				if (room.connections.size() != 0) {
-					openRooms.add(room);
-				}
-			}
-			
-			for (int openRoomIndex = 0; openRoomIndex < openRooms.size(); openRoomIndex++) {
-				for (int baseRoomIndex = 0; baseRoomIndex < this.baseRooms.size(); baseRoomIndex++) {
 
-					for (DOOR d : this.baseRooms.get(baseRoomIndex).connections.keySet()) {
+		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
-						if (openRoomIndex != baseRoomIndex &&
-								openRooms.get(openRoomIndex).connections.containsKey(DOOR.getInverse(d))) {
-							possibleRoomsLinking.add(new RoomLinking(openRoomIndex, baseRoomIndex, DOOR.getInverse(d), d));
-						}
-						/*
-						if (possibleRoomsLinking.size() == MAX_POSSIBILITY) {
-							break;
-						}*/
-					}
+			Room toPut = this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).copy();
+
+			if (this.rooms.isEmpty()) {
+				generateRoom(new Pair<>(0, 0), toPut);
+			} else {
+				Pair<Integer, Integer> doorLink = getConnectionsLinking();
+				int dirX = (rnd.nextInt(3) - 1) * ((toPut.getWidth() / 2) + 1);
+				int dirY = 0;
+				if(dirX == 0) {
+					dirY = (rnd.nextInt(3) - 1) * ((toPut.getWidth() / 2) + 1);
+				}
+				Pair<Integer, Integer> dir = new Pair<>(dirY, dirX);
+				Pair<Integer, Integer> center = Utilities.sumPair(doorLink, dir);
+				if (canPutRoom(center, doorLink, dir, toPut)) {
+					generateRoom(center, toPut);
+					toPut.setCenter(center);
 				}
 			}
-			
-			System.out.println("FREE : " + openRooms.size());
-			System.out.println("ROOMS : " + rooms.size());
-			System.out.println("POSS : " + possibleRoomsLinking.size());
-			
-			
-			if(possibleRoomsLinking.size() != 0) {
-				RoomLinking link = possibleRoomsLinking.get(rnd.nextInt(possibleRoomsLinking.size()));
-				this.linking.add(link);
-				Room FirstRoom = openRooms.get(link.fstIndex);
-				Room SecondRoom = this.baseRooms.get(link.scdIndex);
-				
-				///*
-				Pair<Integer,Integer> D1POS = FirstRoom.connections.get(link.fstDoor);
-				Pair<Integer,Integer> D2POS = SecondRoom.connections.get(link.scdDoor);
-				
-				if (link.getFirstDoor() == DOOR.LEFT) {
-					//SecondRoom.setRelation(new Pair<>(D1POS.getKey() - D2POS.getKey(), -SecondRoom.getHeight()));
-					SecondRoom.setRelation(new Pair<>(-SecondRoom.getWidth(), D1POS.getValue() - D2POS.getValue()));
-				} else if (link.getFirstDoor()  == DOOR.RIGHT) {
-					//SecondRoom.setRelation(new Pair<>(D1POS.getKey() - D2POS.getKey(), FirstRoom.getHeight()));
-					SecondRoom.setRelation(new Pair<>(FirstRoom.getWidth(), D1POS.getValue() - D2POS.getValue()));
-				} else if (link.getFirstDoor() == DOOR.BOT) {
-					//SecondRoom.setRelation(new Pair<>(-SecondRoom.getWidth(), D1POS.getValue() - D2POS.getValue()));
-					SecondRoom.setRelation(new Pair<>(D1POS.getKey() - D2POS.getKey(), -SecondRoom.getHeight()));
-				} else if (link.getFirstDoor() == DOOR.TOP) {
-					//SecondRoom.setRelation(new Pair<>(FirstRoom.getWidth(), D1POS.getValue() - D2POS.getValue()));
-					SecondRoom.setRelation(new Pair<>(D1POS.getKey() - D2POS.getKey(), FirstRoom.getHeight()));
-				}
-				
-				if(canGenerate(SecondRoom)) {
-					generateRoom(SecondRoom);
-					FirstRoom.connections.remove(link.getFirstDoor());					
-				}
-				//*/
-			}
-			
-			//Collections.shuffle(this.rooms);
-			//Collections.shuffle(this.baseRooms);
 		}
 		
-		for(RoomLinking rl : this.linking) {
-			System.out.println(rl.toString());
+		/*
+		System.out.println();
+
+		for (Room r : this.rooms) {
+			System.out.println(r.toString());
 		}
+		*/
 	}
 	
-	private boolean canGenerate(Room r) {
-		boolean can = true;
+	private Pair<Integer, Integer> getConnectionsLinking() {
+		List<Pair<Integer, Integer>> allDoors = new ArrayList<>();
+		for (Pair<Integer, Integer> p : this.map.keySet()) {
+			if (this.map.get(p).equals('D')) {
+				allDoors.add(p);
+			}
+		}
+		return allDoors.get(rnd.nextInt(allDoors.size()));
+	}
 
-		for (Entry<Pair<Integer, Integer>, Character> p2 : r.map.entrySet()) {
-			if (this.map.containsKey(Utilities.sumPair(r.getRelation(), p2.getKey()))) {
+	private boolean canPutRoom(Pair<Integer, Integer> center, Pair<Integer, Integer> doorLink, Pair<Integer, Integer> dir, Room room) {
+		boolean can = true;
+		boolean isNearDoor = false;
+		Pair<Integer, Integer> dd = new Pair<>(doorLink.getKey() + (int)Math.signum(dir.getKey()), doorLink.getValue() + (int)Math.signum(dir.getValue()));
+		
+		for (Pair<Integer, Integer> positions : room.getMap().keySet()) {
+			var pii = Utilities.sumPair(center, positions);
+			if (this.map.containsKey(pii)) {
 				can = false;
 				break;
 			}
+			
+			if(pii.equals(dd) && room.getMap().get(positions).equals('D')) {
+				isNearDoor = true;
+			}
 		}
 		
-		return can;
+		
+		return can && isNearDoor;
 	}
 
-	private void generateRoom(Room r) {
-		for (Entry<Pair<Integer, Integer>, Character> p2 : r.map.entrySet()) {
-			Pair<Integer, Integer> pii = Utilities.sumPair(r.getRelation(), p2.getKey());
-			this.map.put(pii, p2.getValue());
+	private void generateRoom(Pair<Integer, Integer> center, Room room) {
 
-			if (pii.getKey() < xMin) {
-				xMin = pii.getKey();
+		for (Entry<Pair<Integer, Integer>, Character> p : room.getMap().entrySet()) {
+			Pair<Integer, Integer> position = Utilities.sumPair(center, p.getKey());
+			
+			this.map.put(position, p.getValue());
+			
+			if (position.getKey() < xMin) {
+				xMin = position.getKey();
 			}
-			if (pii.getKey() > xMax) {
-				xMax = pii.getKey();
+			if (position.getKey() > xMax) {
+				xMax = position.getKey();
 			}
 
-			if (pii.getValue() < yMin) {
-				yMin = pii.getValue();
+			if (position.getValue() < yMin) {
+				yMin = position.getValue();
 			}
-			if (pii.getValue() > yMax) {
-				yMax = pii.getValue();
+			if (position.getValue() > yMax) {
+				yMax = position.getValue();
 			}
 		}
-		this.rooms.add(r);
+		
+		this.rooms.add(room);
 	}
-	
+
+	public WorldGeneratorImpl addPlayer() {
+		Room r = this.rooms.get(rnd.nextInt(this.rooms.size()));
+		r.getMap().put(r.getCenter(), 'P');
+		this.map.put(r.getCenter(), 'P');
+		return this;
+	}
+
+	public WorldGeneratorImpl addEnemy(float rate, int maxEnemyRoom) {
+		for(Room r : this.rooms) {
+			int enemyCount = 0;
+			for(Entry<Pair<Integer,Integer>,Character> point : r.getMap().entrySet()) {
+				if(enemyCount<maxEnemyRoom &&  point.getValue().equals('.') && rnd.nextFloat() < rate) {
+					r.getMap().put(point.getKey(), 'E');
+					this.map.put(Utilities.sumPair(point.getKey(), r.getCenter()), 'E');
+					enemyCount++;
+				}
+			}
+		}
+		return this;
+	}
+
 	public WorldGeneratorImpl build() {
-		
+
 		this.xMin = xMin - MAP_PADDING;
 		this.xMax = xMax + MAP_PADDING;
 		this.yMax = yMax + MAP_PADDING;
 		this.yMin = yMin - MAP_PADDING;
 		
-		//fill empty position with blank and correct door with no link
 		for (int i = xMin; i <= xMax; i++) {
 			for (int j = yMin; j <= yMax; j++) {
-				
+
 				if (this.map.get(new Pair<>(i, j)) == null) {
-					this.map.put(new Pair<>(i, j), '\\');
+					this.map.put(new Pair<>(i, j), '_');
 				}
 				
 				if (this.map.get(new Pair<>(i, j)) == 'D' && (
-						this.map.get(new Pair<>(i + 1, j)) == null || this.map.get(new Pair<>(i + 1, j)) == '\\' ||
-						this.map.get(new Pair<>(i - 1, j)) == null || this.map.get(new Pair<>(i - 1, j)) == '\\' ||
-						this.map.get(new Pair<>(i, j + 1)) == null ||this.map.get(new Pair<>(i, j + 1)) == '\\' ||
-						this.map.get(new Pair<>(i, j - 1)) == null || this.map.get(new Pair<>(i, j - 1)) == '\\')) {
-					this.map.put(new Pair<>(i, j), '+');
+						this.map.get(new Pair<>(i + 1, j)) == null || this.map.get(new Pair<>(i + 1, j)) == '_' || 
+						this.map.get(new Pair<>(i - 1, j)) == null || this.map.get(new Pair<>(i - 1, j)) == '_' || 
+						this.map.get(new Pair<>(i, j + 1)) == null || this.map.get(new Pair<>(i, j + 1)) == '_' || 
+						this.map.get(new Pair<>(i, j - 1)) == null || this.map.get(new Pair<>(i, j - 1)) == '_')) {
+					this.map.put(new Pair<>(i, j), 'W');
 				}
 				
+				if (this.map.get(new Pair<>(i, j)).equals('D') && this.map.get(new Pair<>(i + 1, j)).equals('D') && this.map.get(new Pair<>(i + 2, j)).equals('.')){
+					this.map.put(new Pair<>(i, j), '.');
+					this.map.put(new Pair<>(i + 1, j), '.');
+				}
+				
+				if (this.map.get(new Pair<>(i, j)).equals('D') && this.map.get(new Pair<>(i, j + 1)).equals('D') && this.map.get(new Pair<>(i, j + 2)).equals('.')){
+					this.map.put(new Pair<>(i, j), '.');
+					this.map.put(new Pair<>(i, j + 1), '.');
+				}
+				
+				if (this.map.get(new Pair<>(i, j)).equals('D') && this.map.get(new Pair<>(i - 1, j)).equals('D') && this.map.get(new Pair<>(i - 2, j)).equals('.')){
+					this.map.put(new Pair<>(i, j), '.');
+					this.map.put(new Pair<>(i - 1, j), '.');
+				}
+				
+				if (this.map.get(new Pair<>(i, j)).equals('D') && this.map.get(new Pair<>(i, j - 1)).equals('D') && this.map.get(new Pair<>(i, j - 2)).equals('.')){
+					this.map.put(new Pair<>(i, j), '.');
+					this.map.put(new Pair<>(i, j - 1), '.');
+				}
 			}
 		}
-		
+
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+				if (this.map.get(new Pair<>(i, j)) == 'D') {
+					this.map.put(new Pair<>(i, j), 'W');
+				}
+			}
+		}
 		return this;
 	}
 	
 	public Map<Pair<Integer, Integer>, Character> getMap() {
 		return this.map;
+	}
+
+	public int getSeed() {
+		return this.seed;
 	}
 }
