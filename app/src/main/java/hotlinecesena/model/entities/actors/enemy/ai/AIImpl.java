@@ -59,15 +59,15 @@ public class AIImpl implements AI{
         } else if(this.nextMove.equals(DirectionList.WEST.get())) {
             return LOOK_WEST;
         } else if(this.nextMove.equals(new Point2D(-1,1))) {
-            return LOOK_WEST_NORTH;
-        } else if(this.nextMove.equals(new Point2D(1,1))) {
-            return LOOK_EAST_NORTH;
-        } else if(this.nextMove.equals(new Point2D(1,-1))) {
-            return LOOK_EAST_SOUTH;
-        } else if(this.nextMove.equals(new Point2D(-1,-1))) {
             return LOOK_WEST_SOUTH;
+        } else if(this.nextMove.equals(new Point2D(1,1))) {
+            return LOOK_EAST_SOUTH;
+        } else if(this.nextMove.equals(new Point2D(1,-1))) {
+            return LOOK_EAST_NORTH;
+        } else if(this.nextMove.equals(new Point2D(-1,-1))) {
+            return LOOK_WEST_NORTH;
         } else {
-            return LOOK_NORTH;
+            return this.rotation;
         }
     }
     
