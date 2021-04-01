@@ -57,6 +57,11 @@ class ActorModelTest {
     }
 
     @Test
+    private void actorCannotRestartReloadingWhileAlreadyReloading() {
+        
+    }
+
+    @Test
     private void actorHurtTest() {
         actor.takeDamage(50);
         assertEquals(50, actor.getCurrentHealth());
