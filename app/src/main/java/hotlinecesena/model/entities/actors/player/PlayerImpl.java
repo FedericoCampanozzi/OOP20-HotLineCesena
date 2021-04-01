@@ -1,7 +1,6 @@
 package hotlinecesena.model.entities.actors.player;
 
 import java.util.Map;
-
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.inventory.Inventory;
@@ -19,7 +18,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
 
     @Override
     public double getNoiseRadius() {
-        return this.noiseLevels.get(this.getActorStatus());
+        return this.noiseLevels.get(this.getActorStatus()); //TODO Put noise in events instead?
     }
 
     @Override
