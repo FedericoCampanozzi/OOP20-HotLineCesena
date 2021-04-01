@@ -1,35 +1,40 @@
-package hotlinecesena.view;
+package hotlinecesena.view.camera;
 
-import javafx.geometry.Point2D;
+import hotlinecesena.model.entities.Entity;
 import javafx.scene.layout.Pane;
 
 /**
  * 
- * Models a camera following a movable entity.
+ * Controller for JavaFX which follows the movements of a {@link Camera}.
  *
  */
-public interface Camera {
+public interface CameraController {
 
     /**
      * Attaches a {@link Translate} to a JavaFX {@link Pane} to simulate camera movement.
      * 
      * @param pane the {@code Pane} which will be translated.
+     * @throws NullPointerException if the supplied {@code Pane} is null.
      */
-    void attachToPane(Pane pane);
+    void setPane(Pane pane) throws NullPointerException;
     
     /**
-     * Detaches this camera's {@link Translate} from a JavaFX {@link Pane}, if it was previously attached.
-     * 
-     * @param pane the {@code Pane} from which the {@code Translate} will be detached.
+     * Detaches the {@link Translate} from this camera's current JavaFX {@link Pane}.
      */
-    void detachFromPane(Pane pane);
+    void removePane();
+    
+    /**
+     * Orders the {@link Camera} model to follow a specific {@link Entity}.
+     * 
+     * @param entity
+     * @throws NullPointerException if the supplied {@code Entity} is null.
+     */
+    void setEntity(Entity entity) throws NullPointerException;
 
     /**
-     * Updates the camera position based on an entity's sprite coordinates.
+     * Updates the {@link Translate} position based on {@link Camera} movements.
      * 
-     * @param spritePos the entity's sprite position on the Scene.
-     * @param deltaTime time elapsed since the last frame was rendered. Used for interpolating
-     * camera movement.
+     * @param deltaTime
      */
-    void update(Point2D spritePos, double deltaTime);
+    void update(double deltaTime);
 }

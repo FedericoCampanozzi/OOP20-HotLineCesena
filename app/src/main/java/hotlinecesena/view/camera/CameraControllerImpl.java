@@ -1,52 +1,52 @@
-package hotlinecesena.view;
+package hotlinecesena.view.camera;
 
-import hotlinecesena.utilities.MathUtils;
+import java.util.Objects;
+
+import hotlinecesena.model.camera.Camera;
+import hotlinecesena.model.entities.Entity;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
 /**
- * Simple camera implementation.
+ * Simple camera controller for JavaFX.
  *
  */
-public class CameraImpl implements Camera {
+public class CameraControllerImpl implements CameraController {
 
-    private static final int ACCEL = 30;
-    private static final float CENTERING_FACTOR = 2.8125f;
-    private static final float SHARPNESS = 0.2f;
+    private static final float CENTERING_FACTOR = 2.23f; // By trial and error
     private static final float SPEED_SCALE = 2.0f;
     private final Translate paneTranslate = new Translate();
-    private final Scene scene;
+    private final Camera camera;
+    private Pane pane;
 
-    public CameraImpl(final Scene scene) {
-        this.scene = scene;
+    public CameraControllerImpl(final Camera camera, final Pane pane) {
+        this.camera = Objects.requireNonNull(camera);
+        this.setPane(pane);
     }
 
     @Override
-    public void attachToPane(final Pane pane) {
+    public void setPane(final Pane pane) throws NullPointerException {
+        this.pane = Objects.requireNonNull(pane);
         pane.getTransforms().add(this.paneTranslate);
     }
-    
+
     @Override
-    public void detachFromPane(final Pane pane) {
-        if (pane.getTransforms().contains(this.paneTranslate)) {
-            pane.getTransforms().remove(this.paneTranslate);
-        }
+    public void removePane() {
+        pane.getTransforms().remove(this.paneTranslate);
+    }
+
+    public void setEntity(Entity entity) throws NullPointerException {
+        this.camera.attachTo(Objects.requireNonNull(entity));
     }
 
     @Override
-    public void update(final Point2D playerPos, final double deltaTime) {
-        // Blend formula taken from gamedev.stackexchange.com/a/152466
-        final double blend = 1 - Math.pow(1 - SHARPNESS, deltaTime * ACCEL);
-
-        final Point2D cameraPos = new Point2D(paneTranslate.getX(), paneTranslate.getY());
-        final Point2D newPos = MathUtils.lerp(
-                cameraPos,
-                playerPos.multiply(SPEED_SCALE)
-                    .subtract(scene.getWidth()/CENTERING_FACTOR, scene.getHeight()/CENTERING_FACTOR),
-                blend);
-        this.paneTranslate.setX(newPos.getX());
-        this.paneTranslate.setY(newPos.getY());
+    public void update(final double deltaTime) {
+        this.camera.update(deltaTime);
+        final Point2D newTranslate = this.camera.getCameraPosition()
+                .multiply(SPEED_SCALE)
+                .subtract(pane.getWidth()/CENTERING_FACTOR, pane.getHeight()/CENTERING_FACTOR);
+        this.paneTranslate.setX(-newTranslate.getX());
+        this.paneTranslate.setY(-newTranslate.getY());
     }
 }
