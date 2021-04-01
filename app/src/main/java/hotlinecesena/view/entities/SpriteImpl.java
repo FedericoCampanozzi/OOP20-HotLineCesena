@@ -10,7 +10,7 @@ import javafx.scene.transform.Translate;
 public class SpriteImpl implements Sprite {
 
     private static final double SCALE = 0.2; //TODO Temporary, GameController will pass this to the constructor
-    private static final double SPEED_SCALE = 10;
+    private static final double SPEED_SCALE = 10; //SCALE * SPEED_SCALE = 2
     private final ImageView imageView;
     private final Rotate rotate;
     private final Translate trans;
