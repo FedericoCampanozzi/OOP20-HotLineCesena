@@ -13,8 +13,9 @@ import javafx.geometry.Point2D;
  * <br>
  * Its implementations must be View-agnostic, meaning they must work with virtually
  * any graphics library without needing any modifications.
- * </p>
  * To achieve this, implementations must work alongside an InputListener.
+ * </p>
+ * Not to be confused with the Interpreter pattern.
  *
  * @param <K> keyboard key codes
  * @param <M> mouse button codes
