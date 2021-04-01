@@ -1,10 +1,12 @@
 package hotlinecesena.controller.input;
 
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toUnmodifiableSet;
+
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -66,7 +68,7 @@ implements InputInterpreter<K, M> {
         return inputs.stream()
             .filter(bindings::containsKey)
             .map(bindings::get)
-            .collect(Collectors.toCollection(() -> EnumSet.noneOf(PlayerAction.class))); // stackoverflow.com/a/35178448
+            .collect(toCollection(() -> EnumSet.noneOf(PlayerAction.class)));
     }
 
     // Computes the new direction
@@ -96,6 +98,6 @@ implements InputInterpreter<K, M> {
         return actions.stream()
             .filter(a -> a.getCommand().isPresent())
             .map(a -> a.getCommand().get())
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(toUnmodifiableSet());
     }
 }
