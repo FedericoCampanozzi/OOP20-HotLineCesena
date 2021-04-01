@@ -28,14 +28,14 @@ import javafx.scene.paint.Color;
 @TestInstance(Lifecycle.PER_METHOD)
 class InputListenerTest {
 
-    static FxRobot robot;
-    static Scene testScene;
-    static InputListener<KeyCode, MouseButton> listener;
+    private FxRobot robot;
+    private Scene testScene;
+    private InputListener<KeyCode, MouseButton> listener;
 
     @Start
     public void start(Stage stage) {
         robot = new FxRobot();
-        testScene = new Scene(new Pane());
+        testScene = new Scene(new Pane(), 800, 600);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX(testScene);
         stage.setScene(testScene);
@@ -92,7 +92,7 @@ class InputListenerTest {
     @Test
     void mouseMovement() {
         final Point2D center = new Point2D(testScene.getWidth()/2, testScene.getHeight()/2);
-        robot.moveTo(testScene); // Moves to the center of the scene
+        robot.moveTo(Point2D.ZERO).moveTo(testScene);
         WaitForAsyncUtils.waitForFxEvents();
         assertThat(listener.deliverInputs().getRight(), equalTo(center));
     }

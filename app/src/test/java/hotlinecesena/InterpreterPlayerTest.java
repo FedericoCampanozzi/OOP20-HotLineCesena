@@ -25,6 +25,7 @@ import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.inventory.NaiveInventoryImpl;
+import hotlinecesena.utilities.MathUtils;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
 import javafx.geometry.Point2D;
@@ -39,14 +40,14 @@ import javafx.stage.Stage;
 @TestInstance(Lifecycle.PER_METHOD)
 class InterpreterPlayerTest {
 
-    static Player player;
-    static FxRobot robot;
-    static Scene testScene;
-    static InputListener<KeyCode, MouseButton> listener;
-    static InputInterpreter<KeyCode, MouseButton> interpreter;
-    static final double SPEED = 1;
-    static final double MAX_HP = 100;
-    static final double DELTA_TIME = 1;
+    private Player player;
+    private FxRobot robot;
+    private Scene testScene;
+    private InputListener<KeyCode, MouseButton> listener;
+    private InputInterpreter<KeyCode, MouseButton> interpreter;
+    private static final double SPEED = 1;
+    private static final double MAX_HP = 100;
+    private static final double DELTA_TIME = 1;
     private final Map<KeyCode, PlayerAction> keyBindings = new EnumMap<>(Map.of(
             KeyCode.W,             MOVE_NORTH,
             KeyCode.S,             MOVE_SOUTH,
@@ -62,7 +63,7 @@ class InterpreterPlayerTest {
     public void start(Stage stage) {
         player = new PlayerImpl(Point2D.ZERO, 270, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
         robot = new FxRobot();
-        testScene = new Scene(new Pane());
+        testScene = new Scene(new Pane(), 800, 600);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX(testScene);
         interpreter = new InputInterpreterImpl<>(keyBindings, mouseBindings);
@@ -124,16 +125,16 @@ class InterpreterPlayerTest {
         assertThat(player.getPosition(), equalTo(dest));
     }
 
-    //TODO Can't make this work
-//    @Test
-//    void deliverRotation() {
-//        final Point2D mouseCoords = new Point2D(testScene.getWidth()/2, testScene.getHeight()/2);
-//        final double angle = MathUtils.mouseToDegrees(mouseCoords);
-//        robot.moveBy(testScene.getWidth()/2, testScene.getHeight()/2);
-//        WaitForAsyncUtils.waitForFxEvents();
-//        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
-//        assertThat(commands, not(empty()));
-//        commands.forEach(c -> c.execute(player));
-//        assertThat(player.getAngle(), equalTo(angle));
-//    }
+    @Test
+    void deliverRotation() {
+        final Point2D mouseCoords = new Point2D(testScene.getWidth()/2, testScene.getHeight());
+        final double angle = MathUtils.mouseToDegrees(mouseCoords);
+        robot.moveBy(0, testScene.getHeight()/2);
+        WaitForAsyncUtils.waitForFxEvents();
+        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        assertThat(commands, not(empty()));
+        commands.forEach(c -> c.execute(player));
+        assertThat(Math.floor(player.getAngle()), equalTo(Math.floor(angle)));
+        // Without truncating: player.getAngle() == 56.3; angle == 56.2 --> TEST FAILS
+    }
 }
