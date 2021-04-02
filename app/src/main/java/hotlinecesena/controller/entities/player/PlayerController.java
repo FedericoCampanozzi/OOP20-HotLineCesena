@@ -1,9 +1,10 @@
 package hotlinecesena.controller.entities.player;
 
 import hotlinecesena.controller.Updatable;
-import hotlinecesena.view.entities.Camera;
+import hotlinecesena.view.camera.CameraController;
 
 public interface PlayerController extends Updatable {
 
-    Camera getCamera();
+    // TODO To be removed when the GameController will be made to hold the camera
+    CameraController getCamera();
 }

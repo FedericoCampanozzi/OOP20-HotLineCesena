@@ -1,9 +1,14 @@
 package hotlinecesena.controller.input;
 
+import static java.util.stream.Collectors.toCollection;
+import static java.util.stream.Collectors.toUnmodifiableSet;
+
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import org.apache.commons.lang3.tuple.Triple;
 
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
@@ -18,28 +23,26 @@ import javafx.geometry.Point2D;
  * @param <M> mouse button codes
  */
 public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
-    implements InputInterpreter<K, M> {
+implements InputInterpreter<K, M> {
 
+    private static final float DEADZONE = 65.0f;
     private final Map<K, PlayerAction> keyBindings;
     private final Map<M, PlayerAction> mouseBindings;
-    private final InputListener<K, M> listener;
     private Point2D currentMouseCoords = Point2D.ZERO;
 
-    public InputInterpreterImpl(final Map<K, PlayerAction> keyBindings, final Map<M, PlayerAction> mouseBindings,
-            final InputListener<K, M> listener) {
+    public InputInterpreterImpl(final Map<K, PlayerAction> keyBindings, final Map<M, PlayerAction> mouseBindings) {
         this.keyBindings = keyBindings;
         this.mouseBindings = mouseBindings;
-        this.listener = listener;
     }
 
     @Override
-    public Set<Command> interpret(double deltaTime) {
-        final var receivedInputs = this.listener.deliverInputs();
-        final Set<PlayerAction> actions = new HashSet<>();
+    public Set<Command> interpret(final Triple<Set<K>, Set<M>, Point2D> inputs, final Point2D spritePosition,
+            final double deltaTime) {
+        final Set<PlayerAction> actions = EnumSet.noneOf(PlayerAction.class);
         final Set<Command> commandsToDeliver = new HashSet<>();
 
-        actions.addAll(convertBindings(receivedInputs.getLeft(), this.keyBindings));
-        actions.addAll(convertBindings(receivedInputs.getMiddle(), this.mouseBindings));
+        actions.addAll(convertBindings(inputs.getLeft(), this.keyBindings));
+        actions.addAll(convertBindings(inputs.getMiddle(), this.mouseBindings));
 
         // Compute normalized movement direction
         final Point2D newMovementDir = this.processMovementDirection(actions);
@@ -48,7 +51,7 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
         }
 
         // Compute new angle
-        final Point2D newMouseCoords = receivedInputs.getRight();
+        final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getRight(), spritePosition);
         if (!this.currentMouseCoords.equals(newMouseCoords)) {
             commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
             this.currentMouseCoords = newMouseCoords;
@@ -60,25 +63,41 @@ public final class InputInterpreterImpl<K extends Enum<K>, M extends Enum<M>>
         return commandsToDeliver;
     }
 
+    // Converts all bindings into PlayerActions
     private <X extends Enum<X>> Set<PlayerAction> convertBindings(Set<X> inputs, Map<X, PlayerAction> bindings) {
         return inputs.stream()
             .filter(bindings::containsKey)
             .map(bindings::get)
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(toCollection(() -> EnumSet.noneOf(PlayerAction.class)));
     }
 
+    // Computes the new direction
     private Point2D processMovementDirection(Set<PlayerAction> actions) {
-        return actions.stream()
-            .filter(a -> a.getDirection().isPresent())
-            .map(a -> a.getDirection().get().get())
-            .reduce(Point2D.ZERO, Point2D::add)
-            .normalize();
+        Point2D direction = actions.stream()
+                .filter(a -> a.getDirection().isPresent())
+                .map(a -> a.getDirection().get().get())
+                .reduce(Point2D.ZERO, Point2D::add);
+        final double magnitude = direction.magnitude();
+        if (magnitude > 1) {
+            direction = MathUtils.normalizeWithMagnitude(direction, magnitude);
+        }
+        return direction;
     }
 
+    // Ignores mouse movement when too close to the player's sprite
+    private Point2D processMouseCoordinates(Point2D mouseCoords, Point2D spritePosition) {
+        if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
+            return new Point2D(mouseCoords.getX() - spritePosition.getX(),
+                               mouseCoords.getY() - spritePosition.getY());
+        }
+        return this.currentMouseCoords;
+    }
+
+    // Converts all remaining PlayerActions into Commands
     private Set<Command> computeRemainingCommands(Set<PlayerAction> actions) {
         return actions.stream()
             .filter(a -> a.getCommand().isPresent())
             .map(a -> a.getCommand().get())
-            .collect(Collectors.toUnmodifiableSet());
+            .collect(toUnmodifiableSet());
     }
 }

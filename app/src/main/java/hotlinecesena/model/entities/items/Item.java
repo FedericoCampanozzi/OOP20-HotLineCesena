@@ -9,7 +9,5 @@ public interface Item {
 
     Optional<Consumer<Actor>> usage();
     
-    Optional<Item> getReloadItem();
-    
     int getMaxStacks();
 }

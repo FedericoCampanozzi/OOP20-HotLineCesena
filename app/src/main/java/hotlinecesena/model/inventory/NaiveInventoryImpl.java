@@ -4,13 +4,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.items.Item;
+import hotlinecesena.model.entities.items.Weapon;
 
 public class NaiveInventoryImpl implements Inventory {
 
-    private static final double DEFAULT_RELOAD_TIME = 2.0;
     private double reloadTimeRemaining = 0.0;
-    private Optional<Item> equippable = Optional.empty();
+    private Optional<Weapon> weapon = Optional.empty();
     private Map<Item, Integer> stackables;
+    private int ammoForReloading;
 
     @Override
     public void add(Item item) {
@@ -27,14 +28,18 @@ public class NaiveInventoryImpl implements Inventory {
     }
 
     @Override
-    public Optional<Item> getEquipped() {
-        return this.equippable;
+    public Optional<Weapon> getWeapon() {
+        return this.weapon;
     }
 
     @Override
-    public void reloadEquipped() {
-        if (!this.isReloading()) {
-            this.reloadTimeRemaining = DEFAULT_RELOAD_TIME;
+    public void reloadWeapon() {
+        if (this.weapon.isPresent() && !this.isReloading()) {
+            final Weapon w = this.weapon.get();
+            final int ammoOwned = this.stackables.getOrDefault(w.getCompatibleAmmunition(), 0);
+            if (ammoOwned > 0) {
+                this.reloadTimeRemaining = w.getReloadTime();
+            }
         }
     }
 
@@ -42,17 +47,26 @@ public class NaiveInventoryImpl implements Inventory {
     public boolean isReloading() {
         return this.reloadTimeRemaining > 0.0;
     }
-    
+
+    @Override
     public void update(double timeElapsed) {
+        this.updateReloading(timeElapsed);
+    }
+    
+    private void updateReloading(double timeElapsed) {
         if (this.isReloading()) {
             reloadTimeRemaining -= timeElapsed;
             if (reloadTimeRemaining <= 0.0) {
-//                this.equippable.get().reload();
+                final int ammoNeeded = weapon.get().getMagazineSize() - weapon.get().getCurrentAmmo();
+                if (this.ammoForReloading > ammoNeeded) {
+                    weapon.get().reload(ammoNeeded);
+                    stackables.put(weapon.get().getCompatibleAmmunition(), ammoForReloading - ammoNeeded);
+                } else {
+                    weapon.get().reload(ammoForReloading);
+                    stackables.put(weapon.get().getCompatibleAmmunition(), 0);
+                }
+                ammoForReloading = 0;
             }
         }
-    }
-
-    private void drop(Item item) {
-        //TODO Remove from inventory and then add to DAL?
     }
 }
