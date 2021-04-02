@@ -1,17 +1,10 @@
 package hotlinecesena.controller;
 
-import hotlinecesena.controller.mission.CheckMethod;
-import hotlinecesena.controller.mission.MissionBuilder;
 import hotlinecesena.model.DALImpl;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import javafx.util.Pair;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
