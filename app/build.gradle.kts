@@ -43,6 +43,7 @@ dependencies {
 
     // Jackson
     implementation("com.fasterxml.jackson:jackson-bom:2.12.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.9.8")
 
     // JUnit Jupiter
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
