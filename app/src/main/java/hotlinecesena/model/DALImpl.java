@@ -4,13 +4,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.function.Function;
 import java.io.IOException;
 import java.io.File;
 import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
 
-import hotlinecesena.controller.generator.WorldGeneratorImpl;
+import hotlinecesena.controller.generator.*;
 
 import static java.util.stream.Collectors.*;
 
@@ -20,13 +21,12 @@ public class DALImpl {
 	
 	private final Map<String, Pair<String,String>> settings;
 	private final Map<Character, String> simbols;
-	//private final Map<Pair<Integer, Integer>, Character> gameMap;
 	private final Map<String, Pair<Integer, Integer>> ranking;
 	private final Map<String, List<String>> messages;
 	private final String resFileFolder = System.getProperty("user.dir") + File.separator + "src" + File.separator +
 			"main" + File.separator +"resources" + File.separator + "File";
 	private final Map<String, String> guiPath = new HashMap<String, String>();
-	private final WorldGeneratorImpl wgi;
+	private final WorldGeneratorBuilder sgwb;
 	
 	private DALImpl() throws IOException {
 		this.simbols = mapFileTo(resFileFolder + File.separator + "simbols.txt",
@@ -39,11 +39,17 @@ public class DALImpl {
 				(String[] splitted) -> new Pair<>(splitted[1], splitted[2]));
 		
 		readGuiFile();
-		wgi = new WorldGeneratorImpl(1231,5,5,10,10,10,5).build();
+		sgwb = new SimpleWorldGeneratorBuilder(new Random().nextLong())
+				.setSimbols('.', 'E','P', 'D', '_', 'W')
+				.generateRooms(5,11,2,5,7,12,20,30)
+				.generateEnemy(0.05f, 4)
+				.generatePlayer()
+				.generateDecorations()
+				.build();
 	}
 
-	public WorldGeneratorImpl getGenerator() {
-		return this.wgi;
+	public WorldGeneratorBuilder getGenerator() {
+		return this.sgwb;
 	}
 	
 	public static DALImpl getInstance() throws IOException {
