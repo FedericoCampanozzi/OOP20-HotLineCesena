@@ -1,6 +1,6 @@
 package hotlinecesena.model.score;
 
-public class KillCountPartial extends AbstractPartial implements PartialScore {
+public class KillCountPartial extends AbstractPartial {
     
     private static final String NAME = "Kills";
     private static final int POINTS = 100;

@@ -1,6 +1,6 @@
 package hotlinecesena.model.score;
 
-public class TimePartial extends AbstractPartial implements PartialScore {
+public class TimePartial extends AbstractPartial {
 
     private static final String NAME = "Time bonus";
     private static final int POINTS = 5;

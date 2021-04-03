@@ -1,6 +1,6 @@
 package hotlinecesena.model.score;
 
-public class AccuracyPartial extends AbstractPartial implements PartialScore {
+public class AccuracyPartial extends AbstractPartial {
 
     private static final String NAME = "Accuracy";
     private static final int POINTS = 1500;
