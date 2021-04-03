@@ -2,9 +2,8 @@ package hotlinecesena.view.input;
 
 import java.util.EnumSet;
 import java.util.Set;
-
-import org.apache.commons.lang3.tuple.ImmutableTriple;
-import org.apache.commons.lang3.tuple.Triple;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
@@ -12,13 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.util.Pair;
 
 /**
  * 
  * Specific implementation created to listen for inputs in JavaFX.
  *
  */
-public final class InputListenerFX implements InputListener<KeyCode, MouseButton> {
+public final class InputListenerFX implements InputListener {
 
     private final Set<KeyCode> keyboardInputs = EnumSet.noneOf(KeyCode.class);
     private final Set<MouseButton> mouseInputs = EnumSet.noneOf(MouseButton.class);
@@ -36,8 +36,18 @@ public final class InputListenerFX implements InputListener<KeyCode, MouseButton
     }
 
     @Override
-    public Triple<Set<KeyCode>, Set<MouseButton>, Point2D> deliverInputs() {
-        return new ImmutableTriple<>(this.keyboardInputs, this.mouseInputs, this.currentMouseCoords);
+    public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
+        return new Pair<>(this.combineInputs(), this.currentMouseCoords);
+    }
+
+    /**
+     * Combines sets of {@code KeyCode}s and {@code MouseButton}s into a single
+     * {@code Set<Enum<?>>}.
+     * @return
+     */
+    private Set<Enum<?>> combineInputs() {
+        return Stream.concat(this.keyboardInputs.stream(), this.mouseInputs.stream())
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
@@ -45,8 +55,8 @@ public final class InputListenerFX implements InputListener<KeyCode, MouseButton
      * @param scene
      */
     private void setKeyEventHandlers(final Scene scene) {
-        scene.setOnKeyReleased(e -> this.unregisterInput(keyboardInputs, e.getCode()));
-        scene.setOnKeyPressed(e -> this.registerInput(keyboardInputs, e.getCode()));
+        scene.setOnKeyReleased(e -> this.forgetInput(keyboardInputs, e.getCode()));
+        scene.setOnKeyPressed(e -> this.captureInput(keyboardInputs, e.getCode()));
     }
 
     /**
@@ -54,8 +64,8 @@ public final class InputListenerFX implements InputListener<KeyCode, MouseButton
      * @param scene
      */
     private void setMouseButtonHandlers(final Scene scene) {
-        scene.setOnMouseReleased(e -> this.unregisterInput(mouseInputs, e.getButton()));
-        scene.setOnMousePressed(e -> this.registerInput(mouseInputs, e.getButton()));
+        scene.setOnMouseReleased(e -> this.forgetInput(mouseInputs, e.getButton()));
+        scene.setOnMousePressed(e -> this.captureInput(mouseInputs, e.getButton()));
     }
 
     /**
@@ -64,20 +74,24 @@ public final class InputListenerFX implements InputListener<KeyCode, MouseButton
      */
     private void setMouseMovementHandlers(final Scene scene) {
         //Mouse moved, no buttons pressed
-        scene.setOnMouseMoved(this.registerMouseMovement());
+        scene.setOnMouseMoved(this.captureMouseMovement());
         //Mouse moved while buttons pressed
-        scene.setOnMouseDragged(this.registerMouseMovement());
+        scene.setOnMouseDragged(this.captureMouseMovement());
     }
 
-    private EventHandler<MouseEvent> registerMouseMovement() {
+    /**
+     * Event handler common to setOnMouseMoved and setOnMouseDragged properties.
+     * @return an {@link EventHandler} for capturing mouse coordinates.
+     */
+    private EventHandler<MouseEvent> captureMouseMovement() {
         return e -> this.currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
     }
 
-    private <T extends Enum<T>> void registerInput(Set<T> field, T code) {
+    private <T extends Enum<T>> void captureInput(Set<T> field, T code) {
         field.add(code);
     }
 
-    private <T extends Enum<T>> void unregisterInput(Set<T> field, T code) {
+    private <T extends Enum<T>> void forgetInput(Set<T> field, T code) {
         if (field.contains(code)) {
             field.remove(code);
         }
