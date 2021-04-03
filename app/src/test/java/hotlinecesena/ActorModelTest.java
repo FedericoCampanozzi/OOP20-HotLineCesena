@@ -57,7 +57,7 @@ class ActorModelTest {
     }
 
     @Test
-    private void actorCannotRestartReloadingWhileAlreadyReloading() {
+    private void actorCannotInitiateReloadingWhileAlreadyReloading() {
         
     }
 
