@@ -8,6 +8,9 @@ import javafx.geometry.Point2D;
  */
 public class MathUtils {
 
+    private MathUtils() {
+    }
+
     /**
      * Normalizes a vector given its magnitude.
      * 
