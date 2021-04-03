@@ -27,5 +27,5 @@ public interface InputInterpreter {
      * @param deltaTime time elapsed since the last frame.
      * @return a set of {@link Command}s that an external controller may execute.
      */
-    Set<Command> interpret(Pair<Set<Enum<?>>, Point2D> inputs, final Point2D spritePosition, double deltaTime);
+    Set<Command> interpret(Pair<Set<Enum<?>>, Point2D> inputs, Point2D spritePosition, double deltaTime);
 }
