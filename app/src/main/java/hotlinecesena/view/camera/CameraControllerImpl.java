@@ -4,7 +4,6 @@ import java.util.Objects;
 
 import hotlinecesena.model.camera.Camera;
 import hotlinecesena.model.entities.Entity;
-import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -14,11 +13,12 @@ import javafx.scene.transform.Translate;
  */
 public class CameraControllerImpl implements CameraController {
 
-    private static final float CENTERING_FACTOR = 2.23f; // By trial and error
-    private static final float SPEED_SCALE = 2.0f;
-    private final Translate paneTranslate = new Translate();
+    private static final float VIEW_SCALE = 2.0f;
+    private static final float CENTERING_X = 2.5f;
+    private static final float CENTERING_Y = 2.8f;
     private final Camera camera;
     private Pane pane;
+    private final Translate paneTranslate = new Translate();
 
     public CameraControllerImpl(final Camera camera, final Pane pane) {
         this.camera = Objects.requireNonNull(camera);
@@ -33,7 +33,7 @@ public class CameraControllerImpl implements CameraController {
 
     @Override
     public void removePane() {
-        pane.getTransforms().remove(this.paneTranslate);
+        this.pane.getTransforms().remove(this.paneTranslate);
     }
 
     public void setEntity(Entity entity) throws NullPointerException {
@@ -42,11 +42,10 @@ public class CameraControllerImpl implements CameraController {
 
     @Override
     public void update(final double deltaTime) {
-        this.camera.update(deltaTime);
-        final Point2D newTranslate = this.camera.getCameraPosition()
-                .multiply(SPEED_SCALE)
-                .subtract(pane.getWidth()/CENTERING_FACTOR, pane.getHeight()/CENTERING_FACTOR);
-        this.paneTranslate.setX(-newTranslate.getX());
-        this.paneTranslate.setY(-newTranslate.getY());
+        this.camera.update(deltaTime); //TODO Should not be updated from the View. Perhaps from DAL?
+        final double transX = camera.getCameraPosition().getX()*VIEW_SCALE - pane.getScene().getWidth()/CENTERING_X;
+        final double transY = camera.getCameraPosition().getY()*VIEW_SCALE - pane.getScene().getHeight()/CENTERING_Y;
+        this.paneTranslate.setX(-transX);
+        this.paneTranslate.setY(-transY);
     }
 }
