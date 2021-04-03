@@ -1,10 +1,6 @@
 package hotlinecesena.model.entities;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.google.common.eventbus.EventBus;
-import com.google.common.util.concurrent.MoreExecutors;
 
 import hotlinecesena.model.events.Event;
 import hotlinecesena.model.events.RotationEvent;
@@ -20,12 +16,10 @@ public abstract class AbstractEntity implements Entity {
     private Point2D position;
     private double angle;
     private final EventBus bus;
-    private final ExecutorService executor;
 
     protected AbstractEntity(final Point2D pos, final double angle) {
         this.position = pos;
         this.angle = angle;
-        this.executor = MoreExecutors.newDirectExecutorService();
         this.bus = new EventBus();
     }
     
@@ -66,7 +60,7 @@ public abstract class AbstractEntity implements Entity {
      * @param event
      */
     protected void publish(final Event event) {
-        this.executor.execute(() -> this.bus.post(event));
+        this.bus.post(event);
     }
 
     @Override
