@@ -1,22 +1,32 @@
 package hotlinecesena.model.entities;
 
-import hotlinecesena.model.events.AbstractPublisher;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import com.google.common.eventbus.EventBus;
+import com.google.common.util.concurrent.MoreExecutors;
+
+import hotlinecesena.model.events.Event;
 import hotlinecesena.model.events.RotationEvent;
+import hotlinecesena.model.events.Subscriber;
 import javafx.geometry.Point2D;
 
 /**
  * 
  * Template for generic entities.
  */
-public abstract class AbstractEntity extends AbstractPublisher implements Entity {
+public abstract class AbstractEntity implements Entity {
 
     private Point2D position;
     private double angle;
+    private final EventBus bus;
+    private final ExecutorService executor;
 
     protected AbstractEntity(final Point2D pos, final double angle) {
-        super("Entity");
         this.position = pos;
         this.angle = angle;
+        this.executor = MoreExecutors.newDirectExecutorService();
+        this.bus = new EventBus();
     }
     
     @Override
@@ -26,6 +36,8 @@ public abstract class AbstractEntity extends AbstractPublisher implements Entity
 
     /**
      * Sets this entity's current position to {@code pos}.
+     * <br>
+     * Position may not be modified by external objects.
      * 
      * @param pos the new position.
      */
@@ -44,5 +56,26 @@ public abstract class AbstractEntity extends AbstractPublisher implements Entity
             this.angle = angle;
             this.publish(new RotationEvent(this, angle));
         }
+    }
+
+    /**
+     * Posts an {@link Event} on this entity's {@link EventBus}.
+     * <br>
+     * Events may not be posted by external objects.
+     * 
+     * @param event
+     */
+    protected void publish(final Event event) {
+        this.executor.execute(() -> this.bus.post(event));
+    }
+
+    @Override
+    public void register(Subscriber subscriber) {
+        this.bus.register(subscriber);
+    }
+
+    @Override
+    public void unregister(Subscriber subscriber) {
+        this.bus.unregister(subscriber);
     }
 }
