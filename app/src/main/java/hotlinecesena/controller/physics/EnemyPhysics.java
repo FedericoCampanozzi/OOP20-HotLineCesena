@@ -51,8 +51,8 @@ public class EnemyPhysics {
         return false;
     }
     
-    public static Point2D sum(Point2D arg1, Point2D arg2) {
-        return new Point2D(arg1.getX() + arg2.getX(), arg1.getY() + arg2.getY());
+    private static Point2D sum(Point2D arg1, Point2D arg2) {
+        return new Point2D((int)arg1.getX() + (int)arg2.getX(), (int)arg1.getY() + (int)arg2.getY());
     }
     
     public static int distance(Point2D arg1, Point2D arg2) {
