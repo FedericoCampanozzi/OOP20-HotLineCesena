@@ -17,7 +17,7 @@ public class MovementEvent extends AbstractEvent {
     public Point2D getPosition() {
         return this.newPos;
     }
-    
+
     public double getNoiseRadius() {
         return this.noiseRadius;
     }
