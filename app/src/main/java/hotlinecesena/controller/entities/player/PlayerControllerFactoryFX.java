@@ -1,6 +1,11 @@
 package hotlinecesena.controller.entities.player;
 
-import static hotlinecesena.model.entities.actors.player.PlayerAction.*;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.ATTACK;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_EAST;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
 
 import java.util.Map;
 
@@ -59,10 +64,10 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
                 MAX_HEALTH,
                 new NaiveInventoryImpl(),
                 Map.of(ActorStatus.NORMAL, 0.0,
-                       ActorStatus.ATTACKING, 10.0,
-                       ActorStatus.RELOADING, 3.0,
-                       ActorStatus.DEAD, 0.0
-                       )
+                        ActorStatus.ATTACKING, 10.0,
+                        ActorStatus.RELOADING, 3.0,
+                        ActorStatus.DEAD, 0.0
+                        )
                 );
         final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
         final InputListener listener = new InputListenerFX(scene);

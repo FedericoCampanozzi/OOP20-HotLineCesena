@@ -15,9 +15,9 @@ import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
 /**
- * 
+ *
  * Interpreter implementation.
- * 
+ *
  */
 public final class InputInterpreterImpl implements InputInterpreter {
 
@@ -35,7 +35,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
         final Set<PlayerAction> actions = EnumSet.noneOf(PlayerAction.class);
         final Set<Command> commandsToDeliver = new HashSet<>();
 
-        actions.addAll(convertBindings(inputs.getKey()));
+        actions.addAll(this.convertBindings(inputs.getKey()));
 
         final Point2D newMovementDir = this.processMovementDirection(actions);
         if (!newMovementDir.equals(Point2D.ZERO)) {
@@ -43,9 +43,9 @@ public final class InputInterpreterImpl implements InputInterpreter {
         }
 
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
-        if (!this.currentMouseCoords.equals(newMouseCoords)) {
+        if (!currentMouseCoords.equals(newMouseCoords)) {
             commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
-            this.currentMouseCoords = newMouseCoords;
+            currentMouseCoords = newMouseCoords;
         }
 
         commandsToDeliver.addAll(this.computeRemainingCommands(actions));
@@ -58,11 +58,11 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param inputs
      * @return
      */
-    private Set<PlayerAction> convertBindings(Set<Enum<?>> inputs) {
+    private Set<PlayerAction> convertBindings(final Set<Enum<?>> inputs) {
         return inputs.stream()
-            .filter(bindings::containsKey)
-            .map(bindings::get)
-            .collect(toCollection(() -> EnumSet.noneOf(PlayerAction.class)));
+                .filter(bindings::containsKey)
+                .map(bindings::get)
+                .collect(toCollection(() -> EnumSet.noneOf(PlayerAction.class)));
     }
 
     /**
@@ -70,7 +70,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param actions
      * @return
      */
-    private Point2D processMovementDirection(Set<PlayerAction> actions) {
+    private Point2D processMovementDirection(final Set<PlayerAction> actions) {
         Point2D direction = actions.stream()
                 .filter(a -> a.getDirection().isPresent())
                 .map(a -> a.getDirection().get().get())
@@ -90,12 +90,12 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param spritePosition
      * @return
      */
-    private Point2D processMouseCoordinates(Point2D mouseCoords, Point2D spritePosition) {
+    private Point2D processMouseCoordinates(final Point2D mouseCoords, final Point2D spritePosition) {
         if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
             return new Point2D(mouseCoords.getX() - spritePosition.getX(),
-                               mouseCoords.getY() - spritePosition.getY());
+                    mouseCoords.getY() - spritePosition.getY());
         }
-        return this.currentMouseCoords;
+        return currentMouseCoords;
     }
 
     /**
@@ -103,10 +103,10 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param actions
      * @return
      */
-    private Set<Command> computeRemainingCommands(Set<PlayerAction> actions) {
+    private Set<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
         return actions.stream()
-            .filter(a -> a.getCommand().isPresent())
-            .map(a -> a.getCommand().get())
-            .collect(toUnmodifiableSet());
+                .filter(a -> a.getCommand().isPresent())
+                .map(a -> a.getCommand().get())
+                .collect(toUnmodifiableSet());
     }
 }

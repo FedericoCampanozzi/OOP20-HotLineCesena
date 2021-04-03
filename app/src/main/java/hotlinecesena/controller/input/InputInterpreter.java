@@ -1,7 +1,9 @@
 package hotlinecesena.controller.input;
 
 import java.util.Set;
+
 import hotlinecesena.model.entities.actors.player.Command;
+import hotlinecesena.view.input.InputListener;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
@@ -20,7 +22,7 @@ import javafx.util.Pair;
 public interface InputInterpreter {
 
     /**
-     * 
+     *
      * @param inputs raw inputs captured by the {@link InputListener}.
      * @param spritePosition position of the player's sprite on the screen. Used to
      * prevent unwanted rotations when the cursor is too close to the player.

@@ -16,13 +16,13 @@ public class SpriteImpl implements Sprite {
     private final Translate trans;
 
     public SpriteImpl(final Image img, final Pane pane) {
-        this.imageView = new ImageView(img);
+        imageView = new ImageView(img);
         imageView.setScaleX(SCALE);
         imageView.setScaleY(SCALE);
-        
-        this.rotate = new Rotate();
-        this.trans = new Translate();
-        this.imageView.getTransforms().addAll(rotate, trans);
+
+        rotate = new Rotate();
+        trans = new Translate();
+        imageView.getTransforms().addAll(rotate, trans);
         pane.getChildren().add(imageView);
     }
 
@@ -40,8 +40,8 @@ public class SpriteImpl implements Sprite {
     }
 
     @Override
-    public void updateImage(Image image) {
-        this.imageView.setImage(image);
+    public void updateImage(final Image image) {
+        imageView.setImage(image);
     }
 
     @Override

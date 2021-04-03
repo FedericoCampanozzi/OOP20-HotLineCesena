@@ -13,18 +13,18 @@ public class MathUtils {
 
     /**
      * Normalizes a vector given its magnitude.
-     * 
+     *
      * @param vector the vector to be normalized
      * @param magnitude the vector's magnitude
      * @return the normalized vector
      */
-    public static Point2D normalizeWithMagnitude(final Point2D vector, double magnitude) {
+    public static Point2D normalizeWithMagnitude(final Point2D vector, final double magnitude) {
         return vector.multiply(1/magnitude);
     }
 
     /**
      * Converts raw mouse coordinates to degrees.
-     * 
+     *
      * @param coords
      * @return
      */
@@ -34,21 +34,21 @@ public class MathUtils {
     }
 
     /**
-     * 
+     *
      * Linear interpolation formula used for camera movement.
      * May give inaccurate results due to floating point approximations.
      * <br>
      * Original formula: {@code first*(1 - by) + second*by}
      * <br>
      * Taken from gamedev.stackexchange.com/a/152466
-     * 
+     *
      * @param first first one-dimensional coordinate
      * @param second second one-dimensional coordinate
      * @param by interpolation factor
-     * @return 
+     * @return
      */
-    public static double lerp(double first, double second, double by) {
-         return first + by*(second - first);
+    public static double lerp(final double first, final double second, final double by) {
+        return first + by*(second - first);
     }
 
     /**
@@ -56,28 +56,28 @@ public class MathUtils {
      * May give inaccurate results due to floating point approximations.
      * <br>
      * Taken from gamedev.stackexchange.com/a/152466
-     * 
+     *
      * @param first first two-dimensional coordinate
      * @param second second two-dimensional coordinate
      * @param by interpolation factor
      * @return
      */
-    public static Point2D lerp(Point2D first, Point2D second, double by) {
-        double retX = lerp(first.getX(), second.getX(), by);
-        double retY = lerp(first.getY(), second.getY(), by);
+    public static Point2D lerp(final Point2D first, final Point2D second, final double by) {
+        final double retX = lerp(first.getX(), second.getX(), by);
+        final double retY = lerp(first.getY(), second.getY(), by);
         return new Point2D(retX, retY);
     }
 
     /**
      * Blend formula for camera interpolation.
      * Taken from gamedev.stackexchange.com/a/152466
-     * 
+     *
      * @param sharpness
      * @param acceleration
      * @param deltaTime
      * @return
      */
-    public static double blend(double sharpness, int acceleration, double deltaTime) {
+    public static double blend(final double sharpness, final int acceleration, final double deltaTime) {
         return 1 - Math.pow(1 - sharpness, deltaTime * acceleration);
     }
 }

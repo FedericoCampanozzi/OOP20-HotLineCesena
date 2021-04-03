@@ -12,7 +12,7 @@ public class CameraImpl implements Camera {
     private static final double SHARPNESS = 0.2;
     private Point2D cameraPos = Point2D.ZERO;
     private Entity entity;
-    
+
     public CameraImpl(final Entity entity) {
         this.attachTo(entity);
     }
@@ -24,12 +24,12 @@ public class CameraImpl implements Camera {
 
     @Override
     public Point2D getCameraPosition() {
-        return this.cameraPos;
+        return cameraPos;
     }
 
     @Override
     public void update(final double timeElapsed) {
         final double blend = MathUtils.blend(SHARPNESS, ACCEL, timeElapsed);
-        this.cameraPos = MathUtils.lerp(cameraPos, entity.getPosition(), blend);
+        cameraPos = MathUtils.lerp(cameraPos, entity.getPosition(), blend);
     }
 }

@@ -4,16 +4,16 @@ public abstract class AbstractPartial implements PartialScore {
 
     private final String name;
     private final int pointsPerUnit;
-//    private final DAL world = DALImpl.getInstance();
+    //    private final DAL world = DALImpl.getInstance();
 
     protected AbstractPartial(final String name, final int points) {
         this.name = name;
-        this.pointsPerUnit = points;
+        pointsPerUnit = points;
     }
 
     @Override
     public final String getName() {
-        return this.name;
+        return name;
     }
 
     /**
@@ -21,12 +21,12 @@ public abstract class AbstractPartial implements PartialScore {
      */
     @Override
     public final int getPartialPoints() {
-        return this.pointsPerUnit * this.formula();
+        return pointsPerUnit * this.formula();
     }
 
     protected abstract int formula();
-    
-//    protected DAL getWorld() {
-//        return this.world;
-//    }
+
+    //    protected DAL getWorld() {
+    //        return this.world;
+    //    }
 }

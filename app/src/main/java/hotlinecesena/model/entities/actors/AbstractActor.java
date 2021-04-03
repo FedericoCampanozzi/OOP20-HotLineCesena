@@ -11,7 +11,7 @@ import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
 /**
- * 
+ *
  * Base class to extend when creating new Actor specializations.
  *
  */
@@ -25,8 +25,8 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     protected AbstractActor(final Point2D pos, final double angle, final double speed,
             final double maxHealth, final Inventory inv) {
         super(pos, angle, speed);
-        this.maxHealth = this.currentHealth = maxHealth;
-        this.inventory = inv;
+        this.maxHealth = currentHealth = maxHealth;
+        inventory = inv;
     }
 
     /**
@@ -54,8 +54,8 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      */
     @Override
     public void attack() {
-        if (this.isAlive() && !this.inventory.isReloading()) {
-            final Optional<Weapon> weapon = this.inventory.getWeapon();
+        if (this.isAlive() && !inventory.isReloading()) {
+            final Optional<Weapon> weapon = inventory.getWeapon();
             if (weapon.isPresent() && weapon.get().getCurrentAmmo() > 0) {
                 final Weapon w = weapon.get();
                 w.usage().get().accept(this);
@@ -70,24 +70,24 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     @Override
     public void reload() {
         if (this.isAlive()) {
-            this.inventory.reloadWeapon();
+            inventory.reloadWeapon();
         }
     }
 
     @Override
-    public final void takeDamage(double damage) {
+    public final void takeDamage(final double damage) {
         if (this.isAlive()) {
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
             this.publish(new DamageReceivedEvent(this, damage));
         }
         if (!this.isAlive()) {
-            this.status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?
+            status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?
             this.publish(new DeathEvent(this));
         }
     }
 
     @Override
-    public final void heal(double hp) {
+    public final void heal(final double hp) {
         if (this.isAlive()) {
             currentHealth = (currentHealth + hp < maxHealth) ? (currentHealth + hp) : maxHealth;
         }
@@ -95,30 +95,30 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     @Override
     public final double getMaxHealth() {
-        return this.maxHealth;
+        return maxHealth;
     }
 
     @Override
     public final double getCurrentHealth() {
-        return this.currentHealth;
+        return currentHealth;
     }
 
     protected final boolean isAlive() {
-        return this.currentHealth > 0;
+        return currentHealth > 0;
     }
 
     @Override
     public final Inventory getInventory() {
-        return this.inventory;
+        return inventory;
     }
 
     @Override
     public final ActorStatus getActorStatus() {
-        return this.status;
+        return status;
     }
 
     @Override
-    public final void setActorStatus(ActorStatus s) {
-        this.status = s;
+    public final void setActorStatus(final ActorStatus s) {
+        status = s;
     }
 }

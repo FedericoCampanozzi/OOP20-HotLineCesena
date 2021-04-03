@@ -1,8 +1,17 @@
 package hotlinecesena;
 
-import static hotlinecesena.model.entities.actors.player.PlayerAction.*;
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.ATTACK;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_EAST;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.in;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +66,7 @@ class InterpreterPlayerTest {
             );
 
     @Start
-    public void start(Stage stage) {
+    public void start(final Stage stage) {
         player = new PlayerImpl(Point2D.ZERO, 270, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
         robot = new FxRobot();
         testScene = new Scene(new Pane(), 800, 600);
@@ -80,7 +89,7 @@ class InterpreterPlayerTest {
     @Test
     void deliverNothingWhenReceivingNoInputs() {
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(commands, empty());
     }
 
@@ -88,7 +97,7 @@ class InterpreterPlayerTest {
     void deliverNothingWhenReceivingUnboundInputs() {
         robot.press(KeyCode.J);
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(commands, empty());
     }
 
@@ -96,7 +105,7 @@ class InterpreterPlayerTest {
     void deliverAttack() {
         robot.moveTo(testScene).press(MouseButton.PRIMARY); //It won't register without moveTo
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(PlayerAction.ATTACK.getCommand().get(), is(in(commands)));
     }
 
@@ -105,7 +114,7 @@ class InterpreterPlayerTest {
         final Point2D dest = new Point2D(0, -1);
         robot.press(KeyCode.W);
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(commands, not(empty()));
         commands.forEach(c -> c.execute(player));
         assertThat(player.getPosition(), equalTo(dest));
@@ -116,7 +125,7 @@ class InterpreterPlayerTest {
         final Point2D dest = new Point2D(1, -1).normalize();
         robot.press(KeyCode.W, KeyCode.D);
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(commands, not(empty()));
         commands.forEach(c -> c.execute(player));
         assertThat(player.getPosition(), equalTo(dest));
@@ -128,7 +137,7 @@ class InterpreterPlayerTest {
         final double angle = MathUtils.mouseToDegrees(mouseCoords);
         robot.moveBy(0, testScene.getHeight()/2);
         WaitForAsyncUtils.waitForFxEvents();
-        Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
+        final Set<Command> commands = interpreter.interpret(listener.deliverInputs(), Point2D.ZERO, DELTA_TIME);
         assertThat(commands, not(empty()));
         commands.forEach(c -> c.execute(player));
         assertThat(Math.floor(player.getAngle()), equalTo(Math.floor(angle)));

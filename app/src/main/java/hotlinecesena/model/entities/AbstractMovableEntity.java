@@ -35,7 +35,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     }
 
     @Override
-    public final void setSpeed(double speed) {
+    public final void setSpeed(final double speed) {
         this.speed = speed;
     }
 }

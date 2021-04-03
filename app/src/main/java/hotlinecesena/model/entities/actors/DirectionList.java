@@ -3,6 +3,7 @@ package hotlinecesena.model.entities.actors;
 import javafx.geometry.Point2D;
 
 public enum DirectionList implements Direction {
+
     NORTH(new Point2D(0, -1)),
     SOUTH(new Point2D(0, 1)),
     EAST(new Point2D(1, 0)),
@@ -17,6 +18,6 @@ public enum DirectionList implements Direction {
 
     @Override
     public Point2D get() {
-        return this.dir;
+        return dir;
     }
 }

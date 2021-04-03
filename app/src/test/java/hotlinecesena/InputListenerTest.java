@@ -1,11 +1,12 @@
 package hotlinecesena;
 
-import static org.hamcrest.Matchers.*;
-import static org.hamcrest.MatcherAssert.*;
-
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import javafx.stage.Stage;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.hasSize;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,11 @@ import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 @TestInstance(Lifecycle.PER_METHOD)
@@ -33,7 +37,7 @@ class InputListenerTest {
     private InputListener listener;
 
     @Start
-    public void start(Stage stage) {
+    public void start(final Stage stage) {
         robot = new FxRobot();
         testScene = new Scene(new Pane(), 800, 600);
         testScene.setFill(Color.BLACK);

@@ -14,7 +14,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.util.Pair;
 
 /**
- * 
+ *
  * Specific implementation created to listen for inputs in JavaFX.
  *
  */
@@ -37,7 +37,7 @@ public final class InputListenerFX implements InputListener {
 
     @Override
     public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
-        return new Pair<>(this.combineInputs(), this.currentMouseCoords);
+        return new Pair<>(this.combineInputs(), currentMouseCoords);
     }
 
     /**
@@ -46,7 +46,7 @@ public final class InputListenerFX implements InputListener {
      * @return
      */
     private Set<Enum<?>> combineInputs() {
-        return Stream.concat(this.keyboardInputs.stream(), this.mouseInputs.stream())
+        return Stream.concat(keyboardInputs.stream(), mouseInputs.stream())
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -84,14 +84,14 @@ public final class InputListenerFX implements InputListener {
      * @return an {@link EventHandler} for capturing mouse coordinates.
      */
     private EventHandler<MouseEvent> captureMouseMovement() {
-        return e -> this.currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
+        return e -> currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
     }
 
-    private <T extends Enum<T>> void captureInput(Set<T> field, T code) {
+    private <T extends Enum<T>> void captureInput(final Set<T> field, final T code) {
         field.add(code);
     }
 
-    private <T extends Enum<T>> void forgetInput(Set<T> field, T code) {
+    private <T extends Enum<T>> void forgetInput(final Set<T> field, final T code) {
         if (field.contains(code)) {
             field.remove(code);
         }

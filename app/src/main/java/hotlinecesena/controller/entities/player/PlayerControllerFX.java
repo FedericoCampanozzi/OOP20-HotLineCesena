@@ -8,9 +8,9 @@ import com.google.common.eventbus.Subscribe;
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
+import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.view.camera.CameraController;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
@@ -33,20 +33,20 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         this.interpreter = interpreter;
         this.camera = camera;
 
-        setup();
+        this.setup();
     }
 
     private void setup() {
-        this.player.register(this);
-        this.sprite.updatePosition(this.player.getPosition());
-        this.sprite.updateRotation(this.player.getAngle());
+        player.register(this);
+        sprite.updatePosition(player.getPosition());
+        sprite.updateRotation(player.getAngle());
     }
 
     @Override
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             player.update(deltaTime);
-            Set<Command> commands = interpreter.interpret(listener.deliverInputs(),
+            final Set<Command> commands = interpreter.interpret(listener.deliverInputs(),
                     sprite.getSpritePosition(), deltaTime);
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(player));
@@ -58,16 +58,16 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     @Override
     public CameraController getCamera() {
-        return this.camera;
+        return camera;
     }
 
     @Subscribe
-    private void handleMovementEvent(MovementEvent e) {
+    private void handleMovementEvent(final MovementEvent e) {
         sprite.updatePosition(e.getPosition());
     }
 
     @Subscribe
-    private void handleRotationEvent(RotationEvent e) {
+    private void handleRotationEvent(final RotationEvent e) {
         sprite.updateRotation(e.getNewAngle());
     }
 }

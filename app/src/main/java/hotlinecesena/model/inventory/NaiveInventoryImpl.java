@@ -9,56 +9,56 @@ import hotlinecesena.model.entities.items.Weapon;
 public class NaiveInventoryImpl implements Inventory {
 
     private double reloadTimeRemaining = 0.0;
-    private Optional<Weapon> weapon = Optional.empty();
+    private final Optional<Weapon> weapon = Optional.empty();
     private Map<Item, Integer> stackables;
     private int ammoForReloading;
 
     @Override
-    public void add(Item item) {
-//        if (isWeapon(item)) {
-//            if (this.equippable.isPresent()) {
-//                this.drop(this.equippable.get());
-//            }
-//            this.equippable = Optional.of(item);
-//        } else {
-//            
-//        }
-        final int oldQuantity = this.stackables.containsKey(item) ? this.stackables.get(item) : 0;
-        this.stackables.put(item, 1 + oldQuantity);
+    public void add(final Item item) {
+        //        if (isWeapon(item)) {
+        //            if (this.equippable.isPresent()) {
+        //                this.drop(this.equippable.get());
+        //            }
+        //            this.equippable = Optional.of(item);
+        //        } else {
+        //
+        //        }
+        final int oldQuantity = stackables.containsKey(item) ? stackables.get(item) : 0;
+        stackables.put(item, 1 + oldQuantity);
     }
 
     @Override
     public Optional<Weapon> getWeapon() {
-        return this.weapon;
+        return weapon;
     }
 
     @Override
     public void reloadWeapon() {
-        if (this.weapon.isPresent() && !this.isReloading()) {
-            final Weapon w = this.weapon.get();
-            final int ammoOwned = this.stackables.getOrDefault(w.getCompatibleAmmunition(), 0);
+        if (weapon.isPresent() && !this.isReloading()) {
+            final Weapon w = weapon.get();
+            final int ammoOwned = stackables.getOrDefault(w.getCompatibleAmmunition(), 0);
             if (ammoOwned > 0) {
-                this.reloadTimeRemaining = w.getReloadTime();
+                reloadTimeRemaining = w.getReloadTime();
             }
         }
     }
 
     @Override
     public boolean isReloading() {
-        return this.reloadTimeRemaining > 0.0;
+        return reloadTimeRemaining > 0.0;
     }
 
     @Override
-    public void update(double timeElapsed) {
+    public void update(final double timeElapsed) {
         this.updateReloading(timeElapsed);
     }
-    
-    private void updateReloading(double timeElapsed) {
+
+    private void updateReloading(final double timeElapsed) {
         if (this.isReloading()) {
             reloadTimeRemaining -= timeElapsed;
             if (reloadTimeRemaining <= 0.0) {
                 final int ammoNeeded = weapon.get().getMagazineSize() - weapon.get().getCurrentAmmo();
-                if (this.ammoForReloading > ammoNeeded) {
+                if (ammoForReloading > ammoNeeded) {
                     weapon.get().reload(ammoNeeded);
                     stackables.put(weapon.get().getCompatibleAmmunition(), ammoForReloading - ammoNeeded);
                 } else {
