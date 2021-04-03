@@ -32,7 +32,7 @@ public class MathUtils {
 
     /**
      * 
-     * Linear interpolation formula used for camera movement (hence that minus sign).
+     * Linear interpolation formula used for camera movement.
      * May give inaccurate results due to floating point approximations.
      * <br>
      * Original formula: {@code first*(1 - by) + second*by}
@@ -45,7 +45,7 @@ public class MathUtils {
      * @return 
      */
     public static double lerp(double first, double second, double by) {
-         return first - by * (first + second);
+         return first + by*(second - first);
     }
 
     /**
@@ -63,5 +63,18 @@ public class MathUtils {
         double retX = lerp(first.getX(), second.getX(), by);
         double retY = lerp(first.getY(), second.getY(), by);
         return new Point2D(retX, retY);
+    }
+
+    /**
+     * Blend formula for camera interpolation.
+     * Taken from gamedev.stackexchange.com/a/152466
+     * 
+     * @param sharpness
+     * @param acceleration
+     * @param deltaTime
+     * @return
+     */
+    public static double blend(double sharpness, int acceleration, double deltaTime) {
+        return 1 - Math.pow(1 - sharpness, deltaTime * acceleration);
     }
 }

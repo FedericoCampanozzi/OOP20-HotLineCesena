@@ -6,29 +6,29 @@ import java.util.function.Consumer;
 import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.controller.input.InputInterpreter;
-import hotlinecesena.controller.input.InputListener;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
-import hotlinecesena.view.Camera;
+import hotlinecesena.view.camera.CameraController;
 import hotlinecesena.view.entities.Sprite;
+import hotlinecesena.view.input.InputListener;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     private final Player player;
-    //TODO Listener to be held by the GameController
+    //TODO Listener to be held by the GameController/WorldView
     private final InputListener<KeyCode, MouseButton> listener;
     private final InputInterpreter<KeyCode, MouseButton> interpreter;
     private final Sprite sprite;
-    //TODO Camera to be held by the GameController
-    private final Camera camera;
+    //TODO Camera to be held by the GameController/WorldView
+    private final CameraController camera;
 
     public PlayerControllerFX(final Player player, final Sprite sprite,
-            final InputInterpreter<KeyCode, MouseButton> interpreter, final Camera camera,
+            final InputInterpreter<KeyCode, MouseButton> interpreter, final CameraController camera,
             final InputListener<KeyCode, MouseButton> listener) {
         this.player = player;
         this.sprite = sprite;
@@ -49,17 +49,18 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             player.update(deltaTime);
-            var inputs = listener.deliverInputs();
-            Set<Command> commands = interpreter.interpret(inputs, sprite.getSpritePosition(), deltaTime);
+            Set<Command> commands = interpreter.interpret(listener.deliverInputs(),
+                    sprite.getSpritePosition(), deltaTime);
             if (!commands.isEmpty()) {
-                commands.forEach(c -> c.execute(this.player));
+                commands.forEach(c -> c.execute(player));
             }
-            camera.update(player.getPosition(), deltaTime);
+            //TODO To be updated from the GameLoop
+            camera.update(deltaTime);
         };
     }
 
     @Override
-    public Camera getCamera() {
+    public CameraController getCamera() {
         return this.camera;
     }
 

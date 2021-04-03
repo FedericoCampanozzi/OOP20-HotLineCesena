@@ -20,12 +20,12 @@ import javafx.geometry.Point2D;
  */
 class ActorModelTest {
 
-    static Actor actor;
-    static final double SPEED = 500;
-    static final double MAX_HP = 100;
+    private Actor actor;
+    private static final double SPEED = 500;
+    private static final double MAX_HP = 100;
 
     @BeforeAll
-    static void setUpBeforeClass() throws Exception {
+    void setUpBeforeClass() throws Exception {
         actor = new PlayerImpl(Point2D.ZERO, 270, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
     }
 
@@ -54,6 +54,11 @@ class ActorModelTest {
     @Test
     private void actorReloadTest() {
         //TODO
+    }
+
+    @Test
+    private void actorCannotRestartReloadingWhileAlreadyReloading() {
+        
     }
 
     @Test

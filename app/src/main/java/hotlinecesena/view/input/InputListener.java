@@ -1,4 +1,4 @@
-package hotlinecesena.controller.input;
+package hotlinecesena.view.input;
 
 import java.util.Set;
 import org.apache.commons.lang3.tuple.Triple;
@@ -15,10 +15,10 @@ import javafx.geometry.Point2D;
 public interface InputListener<K extends Enum<K>, M extends Enum<M>> {
 
     /**
-     * Delivers in a "raw" form all inputs coming from the View.
-     * @param spritePosition current position of the player's sprite on the Scene.
+     * Delivers sets of raw inputs coming from the View.
+     * @param spritePosition current position of the player's sprite on screen.
      * Used to adjust player rotation.
-     * @return a {@code Triple} containing sets of raw inputs.
+     * @return a {@link Triple} containing sets of raw inputs.
      */
     Triple<Set<K>, Set<M>, Point2D> deliverInputs();
 }
