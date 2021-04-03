@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import hotlinecesena.model.entities.AbstractMovableEntity;
 import hotlinecesena.model.entities.items.Weapon;
+import hotlinecesena.model.events.AttackPerformedEvent;
+import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
@@ -54,8 +56,10 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public void attack() {
         if (this.isAlive() && !this.inventory.isReloading()) {
             final Optional<Weapon> weapon = this.inventory.getWeapon();
-            if (weapon.isPresent()) {
-                weapon.get().usage().get().accept(this);
+            if (weapon.isPresent() && weapon.get().getCurrentAmmo() > 0) {
+                final Weapon w = weapon.get();
+                w.usage().get().accept(this);
+                this.publish(new AttackPerformedEvent(this, w));
             }
         }
     }
@@ -74,6 +78,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public final void takeDamage(double damage) {
         if (this.isAlive()) {
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
+            this.publish(new DamageReceivedEvent(this, damage));
         }
         if (!this.isAlive()) {
             this.status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?

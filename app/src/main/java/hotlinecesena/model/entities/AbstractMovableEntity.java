@@ -9,8 +9,7 @@ import javafx.geometry.Point2D;
  * Template for generic entities capable of moving.
  *
  */
-public abstract class AbstractMovableEntity extends AbstractEntity
-implements MovableEntity {
+public abstract class AbstractMovableEntity extends AbstractEntity implements MovableEntity {
 
     private static final double MOVE_NOISE = 5.0;
     private double speed;
