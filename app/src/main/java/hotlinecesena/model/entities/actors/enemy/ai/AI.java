@@ -15,4 +15,6 @@ public interface AI {
     public boolean isInPursuit(Point2D target, double noise);
     
     public boolean isShooting(Point2D target);
+    
+    public Set<Point2D> getWallSet();
 }

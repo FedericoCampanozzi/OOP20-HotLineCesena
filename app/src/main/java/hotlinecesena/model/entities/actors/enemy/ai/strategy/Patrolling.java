@@ -26,7 +26,7 @@ public class Patrolling implements MovementStrategy{
         this.movementStack.push(DirectionList.EAST);
         this.movementStack.push(DirectionList.NORTH);
     }
-     
+    
     private DirectionList newMove() {
         return this.movementStack.pop();
     }

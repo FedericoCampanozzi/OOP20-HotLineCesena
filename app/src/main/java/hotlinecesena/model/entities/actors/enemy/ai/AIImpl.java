@@ -29,7 +29,8 @@ public class AIImpl implements AI{
     private Point2D nextMove;
     private double rotation;
 
-    public AIImpl(EnemyType type, double rotation, Set<Point2D> walls) {
+    public AIImpl(Point2D pos, EnemyType type, double rotation, Set<Point2D> walls) {
+        this.current = pos;
         this.strategy = this.getStrategy(type);
         this.rotation = rotation;
         this.wallSet = walls;
@@ -59,15 +60,15 @@ public class AIImpl implements AI{
         } else if(this.nextMove.equals(DirectionList.WEST.get())) {
             return LOOK_WEST;
         } else if(this.nextMove.equals(new Point2D(-1,1))) {
-            return LOOK_WEST_NORTH;
-        } else if(this.nextMove.equals(new Point2D(1,1))) {
-            return LOOK_EAST_NORTH;
-        } else if(this.nextMove.equals(new Point2D(1,-1))) {
-            return LOOK_EAST_SOUTH;
-        } else if(this.nextMove.equals(new Point2D(-1,-1))) {
             return LOOK_WEST_SOUTH;
+        } else if(this.nextMove.equals(new Point2D(1,1))) {
+            return LOOK_EAST_SOUTH;
+        } else if(this.nextMove.equals(new Point2D(1,-1))) {
+            return LOOK_EAST_NORTH;
+        } else if(this.nextMove.equals(new Point2D(-1,-1))) {
+            return LOOK_WEST_NORTH;
         } else {
-            return LOOK_NORTH;
+            return this.rotation;
         }
     }
     
@@ -82,14 +83,14 @@ public class AIImpl implements AI{
     }
     
     private boolean isInArea(Point2D target, int radius) {
-        return target.getX() >= this.current.getX() - radius && target.getX() <= this.current.getX() + radius
-                && target.getY() >= this.current.getY() - radius && target.getY() <= this.current.getY() + radius;
+        return (target.getX() - this.current.getX()) * (target.getX() - this.current.getX()) +
+                (target.getY() - this.current.getY()) * (target.getY() - this.current.getY()) <= radius * radius;
     }
     
     private boolean inLineOfSight(Point2D target) {
         return this.rotationToTarget(target) >= this.rotation - (FIELD_OF_VIEW / 2)
                 && this.rotationToTarget(target) <= this.rotation + (FIELD_OF_VIEW / 2)
-                && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet); 
+                && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
     }
 
     @Override
@@ -119,5 +120,9 @@ public class AIImpl implements AI{
     @Override
     public boolean isShooting(Point2D target) {
         return this.isInArea(target, VISION_RADIUS) && this.inLineOfSight(target);
+    }
+    
+    public Set<Point2D> getWallSet() {
+        return this.wallSet;
     }
 }
