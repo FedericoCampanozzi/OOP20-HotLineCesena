@@ -30,7 +30,7 @@ class InputListenerTest {
 
     private FxRobot robot;
     private Scene testScene;
-    private InputListener<KeyCode, MouseButton> listener;
+    private InputListener listener;
 
     @Start
     public void start(Stage stage) {
@@ -54,20 +54,20 @@ class InputListenerTest {
     void keyboardPressAndRelease() {
         robot.press(KeyCode.W);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getLeft(), contains(KeyCode.W));
+        assertThat(listener.deliverInputs().getKey(), contains(KeyCode.W));
         robot.release(KeyCode.W);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getLeft(), empty());
+        assertThat(listener.deliverInputs().getKey(), empty());
     }
 
     @Test
     void mousePressAndRelease() {
         robot.moveTo(testScene).press(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getMiddle(), contains(MouseButton.PRIMARY));
+        assertThat(listener.deliverInputs().getKey(), contains(MouseButton.PRIMARY));
         robot.moveTo(testScene).release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getMiddle(), empty());
+        assertThat(listener.deliverInputs().getKey(), empty());
     }
 
     @Test
@@ -75,18 +75,14 @@ class InputListenerTest {
         robot.press(KeyCode.W, KeyCode.D, KeyCode.E);
         robot.moveTo(testScene).press(MouseButton.PRIMARY, MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getLeft(),
-                containsInAnyOrder(KeyCode.W, KeyCode.D, KeyCode.E));
-        assertThat(listener.deliverInputs().getMiddle(),
-                containsInAnyOrder(MouseButton.PRIMARY, MouseButton.SECONDARY));
+        assertThat(listener.deliverInputs().getKey(),
+                containsInAnyOrder(KeyCode.W, KeyCode.D, KeyCode.E, MouseButton.PRIMARY, MouseButton.SECONDARY));
 
         robot.release(KeyCode.W, KeyCode.E);
         robot.release(MouseButton.PRIMARY, MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getLeft(),
-                allOf(contains(KeyCode.D), not(contains(KeyCode.W)), not(contains(KeyCode.E))));
-        assertThat(listener.deliverInputs().getMiddle(),
-                empty());
+        assertThat(listener.deliverInputs().getKey(), hasSize(1));
+        assertThat(listener.deliverInputs().getKey(), hasItem(KeyCode.D));
     }
 
     @Test
@@ -94,6 +90,6 @@ class InputListenerTest {
         final Point2D center = new Point2D(testScene.getWidth()/2, testScene.getHeight()/2);
         robot.moveTo(Point2D.ZERO).moveTo(testScene);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getRight(), equalTo(center));
+        assertThat(listener.deliverInputs().getValue(), equalTo(center));
     }
 }

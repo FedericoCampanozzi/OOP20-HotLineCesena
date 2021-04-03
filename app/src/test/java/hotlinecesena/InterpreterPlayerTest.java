@@ -4,7 +4,6 @@ import static hotlinecesena.model.entities.actors.player.PlayerAction.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.*;
 
-import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,21 +42,19 @@ class InterpreterPlayerTest {
     private Player player;
     private FxRobot robot;
     private Scene testScene;
-    private InputListener<KeyCode, MouseButton> listener;
-    private InputInterpreter<KeyCode, MouseButton> interpreter;
+    private InputListener listener;
+    private InputInterpreter interpreter;
     private static final double SPEED = 1;
     private static final double MAX_HP = 100;
     private static final double DELTA_TIME = 1;
-    private final Map<KeyCode, PlayerAction> keyBindings = new EnumMap<>(Map.of(
+    private final Map<Enum<?>, PlayerAction> bindings = Map.of(
             KeyCode.W,             MOVE_NORTH,
             KeyCode.S,             MOVE_SOUTH,
             KeyCode.D,             MOVE_EAST,
             KeyCode.A,             MOVE_WEST,
-            KeyCode.R,             RELOAD
-            ));
-    private final Map<MouseButton, PlayerAction> mouseBindings = new EnumMap<>(Map.of(
+            KeyCode.R,             RELOAD,
             MouseButton.PRIMARY,   ATTACK
-            ));
+            );
 
     @Start
     public void start(Stage stage) {
@@ -66,7 +63,7 @@ class InterpreterPlayerTest {
         testScene = new Scene(new Pane(), 800, 600);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX(testScene);
-        interpreter = new InputInterpreterImpl<>(keyBindings, mouseBindings);
+        interpreter = new InputInterpreterImpl(bindings);
         stage.setScene(testScene);
         stage.requestFocus();
         stage.show();

@@ -2,7 +2,6 @@ package hotlinecesena.controller.entities.player;
 
 import static hotlinecesena.model.entities.actors.player.PlayerAction.*;
 
-import java.util.EnumMap;
 import java.util.Map;
 
 import hotlinecesena.controller.input.InputInterpreter;
@@ -37,16 +36,14 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     private final Scene scene;
     private final Pane pane;
     // TODO: Read bindings from file?
-    private final Map<KeyCode, PlayerAction> keyBindings = new EnumMap<>(Map.of(
+    private final Map<Enum<?>, PlayerAction> bindings = Map.of(
             KeyCode.W,             MOVE_NORTH,
             KeyCode.S,             MOVE_SOUTH,
             KeyCode.D,             MOVE_EAST,
             KeyCode.A,             MOVE_WEST,
-            KeyCode.R,             RELOAD
-            ));
-    private final Map<MouseButton, PlayerAction> mouseBindings = new EnumMap<>(Map.of(
+            KeyCode.R,             RELOAD,
             MouseButton.PRIMARY,   ATTACK
-            ));
+            );
 
     public PlayerControllerFactoryFX(final Scene scene, final Pane pane) {
         this.scene = scene;
@@ -68,9 +65,9 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
                        )
                 );
         final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
-        final InputListener<KeyCode, MouseButton> listener = new InputListenerFX(scene);
-        final InputInterpreter<KeyCode, MouseButton> interpreter = new InputInterpreterImpl<>(
-                keyBindings, mouseBindings);
+        final InputListener listener = new InputListenerFX(scene);
+        final InputInterpreter interpreter = new InputInterpreterImpl(
+                bindings);
         final CameraController camera = new CameraControllerImpl(new CameraImpl(playerModel), pane);
         return new PlayerControllerFX(playerModel, view, interpreter, camera, listener);
     }

@@ -14,22 +14,19 @@ import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.view.camera.CameraController;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
 
 public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     private final Player player;
     //TODO Listener to be held by the GameController/WorldView
-    private final InputListener<KeyCode, MouseButton> listener;
-    private final InputInterpreter<KeyCode, MouseButton> interpreter;
+    private final InputListener listener;
+    private final InputInterpreter interpreter;
     private final Sprite sprite;
     //TODO Camera to be held by the GameController/WorldView
     private final CameraController camera;
 
-    public PlayerControllerFX(final Player player, final Sprite sprite,
-            final InputInterpreter<KeyCode, MouseButton> interpreter, final CameraController camera,
-            final InputListener<KeyCode, MouseButton> listener) {
+    public PlayerControllerFX(final Player player, final Sprite sprite, final InputInterpreter interpreter,
+            final CameraController camera, final InputListener listener) {
         this.player = player;
         this.sprite = sprite;
         this.listener = listener;
