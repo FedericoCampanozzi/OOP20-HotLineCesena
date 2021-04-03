@@ -8,19 +8,13 @@ import javafx.geometry.Point2D;
 public class EnemyFactoryImpl implements EnemyFactory {
 
     @Override
-    public Enemy getEnemy(Point2D pos, EnemyType type, Set<Point2D> walkable, Set<Point2D> walls) {
-        Enemy retval;
-        
+    public Enemy getEnemy(Point2D pos, EnemyType type, Set<Point2D> walkable, Set<Point2D> walls) {        
         switch(type) {
             case BOSS:
-                retval = null;
-                break;
+                return null;
             default:
-                retval = new EnemyImpl(pos, new NaiveInventoryImpl(), type, walkable, walls);
-                break;
+                return new EnemyImpl(pos, new NaiveInventoryImpl(), type, walkable, walls);
         }
-
-        return retval;
     }
 
 }
