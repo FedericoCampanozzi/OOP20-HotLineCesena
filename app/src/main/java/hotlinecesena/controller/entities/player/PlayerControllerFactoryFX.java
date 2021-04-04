@@ -12,18 +12,15 @@ import java.util.Map;
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
 import hotlinecesena.model.camera.CameraImpl;
-import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
-import hotlinecesena.model.entities.actors.player.PlayerImpl;
-import hotlinecesena.model.inventory.NaiveInventoryImpl;
-import hotlinecesena.view.camera.CameraController;
-import hotlinecesena.view.camera.CameraControllerImpl;
+import hotlinecesena.model.entities.actors.player.PlayerFactoryImpl;
+import hotlinecesena.view.camera.CameraView;
+import hotlinecesena.view.camera.CameraViewImpl;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -34,10 +31,6 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
 
     // TODO: All temporary, will replace with values given by DAL
     private static final String SPRITE_NAME = "index.png";
-    private static final double MAX_HEALTH = 100;
-    private static final double SPEED = 450;
-    private static final double STARTING_ANGLE = 270;
-    private static final Point2D STARTING_POS = Point2D.ZERO;
     private final Scene scene;
     private final Pane pane;
     // TODO: Read bindings from file?
@@ -57,23 +50,12 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
 
     @Override
     public PlayerController createPlayerController() {
-        final Player playerModel = new PlayerImpl(
-                STARTING_POS,
-                STARTING_ANGLE,
-                SPEED,
-                MAX_HEALTH,
-                new NaiveInventoryImpl(),
-                Map.of(ActorStatus.NORMAL, 0.0,
-                        ActorStatus.ATTACKING, 10.0,
-                        ActorStatus.RELOADING, 3.0,
-                        ActorStatus.DEAD, 0.0
-                        )
-                );
+        final Player playerModel = new PlayerFactoryImpl().createPlayer();
         final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
         final InputListener listener = new InputListenerFX(scene);
         final InputInterpreter interpreter = new InputInterpreterImpl(
                 bindings);
-        final CameraController camera = new CameraControllerImpl(new CameraImpl(playerModel), pane);
+        final CameraView camera = new CameraViewImpl(new CameraImpl(playerModel), pane);
         return new PlayerControllerFX(playerModel, view, interpreter, camera, listener);
     }
 }
