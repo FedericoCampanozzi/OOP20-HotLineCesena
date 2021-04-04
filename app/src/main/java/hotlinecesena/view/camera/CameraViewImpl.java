@@ -11,7 +11,7 @@ import javafx.scene.transform.Translate;
  * Simple camera controller for JavaFX.
  *
  */
-public class CameraControllerImpl implements CameraController {
+public class CameraViewImpl implements CameraView {
 
     private static final float VIEW_SCALE = 2.0f;
     private static final float CENTERING_X = 2.5f;
@@ -20,13 +20,16 @@ public class CameraControllerImpl implements CameraController {
     private Pane pane;
     private final Translate paneTranslate = new Translate();
 
-    public CameraControllerImpl(final Camera camera, final Pane pane) {
+    public CameraViewImpl(final Camera camera, final Pane pane) {
         this.camera = Objects.requireNonNull(camera);
         this.setPane(pane);
     }
 
+    /**
+     * @throws NullPointerException if the supplied {@code Pane} is null.
+     */
     @Override
-    public void setPane(final Pane pane) throws NullPointerException {
+    public void setPane(final Pane pane) {
         this.pane = Objects.requireNonNull(pane);
         pane.getTransforms().add(paneTranslate);
     }
@@ -36,8 +39,11 @@ public class CameraControllerImpl implements CameraController {
         pane.getTransforms().remove(paneTranslate);
     }
 
+    /**
+     * @throws NullPointerException if the supplied {@code Entity} is null.
+     */
     @Override
-    public void setEntity(final Entity entity) throws NullPointerException {
+    public void setEntity(final Entity entity) {
         camera.attachTo(Objects.requireNonNull(entity));
     }
 

@@ -1,6 +1,7 @@
 package hotlinecesena.view.input;
 
 import java.util.EnumSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -30,6 +31,7 @@ public final class InputListenerFX implements InputListener {
      * @param scene the {@code Scene} on which the event handlers will be set.
      */
     public InputListenerFX(final Scene scene) {
+        Objects.requireNonNull(scene);
         this.setKeyEventHandlers(scene);
         this.setMouseButtonHandlers(scene);
         this.setMouseMovementHandlers(scene);
@@ -42,7 +44,7 @@ public final class InputListenerFX implements InputListener {
 
     /**
      * Combines sets of {@code KeyCode}s and {@code MouseButton}s into a single
-     * {@code Set<Enum<?>>}.
+     * set of generic enums for simplicity.
      * @return
      */
     private Set<Enum<?>> combineInputs() {
@@ -74,16 +76,16 @@ public final class InputListenerFX implements InputListener {
      */
     private void setMouseMovementHandlers(final Scene scene) {
         //Mouse moved, no buttons pressed
-        scene.setOnMouseMoved(this.captureMouseMovement());
+        scene.setOnMouseMoved(this.captureMouseCoordinates());
         //Mouse moved while buttons pressed
-        scene.setOnMouseDragged(this.captureMouseMovement());
+        scene.setOnMouseDragged(this.captureMouseCoordinates());
     }
 
     /**
      * Event handler common to setOnMouseMoved and setOnMouseDragged properties.
      * @return an {@link EventHandler} for capturing mouse coordinates.
      */
-    private EventHandler<MouseEvent> captureMouseMovement() {
+    private EventHandler<MouseEvent> captureMouseCoordinates() {
         return e -> currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
     }
 
