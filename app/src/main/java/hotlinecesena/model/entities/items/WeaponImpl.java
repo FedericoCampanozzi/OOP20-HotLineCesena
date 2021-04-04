@@ -6,53 +6,52 @@ import java.util.function.Consumer;
 import hotlinecesena.model.entities.actors.Actor;
 
 public class WeaponImpl implements Weapon{
+	
+	// Player starts with this specific weapon
+	private WeaponType weapon = WeaponType.PISTOL;
+	private int currentAmmo = weapon.getMagazineSize();
 
 	@Override
 	public Optional<Consumer<Actor>> usage() {
-		// TODO Auto-generated method stub
-		return null;
+		return Optional.empty();
 	}
 
 	@Override
 	public int getMaxStacks() {
-		// TODO Auto-generated method stub
-		return 0;
+		return weapon.getMaxStacks();
 	}
 
 	@Override
 	public void reload(int bullets) {
-		// TODO Auto-generated method stub
-		
+		currentAmmo = currentAmmo + bullets;
+		if (currentAmmo > weapon.getMagazineSize()) {
+			currentAmmo = weapon.getMagazineSize();
+		}
 	}
 
 	@Override
 	public Item getCompatibleAmmunition() {
-		// TODO Auto-generated method stub
-		return null;
+		return weapon.getCompatibleAmmo();
 	}
 
 	@Override
 	public double getReloadTime() {
-		// TODO Auto-generated method stub
-		return 0;
+		return weapon.getReloadTime();
 	}
 
 	@Override
 	public double getNoise() {
-		// TODO Auto-generated method stub
-		return 0;
+		return weapon.getNoise();
 	}
 
 	@Override
 	public int getMagazineSize() {
-		// TODO Auto-generated method stub
-		return 0;
+		return weapon.getMagazineSize();
 	}
 
 	@Override
 	public int getCurrentAmmo() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.currentAmmo;
 	}
 
 }
