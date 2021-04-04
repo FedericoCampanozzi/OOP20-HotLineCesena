@@ -3,7 +3,6 @@ package hotlinecesena.view.camera;
 import java.util.Objects;
 
 import hotlinecesena.model.camera.Camera;
-import hotlinecesena.model.entities.Entity;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -37,14 +36,6 @@ public class CameraViewImpl implements CameraView {
     @Override
     public void removePane() {
         pane.getTransforms().remove(paneTranslate);
-    }
-
-    /**
-     * @throws NullPointerException if the supplied {@code Entity} is null.
-     */
-    @Override
-    public void setEntity(final Entity entity) {
-        camera.attachTo(Objects.requireNonNull(entity));
     }
 
     @Override
