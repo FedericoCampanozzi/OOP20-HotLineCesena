@@ -34,3 +34,6 @@ app/bin
 .eclipse-pmd
 ./.settings
 org.eclipse.*
+
+# Ignore generated map file
+/app/src/main/resources/File/WorldMap.txt
