@@ -11,7 +11,7 @@ import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.model.events.Subscriber;
-import hotlinecesena.view.camera.CameraController;
+import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
 
@@ -23,10 +23,10 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     private final InputInterpreter interpreter;
     private final Sprite sprite;
     //TODO Camera to be held by the GameController/WorldView
-    private final CameraController camera;
+    private final CameraView camera;
 
     public PlayerControllerFX(final Player player, final Sprite sprite, final InputInterpreter interpreter,
-            final CameraController camera, final InputListener listener) {
+            final CameraView camera, final InputListener listener) {
         this.player = player;
         this.sprite = sprite;
         this.listener = listener;
@@ -57,7 +57,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     @Override
-    public CameraController getCamera() {
+    public CameraView getCamera() {
         return camera;
     }
 

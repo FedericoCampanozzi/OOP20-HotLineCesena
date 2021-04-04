@@ -6,6 +6,11 @@ import hotlinecesena.model.entities.Entity;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
+/**
+ * Camera implementation. It makes use of interpolation to simulate
+ * smooth movement, making it time-dependent.
+ *
+ */
 public class CameraImpl implements Camera {
 
     private static final int ACCEL = 30;
@@ -13,12 +18,20 @@ public class CameraImpl implements Camera {
     private Point2D cameraPos = Point2D.ZERO;
     private Entity entity;
 
+    /**
+     *
+     * @param entity the {@link Entity} to be followed by this camera.
+     * @throws NullPointerException if {@code entity} is null.
+     */
     public CameraImpl(final Entity entity) {
         this.attachTo(entity);
     }
 
+    /**
+     * @throws NullPointerException if the supplied {@code Entity} is null.
+     */
     @Override
-    public void attachTo(final Entity entity) throws NullPointerException {
+    public void attachTo(final Entity entity) {
         this.entity = Objects.requireNonNull(entity);
     }
 
@@ -27,6 +40,9 @@ public class CameraImpl implements Camera {
         return cameraPos;
     }
 
+    /**
+     * Interpolation is time-dependent.
+     */
     @Override
     public void update(final double timeElapsed) {
         final double blend = MathUtils.blend(SHARPNESS, ACCEL, timeElapsed);
