@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 
 import hotlinecesena.model.entities.actors.Actor;
 
-public enum WeaponType {
+public enum WeaponType implements Weapon{
 	SHOTGUN(actor -> actor.attack(), 25, 7, AmmunitionType.SHOTGUN_AMMO, 1, 7, 8, 5),
 	RIFLE(actor -> actor.attack(), 20, 5, AmmunitionType.RIFLE_AMMO, 1, 30, 5, 4),
 	PISTOL(actor -> actor.attack(), 5, 5, AmmunitionType.RIFLE_AMMO, 1, 10, 3, 3);
@@ -15,10 +15,11 @@ public enum WeaponType {
 	private AmmunitionType compatibleAmmo;
 	private int maxStacks;
 	private int magazineSize;
-	private int noise;
-	private int reloadTime;
+	private double noise;
+	private double reloadTime;
+	private int currentAmmo;
 	
-	WeaponType(Consumer<Actor> attackFunc, final double damage, final double projectileSpeed, final AmmunitionType compatibleAmmo, final int maxStacks, final int magazineSize, final int noise, final int reloadTime) {
+	WeaponType(Consumer<Actor> attackFunc, final double damage, final double projectileSpeed, final AmmunitionType compatibleAmmo, final int maxStacks, final int magazineSize, final double noise, final double reloadTime) {
 		this.attackFunc = attackFunc;
 		this.damage = damage;
 		this.projectileSpeed = projectileSpeed;
@@ -27,10 +28,7 @@ public enum WeaponType {
 		this.magazineSize = magazineSize;
 		this.noise = noise;
 		this.reloadTime = reloadTime;
-	}
-	
-	public Consumer<Actor> getAttackFunc() {
-		return this.attackFunc;
+		this.currentAmmo = magazineSize;
 	}
 	
 	public double getDamage() {
@@ -41,23 +39,46 @@ public enum WeaponType {
 		return this.projectileSpeed;
 	}
 	
-	public AmmunitionType getCompatibleAmmo() {
-		return this.compatibleAmmo;
-	}
-	
+	@Override
 	public int getMaxStacks() {
 		return this.maxStacks;
 	}
 	
+	@Override
 	public int getMagazineSize() {
 		return this.magazineSize;
 	}
 	
-	public int getNoise() {
+	@Override
+	public double getNoise() {
 		return this.noise;
 	}
 	
-	public int getReloadTime() {
+	@Override
+	public double getReloadTime() {
 		return this.reloadTime;
+	}
+
+	@Override
+	public Consumer<Actor> usage() {
+		return this.attackFunc;
+	}
+
+	@Override
+	public void reload(int bullets) {
+		currentAmmo = currentAmmo + bullets;
+		if (currentAmmo > getMagazineSize()) {
+			currentAmmo = getMagazineSize();
+		}
+	}
+
+	@Override
+	public Item getCompatibleAmmunition() {
+		return this.compatibleAmmo;
+	}
+
+	@Override
+	public int getCurrentAmmo() {
+		return this.currentAmmo;
 	}
 }

@@ -10,16 +10,16 @@ public enum ItemsType implements Item {
 	MEDIKIT(actor -> actor.heal(50), 5),
 	AMMO_BAG(actor -> actor.addAmmo(14, 60, 20), 5);
 	
-	private Optional<Consumer<Actor>> usageFunc;
+	private Consumer<Actor> usageFunc;
 	private int maxStacks;
 
-	ItemsType(final Optional<Consumer<Actor>> usageFunc, final int maxStacks) {
+	ItemsType(final Consumer<Actor> usageFunc, final int maxStacks) {
 		this.usageFunc = usageFunc;
 		this.maxStacks = maxStacks;
 	}
 
 	@Override
-	public Optional<Consumer<Actor>> usage() {
+	public Consumer<Actor> usage() {
 		return this.usageFunc;
 	}
 

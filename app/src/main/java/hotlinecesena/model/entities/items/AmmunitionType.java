@@ -1,6 +1,5 @@
 package hotlinecesena.model.entities.items;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import hotlinecesena.model.entities.actors.Actor;
@@ -17,8 +16,8 @@ public enum AmmunitionType implements Item {
 	}
 
 	@Override
-	public Optional<Consumer<Actor>> usage() {
-		return Optional.empty();
+	public Consumer<Actor> usage() {
+		return null;
 	}
 
 	@Override
