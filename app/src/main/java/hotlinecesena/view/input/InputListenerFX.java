@@ -21,6 +21,7 @@ import javafx.util.Pair;
  */
 public final class InputListenerFX implements InputListener {
 
+    private final Scene scene;
     private final Set<KeyCode> keyboardInputs = EnumSet.noneOf(KeyCode.class);
     private final Set<MouseButton> mouseInputs = EnumSet.noneOf(MouseButton.class);
     private Point2D currentMouseCoords = Point2D.ZERO;
@@ -31,10 +32,10 @@ public final class InputListenerFX implements InputListener {
      * @param scene the {@code Scene} on which the event handlers will be set.
      */
     public InputListenerFX(final Scene scene) {
-        Objects.requireNonNull(scene);
-        this.setKeyEventHandlers(scene);
-        this.setMouseButtonHandlers(scene);
-        this.setMouseMovementHandlers(scene);
+        this.scene = Objects.requireNonNull(scene);
+        this.setKeyEventHandlers();
+        this.setMouseButtonHandlers();
+        this.setMouseMovementHandlers();
     }
 
     @Override
@@ -56,7 +57,7 @@ public final class InputListenerFX implements InputListener {
      * Handles key presses and key releases.
      * @param scene
      */
-    private void setKeyEventHandlers(final Scene scene) {
+    private void setKeyEventHandlers() {
         scene.setOnKeyReleased(e -> this.forgetInput(keyboardInputs, e.getCode()));
         scene.setOnKeyPressed(e -> this.captureInput(keyboardInputs, e.getCode()));
     }
@@ -65,7 +66,7 @@ public final class InputListenerFX implements InputListener {
      * Handles mouse button presses and releases.
      * @param scene
      */
-    private void setMouseButtonHandlers(final Scene scene) {
+    private void setMouseButtonHandlers() {
         scene.setOnMouseReleased(e -> this.forgetInput(mouseInputs, e.getButton()));
         scene.setOnMousePressed(e -> this.captureInput(mouseInputs, e.getButton()));
     }
@@ -74,7 +75,7 @@ public final class InputListenerFX implements InputListener {
      * Handles mouse movement.
      * @param scene
      */
-    private void setMouseMovementHandlers(final Scene scene) {
+    private void setMouseMovementHandlers() {
         //Mouse moved, no buttons pressed
         scene.setOnMouseMoved(this.captureMouseCoordinates());
         //Mouse moved while buttons pressed
