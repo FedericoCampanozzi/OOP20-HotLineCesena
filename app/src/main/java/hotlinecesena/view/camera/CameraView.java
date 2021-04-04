@@ -1,6 +1,5 @@
 package hotlinecesena.view.camera;
 
-import hotlinecesena.model.entities.Entity;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -22,13 +21,6 @@ public interface CameraView {
      * Detaches the {@link Translate} from this camera's current JavaFX {@link Pane}.
      */
     void removePane();
-
-    /**
-     * Orders the {@link Camera} model to follow a specific {@link Entity}.
-     *
-     * @param entity
-     */
-    void setEntity(Entity entity);
 
     /**
      * Updates the {@link Translate} position based on {@link Camera} movements.
