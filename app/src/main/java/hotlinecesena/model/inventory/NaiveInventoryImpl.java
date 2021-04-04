@@ -15,7 +15,7 @@ public class NaiveInventoryImpl implements Inventory {
     private int ammoForReloading;
 
     @Override
-    public void add(final Item item) {
+    public void add(final Item item, final int quantity) {
         Objects.requireNonNull(item);
         //        if (isWeapon(item)) {
         //            if (this.equippable.isPresent()) {
@@ -25,8 +25,8 @@ public class NaiveInventoryImpl implements Inventory {
         //        } else {
         //
         //        }
-        final int oldQuantity = stackables.containsKey(item) ? stackables.get(item) : 0;
-        stackables.put(item, 1 + oldQuantity);
+        final int ownedQuantity = stackables.getOrDefault(item, 0);
+        stackables.put(item, quantity + ownedQuantity);
     }
 
     @Override
