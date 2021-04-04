@@ -36,7 +36,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     @Override
     public void pickUp() {
         //TODO Use DAL and collisions to determine which item will be picked up
-        this.getInventory().add(null);
+        //this.getInventory().add(null);
     }
 
     @Override
