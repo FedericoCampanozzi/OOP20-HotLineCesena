@@ -1,11 +1,13 @@
 package hotlinecesena.model.entities;
 
+import java.util.Objects;
+
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.events.MovementEvent;
 import javafx.geometry.Point2D;
 
 /**
- * 
+ *
  * Template for generic entities capable of moving.
  *
  */
@@ -19,11 +21,15 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
         this.speed = speed;
     }
 
+    /**
+     * @throws NullPointerException if the supplied direction is null.
+     */
     @Override
-    public void move(Point2D direction) {
+    public void move(final Point2D direction) {
+        Objects.requireNonNull(direction);
         if (!direction.equals(DirectionList.NONE.get())) {
             final Point2D oldPos = this.getPosition();
-            final Point2D newPos = oldPos.add(direction.multiply(this.speed));
+            final Point2D newPos = oldPos.add(direction.multiply(speed));
             this.setPosition(newPos);
             this.publish(new MovementEvent(this, newPos, MOVE_NOISE));
         }
@@ -31,7 +37,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
 
     @Override
     public final double getSpeed() {
-        return this.speed;
+        return speed;
     }
 
     @Override

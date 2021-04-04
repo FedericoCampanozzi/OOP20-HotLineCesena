@@ -1,5 +1,6 @@
 package hotlinecesena.model.entities.actors;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.AbstractMovableEntity;
@@ -22,11 +23,20 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     private ActorStatus status = ActorStatus.NORMAL;
     private final Inventory inventory;
 
+    /**
+     *
+     * @param pos
+     * @param angle
+     * @param speed
+     * @param maxHealth maximum health points.
+     * @param inv the {@link Inventory} used by this actor to access owned items and weapons.
+     * @throws NullPointerException if {@code pos} or {@code inv} are null.
+     */
     protected AbstractActor(final Point2D pos, final double angle, final double speed,
             final double maxHealth, final Inventory inv) {
         super(pos, angle, speed);
         this.maxHealth = currentHealth = maxHealth;
-        inventory = inv;
+        inventory = Objects.requireNonNull(inv);
     }
 
     /**
@@ -43,17 +53,14 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      * Overridden to prohibit rotations when the actor is dead.
      */
     @Override
-    public void setAngle(final double angle) {
+    public final void setAngle(final double angle) {
         if (this.isAlive()) {
             super.setAngle(angle);
         }
     }
 
-    /**
-     * Can be overridden if a concrete implementation is not based on an inventory system.
-     */
     @Override
-    public void attack() {
+    public final void attack() {
         if (this.isAlive() && !inventory.isReloading()) {
             final Optional<Weapon> weapon = inventory.getWeapon();
             if (weapon.isPresent() && weapon.get().getCurrentAmmo() > 0) {
@@ -64,18 +71,21 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
     }
 
-    /**
-     * Can be overridden if a concrete implementation is not based on an inventory system.
-     */
     @Override
-    public void reload() {
+    public final void reload() {
         if (this.isAlive()) {
             inventory.reloadWeapon();
         }
     }
 
+    /**
+     * @throws IllegalArgumentException if supplied damage is negative.
+     */
     @Override
     public final void takeDamage(final double damage) {
+        if (damage < 0) {
+            throw new IllegalArgumentException("Negative damage: " + damage);
+        }
         if (this.isAlive()) {
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
             this.publish(new DamageReceivedEvent(this, damage));
@@ -86,8 +96,14 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
     }
 
+    /**
+     * @throws IllegalArgumentException if supplied hp is negative.
+     */
     @Override
     public final void heal(final double hp) {
+        if (hp < 0) {
+            throw new IllegalArgumentException("Negative hp: " + hp);
+        }
         if (this.isAlive()) {
             currentHealth = (currentHealth + hp < maxHealth) ? (currentHealth + hp) : maxHealth;
         }
@@ -103,6 +119,10 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         return currentHealth;
     }
 
+    /**
+     * Convenience method to be used internally.
+     * @return {@code true} if the actor is alive, {@code false} otherwise.
+     */
     protected final boolean isAlive() {
         return currentHealth > 0;
     }

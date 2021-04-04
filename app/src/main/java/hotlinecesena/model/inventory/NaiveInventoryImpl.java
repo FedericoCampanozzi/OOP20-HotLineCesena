@@ -1,6 +1,7 @@
 package hotlinecesena.model.inventory;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.items.Item;
@@ -15,6 +16,7 @@ public class NaiveInventoryImpl implements Inventory {
 
     @Override
     public void add(final Item item) {
+        Objects.requireNonNull(item);
         //        if (isWeapon(item)) {
         //            if (this.equippable.isPresent()) {
         //                this.drop(this.equippable.get());

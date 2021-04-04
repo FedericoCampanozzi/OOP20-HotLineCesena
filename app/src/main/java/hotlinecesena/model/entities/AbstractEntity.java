@@ -1,5 +1,7 @@
 package hotlinecesena.model.entities;
 
+import java.util.Objects;
+
 import com.google.common.eventbus.EventBus;
 
 import hotlinecesena.model.events.Event;
@@ -17,8 +19,13 @@ public abstract class AbstractEntity implements Entity {
     private double angle;
     private final EventBus bus;
 
+    /**
+     *
+     * @param position starting position in which the entity will be located.
+     * @param angle starting angle that the entity will face
+     */
     protected AbstractEntity(final Point2D position, final double angle) {
-        this.position = position;
+        this.position = Objects.requireNonNull(position);
         this.angle = angle;
         bus = new EventBus();
     }
@@ -34,9 +41,10 @@ public abstract class AbstractEntity implements Entity {
      * Position may not be modified by external objects.
      *
      * @param pos the new position.
+     * @throws NullPointerException if the supplied {@link Point2D} is null.
      */
     protected final void setPosition(final Point2D pos) {
-        position = pos;
+        position = Objects.requireNonNull(pos);
     }
 
     @Override
@@ -58,18 +66,25 @@ public abstract class AbstractEntity implements Entity {
      * Events may not be posted by external objects.
      *
      * @param event
+     * @throws NullPointerException if the supplied event is null.
      */
     protected void publish(final Event event) {
-        bus.post(event);
+        bus.post(Objects.requireNonNull(event));
     }
 
+    /**
+     * @throws NullPointerException if the supplied subscriber is null.
+     */
     @Override
     public void register(final Subscriber subscriber) {
-        bus.register(subscriber);
+        bus.register(Objects.requireNonNull(subscriber));
     }
 
+    /**
+     * @throws NullPointerException if the supplied subscriber is null.
+     */
     @Override
     public void unregister(final Subscriber subscriber) {
-        bus.unregister(subscriber);
+        bus.unregister(Objects.requireNonNull(subscriber));
     }
 }
