@@ -10,11 +10,6 @@ import hotlinecesena.model.entities.actors.Actor;
 public interface Player extends Actor {
 
     /**
-     * Picks up nearby items, weapons or ammo, if there are any.
-     */
-    void pickUp();
-
-    /**
      * Uses items found on ground.
      */
     void use();
