@@ -68,7 +68,7 @@ public enum AudioType {
      * @param path the relative path to each audio file
      * @see String 
      */
-    private AudioType(String path) {
+    private AudioType(final String path) {
         this.path = path;
     }
 

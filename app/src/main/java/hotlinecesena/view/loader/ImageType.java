@@ -55,7 +55,7 @@ public enum ImageType {
      * @param path the relative path to each image file
      * @see String 
      */
-    private ImageType(String path) {
+    private ImageType(final String path) {
         this.path = path;
     }
 

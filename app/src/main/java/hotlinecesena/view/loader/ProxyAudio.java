@@ -36,7 +36,7 @@ public class ProxyAudio implements SoundLoader{
      * @see Map
      */
     @Override
-    public AudioClip getAudioClip(AudioType type) {
+    public AudioClip getAudioClip(final AudioType type) {
         if(this.loadedAudioClips.containsKey(type.toString())) {
             return this.loadedAudioClips.get(type.toString());
         } else {
@@ -46,21 +46,24 @@ public class ProxyAudio implements SoundLoader{
     }
 
     @Override
-    public MediaPlayer getMediaPlayer(AudioType type) {
+    public MediaPlayer getMediaPlayer(final AudioType type) {
         return audioLoader.getMediaPlayer(type);
     }
 
     private static class ProxyAudioLoader implements SoundLoader {
-        private final static String PATH = "src" + File.separator + "main" + File.separator + "resources" + File.separator + "FX";
+        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator +
+                "resources" + File.separator + "FX";
 
         @Override
-        public AudioClip getAudioClip(AudioType type) {
-            return new AudioClip(Paths.get(PATH + File.separator + type.toString()).toUri().toString());
+        public AudioClip getAudioClip(final AudioType type) {
+            return new AudioClip(Paths.get(ABSOLUTE_PATH + File.separator +
+                    type.toString()).toUri().toString());
         }
 
         @Override
-        public MediaPlayer getMediaPlayer(AudioType type) {
-            final Media media = new Media(Paths.get(PATH + File.separator + type.toString()).toUri().toString());
+        public MediaPlayer getMediaPlayer(final AudioType type) {
+            final Media media = new Media(Paths.get(ABSOLUTE_PATH + File.separator +
+                    type.toString()).toUri().toString());
             return new MediaPlayer(media);
         }  
     }

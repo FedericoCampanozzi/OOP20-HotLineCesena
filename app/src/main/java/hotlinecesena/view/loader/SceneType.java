@@ -21,7 +21,7 @@ public enum SceneType {
     /**
      * @param path the relative path to each file type
      */
-    private SceneType(String path) {
+    private SceneType(final String path) {
         this.path = path;
     } 
 

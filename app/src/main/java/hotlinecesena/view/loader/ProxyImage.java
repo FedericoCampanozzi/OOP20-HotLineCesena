@@ -31,7 +31,7 @@ public class ProxyImage implements ImageLoader {
      * @see Map
      */
     @Override
-    public Image getImage(SceneType scene, ImageType image) {
+    public Image getImage(final SceneType scene, final ImageType image) {
         if(this.loadedImages.containsKey(image)) {
             return loadedImages.get(image);
         } else {
@@ -41,11 +41,12 @@ public class ProxyImage implements ImageLoader {
     }
 
     private static class ProxyImageLoader implements ImageLoader {
-        private final static String PATH = "src" + File.separator + "main" + File.separator + "resources";
+        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources";
 
         @Override
-        public Image getImage(SceneType scene, ImageType image) {
-            return new Image(Paths.get(PATH + File.separator + scene.toString() + File.separator + image.toString()).toUri().toString());
+        public Image getImage(final SceneType scene, final ImageType image) {
+            return new Image(Paths.get(ABSOLUTE_PATH + File.separator + scene.toString() +
+                    File.separator + image.toString()).toUri().toString());
         }
     } 
 }
