@@ -1,19 +1,19 @@
 package hotlinecesena.model.score;
 
-public class TimePartial extends AbstractPartial {
+public final class TimePartial extends AbstractPartial {
 
     private static final String NAME = "Time bonus";
     private static final int POINTS = 5;
-//    private final int timeCeiling;
+    //    private final int timeCeiling;
 
     protected TimePartial() {
         super(NAME, POINTS);
-//        this.timeCeiling = getWorld().getMapSize() / 5;
+        //        this.timeCeiling = getWorld().getMapSize() / 5;
     }
 
     @Override
     protected int formula() {
         return 0;
-//        return timeCeiling <= getWorld().getTotalTime() ? 0 : timeCeiling - getWorld().getTotalTime();
+        //        return timeCeiling <= getWorld().getTotalTime() ? 0 : timeCeiling - getWorld().getTotalTime();
     }
 }
