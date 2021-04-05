@@ -7,8 +7,10 @@ import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
+import hotlinecesena.model.entities.actors.Direction;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.utilities.MathUtils;
@@ -81,8 +83,9 @@ public final class InputInterpreterImpl implements InputInterpreter {
      */
     private Point2D processMovementDirection(final Set<PlayerAction> actions) {
         Point2D direction = actions.stream()
-                .filter(a -> a.getDirection().isPresent())
-                .map(a -> a.getDirection().get().get())
+                .map(PlayerAction::getDirection)
+                .flatMap(Optional::stream)
+                .map(Direction::get)
                 .reduce(Point2D.ZERO, Point2D::add);
         final double magnitude = direction.magnitude();
         if (magnitude > 1) {
@@ -114,8 +117,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
      */
     private Set<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
         return actions.stream()
-                .filter(a -> a.getCommand().isPresent())
-                .map(a -> a.getCommand().get())
+                .map(PlayerAction::getCommand)
+                .flatMap(Optional::stream)
                 .collect(toUnmodifiableSet());
     }
 }
