@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 
 public final class PlayerImpl extends AbstractActor implements Player {
 
+    private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
 
     /**
@@ -32,7 +33,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     public double getNoiseRadius() {
         final ActorStatus status = this.getActorStatus();
         return status == ActorStatus.ATTACKING ? this.getInventory().getWeapon().get().getNoise()
-                : noiseLevels.getOrDefault(status, 0.0);
+                : noiseLevels.getOrDefault(status, DEFAULT_NOISE_LEVEL);
     }
 
     @Override
