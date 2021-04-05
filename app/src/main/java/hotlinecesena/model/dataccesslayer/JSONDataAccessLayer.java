@@ -2,6 +2,9 @@ package hotlinecesena.model.dataccesslayer;
 
 import java.io.File;
 import java.util.Random;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hotlinecesena.model.dataccesslayer.datastructure.*;
 
 public class JSONDataAccessLayer {
@@ -12,8 +15,8 @@ public class JSONDataAccessLayer {
 	private static JSONDataAccessLayer singleton = null;
 	
 	private DataJSONSettings settings;
-	//private DataJSONRanking ranking;
-	//private DataJSONLanguages languages;
+	private DataJSONRanking ranking;
+	private DataJSONLanguages languages;
 	private DataWorldMap world;
 	private DataJSONPlayer player;
 	private DataJSONEnemy enemy;
@@ -23,13 +26,13 @@ public class JSONDataAccessLayer {
 		return settings;
 	}
 
-//	public DataJSONRanking getRanking() {
-//		return ranking;
-//	}
-//
-//	public DataJSONLanguages getLanguages() {
-//		return languages;
-//	}
+	public DataJSONRanking getRanking() {
+		return ranking;
+	}
+
+	public DataJSONLanguages getLanguages() {
+		return languages;
+	}
 	
 	public DataWorldMap getWorld() {
 		return world;
@@ -47,15 +50,16 @@ public class JSONDataAccessLayer {
 		return guiPath;
 	}
 	
-	public JSONDataAccessLayer() {
+	private JSONDataAccessLayer() {
 		try {
+			ObjectMapper mapper = new ObjectMapper();
+			this.settings = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "settings.json"), DataJSONSettings.class);
+			this.ranking = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "ranking.json"), DataJSONRanking.class);
+			this.languages = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "languages.json"), DataJSONLanguages.class);
 			this.world = new DataWorldMap();
-			this.settings = new DataJSONSettings();
-			this.player = new DataJSONPlayer(this.world);
+			this.player = new DataJSONPlayer(this.world, this.settings);
 			this.guiPath = new DataGUIPath();
-			this.enemy = new DataJSONEnemy(this.world);
-			//this.ranking = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "ranking.json"), DataJSONRanking.class);
-			//this.languages = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "languages.json"), DataJSONLanguages.class);
+			this.enemy = new DataJSONEnemy(this.world, this.settings);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -64,6 +68,7 @@ public class JSONDataAccessLayer {
 	public static JSONDataAccessLayer getInstance() {
 		if(singleton == null) {
 			SEED = new Random().nextLong();
+			//SEED = 12254;
 			singleton = new JSONDataAccessLayer();
 		}
 		return singleton;

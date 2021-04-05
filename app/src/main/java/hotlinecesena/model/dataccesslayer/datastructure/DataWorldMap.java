@@ -10,20 +10,23 @@ import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilderImpl;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
 import javafx.util.Pair;
 
 public class DataWorldMap extends AbstractData {
 
-	private Map<Pair<Integer, Integer>, Character> worldMap;
+	private Map<Pair<Integer, Integer>, SIMBOLS_TYPE> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	
-	public DataWorldMap() {
-		final WorldGeneratorBuilder sgwb = new WorldGeneratorBuilderImpl(JSONDataAccessLayer.SEED)
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticList(JSONDataAccessLayer.SEED, 5,5, 11, 11, 15, 20))
-				.generateRooms(20, 30)
-				.generateEnemy(0.05f, 4)
+	public DataWorldMap() throws IOException {
+		final WorldGeneratorBuilder sgwb = new WorldGeneratorBuilderImpl()
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(7, 13, 1, 5, 15, 25))
+				.generateRooms(10, 20)
 				.generatePlayer()
-				.generateDecorations(0.01f)
+				.generateAmmo(0, 2)
+				.generateEnemy(1, 6)
+				.generateMedikit(1, 3)
+				.generateObstacoles(3, 8)
 				.finishes()
 				.build();
 		
@@ -32,6 +35,8 @@ public class DataWorldMap extends AbstractData {
 		this.xMax = sgwb.getMaxX();
 		this.yMin = sgwb.getMinY();
 		this.yMax = sgwb.getMaxY();
+		
+		write();
 	}
 	
 	@Override
@@ -50,7 +55,7 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
-	public Map<Pair<Integer, Integer>, Character> getWorldMap(){
+	public Map<Pair<Integer, Integer>, SIMBOLS_TYPE> getWorldMap(){
 		return this.worldMap;
 	}
 

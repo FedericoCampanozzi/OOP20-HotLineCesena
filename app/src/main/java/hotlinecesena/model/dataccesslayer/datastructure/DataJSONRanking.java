@@ -69,20 +69,10 @@ public class DataJSONRanking extends AbstractData {
 		return description;
 	}
 	
-	public DataJSONRanking() throws JsonGenerationException, JsonMappingException, IOException {
-		read();
-	}
-	
 	@Override
 	public void write() throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.enable(SerializationFeature.INDENT_OUTPUT);
 		mapper.writeValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "ranking.json"), this);
 	}
-	
-	@Override
-	public void read() throws JsonGenerationException, JsonMappingException, IOException {
-		 
-	}
-
 }
