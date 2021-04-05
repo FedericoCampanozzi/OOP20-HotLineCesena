@@ -21,8 +21,9 @@ public abstract class AbstractEntity implements Entity {
 
     /**
      *
-     * @param position starting position in which the entity will be located.
-     * @param angle starting angle that the entity will face
+     * @param position starting position in which this entity will be located.
+     * @param angle starting angle that this entity will face.
+     * @throws NullPointerException if given position is null.
      */
     protected AbstractEntity(final Point2D position, final double angle) {
         this.position = Objects.requireNonNull(position);
@@ -52,6 +53,11 @@ public abstract class AbstractEntity implements Entity {
         return angle;
     }
 
+    /**
+     * @implSpec
+     * Can be overridden if a subclass requires that other conditions be satisfied
+     * before setting a new angle.
+     */
     @Override
     public void setAngle(final double angle) {
         if (this.angle != angle) {

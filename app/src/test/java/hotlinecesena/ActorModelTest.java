@@ -21,13 +21,14 @@ import javafx.geometry.Point2D;
  */
 class ActorModelTest {
 
-    private Actor actor;
     private static final double SPEED = 500;
     private static final double MAX_HP = 100;
+    private static final int ANGLE = 270;
+    private Actor actor;
 
     @BeforeAll
     void setUpBeforeClass() throws Exception {
-        actor = new PlayerImpl(Point2D.ZERO, 270, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
+        actor = new PlayerImpl(Point2D.ZERO, ANGLE, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
     }
 
     @Test
@@ -64,9 +65,11 @@ class ActorModelTest {
 
     @Test
     private void actorHurtTest() {
-        actor.takeDamage(50);
-        assertEquals(50, actor.getCurrentHealth());
-        actor.takeDamage(2000);
+        final int damage = 50;
+        actor.takeDamage(damage);
+        assertEquals(damage, actor.getCurrentHealth());
+        final int unrealDamage = 2000;
+        actor.takeDamage(unrealDamage);
         assertEquals(0, actor.getCurrentHealth());
     }
 
@@ -84,8 +87,8 @@ class ActorModelTest {
 
     @Test
     private void actorDoesNotHealWhenDead() {
-        actor.heal(50000);
+        final int unrealHp = 50000;
+        actor.heal(unrealHp);
         assertEquals(0, actor.getCurrentHealth());
     }
-
 }

@@ -1,7 +1,9 @@
 package hotlinecesena.model.events;
 
+import com.google.common.eventbus.EventBus;
+
 /**
- * 
+ *
  * Models an object capable of publishing events on the {@link EventBus}.
  *
  */
@@ -12,7 +14,7 @@ public interface Publisher {
      * @param subscriber
      */
     void register(Subscriber subscriber);
-    
+
     /**
      * Unregisters a previously registered {@link Subscriber}.
      * @param subscriber

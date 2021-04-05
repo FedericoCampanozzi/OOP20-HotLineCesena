@@ -10,7 +10,7 @@ import javafx.scene.transform.Translate;
  * Simple camera controller for JavaFX.
  *
  */
-public class CameraViewImpl implements CameraView {
+public final class CameraViewImpl implements CameraView {
 
     private static final float VIEW_SCALE = 2.0f;
     private static final float CENTERING_X = 2.5f;
@@ -41,8 +41,10 @@ public class CameraViewImpl implements CameraView {
     @Override
     public void update(final double deltaTime) {
         camera.update(deltaTime); //TODO Should not be updated from the View. Perhaps from DAL?
-        final double transX = camera.getCameraPosition().getX()*VIEW_SCALE - pane.getScene().getWidth()/CENTERING_X;
-        final double transY = camera.getCameraPosition().getY()*VIEW_SCALE - pane.getScene().getHeight()/CENTERING_Y;
+        final double transX = camera.getCameraPosition().getX() * VIEW_SCALE
+                - pane.getScene().getWidth() / CENTERING_X;
+        final double transY = camera.getCameraPosition().getY() * VIEW_SCALE
+                - pane.getScene().getHeight() / CENTERING_Y;
         paneTranslate.setX(-transX);
         paneTranslate.setY(-transY);
     }

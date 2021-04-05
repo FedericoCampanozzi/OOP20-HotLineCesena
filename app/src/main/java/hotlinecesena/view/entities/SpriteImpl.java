@@ -7,7 +7,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-public class SpriteImpl implements Sprite {
+public final class SpriteImpl implements Sprite {
 
     private static final double SCALE = 0.2; //TODO Temporary, GameController will pass this to the constructor
     private static final double SPEED_SCALE = 10; //SCALE * SPEED_SCALE = 2
@@ -28,10 +28,10 @@ public class SpriteImpl implements Sprite {
 
     @Override
     public void updatePosition(final Point2D entityPos) {
-        rotate.setPivotX(entityPos.getX()*SPEED_SCALE + imageView.getImage().getWidth()/2);
-        rotate.setPivotY(entityPos.getY()*SPEED_SCALE + imageView.getImage().getHeight()/2);
-        trans.setX(entityPos.getX()*SPEED_SCALE);
-        trans.setY(entityPos.getY()*SPEED_SCALE);
+        rotate.setPivotX(entityPos.getX() * SPEED_SCALE + imageView.getImage().getWidth() / 2);
+        rotate.setPivotY(entityPos.getY() * SPEED_SCALE + imageView.getImage().getHeight() / 2);
+        trans.setX(entityPos.getX() * SPEED_SCALE);
+        trans.setY(entityPos.getY() * SPEED_SCALE);
     }
 
     @Override

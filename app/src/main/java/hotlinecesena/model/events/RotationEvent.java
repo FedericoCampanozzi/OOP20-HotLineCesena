@@ -2,7 +2,7 @@ package hotlinecesena.model.events;
 
 import hotlinecesena.model.entities.Entity;
 
-public class RotationEvent extends AbstractEvent {
+public final class RotationEvent extends AbstractEvent {
 
     private final double newAngle;
 
