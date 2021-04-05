@@ -13,6 +13,7 @@ import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.enemy.EnemyImpl;
 import hotlinecesena.model.entities.actors.enemy.EnemyType;
+import hotlinecesena.model.inventory.NaiveInventoryImpl;
 import javafx.geometry.Point2D;
 
 class EnemyModelTest {
@@ -20,7 +21,7 @@ class EnemyModelTest {
     @Test
     void enemyShoot() {
         
-        Enemy idle = new EnemyImpl(new Point2D(0,0), null, EnemyType.IDLE, null, Collections.emptySet());
+        Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.IDLE, null, Collections.emptySet());
         final Point2D target = new Point2D(2,2);
         
         // ENEMY SHOULD HAVE A CLEAR LINE OF SIGHT
@@ -35,7 +36,7 @@ class EnemyModelTest {
     
     @Test
     void enemyIdle() {
-        final Enemy idle = new EnemyImpl(new Point2D(0,0), null, EnemyType.IDLE, null, null);
+        final Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.IDLE, null, null);
         
         Point2D current = idle.getPosition();
         
@@ -48,7 +49,7 @@ class EnemyModelTest {
     @Test
     void enemyPatrolling() {
         final Set<Point2D> walkable = new HashSet<>() {{ add(new Point2D(0,0)); add(new Point2D(1,0)); add(new Point2D(1,1)); add(new Point2D(0,1));}};
-        final Enemy patrol = new EnemyImpl(new Point2D(0,0), null, EnemyType.PATROLLING, walkable, null);
+        final Enemy patrol = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.PATROLLING, walkable, null);
         
         assertEquals(DirectionList.EAST.get(), patrol.getAI().getNextMove(null, false, walkable));
         
