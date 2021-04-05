@@ -7,26 +7,30 @@ import java.util.Optional;
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
-public class NaiveInventoryImpl implements Inventory {
+public final class NaiveInventoryImpl implements Inventory {
 
-    private double reloadTimeRemaining = 0.0;
-    private final Optional<Weapon> weapon = Optional.empty();
+    private Optional<Weapon> weapon = Optional.empty();
     private Map<Item, Integer> stackables;
+    private double reloadTimeRemaining = 0.0;
     private int ammoForReloading;
 
     @Override
     public void add(final Item item, final int quantity) {
         Objects.requireNonNull(item);
-        //        if (isWeapon(item)) {
-        //            if (this.equippable.isPresent()) {
-        //                this.drop(this.equippable.get());
-        //            }
-        //            this.equippable = Optional.of(item);
-        //        } else {
-        //
-        //        }
-        final int ownedQuantity = stackables.getOrDefault(item, 0);
-        stackables.put(item, quantity + ownedQuantity);
+        if (item instanceof Weapon) {
+            final Weapon w = (Weapon) item;
+            weapon.ifPresent(this::drop);
+            weapon = Optional.of(w);
+        } else {
+            final int ownedQuantity = stackables.getOrDefault(item, 0);
+            final int newQuantity = quantity + ownedQuantity;
+            stackables.put(item, newQuantity > item.getMaxStacks() ? item.getMaxStacks() : newQuantity);
+        }
+    }
+
+    private void drop(final Item item) {
+        //TODO
+        weapon = Optional.empty();
     }
 
     @Override
@@ -36,13 +40,14 @@ public class NaiveInventoryImpl implements Inventory {
 
     @Override
     public void reloadWeapon() {
-        if (weapon.isPresent() && !this.isReloading()) {
-            final Weapon w = weapon.get();
-            final int ammoOwned = stackables.getOrDefault(w.getCompatibleAmmunition(), 0);
-            if (ammoOwned > 0) {
-                reloadTimeRemaining = w.getReloadTime();
+        weapon.ifPresent(weapon -> {
+            if (!this.isReloading()) {
+                final int ammoOwned = stackables.getOrDefault(weapon.getCompatibleAmmunition(), 0);
+                if (ammoOwned > 0) {
+                    reloadTimeRemaining = weapon.getReloadTime();
+                }
             }
-        }
+        });
     }
 
     @Override
@@ -59,13 +64,14 @@ public class NaiveInventoryImpl implements Inventory {
         if (this.isReloading()) {
             reloadTimeRemaining -= timeElapsed;
             if (reloadTimeRemaining <= 0.0) {
-                final int ammoNeeded = weapon.get().getMagazineSize() - weapon.get().getCurrentAmmo();
+                final Weapon w = weapon.get();
+                final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
                 if (ammoForReloading > ammoNeeded) {
-                    weapon.get().reload(ammoNeeded);
-                    stackables.put(weapon.get().getCompatibleAmmunition(), ammoForReloading - ammoNeeded);
+                    w.reload(ammoNeeded);
+                    stackables.put(w.getCompatibleAmmunition(), ammoForReloading - ammoNeeded);
                 } else {
-                    weapon.get().reload(ammoForReloading);
-                    stackables.put(weapon.get().getCompatibleAmmunition(), 0);
+                    w.reload(ammoForReloading);
+                    stackables.put(w.getCompatibleAmmunition(), 0);
                 }
                 ammoForReloading = 0;
             }
