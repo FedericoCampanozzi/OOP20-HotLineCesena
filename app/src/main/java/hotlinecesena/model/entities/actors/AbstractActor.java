@@ -115,7 +115,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      * @return {@code true} if the actor is alive, {@code false} otherwise.
      */
     protected final boolean isAlive() {
-        return status != ActorStatus.DEAD;
+        return currentHealth > 0;
     }
 
     @Override
