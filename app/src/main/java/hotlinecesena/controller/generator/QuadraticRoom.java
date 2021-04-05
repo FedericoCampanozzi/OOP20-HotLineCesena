@@ -1,50 +1,50 @@
 package hotlinecesena.controller.generator;
 
-import java.util.HashSet;
+import javafx.util.Pair;
 import java.util.Map;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import javafx.util.Pair;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
 
 public class QuadraticRoom extends AbstractRoom {
 	final private  int w;
-	final private  int d;
+	private  int d;
 	
-	private QuadraticRoom(final long seed, Map<Pair<Integer, Integer>, Character> map, Pair<Integer, Integer> center, int w, int d) {
+	private QuadraticRoom(Map<Pair<Integer, Integer>, SIMBOLS_TYPE> map, Pair<Integer, Integer> center, int edge) {
 		super();
 		this.map = map;
-		this.seed = seed;
-		this.w = w;
-		this.d = d;
+		this.w = edge;
 	}
 	
-	public QuadraticRoom(final long seed, int w, int d, final char walkableSimbol, final char doorSimbols, final char wallSimbols) {
+	public QuadraticRoom(int edge, int nDoor) {
 		super();
 		
-		if(w % 2 == 0) {
-			w += 1;
+		if (edge % 2 == 0) {
+			edge -= 1;
 		}
 		
-		this.w = w;
-		this.d = d;
-		generate(seed, walkableSimbol, doorSimbols, wallSimbols);
+		this.w = edge;
+		this.d = nDoor;
+		generate();
 	}
 	
 	@Override
-	public void generate(final long seed, final char walkableSimbol, final char doorSimbols, final char wallSimbols) {
+	public void generate() {
 		
 		final int width = (this.w - 1) / 2;
 		Random rnd = new Random();
-		rnd.setSeed(seed);
+		rnd.setSeed(JSONDataAccessLayer.SEED);
 		
 		for (int y = -width; y <= width; y++) {
 			for (int x = -width; x <= width; x++) {
 
 				if (y == -width || x == -width || y == width || x == width) {
-					map.put(new Pair<>(y, x), wallSimbols);
+					map.put(new Pair<>(y, x), SIMBOLS_TYPE.WALL);
 				} else {
-					map.put(new Pair<>(y, x), walkableSimbol);
+					map.put(new Pair<>(y, x), SIMBOLS_TYPE.WALKABLE);
 				}
 			}
 		}
@@ -58,8 +58,8 @@ public class QuadraticRoom extends AbstractRoom {
 					&& !cPos.equals(new Pair<Integer, Integer>(width, width))
 					&& !cPos.equals(new Pair<Integer, Integer>(-width, width))
 					&& !cPos.equals(new Pair<Integer, Integer>(width, -width))) && !connections.contains(cPos)
-					&& this.map.get(cPos).equals(wallSimbols)) {
-				this.map.put(cPos, doorSimbols);
+					&& this.map.get(cPos).equals(SIMBOLS_TYPE.WALL)) {
+				this.map.put(cPos, SIMBOLS_TYPE.DOOR);
 				connections.add(cPos);
 			}
 		}
@@ -67,7 +67,7 @@ public class QuadraticRoom extends AbstractRoom {
 
 	@Override
 	public Room deepCopy() {
-		return new QuadraticRoom(this.seed, this.map, this.center, this.w, this.d);
+		return new QuadraticRoom(this.map, this.center, this.w);
 	}
 	
 	public int getWidth() {

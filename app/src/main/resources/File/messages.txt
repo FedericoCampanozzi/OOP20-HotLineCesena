@@ -1,3 +1,0 @@
-#id_text_gui;per ogni lingua definisco una colonna
-win_message;vittoria;win
-loose_message;sconfitta;lost

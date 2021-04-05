@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toUnmodifiableSet;
 import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import hotlinecesena.model.entities.actors.player.Command;
@@ -25,17 +26,25 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private final Map<Enum<?>, PlayerAction> bindings;
     private Point2D currentMouseCoords = Point2D.ZERO;
 
+    /**
+     *
+     * @param bindings bindings of inputs to player actions.
+     * @throws NullPointerException if {@code bindings} is null.
+     */
     public InputInterpreterImpl(final Map<Enum<?>, PlayerAction> bindings) {
-        this.bindings = bindings;
+        this.bindings = Objects.requireNonNull(bindings);
     }
 
+    /**
+     * @throws NullPointerException if {@code inputs} or {@code spritePosition} are null.
+     */
     @Override
     public Set<Command> interpret(final Pair<Set<Enum<?>>, Point2D> inputs, final Point2D spritePosition,
             final double deltaTime) {
-        final Set<PlayerAction> actions = EnumSet.noneOf(PlayerAction.class);
+        Objects.requireNonNull(inputs);
+        Objects.requireNonNull(spritePosition);
         final Set<Command> commandsToDeliver = new HashSet<>();
-
-        actions.addAll(this.convertBindings(inputs.getKey()));
+        final Set<PlayerAction> actions = this.convertBindings(inputs.getKey());
 
         final Point2D newMovementDir = this.processMovementDirection(actions);
         if (!newMovementDir.equals(Point2D.ZERO)) {

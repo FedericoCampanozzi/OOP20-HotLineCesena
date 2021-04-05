@@ -3,19 +3,19 @@ package hotlinecesena.controller.generator;
 import java.util.HashMap;
 import java.util.Map;
 
+import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
 import javafx.util.Pair;
 
 public abstract class AbstractRoom implements Room {
 	
-	protected Map<Pair<Integer, Integer>, Character> map = new HashMap<>();
+	protected Map<Pair<Integer, Integer>, SIMBOLS_TYPE> map = new HashMap<>();
 	protected Pair<Integer, Integer> center = new Pair<>(0, 0);
-	protected long seed;
 	
 	public AbstractRoom() {
 		
 	}
 
-	public AbstractRoom(Map<Pair<Integer, Integer>, Character> map, Pair<Integer, Integer> center) {
+	public AbstractRoom(Map<Pair<Integer, Integer>, SIMBOLS_TYPE> map, Pair<Integer, Integer> center) {
 		this.map = map;
 		this.center = center;
 	}
@@ -28,7 +28,7 @@ public abstract class AbstractRoom implements Room {
 		this.center = center;
 	}
 	
-	public Map<Pair<Integer, Integer>, Character> getMap() {
+	public Map<Pair<Integer, Integer>, SIMBOLS_TYPE> getMap() {
 		return map;
 	}
 }
