@@ -10,6 +10,7 @@ import javafx.geometry.Point2D;
 
 public final class PlayerImpl extends AbstractActor implements Player {
 
+    private static final double ACTIVATION_RADIUS = 5.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
 
@@ -43,7 +44,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     public void use() {
         //TODO
         if (!this.getInventory().isReloading()) {
-
+            //this.publish(new PickUpEvent<Player, ItemsType>(this, ItemsType.MEDIKIT));
         }
     }
 

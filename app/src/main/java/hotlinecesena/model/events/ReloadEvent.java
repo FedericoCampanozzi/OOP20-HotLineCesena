@@ -1,7 +1,7 @@
 package hotlinecesena.model.events;
 
 import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.items.Weapon;
+import hotlinecesena.model.entities.items.WeaponType;
 
 /**
  *
@@ -10,7 +10,7 @@ import hotlinecesena.model.entities.items.Weapon;
  */
 public class ReloadEvent<A extends Actor> extends AbstractWeaponEvent<A> {
 
-    public ReloadEvent(final A source, final Weapon weapon) {
-        super(source, weapon);
+    public ReloadEvent(final A source, final WeaponType weaponType) {
+        super(source, weaponType);
     }
 }

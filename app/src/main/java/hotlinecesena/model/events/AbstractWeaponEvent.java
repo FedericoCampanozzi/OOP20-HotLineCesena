@@ -1,7 +1,7 @@
 package hotlinecesena.model.events;
 
 import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.items.Weapon;
+import hotlinecesena.model.entities.items.WeaponType;
 
 /**
  *
@@ -10,18 +10,19 @@ import hotlinecesena.model.entities.items.Weapon;
  */
 public abstract class AbstractWeaponEvent<A extends Actor> extends AbstractEvent<A> {
 
-    private final Weapon weapon;
+    private final WeaponType weaponType;
 
-    protected AbstractWeaponEvent(final A source, final Weapon weapon) {
+    protected AbstractWeaponEvent(final A source, final WeaponType weaponType) {
         super(source);
-        this.weapon = weapon;
+        this.weaponType = weaponType;
     }
 
     /**
-     * Returns the weapon with which this event has been triggered.
+     * Returns the {@link WeaponType} relative to the Weapon
+     * with which this event has been triggered.
      * @return the weapon used.
      */
-    public final Weapon getWeapon() {
-        return weapon;
+    public final WeaponType getWeapon() {
+        return weaponType;
     }
 }
