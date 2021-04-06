@@ -1,11 +1,16 @@
 package hotlinecesena.model.events;
 
-import hotlinecesena.model.entities.Entity;
+import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.entities.items.Weapon;
 
-public class ReloadEvent extends AbstractWeaponEvent {
+/**
+ *
+ * Notifies that an actor has reloaded their weapon.
+ * @param <A> an interface that extends {@link Actor}.
+ */
+public class ReloadEvent<A extends Actor> extends AbstractWeaponEvent<A> {
 
-    public ReloadEvent(final Entity source, final Weapon weapon) {
+    public ReloadEvent(final A source, final Weapon weapon) {
         super(source, weapon);
     }
 }
