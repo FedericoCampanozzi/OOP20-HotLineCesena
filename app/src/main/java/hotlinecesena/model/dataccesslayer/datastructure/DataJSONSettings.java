@@ -23,31 +23,46 @@ public class DataJSONSettings  extends AbstractData  {
     @JsonProperty("tileSize")
 	private int tileSize;
     
-	public int getTileSize() {
-		return tileSize;
+	public int getMonitorX() {
+		return monitorX;
 	}
+
+	public void setMonitorX(int monitorX) {
+		this.monitorX = monitorX;
+	}
+
+	public int getMonitorY() {
+		return monitorY;
+	}
+
+	public void setMonitorY(int monitorY) {
+		this.monitorY = monitorY;
+	}
+
+	public boolean isFullScreen() {
+		return isFullScreen;
+	}
+
+	public void setFullScreen(boolean isFullScreen) {
+		this.isFullScreen = isFullScreen;
+	}
+
 	public int getVolume() {
 		return volume;
 	}
-	public int getMonitorX() {
-    	return this.monitorX;
-    }
-    public void setMonitorX(final int monitorX) {
-    	this.monitorX = monitorX;
-    }
-    public int getMonitorY() {
-    	return this.monitorY;
-    }
-    public void setMonitorY(final int monitorY) {
-    	this.monitorY = monitorY;
-    }
-	public boolean getIsFullScreen() {
-		return this.isFullScreen;
+
+	public void setVolume(int volume) {
+		this.volume = volume;
 	}
-	public void setIsFullScreen(final boolean isFullScreen) {
-		this.isFullScreen = isFullScreen;
+
+	public int getTileSize() {
+		return tileSize;
 	}
-	
+
+	public void setTileSize(int tileSize) {
+		this.tileSize = tileSize;
+	}
+
 	@Override
 	public void write() throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

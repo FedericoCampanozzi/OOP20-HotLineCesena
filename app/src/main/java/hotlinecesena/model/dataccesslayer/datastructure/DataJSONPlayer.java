@@ -5,7 +5,7 @@ import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.model.dataccesslayer.AbstractData;
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerFactoryImpl;
 import hotlinecesena.utilities.Utilities;
@@ -18,7 +18,7 @@ public class DataJSONPlayer  extends AbstractData {
 	
 	public DataJSONPlayer(DataWorldMap world, DataJSONSettings settings) throws JsonGenerationException, JsonMappingException, IOException {
 		Pair<Integer,Integer> pos = world.getWorldMap().entrySet().stream()
-				.filter(itm -> itm.getValue().equals(SIMBOLS_TYPE.PLAYER))
+				.filter(itm -> itm.getValue().equals(SimbolsType.PLAYER))
 				.map((itm)-> itm.getKey())
 				.collect(toList()).get(0);
 		ply = new PlayerFactoryImpl().createPlayer(Utilities.convertPairToPoint2D(pos, settings.getTileSize()),0);

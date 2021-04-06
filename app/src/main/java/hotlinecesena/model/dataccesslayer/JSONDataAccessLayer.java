@@ -11,7 +11,7 @@ public class JSONDataAccessLayer {
 	
 	public static final String FILE_FOLDER_PATH = System.getProperty("user.dir") + File.separator + "src" + File.separator +
 			"main" + File.separator +"resources" + File.separator + "File" + File.separator;
-	public static long SEED;
+	public static long SEED = 0;
 	private static JSONDataAccessLayer singleton = null;
 	
 	private DataJSONSettings settings;
@@ -67,10 +67,15 @@ public class JSONDataAccessLayer {
 	
 	public static JSONDataAccessLayer getInstance() {
 		if(singleton == null) {
-			SEED = new Random().nextLong();
-			//SEED = 12254;
 			singleton = new JSONDataAccessLayer();
 		}
 		return singleton;
+	}
+	
+	public static void generateSeed() {
+		if(SEED != 0)
+		{
+			SEED = new Random().nextLong();
+		}
 	}
 }

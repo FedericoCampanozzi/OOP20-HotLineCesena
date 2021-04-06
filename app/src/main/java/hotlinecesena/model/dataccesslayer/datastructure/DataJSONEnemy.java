@@ -7,7 +7,7 @@ import java.util.Random;
 import java.util.Set;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.enemy.EnemyFactoryImpl;
 import hotlinecesena.model.entities.actors.enemy.EnemyType;
@@ -27,7 +27,7 @@ public class DataJSONEnemy extends AbstractData {
 		Set<Point2D> wall = new HashSet<>();
 
 		for (Pair<Integer, Integer> pii : world.getWorldMap().keySet()) {
-			if (world.getWorldMap().get(pii).equals(SIMBOLS_TYPE.ENEMY)) {
+			if (world.getWorldMap().get(pii).equals(SimbolsType.ENEMY)) {
 				Point2D pos = Utilities.convertPairToPoint2D(pii, settings.getTileSize());
 				EnemyType et = EnemyType.values()[rnd.nextInt(EnemyType.values().length)];
 				enemies.add(eFact.getEnemy(pos, et, walkable, wall));

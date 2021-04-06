@@ -6,27 +6,27 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
+import hotlinecesena.controller.generator.RectangolarWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
-import hotlinecesena.controller.generator.WorldGeneratorBuilderImpl;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 import javafx.util.Pair;
 
 public class DataWorldMap extends AbstractData {
 
-	private Map<Pair<Integer, Integer>, SIMBOLS_TYPE> worldMap;
+	private Map<Pair<Integer, Integer>, SimbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	
 	public DataWorldMap() throws IOException {
-		final WorldGeneratorBuilder sgwb = new WorldGeneratorBuilderImpl()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(7, 13, 1, 5, 15, 25))
+		WorldGeneratorBuilder sgwb = new RectangolarWorldGeneratorBuilder()
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(7, 13, 7, 13, 1, 5, 15, 25))
 				.generateRooms(10, 20)
 				.generatePlayer()
-				.generateAmmo(0, 2)
-				.generateEnemy(1, 6)
-				.generateMedikit(1, 3)
-				.generateObstacoles(3, 8)
+				//.generateAmmo(0, 2)
+				//.generateEnemy(1, 6)
+				//.generateMedikit(1, 3)
+				//.generateObstacoles(3, 8)
 				.finishes()
 				.build();
 		
@@ -55,7 +55,7 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
-	public Map<Pair<Integer, Integer>, SIMBOLS_TYPE> getWorldMap(){
+	public Map<Pair<Integer, Integer>, SimbolsType> getWorldMap(){
 		return this.worldMap;
 	}
 
