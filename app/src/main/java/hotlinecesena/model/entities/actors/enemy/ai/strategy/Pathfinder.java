@@ -8,6 +8,8 @@ import java.util.Optional;
 import java.util.PriorityQueue;
 import java.util.Set;
 
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 import javafx.geometry.Point2D;
 
 /**
@@ -29,18 +31,22 @@ public class Pathfinder {
      * @return a list of points that need to be traversed
      * to reach the desired end
      * @see Node
+     * @see DataWorldMap
      */
     protected static List<Point2D> findPath(final Point2D start,
             final Point2D end, final Set<Point2D> map) {
 
         final PriorityQueue<Node> toVisit = new PriorityQueue<>();
         final Set<Node> visited = new HashSet<>();
-        // TMP VALUES!
-        final Node[][] nodeMap = new Node[1][1];
+        final int dimensionX = JSONDataAccessLayer.getInstance().getWorld().getMaxX() -
+                JSONDataAccessLayer.getInstance().getWorld().getMinX() + 1;
+        final int dimensionY = JSONDataAccessLayer.getInstance().getWorld().getMaxY() -
+                JSONDataAccessLayer.getInstance().getWorld().getMinY() + 1;
+        final Node[][] nodeMap = new Node[dimensionX][dimensionY];
         Node current;
 
-        for(int y=0; y < nodeMap.length; y++) {
-            for(int x=0; x < nodeMap[0].length; x++) {
+        for(int y=JSONDataAccessLayer.getInstance().getWorld().getMinY(); y < nodeMap.length; y++) {
+            for(int x=JSONDataAccessLayer.getInstance().getWorld().getMinX(); x < nodeMap[0].length; x++) {
                 int heuristic = Math.abs(x - (int) end.getX()) + Math.abs(y - (int) end.getY());
                 Node node = new Node(0, heuristic, x, y);
                 nodeMap[x][y] = node;
