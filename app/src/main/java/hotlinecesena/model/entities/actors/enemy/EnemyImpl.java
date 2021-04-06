@@ -2,7 +2,7 @@ package hotlinecesena.model.entities.actors.enemy;
 
 import java.util.Set;
 
-import hotlinecesena.controller.generator.WorldGeneratorBuilderImpl;
+import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.inventory.Inventory;
@@ -37,7 +37,7 @@ public class EnemyImpl extends AbstractActor implements Enemy {
      * the enemy
      * @param walls collections of all wall objects that could reduce
      * enemy vision
-     * @see WorldGeneratorBuilderImpl
+     * @see WorldGeneratorBuilder
      */
     public EnemyImpl(final Point2D pos, final Inventory inv, final EnemyType type,
             final  Set<Point2D> walkable, final Set<Point2D> walls) {
