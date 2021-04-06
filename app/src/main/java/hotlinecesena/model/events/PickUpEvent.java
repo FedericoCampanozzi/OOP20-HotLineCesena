@@ -4,7 +4,7 @@ import hotlinecesena.model.entities.actors.Actor;
 
 /**
  *
- * Notifies that an Actor has picked up an item.
+ * Notifies that an Actor has picked up an item or a weapon.
  *
  * @param <A> an interface extending {@link Actor}
  * @param <I> an enum
