@@ -35,6 +35,9 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
      * @implNote
      * Template method.
      *
+     * @apiNote
+     * Can be overridden if subclasses require a different movement logic.
+     *
      * @throws NullPointerException if the supplied direction is null.
      */
     @Override
