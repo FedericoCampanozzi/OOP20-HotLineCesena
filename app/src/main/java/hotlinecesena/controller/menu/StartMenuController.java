@@ -23,7 +23,7 @@ public class StartMenuController {
 	private static GameController gameScene = new GameController();
 	
 	public void newGameClick() throws IOException {
-		gameScene.changeScene("worldview.fxml");
+		gameScene.changeScene("WorldView.fxml");
 	}
 	
 	public void optionsClick() throws IOException {
