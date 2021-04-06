@@ -16,14 +16,14 @@ public class AIImpl implements AI{
     private final static int FIELD_OF_VIEW = 90;
     private final static int VISION_RADIUS = 3;
     private final static int HALF = 2;
-    private final static double LOOK_NORTH = 90;
-    private final static double LOOK_EAST_NORTH = 45;
+    private final static double LOOK_NORTH = -90;
+    private final static double LOOK_SOUTH = 90;
     private final static double LOOK_EAST = 0;
-    private final static double LOOK_EAST_SOUTH = -45;
-    private final static double LOOK_SOUTH = -90;
-    private final static double LOOK_WEST_SOUTH = -135;
+    private final static double LOOK_EAST_NORTH = -45;
+    private final static double LOOK_EAST_SOUTH = 45;
     private final static double LOOK_WEST = 180;
-    private final static double LOOK_WEST_NORTH = 135;
+    private final static double LOOK_WEST_NORTH = -135;
+    private final static double LOOK_WEST_SOUTH = 135;
 
     private final MovementStrategy strategy;
     private final Set<Point2D> wallSet;
@@ -135,9 +135,20 @@ public class AIImpl implements AI{
      * of the enemy
      */
     private boolean inLineOfSight(final Point2D target) {
-        return this.rotationToTarget(target) >= this.rotation - (FIELD_OF_VIEW / HALF)
-                && this.rotationToTarget(target) <= this.rotation + (FIELD_OF_VIEW / HALF)
-                && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
+        double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
+        double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
+        
+        if(negative45DegreesAngle <= -LOOK_WEST) {
+            return -this.rotationToTarget(target) >= negative45DegreesAngle
+                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
+        } else if(positive45DegreesAngle >= LOOK_WEST) {
+            return this.rotationToTarget(target) >= -positive45DegreesAngle
+                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
+        } else {
+            return this.rotationToTarget(target) >= negative45DegreesAngle
+                    && this.rotationToTarget(target) <= positive45DegreesAngle
+                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
+        }
     }
 
     @Override
