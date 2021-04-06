@@ -2,7 +2,6 @@ package hotlinecesena.model.entities;
 
 import java.util.Objects;
 
-import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import javafx.geometry.Point2D;
@@ -33,27 +32,45 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     }
 
     /**
+     * @implNote
+     * Template method.
+     *
      * @throws NullPointerException if the supplied direction is null.
      */
     @Override
     public void move(final Point2D direction) {
         Objects.requireNonNull(direction);
-        if (!direction.equals(DirectionList.NONE.get())) {
+        if (!direction.equals(Point2D.ZERO) && this.canInitiateMovement(direction)) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(speed));
             // TODO
-            //            if (!this.isColliding(newPos)) {
+            // if (!this.isColliding(newPos)) {
             this.setPosition(newPos);
             this.publish(new MovementEvent<>(this, newPos));
+            this.onSuccessfulMovement();
             //            }
         }
     }
 
-    //    private boolean isColliding(final Point2D newPos) {
-    //        return this.getGameMaster().getPhysicsCollision().getObstacles()
-    //                .stream()
-    //                .anyMatch(o -> o.intersects(newPos.getX(), newPos.getY(), this.getWidth(), this.getHeight()));
-    //    }
+    /**
+     * Other conditions that need to be satisfied in order to begin
+     * movement.
+     * @param direction the movement direction.
+     * @return {@code true} if this entity can move, {@code false} otherwise.
+     */
+    protected abstract boolean canInitiateMovement(Point2D direction);
+
+    /**
+     * Actions to be performed right after this entity has moved.
+     * Implementation is not mandatory.
+     */
+    protected abstract void onSuccessfulMovement();
+
+    //private boolean isColliding(final Point2D newPos) {
+    //    return this.getGameMaster().getPhysicsCollision().getObstacles()
+    //            .stream()
+    //            .anyMatch(o -> o.intersects(newPos.getX(), newPos.getY(), this.getWidth(), this.getHeight()));
+    //}
 
     //protected abstract void onObstacleCollision();
 
