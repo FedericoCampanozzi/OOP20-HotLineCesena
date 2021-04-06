@@ -8,6 +8,8 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -32,6 +34,8 @@ import javafx.stage.Stage;
 @TestInstance(Lifecycle.PER_METHOD)
 class InputListenerTest {
 
+    private static final int HEIGHT = 600;
+    private static final int WIDTH = 800;
     private FxRobot robot;
     private Scene testScene;
     private InputListener listener;
@@ -39,7 +43,7 @@ class InputListenerTest {
     @Start
     public void start(final Stage stage) {
         robot = new FxRobot();
-        testScene = new Scene(new Pane(), 800, 600);
+        testScene = new Scene(new Pane(), WIDTH, HEIGHT);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX(testScene);
         stage.setScene(testScene);
@@ -85,13 +89,14 @@ class InputListenerTest {
         robot.release(KeyCode.W, KeyCode.E);
         robot.release(MouseButton.PRIMARY, MouseButton.SECONDARY);
         WaitForAsyncUtils.waitForFxEvents();
-        assertThat(listener.deliverInputs().getKey(), hasSize(1));
-        assertThat(listener.deliverInputs().getKey(), hasItem(KeyCode.D));
+        final Set<Enum<?>> inputs = listener.deliverInputs().getKey();
+        assertThat(inputs, hasSize(1));
+        assertThat(inputs, hasItem(KeyCode.D));
     }
 
     @Test
     void mouseMovement() {
-        final Point2D center = new Point2D(testScene.getWidth()/2, testScene.getHeight()/2);
+        final Point2D center = new Point2D(testScene.getWidth() / 2, testScene.getHeight() / 2);
         robot.moveTo(Point2D.ZERO).moveTo(testScene);
         WaitForAsyncUtils.waitForFxEvents();
         assertThat(listener.deliverInputs().getValue(), equalTo(center));

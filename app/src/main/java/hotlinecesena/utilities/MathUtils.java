@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
  * Collection of static methods describing algorithms or mathematical functions.
  *
  */
-public class MathUtils {
+public final class MathUtils {
 
     private MathUtils() {
     }
@@ -19,14 +19,14 @@ public class MathUtils {
      * @return the normalized vector
      */
     public static Point2D normalizeWithMagnitude(final Point2D vector, final double magnitude) {
-        return vector.multiply(1/magnitude);
+        return vector.multiply(1 / magnitude);
     }
 
     /**
      * Converts raw mouse coordinates to degrees.
      *
-     * @param coords
-     * @return
+     * @param coords mouse coordinates
+     * @return value in degrees
      */
     public static double mouseToDegrees(final Point2D coords) {
         final double angle = Math.toDegrees(Math.atan2(coords.getY(), coords.getX()));
@@ -45,10 +45,10 @@ public class MathUtils {
      * @param first first one-dimensional coordinate
      * @param second second one-dimensional coordinate
      * @param by interpolation factor
-     * @return
+     * @return interpolated value
      */
     public static double lerp(final double first, final double second, final double by) {
-        return first + by*(second - first);
+        return first + by * (second - first);
     }
 
     /**
@@ -60,7 +60,7 @@ public class MathUtils {
      * @param first first two-dimensional coordinate
      * @param second second two-dimensional coordinate
      * @param by interpolation factor
-     * @return
+     * @return interpolated value
      */
     public static Point2D lerp(final Point2D first, final Point2D second, final double by) {
         final double retX = lerp(first.getX(), second.getX(), by);
@@ -75,7 +75,7 @@ public class MathUtils {
      * @param sharpness
      * @param acceleration
      * @param deltaTime
-     * @return
+     * @return blend value
      */
     public static double blend(final double sharpness, final int acceleration, final double deltaTime) {
         return 1 - Math.pow(1 - sharpness, deltaTime * acceleration);

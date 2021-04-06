@@ -4,14 +4,14 @@ import hotlinecesena.model.entities.Entity;
 
 public abstract class AbstractEvent implements Event {
 
-    private Entity source;
+    private final Entity source;
 
     protected AbstractEvent(final Entity source) {
         this.source = source;
     }
 
     @Override
-    public Entity getSource() {
-        return this.source;
+    public final Entity getSource() {
+        return source;
     }
 }

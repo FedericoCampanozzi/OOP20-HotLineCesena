@@ -59,14 +59,7 @@ public interface Actor extends MovableEntity {
     /**
      * Returns this actor's current {@link ActorStatus} value.
      *
-     * @return
+     * @return this actor's current status.
      */
     ActorStatus getActorStatus();
-
-    /**
-     * Sets this actor's {@link ActorStatus} to {@code s}.
-     *
-     * @param s
-     */
-    void setActorStatus(ActorStatus s);
 }
