@@ -6,6 +6,7 @@ import hotlinecesena.model.entities.AbstractMovableEntity;
 import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
+import hotlinecesena.model.events.ReloadEvent;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -66,8 +67,11 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     @Override
     public final void reload() {
-        if (this.isAlive()) {
+        if (this.isAlive() && !inventory.isReloading()) {
             inventory.reloadWeapon();
+            if (inventory.isReloading()) {
+                this.publish(new ReloadEvent<>(this, inventory.getWeapon().get().getWeaponType()));
+            }
         }
     }
 
