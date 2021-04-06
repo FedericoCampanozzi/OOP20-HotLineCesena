@@ -66,7 +66,7 @@ public abstract class AbstractEntity implements Entity {
      * Convenience method to be used internally.
      * @return the instance of the {@link JSONDataAccessLayer}.
      */
-    protected JSONDataAccessLayer getGameMaster() {
+    protected final JSONDataAccessLayer getGameMaster() {
         return gameMaster;
     }
 
@@ -78,7 +78,7 @@ public abstract class AbstractEntity implements Entity {
      * @param event
      * @throws NullPointerException if the supplied event is null.
      */
-    protected void publish(final Event<? extends Entity> event) {
+    protected final void publish(final Event<? extends Entity> event) {
         bus.post(Objects.requireNonNull(event));
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractEntity implements Entity {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public void register(final Subscriber subscriber) {
+    public final void register(final Subscriber subscriber) {
         bus.register(Objects.requireNonNull(subscriber));
     }
 
@@ -94,7 +94,7 @@ public abstract class AbstractEntity implements Entity {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public void unregister(final Subscriber subscriber) {
+    public final void unregister(final Subscriber subscriber) {
         bus.unregister(Objects.requireNonNull(subscriber));
     }
 }
