@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 import javafx.util.Pair;
 
@@ -60,7 +60,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				break;
 			}
 
-			if (pii.equals(dd) && room.getMap().get(positions).equals(SimbolsType.DOOR)) {
+			if (pii.equals(dd) && room.getMap().get(positions).equals(SymbolsType.DOOR)) {
 				isNearDoor = true;
 			}
 		}
@@ -70,7 +70,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 
 	private void generateRoom(Pair<Integer, Integer> center, Room room) {
 
-		for (Entry<Pair<Integer, Integer>, SimbolsType> p : room.getMap().entrySet()) {
+		for (Entry<Pair<Integer, Integer>, SymbolsType> p : room.getMap().entrySet()) {
 			Pair<Integer, Integer> position = Utilities.sumPair(center, p.getKey());
 
 			this.map.put(position, p.getValue());
@@ -96,7 +96,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 	private Pair<Integer, Integer> getConnectionsLinking() {
 		List<Pair<Integer, Integer>> allDoors = new ArrayList<>();
 		for (Pair<Integer, Integer> p : this.map.keySet()) {
-			if (this.map.get(p).equals(SimbolsType.DOOR)) {
+			if (this.map.get(p).equals(SymbolsType.DOOR)) {
 				allDoors.add(p);
 			}
 		}

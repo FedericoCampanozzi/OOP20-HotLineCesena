@@ -10,12 +10,12 @@ import hotlinecesena.controller.generator.RectangolarWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 import javafx.util.Pair;
 
 public class DataWorldMap extends AbstractData {
 
-	private Map<Pair<Integer, Integer>, SimbolsType> worldMap;
+	private Map<Pair<Integer, Integer>, SymbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	
 	public DataWorldMap() throws IOException {
@@ -55,7 +55,7 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
-	public Map<Pair<Integer, Integer>, SimbolsType> getWorldMap(){
+	public Map<Pair<Integer, Integer>, SymbolsType> getWorldMap(){
 		return this.worldMap;
 	}
 
