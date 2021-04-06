@@ -1,5 +1,6 @@
 package hotlinecesena.model.inventory;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,7 +37,8 @@ public final class NaiveInventoryImpl implements Inventory {
      */
     public NaiveInventoryImpl(final Weapon weapon, final Map<Item, Integer> collectibles) {
         this.weapon = Optional.ofNullable(weapon);
-        this.collectibles = Objects.requireNonNull(collectibles);
+        this.collectibles = new HashMap<>();
+        this.collectibles.putAll(Objects.requireNonNull(collectibles));
     }
 
     @Override
@@ -74,6 +76,7 @@ public final class NaiveInventoryImpl implements Inventory {
             if (!this.isReloading()) {
                 final int ammoOwned = collectibles.getOrDefault(weapon.getCompatibleAmmunition(), 0);
                 if (ammoOwned > 0) {
+                    ammoForReloading = ammoOwned;
                     reloadTimeRemaining = weapon.getReloadTime();
                 }
             }
