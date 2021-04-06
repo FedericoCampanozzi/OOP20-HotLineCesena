@@ -17,15 +17,18 @@ public final class PlayerImpl extends AbstractActor implements Player {
      *
      * @param position starting position in which this actor will be located.
      * @param angle starting angle that this actor will face.
+     * @param width this actor's width.
+     * @param height this actor's height.
      * @param speed the speed at which this actor will move.
      * @param maxHealth maximum health points.
      * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
      * @param noise a {@link Map} associating noise levels to certain or all {@link ActorStatus}es.
      * @throws NullPointerException if the given {@code position}, {@code inventory} or {@code noise} are null.
      */
-    public PlayerImpl(final Point2D position, final double angle, final double speed, final double maxHealth,
-            final Inventory inventory, final Map<ActorStatus, Double> noise) {
-        super(position, angle, speed, maxHealth, inventory);
+    public PlayerImpl(final Point2D position, final double angle, final double width, final double height,
+            final double speed, final double maxHealth, final Inventory inventory,
+            final Map<ActorStatus, Double> noise) {
+        super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
     }
 

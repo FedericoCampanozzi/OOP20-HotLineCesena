@@ -48,12 +48,16 @@ import javafx.stage.Stage;
 @TestInstance(Lifecycle.PER_METHOD)
 class InterpreterPlayerTest {
 
-    private static final int WIDTH = 800;
-    private static final int HEIGHT = 600;
+    private static final int S_WIDTH = 800;
+    private static final int S_HEIGHT = 600;
+
     private static final Point2D SPRITE_POS = Point2D.ZERO;
-    private static final double SPEED = 1;
     private static final int ANGLE = 270;
+    private static final int WIDTH = 100;
+    private static final int HEIGHT = 300;
+    private static final double SPEED = 1;
     private static final double MAX_HP = 100;
+
     private static final double DELTA_TIME = 1;
     private Player player;
     private FxRobot robot;
@@ -71,9 +75,9 @@ class InterpreterPlayerTest {
 
     @Start
     public void start(final Stage stage) {
-        player = new PlayerImpl(Point2D.ZERO, ANGLE, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
+        player = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
         robot = new FxRobot();
-        testScene = new Scene(new Pane(), WIDTH, HEIGHT);
+        testScene = new Scene(new Pane(), S_WIDTH, S_HEIGHT);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX(testScene);
         interpreter = new InputInterpreterImpl(bindings);

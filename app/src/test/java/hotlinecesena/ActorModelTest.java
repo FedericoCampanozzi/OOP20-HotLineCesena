@@ -22,13 +22,16 @@ import javafx.geometry.Point2D;
 class ActorModelTest {
 
     private static final double SPEED = 500;
-    private static final double MAX_HP = 100;
     private static final int ANGLE = 270;
+    private static final double WIDTH = 100;
+    private static final double HEIGHT = 300;
+    private static final double MAX_HP = 100;
+
     private Actor actor;
 
     @BeforeAll
     void setUpBeforeClass() throws Exception {
-        actor = new PlayerImpl(Point2D.ZERO, ANGLE, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
+        actor = new PlayerImpl(Point2D.ZERO, ANGLE, SPEED, WIDTH, HEIGHT, MAX_HP, new NaiveInventoryImpl(), Map.of());
     }
 
     @Test

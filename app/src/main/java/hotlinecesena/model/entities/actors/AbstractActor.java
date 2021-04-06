@@ -24,14 +24,16 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     /**
      * @param position starting position in which this actor will be located.
      * @param angle starting angle that this actor will face.
+     * @param width this actor's width.
+     * @param height this actor's height.
      * @param speed the speed at which this actor will move.
      * @param maxHealth maximum health points.
      * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
      * @throws NullPointerException if the given {@code position} or {@code inventory} are null.
      */
-    protected AbstractActor(final Point2D position, final double angle, final double speed,
-            final double maxHealth, final Inventory inventory) {
-        super(position, angle, speed);
+    protected AbstractActor(final Point2D position, final double angle, final double width, final double height,
+            final double speed, final double maxHealth, final Inventory inventory) {
+        super(position, angle, width, height, speed);
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
         this.inventory = Objects.requireNonNull(inventory);
