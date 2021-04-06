@@ -1,77 +1,94 @@
-//package hotlinecesena.controller.generator;
-//
-//import javafx.util.Pair;
-//import java.util.Map;
-//import java.util.HashSet;
-//import java.util.Random;
-//import java.util.Set;
-//
-//import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-//import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
-//
-//public class OctagonalRoom extends AbstractRoom {
-//	final private  int w;
-//	final private  int d;
-//	
-//	private OctagonalRoom(Map<Pair<Integer, Integer>, SIMBOLS_TYPE> map, Pair<Integer, Integer> center, int edge, int nDoor) {
-//		super();
-//		this.map = map;
-//		this.w = edge;
-//		this.d = nDoor;
-//	}
-//	
-//	public OctagonalRoom(int edge, int nDoor) {
-//		super();
-//		
-//		if (edge % 2 == 0) {
-//			edge -= 1;
-//		}
-//		
-//		this.w = edge;
-//		this.d = nDoor;
-//		generate(JSONDataAccessLayer.SEED);
-//	}
-//	
-//	@Override
-//	public void generate(final long seed) {
-//		
-//		final int width = (this.w - 1) / 2;
-//		Random rnd = new Random();
-//		rnd.setSeed(seed);
-//		
-//		for (int y = -width; y <= width; y++) {
-//			for (int x = -width; x <= width; x++) {
-//
-//				if (y == -width || x == -width || y == width || x == width) {
-//					map.put(new Pair<>(y, x), SIMBOLS_TYPE.WALL);
-//				} else {
-//					map.put(new Pair<>(y, x), SIMBOLS_TYPE.WALKABLE);
-//				}
-//			}
-//		}
-//		Set<Pair<Integer, Integer>> connections = new HashSet<>();
-//		while (connections.size() < this.d) {
-//			final int x = rnd.nextInt(this.w) - width;
-//			final int y = rnd.nextInt(this.w) - width;
-//			Pair<Integer, Integer> cPos = new Pair<>(y, x);
-//
-//			if ((!cPos.equals(new Pair<Integer, Integer>(-width, -width))
-//					&& !cPos.equals(new Pair<Integer, Integer>(width, width))
-//					&& !cPos.equals(new Pair<Integer, Integer>(-width, width))
-//					&& !cPos.equals(new Pair<Integer, Integer>(width, -width))) && !connections.contains(cPos)
-//					&& this.map.get(cPos).equals(SIMBOLS_TYPE.WALL)) {
-//				this.map.put(cPos, SIMBOLS_TYPE.DOOR);
-//				connections.add(cPos);
-//			}
-//		}
-//	}
-//
-//	@Override
-//	public Room deepCopy() {
-//		return new QuadraticRoom(this.map, this.center, this.w);
-//	}
-//	
-//	public int getWidth() {
-//		return this.w;
-//	}
-//}
+package hotlinecesena.controller.generator;
+
+import javafx.util.Pair;
+import java.util.*;
+
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.utilities.Utilities;
+
+public class OctagonalRoom extends AbstractRoom {
+	final private  int width;
+	private  int edge;
+	private  int nDoor;
+	
+	private OctagonalRoom(Map<Pair<Integer, Integer>, SimbolsType> map, Pair<Integer, Integer> center, int width) {
+		super();
+		this.center = center;
+		this.map = map;
+		this.width = width;
+	}
+	
+	public OctagonalRoom(int edge, int nDoor) {
+		super();
+		if (edge % 2 == 0) {
+			edge -= 1;
+		}
+		this.width = 3 * edge;
+		this.edge = edge;
+		this.nDoor = nDoor;
+		generate();
+	}
+	
+	@Override
+	public void generate() {
+		
+		final int edge2 = (edge-1)/2;
+		final Random rnd = new Random();
+		final List<Pair<Integer, Integer>> walls = new ArrayList<>();
+		final List<Pair<Integer, Integer>> dirs = new ArrayList<>();
+		Pair<Integer, Integer> start = new Pair<>(0, 0);
+		 
+		rnd.setSeed(JSONDataAccessLayer.SEED);
+		dirs.add(new Pair<>(0, 1));
+		dirs.add(new Pair<>(-1, 1));
+		dirs.add(new Pair<>(-1, 0));
+		dirs.add(new Pair<>(-1, -1));
+		dirs.add(new Pair<>(0, -1));
+		dirs.add(new Pair<>(1, -1));
+		dirs.add(new Pair<>(1, 0));
+		dirs.add(new Pair<>(1, 1));
+
+		for (Pair<Integer, Integer> dir : dirs) {
+			for (int i = 1; i < edge; i++) {
+				start = Utilities.sumPair(start, dir);
+				walls.add(start);
+			}
+		}
+		
+		start = new Pair<>(-edge -edge2 + 1 , edge2);
+		
+		for(int i = 0;i < walls.size();i++)
+		{
+			walls.set(i, Utilities.subPair(start, walls.get(i)));
+			this.map.put(walls.get(i), SimbolsType.WALL);
+		}
+		
+		for(int i = 0;i < this.nDoor;)
+		{
+			Pair<Integer, Integer> door = walls.get(rnd.nextInt(walls.size()));
+			
+			if(		(walls.contains(new Pair<>(door.getKey(), door.getValue() + 1)) && 
+							walls.contains(new Pair<>(door.getKey(), door.getValue() - 1)) ) ||
+					(walls.contains(new Pair<>(door.getKey() + 1, door.getValue())) && 
+							walls.contains(new Pair<>(door.getKey() - 1, door.getValue())) ) ||
+					(walls.contains(new Pair<>(door.getKey() - 1, door.getValue() + 1)) && 
+							walls.contains(new Pair<>(door.getKey() + 1, door.getValue() - 1)) ) ||
+					(walls.contains(new Pair<>(door.getKey() + 1, door.getValue() + 1)) && 
+							walls.contains(new Pair<>(door.getKey() - 1, door.getValue() - 1)) )
+					) {
+				this.map.put(door, SimbolsType.DOOR);
+				i++;
+			}
+		}
+	}
+
+	@Override
+	public Room deepCopy() {
+		return new OctagonalRoom(this.map, this.center, this.edge);
+	}
+	
+	public int getWidth() {
+		return this.width;
+	}
+}

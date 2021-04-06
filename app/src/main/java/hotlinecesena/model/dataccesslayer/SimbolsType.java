@@ -1,6 +1,6 @@
 package hotlinecesena.model.dataccesslayer;
 
-public enum SIMBOLS_TYPE {
+public enum SimbolsType {
 	VOID('_'),
 	DOOR('D'),
 	WALKABLE('.'),
@@ -13,7 +13,7 @@ public enum SIMBOLS_TYPE {
 	
 	private final char c;
 	
-	private SIMBOLS_TYPE(char c) {
+	private SimbolsType(char c) {
 		this.c = c;
 	}
 	

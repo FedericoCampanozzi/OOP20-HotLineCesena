@@ -3,7 +3,7 @@ package hotlinecesena.controller.generator;
 import java.util.List;
 import java.util.Map;
 
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 import javafx.util.Pair;
 
 public interface WorldGeneratorBuilder {
@@ -28,7 +28,7 @@ public interface WorldGeneratorBuilder {
 
 	WorldGeneratorBuilder build();
 
-	Map<Pair<Integer, Integer>, SIMBOLS_TYPE> getMap();
+	Map<Pair<Integer, Integer>, SimbolsType> getMap();
 
 	int getMinX();
 

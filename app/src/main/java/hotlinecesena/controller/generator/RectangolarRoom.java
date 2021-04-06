@@ -7,14 +7,14 @@ import java.util.Random;
 import java.util.Set;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 
 public class RectangolarRoom extends AbstractRoom {
 	private  int w;
 	private  int h;
 	private  int d;
 	
-	private RectangolarRoom(Map<Pair<Integer, Integer>, SIMBOLS_TYPE> map, Pair<Integer, Integer> center, int width, int height) {
+	private RectangolarRoom(Map<Pair<Integer, Integer>, SimbolsType> map, Pair<Integer, Integer> center, int width, int height) {
 		super();
 		this.map = map;
 		this.w = width;
@@ -39,7 +39,37 @@ public class RectangolarRoom extends AbstractRoom {
 	
 	@Override
 	public void generate() {
+		final int width2 = (this.w - 1) / 2;
+		final int height2 = (this.h - 1) / 2;
+		Random rnd = new Random();
+		rnd.setSeed(JSONDataAccessLayer.SEED);
 		
+		for (int y = -height2; y <= height2; y++) {
+			for (int x = -width2; x <= width2; x++) {
+
+				if (y == -height2 || x == -width2 || y == height2 || x == width2) {
+					map.put(new Pair<>(y, x), SimbolsType.WALL);
+				} else {
+					map.put(new Pair<>(y, x), SimbolsType.WALKABLE);
+				}
+			}
+		}
+		
+		Set<Pair<Integer, Integer>> connections = new HashSet<>();
+		while (connections.size() < this.d) {
+			final int x = rnd.nextInt(this.w) - width2;
+			final int y = rnd.nextInt(this.h) - height2;
+			Pair<Integer, Integer> cPos = new Pair<>(y, x);
+
+			if ((!cPos.equals(new Pair<Integer, Integer>(-height2, -width2))
+					&& !cPos.equals(new Pair<Integer, Integer>(height2, width2))
+					&& !cPos.equals(new Pair<Integer, Integer>(-height2, width2))
+					&& !cPos.equals(new Pair<Integer, Integer>(height2, -width2))) && !connections.contains(cPos)
+					&& this.map.get(cPos).equals(SimbolsType.WALL)) {
+				this.map.put(cPos, SimbolsType.DOOR);
+				connections.add(cPos);
+			}
+		}
 	}
 
 	@Override
