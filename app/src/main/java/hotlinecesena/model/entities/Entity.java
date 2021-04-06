@@ -18,19 +18,6 @@ public interface Entity extends Publisher {
     Point2D getPosition();
 
     /**
-     * Gets the angle this actor is currently facing.
-     *
-     * @return the actor's angle.
-     */
-    double getAngle();
-
-    /**
-     * Sets the angle this entity will face.
-     * @param angle the new angle this entity will face.
-     */
-    void setAngle(double angle);
-
-    /**
      * Gets this entity's width.
      * @return this entity's width.
      */

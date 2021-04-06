@@ -17,6 +17,19 @@ public interface MovableEntity extends Entity {
     void move(Point2D direction);
 
     /**
+     * Gets the angle this actor is currently facing.
+     *
+     * @return the actor's angle.
+     */
+    double getAngle();
+
+    /**
+     * Sets the angle this entity will face.
+     * @param angle the new angle this entity will face.
+     */
+    void setAngle(double angle);
+
+    /**
      *
      * @return the speed at which this entity moves.
      */
