@@ -11,7 +11,7 @@ import javafx.geometry.Point2D;
  * smooth movement, making it time-dependent.
  *
  */
-public class CameraImpl implements Camera {
+public final class CameraImpl implements Camera {
 
     private static final int ACCEL = 30;
     private static final double SHARPNESS = 0.2;

@@ -3,9 +3,9 @@ package hotlinecesena.model.events;
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.items.Weapon;
 
-public final class AttackPerformedEvent extends AbstractWeaponEvent {
+public class ReloadEvent extends AbstractWeaponEvent {
 
-    public AttackPerformedEvent(final Entity source, final Weapon weapon) {
+    public ReloadEvent(final Entity source, final Weapon weapon) {
         super(source, weapon);
     }
 }

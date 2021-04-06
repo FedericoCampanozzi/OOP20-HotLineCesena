@@ -1,10 +1,8 @@
 package hotlinecesena.model.entities.actors;
 
 import java.util.Objects;
-import java.util.Optional;
 
 import hotlinecesena.model.entities.AbstractMovableEntity;
-import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
@@ -20,54 +18,49 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     private final double maxHealth;
     private double currentHealth;
-    private ActorStatus status = ActorStatus.NORMAL;
+    private ActorStatus status = ActorStatus.IDLE;
     private final Inventory inventory;
 
     /**
-     *
-     * @param pos
-     * @param angle
-     * @param speed
+     * @param position starting position in which this actor will be located.
+     * @param angle starting angle that this actor will face.
+     * @param width this actor's width.
+     * @param height this actor's height.
+     * @param speed the speed at which this actor will move.
      * @param maxHealth maximum health points.
-     * @param inv the {@link Inventory} used by this actor to access owned items and weapons.
-     * @throws NullPointerException if {@code pos} or {@code inv} are null.
+     * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
+     * @throws NullPointerException if the given {@code position} or {@code inventory} are null.
      */
-    protected AbstractActor(final Point2D pos, final double angle, final double speed,
-            final double maxHealth, final Inventory inv) {
-        super(pos, angle, speed);
-        this.maxHealth = currentHealth = maxHealth;
-        inventory = Objects.requireNonNull(inv);
+    protected AbstractActor(final Point2D position, final double angle, final double width, final double height,
+            final double speed, final double maxHealth, final Inventory inventory) {
+        super(position, angle, width, height, speed);
+        this.maxHealth = maxHealth;
+        currentHealth = maxHealth;
+        this.inventory = Objects.requireNonNull(inventory);
     }
 
     /**
+     * @implNote
      * Overridden to prohibit movements when the actor is dead.
      */
     @Override
     public void move(final Point2D direction) {
-        if (this.isAlive()) {
+        if (this.isAlive() && !direction.equals(DirectionList.NONE.get())) {
             super.move(direction);
-        }
-    }
-
-    /**
-     * Overridden to prohibit rotations when the actor is dead.
-     */
-    @Override
-    public final void setAngle(final double angle) {
-        if (this.isAlive()) {
-            super.setAngle(angle);
+            status = ActorStatus.MOVING;
         }
     }
 
     @Override
     public final void attack() {
-        if (this.isAlive() && !inventory.isReloading()) {
-            final Optional<Weapon> weapon = inventory.getWeapon();
-            if (weapon.isPresent() && weapon.get().getCurrentAmmo() > 0) {
-                final Weapon w = weapon.get();
-                w.usage().get().accept(this);
-                this.publish(new AttackPerformedEvent(this, w));
-            }
+        if (this.isAlive()) {
+            inventory.getWeapon().ifPresent(weapon -> {
+                if (!inventory.isReloading() && weapon.getCurrentAmmo() > 0) {
+                    weapon.usage().get().accept(this);
+                    status = ActorStatus.ATTACKING;
+                    this.publish(new AttackPerformedEvent(this, weapon));
+                }
+            });
         }
     }
 
@@ -79,7 +72,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     /**
-     * @throws IllegalArgumentException if supplied damage is negative.
+     * @throws IllegalArgumentException if the given damage is negative.
      */
     @Override
     public final void takeDamage(final double damage) {
@@ -91,13 +84,13 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
             this.publish(new DamageReceivedEvent(this, damage));
         }
         if (!this.isAlive()) {
-            status = ActorStatus.DEAD; // TODO Discard statuses in favor of events?
+            status = ActorStatus.DEAD;
             this.publish(new DeathEvent(this));
         }
     }
 
     /**
-     * @throws IllegalArgumentException if supplied hp is negative.
+     * @throws IllegalArgumentException if the given hp is negative.
      */
     @Override
     public final void heal(final double hp) {
@@ -137,8 +130,13 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         return status;
     }
 
-    @Override
-    public final void setActorStatus(final ActorStatus s) {
+    /**
+     * Sets this actor's {@link ActorStatus} to {@code s}.
+     * Status may not be modified by external objects.
+     *
+     * @param s the new status
+     */
+    protected final void setActorStatus(final ActorStatus s) {
         status = s;
     }
 }

@@ -1,27 +1,27 @@
 package hotlinecesena.model.entities.actors;
 
 /**
- * 
+ *
  */
 public enum ActorStatus {
 
-	/**
-	 * Actor is either moving or receiving no input.
-	 */
-    NORMAL,
-    
     /**
-	 * Actor is reloading.
-	 */
-    RELOADING,
-    
+     * Actor is receiving no inputs.
+     */
+    IDLE,
+
     /**
-	 * Actor is attacking.
-	 */
+     * Actor is moving.
+     */
+    MOVING,
+
+    /**
+     * Actor is attacking.
+     */
     ATTACKING,
-    
+
     /**
-	 * Actor is dead. All subsequent inputs should be ignored.
-	 */
+     * Actor is dead. All subsequent inputs should be ignored.
+     */
     DEAD;
 }

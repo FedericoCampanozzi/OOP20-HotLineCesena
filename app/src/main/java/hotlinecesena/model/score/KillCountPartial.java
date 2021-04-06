@@ -1,10 +1,10 @@
 package hotlinecesena.model.score;
 
-public class KillCountPartial extends AbstractPartial {
-    
+public final class KillCountPartial extends AbstractPartial {
+
     private static final String NAME = "Kills";
     private static final int POINTS = 100;
-    private int killCount = 0;
+    private final int killCount = 0;
 
     protected KillCountPartial() {
         super(NAME, POINTS);
@@ -15,10 +15,10 @@ public class KillCountPartial extends AbstractPartial {
         return killCount;
     }
 
-//  @Subscribe
-//  private void handleDeathEvent(DeathEvent e) {
-//      if (world.getEnemies().contains(e.getSource()) {
-//          this.killCount++;
-//      }
-//  }
+    //  @Subscribe
+    //  private void handleDeathEvent(DeathEvent e) {
+    //      if (world.getEnemies().contains(e.getSource()) {
+    //          this.killCount++;
+    //      }
+    //  }
 }

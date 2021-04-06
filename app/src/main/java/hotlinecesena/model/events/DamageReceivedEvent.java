@@ -2,7 +2,7 @@ package hotlinecesena.model.events;
 
 import hotlinecesena.model.entities.Entity;
 
-public class DamageReceivedEvent extends AbstractEvent {
+public final class DamageReceivedEvent extends AbstractEvent {
 
     private final double damagePoints;
 
@@ -12,6 +12,6 @@ public class DamageReceivedEvent extends AbstractEvent {
     }
 
     public double getDamage() {
-        return this.damagePoints;
+        return damagePoints;
     }
 }

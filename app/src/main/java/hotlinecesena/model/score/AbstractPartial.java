@@ -17,7 +17,7 @@ public abstract class AbstractPartial implements PartialScore {
     }
 
     /**
-     * Template method
+     * Template method.
      */
     @Override
     public final int getPartialPoints() {

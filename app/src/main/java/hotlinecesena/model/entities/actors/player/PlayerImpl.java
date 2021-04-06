@@ -10,42 +10,46 @@ import javafx.geometry.Point2D;
 
 public final class PlayerImpl extends AbstractActor implements Player {
 
+    private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
 
     /**
      *
-     * @param pos
-     * @param angle
-     * @param speed
-     * @param maxHealth
-     * @param inv
-     * @param noise
-     * @throws NullPointerException if {@code pos}, {@code inv} or {@code noise} are null.
+     * @param position starting position in which this actor will be located.
+     * @param angle starting angle that this actor will face.
+     * @param width this actor's width.
+     * @param height this actor's height.
+     * @param speed the speed at which this actor will move.
+     * @param maxHealth maximum health points.
+     * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
+     * @param noise a {@link Map} associating noise levels to certain or all {@link ActorStatus}es.
+     * @throws NullPointerException if the given {@code position}, {@code inventory} or {@code noise} are null.
      */
-    public PlayerImpl(final Point2D pos, final double angle, final double speed, final double maxHealth,
-            final Inventory inv, final Map<ActorStatus, Double> noise) {
-        super(pos, angle, speed, maxHealth, inv);
+    public PlayerImpl(final Point2D position, final double angle, final double width, final double height,
+            final double speed, final double maxHealth, final Inventory inventory,
+            final Map<ActorStatus, Double> noise) {
+        super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
     }
 
     @Override
     public double getNoiseRadius() {
-        return noiseLevels.get(this.getActorStatus()); //TODO Put noise in events instead?
-    }
-
-    @Override
-    public void pickUp() {
-        //TODO Use DAL and collisions to determine which item will be picked up
-        //this.getInventory().add(null);
+        final ActorStatus status = this.getActorStatus();
+        return status == ActorStatus.ATTACKING ? this.getInventory().getWeapon().get().getNoise()
+                : noiseLevels.getOrDefault(status, DEFAULT_NOISE_LEVEL);
     }
 
     @Override
     public void use() {
-        // TODO
+        //TODO
+        if (!this.getInventory().isReloading()) {
+
+        }
     }
 
     @Override
     public void update(final double timeElapsed) {
+        this.setActorStatus(ActorStatus.IDLE);
         this.getInventory().update(timeElapsed);
     }
 }

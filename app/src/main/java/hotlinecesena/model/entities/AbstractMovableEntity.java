@@ -13,11 +13,19 @@ import javafx.geometry.Point2D;
  */
 public abstract class AbstractMovableEntity extends AbstractEntity implements MovableEntity {
 
-    private static final double MOVE_NOISE = 5.0;
     private double speed;
 
-    protected AbstractMovableEntity(final Point2D pos, final double angle, final double speed) {
-        super(pos, angle);
+    /**
+     * @param position starting position in which this entity will be located.
+     * @param angle starting angle that this entity will face.
+     * @param width this entity's width.
+     * @param height this entity's height.
+     * @param speed the speed at which this entity will move.
+     * @throws NullPointerException if given position is null.
+     */
+    protected AbstractMovableEntity(final Point2D position, final double angle, final double width,
+            final double height, final double speed) {
+        super(position, angle, width, height);
         this.speed = speed;
     }
 
@@ -30,10 +38,18 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
         if (!direction.equals(DirectionList.NONE.get())) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(speed));
+            // TODO foreach obstacle...
+            // if Utilities.intersect(new BoundingBox(newPos.getX(), newPos.getY(), getWidth(), getHeight()), null)...
+            // this.onCollision(); else
+
             this.setPosition(newPos);
-            this.publish(new MovementEvent(this, newPos, MOVE_NOISE));
+            this.publish(new MovementEvent(this, newPos));
         }
     }
+
+    //protected abstract void onObstacleCollision();
+
+    //protected abstract void onActorCollision();
 
     @Override
     public final double getSpeed() {
