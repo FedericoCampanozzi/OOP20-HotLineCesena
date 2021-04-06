@@ -25,10 +25,20 @@ public interface Entity extends Publisher {
     double getAngle();
 
     /**
-     *
      * Sets the angle this entity will face.
-     *
-     * @param angle
+     * @param angle the new angle this entity will face.
      */
     void setAngle(double angle);
+
+    /**
+     * Gets this entity's width.
+     * @return this entity's width.
+     */
+    double getWidth();
+
+    /**
+     * Gets this entity's height.
+     * @return this entity's height.
+     */
+    double getHeight();
 }

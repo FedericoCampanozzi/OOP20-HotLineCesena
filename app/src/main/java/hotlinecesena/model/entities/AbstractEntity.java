@@ -17,17 +17,23 @@ public abstract class AbstractEntity implements Entity {
 
     private Point2D position;
     private double angle;
+    private final double width;
+    private final double height;
     private final EventBus bus;
 
     /**
      *
      * @param position starting position in which this entity will be located.
      * @param angle starting angle that this entity will face.
+     * @param width this entity's width.
+     * @param height this entity's height.
      * @throws NullPointerException if given position is null.
      */
-    protected AbstractEntity(final Point2D position, final double angle) {
+    protected AbstractEntity(final Point2D position, final double angle, final double width, final double height) {
         this.position = Objects.requireNonNull(position);
         this.angle = angle;
+        this.width = width;
+        this.height = height;
         bus = new EventBus();
     }
 
@@ -55,15 +61,25 @@ public abstract class AbstractEntity implements Entity {
 
     /**
      * @implSpec
-     * Can be overridden if a subclass requires that other conditions be satisfied
+     * Can be overridden if subclasses require that other conditions be satisfied
      * before setting a new angle.
      */
     @Override
-    public void setAngle(final double angle) {
+    public final void setAngle(final double angle) {
         if (this.angle != angle) {
             this.angle = angle;
             this.publish(new RotationEvent(this, angle));
         }
+    }
+
+    @Override
+    public final double getWidth() {
+        return width;
+    }
+
+    @Override
+    public final double getHeight() {
+        return height;
     }
 
     /**
