@@ -58,4 +58,9 @@ public class WeaponImpl implements Weapon {
 		return this.currentAmmo;
 	}
 
+	@Override
+	public WeaponType getWeaponType() {
+		return this.weaponType;
+	}
+
 }
