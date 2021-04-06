@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.google.common.eventbus.EventBus;
 
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.events.Event;
 import hotlinecesena.model.events.Subscriber;
 import javafx.geometry.Point2D;
@@ -17,6 +18,7 @@ public abstract class AbstractEntity implements Entity {
     private Point2D position;
     private final double width;
     private final double height;
+    private final JSONDataAccessLayer gameMaster = JSONDataAccessLayer.getInstance();
     private final EventBus bus;
 
     /**
@@ -58,6 +60,14 @@ public abstract class AbstractEntity implements Entity {
     @Override
     public final double getHeight() {
         return height;
+    }
+
+    /**
+     * Convenience method to be used internally.
+     * @return the instance of the {@link JSONDataAccessLayer}.
+     */
+    protected JSONDataAccessLayer getGameMaster() {
+        return gameMaster;
     }
 
     /**

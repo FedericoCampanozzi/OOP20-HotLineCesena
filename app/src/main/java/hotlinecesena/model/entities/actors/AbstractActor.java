@@ -58,7 +58,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
                 if (!inventory.isReloading() && weapon.getCurrentAmmo() > 0) {
                     weapon.usage().accept(this);
                     status = ActorStatus.ATTACKING;
-                    this.publish(new AttackPerformedEvent<>(this, weapon));
+                    this.publish(new AttackPerformedEvent<>(this, weapon.getWeaponType()));
                 }
             });
         }
