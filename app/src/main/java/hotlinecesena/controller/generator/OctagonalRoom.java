@@ -4,7 +4,7 @@ import javafx.util.Pair;
 import java.util.*;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
 public class OctagonalRoom extends AbstractRoom {
@@ -12,7 +12,7 @@ public class OctagonalRoom extends AbstractRoom {
 	private  int edge;
 	private  int nDoor;
 	
-	private OctagonalRoom(Map<Pair<Integer, Integer>, SimbolsType> map, Pair<Integer, Integer> center, int width) {
+	private OctagonalRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center, int width) {
 		super();
 		this.center = center;
 		this.map = map;
@@ -61,7 +61,7 @@ public class OctagonalRoom extends AbstractRoom {
 		for(int i = 0;i < walls.size();i++)
 		{
 			walls.set(i, Utilities.subPair(start, walls.get(i)));
-			this.map.put(walls.get(i), SimbolsType.WALL);
+			this.map.put(walls.get(i), SymbolsType.WALL);
 		}
 		
 		for(int i = 0;i < this.nDoor;)
@@ -77,7 +77,7 @@ public class OctagonalRoom extends AbstractRoom {
 					(walls.contains(new Pair<>(door.getKey() + 1, door.getValue() + 1)) && 
 							walls.contains(new Pair<>(door.getKey() - 1, door.getValue() - 1)) )
 					) {
-				this.map.put(door, SimbolsType.DOOR);
+				this.map.put(door, SymbolsType.DOOR);
 				i++;
 			}
 		}

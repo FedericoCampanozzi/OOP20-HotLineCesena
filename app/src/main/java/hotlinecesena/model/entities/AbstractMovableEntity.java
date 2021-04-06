@@ -41,14 +41,19 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
         if (!direction.equals(DirectionList.NONE.get())) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(speed));
-            // TODO foreach obstacle...
-            // if Utilities.intersect(new BoundingBox(newPos.getX(), newPos.getY(), getWidth(), getHeight()), null)...
-            // this.onCollision(); else
-
+            // TODO
+            //            if (!this.isColliding(newPos)) {
             this.setPosition(newPos);
             this.publish(new MovementEvent<>(this, newPos));
+            //            }
         }
     }
+
+    //    private boolean isColliding(final Point2D newPos) {
+    //        return this.getGameMaster().getPhysicsCollision().getObstacles()
+    //                .stream()
+    //                .anyMatch(o -> o.intersects(newPos.getX(), newPos.getY(), this.getWidth(), this.getHeight()));
+    //    }
 
     //protected abstract void onObstacleCollision();
 
@@ -60,7 +65,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     }
 
     /**
-     * @implSpec
+     * @implNote
      * Can be overridden if subclasses require that other conditions be satisfied
      * before setting a new angle.
      */

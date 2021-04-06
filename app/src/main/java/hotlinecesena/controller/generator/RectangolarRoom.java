@@ -7,14 +7,14 @@ import java.util.Random;
 import java.util.Set;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 
 public class RectangolarRoom extends AbstractRoom {
 	private  int w;
 	private  int h;
 	private  int d;
 	
-	private RectangolarRoom(Map<Pair<Integer, Integer>, SimbolsType> map, Pair<Integer, Integer> center, int width, int height) {
+	private RectangolarRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center, int width, int height) {
 		super();
 		this.map = map;
 		this.w = width;
@@ -48,9 +48,9 @@ public class RectangolarRoom extends AbstractRoom {
 			for (int x = -width2; x <= width2; x++) {
 
 				if (y == -height2 || x == -width2 || y == height2 || x == width2) {
-					map.put(new Pair<>(y, x), SimbolsType.WALL);
+					map.put(new Pair<>(y, x), SymbolsType.WALL);
 				} else {
-					map.put(new Pair<>(y, x), SimbolsType.WALKABLE);
+					map.put(new Pair<>(y, x), SymbolsType.WALKABLE);
 				}
 			}
 		}
@@ -65,8 +65,8 @@ public class RectangolarRoom extends AbstractRoom {
 					&& !cPos.equals(new Pair<Integer, Integer>(height2, width2))
 					&& !cPos.equals(new Pair<Integer, Integer>(-height2, width2))
 					&& !cPos.equals(new Pair<Integer, Integer>(height2, -width2))) && !connections.contains(cPos)
-					&& this.map.get(cPos).equals(SimbolsType.WALL)) {
-				this.map.put(cPos, SimbolsType.DOOR);
+					&& this.map.get(cPos).equals(SymbolsType.WALL)) {
+				this.map.put(cPos, SymbolsType.DOOR);
 				connections.add(cPos);
 			}
 		}

@@ -8,7 +8,7 @@ import hotlinecesena.model.entities.items.WeaponType;
  * Notifies that an actor has used their weapon.
  * @param <A> an interface that extends {@link Actor}.
  */
-public final class AttackPerformedEvent<A extends Actor> extends AbstractWeaponEvent<A> {
+public final class AttackPerformedEvent<A extends Actor> extends AbstractItemEvent<A, WeaponType> {
 
     public AttackPerformedEvent(final A source, final WeaponType weaponType) {
         super(source, weaponType);
