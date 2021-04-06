@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.ResourceBundle;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SIMBOLS_TYPE;
+import hotlinecesena.model.dataccesslayer.SimbolsType;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -25,6 +25,8 @@ public class WorldView implements Initializable{
 	// private static final int HEIGHT = (int) (Screen.getPrimary().getBounds().getMaxY() / 2);
 	
 	private GridPane gridPane = new GridPane();
+	DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
+    Map<Pair<Integer, Integer>, SimbolsType> worldMap = world.getWorldMap();
 
 	@FXML
 	private BorderPane borderPane;
@@ -34,12 +36,12 @@ public class WorldView implements Initializable{
 		Stage primaryStage = (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
 		// primaryStage.setWidth(WIDTH);
 		// primaryStage.setHeight(HEIGHT);
-		DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
-        Map<Pair<Integer, Integer>, SIMBOLS_TYPE> worldMap = world.getWorldMap();
-
         
         int rows = world.getMaxY() - world.getMinY() + 1;
     	int cols = world.getMaxX() - world.getMinX() + 1;
+    	
+    	System.out.println("rows: " + rows);
+    	System.out.println("cols: " + cols);
     		
     	for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
     		RowConstraints rc = new RowConstraints();
@@ -57,19 +59,19 @@ public class WorldView implements Initializable{
     	}
         for (int row = 0 ; row < rows ; row++) {
             for (int col = 0 ; col < cols ; col++) {
-            	Button button = createButton(row, col);
-            	button.setText(Character.toString(worldMap.get(new Pair<Integer, Integer> (world.getMinY() + row, world.getMinX() + col)).getDecotification()));
-                gridPane.add(button, col, row);
+            	Button button = createButton(col, row);
+            	gridPane.add(button, col, row);
             }
         }
         borderPane.setCenter(gridPane);    
         primaryStage.setFullScreen(true);
 	}
 
-	 private Button createButton(int row, int col) {
+	 private Button createButton(int col, int row) {
 		 	Button button = new Button();
 	        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 	        button.setDisable(true);
+	        button.setText(Character.toString(worldMap.get(new Pair<Integer, Integer> (world.getMinX() + col, world.getMinY() + row)).getDecotification()));
 	        return button;
 	    }
 
