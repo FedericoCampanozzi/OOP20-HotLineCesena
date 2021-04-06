@@ -4,15 +4,17 @@ import java.util.Objects;
 
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.events.MovementEvent;
+import hotlinecesena.model.events.RotationEvent;
 import javafx.geometry.Point2D;
 
 /**
  *
- * Template for generic entities capable of moving.
+ * Template for generic entities capable of moving and rotating.
  *
  */
 public abstract class AbstractMovableEntity extends AbstractEntity implements MovableEntity {
 
+    private double angle;
     private double speed;
 
     /**
@@ -25,7 +27,8 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
      */
     protected AbstractMovableEntity(final Point2D position, final double angle, final double width,
             final double height, final double speed) {
-        super(position, angle, width, height);
+        super(position, width, height);
+        this.angle = angle;
         this.speed = speed;
     }
 
@@ -43,13 +46,31 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
             // this.onCollision(); else
 
             this.setPosition(newPos);
-            this.publish(new MovementEvent(this, newPos));
+            this.publish(new MovementEvent<>(this, newPos));
         }
     }
 
     //protected abstract void onObstacleCollision();
 
     //protected abstract void onActorCollision();
+
+    @Override
+    public final double getAngle() {
+        return angle;
+    }
+
+    /**
+     * @implSpec
+     * Can be overridden if subclasses require that other conditions be satisfied
+     * before setting a new angle.
+     */
+    @Override
+    public final void setAngle(final double angle) {
+        if (this.angle != angle) {
+            this.angle = angle;
+            this.publish(new RotationEvent<>(this, angle));
+        }
+    }
 
     @Override
     public final double getSpeed() {
