@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import hotlinecesena.model.entities.actors.Actor;
 
 public enum AmmunitionType implements Item {
-	SHOTGUN_AMMO(20),
+	SHOTGUN_AMMO(21),
 	RIFLE_AMMO(90),
 	PISTOL_AMMO(30);
 	

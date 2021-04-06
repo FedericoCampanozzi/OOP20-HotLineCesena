@@ -1,14 +1,17 @@
 package hotlinecesena.model.entities.items;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.actors.player.Player;
 
 public enum ItemsType implements Item {
 	MEDIKIT(actor -> actor.heal(50), 5),
-	AMMO_BAG(actor -> actor.addAmmo(14, 60, 20), 5);
+	// 3 add, una per ogni tipo di munizone
+	AMMO_BAG(actor -> {
+		actor.getInventory().add(AmmunitionType.SHOTGUN_AMMO, AmmunitionType.SHOTGUN_AMMO.getMaxStacks() / 3);
+		actor.getInventory().add(AmmunitionType.RIFLE_AMMO, AmmunitionType.RIFLE_AMMO.getMaxStacks() / 3);
+		actor.getInventory().add(AmmunitionType.PISTOL_AMMO, AmmunitionType.PISTOL_AMMO.getMaxStacks() / 3);
+		}, 5);
 	
 	private Consumer<Actor> usageFunc;
 	private int maxStacks;
@@ -27,5 +30,4 @@ public enum ItemsType implements Item {
 	public int getMaxStacks() {
 		return this.maxStacks;
 	}
-
 }

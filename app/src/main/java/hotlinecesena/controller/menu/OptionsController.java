@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.GameController;
-import hotlinecesena.model.DALImpl;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -20,6 +20,7 @@ import javafx.util.Pair;
 public class OptionsController implements Initializable {
 	
 	private int volValue;
+	GameController gameController = new GameController();
 	private List<Pair<Integer, Integer>> resolutions = new ArrayList<>();
 	
 	public OptionsController(){
@@ -33,13 +34,8 @@ public class OptionsController implements Initializable {
 		resolutions.add(new Pair<Integer, Integer>(1280,  720));
 		resolutions.add(new Pair<Integer, Integer>(1920,  1080));
 		
-		try {
-			updatePercVolLabel(DALImpl.getInstance().getIntegerSetting("volume"));
-			volSlider.setValue(volValue);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		updatePercVolLabel(JSONDataAccessLayer.getInstance().getSettings().getVolume());
+		volSlider.setValue(volValue);
 	}	
 	
 	@FXML
@@ -66,10 +62,7 @@ public class OptionsController implements Initializable {
 	private Button backButton;
 	
 	public void backClick() throws IOException {
-		System.out.println("'Back' button pressed");
-
-		GameController gameScene = new GameController();
-		gameScene.changeScene("StartMenuView.fxml");
+		gameController.changeScene("StartMenuView.fxml");
 	}
 	
 	public void volSliderValueChanged() throws IOException {
