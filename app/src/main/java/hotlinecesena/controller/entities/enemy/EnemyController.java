@@ -61,12 +61,12 @@ public class EnemyController implements Updatable, Subscriber {
     }
 
     @Subscribe
-    private void updateSpriteOnMoveEvent(final MovementEvent e) {
-        this.enemyMap.get((Enemy) e.getSource()).updatePosition(e.getPosition());
+    private void updateSpriteOnMoveEvent(final MovementEvent<Enemy> e) {
+        this.enemyMap.get(e.getSource()).updatePosition(e.getPosition());
     }
 
     @Subscribe
-    private void updateSpriteOnRotationEvent(final RotationEvent e) {
-        this.enemyMap.get((Enemy) e.getSource()).updateRotation(e.getNewAngle());
+    private void updateSpriteOnRotationEvent(final RotationEvent<Enemy> e) {
+        this.enemyMap.get(e.getSource()).updateRotation(e.getNewAngle());
     }
 }
