@@ -5,33 +5,21 @@ package hotlinecesena.view.loader;
  */
 public enum ImageType {
 
-    PLAYER("Player.png"),
+    PLAYER("player.png"),
 
-    PLAYER_PISTOL("PlayerPistol.png"),
+    PLAYER_PISTOL("playerPistol.png"),
 
-    PLAYER_RIFLE("PlayerRifle.png"),
+    PLAYER_RIFLE("playerRifle.png"),
 
-    ENEMY_IDLE("EnemyIdle.png"),
+    ENEMY_1("enemy1.png"),
 
-    ENEMY_RANDOM_MOVEMENTS("EnemyRandomMovement.png"),
+    ENEMY_2("enemy2.png"),
 
-    ENEMY_PATROLING("EnemyIdle.png"),
+    ENEMY_3("enemy3.png"),
 
     BULLET("shoot.png"),
 
-    AMMO_PISTOL("AmmoPistol.png"),
-
-    AMMO_RIFLE("AmmoRifle.png"),
-
-    PISTOL("Pistol.png"),
-
-    RIFLE("Rifle.png"),
-
     MEDKIT("medkit.png"),
-
-    ICON("icon.png"),
-
-    TITLE("Title.png"),
 
     WALL("wall.png"),
 
@@ -47,7 +35,24 @@ public enum ImageType {
 
     KITCHEN("kitchen.png"),
 
-    OVEN("oven.png");
+    OVEN("oven.png"),
+
+    AMMO_PISTOL("ammoPistol.png"),
+
+    AMMO_RIFLE("ammoRifle.png"),
+
+    PISTOL("pistol.png"),
+
+    RIFLE("rifle.png"),
+
+    ICON("icon.png"),
+
+    TITLE("title.png"),
+    
+    MENU("menu.png"),
+    
+    CREDITS("startingScreen.png"),
+    ;
 
     private final String path;
 

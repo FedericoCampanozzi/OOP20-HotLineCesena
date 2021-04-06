@@ -41,7 +41,8 @@ public class ProxyImage implements ImageLoader {
     }
 
     private static class ProxyImageLoader implements ImageLoader {
-        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources";
+        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources"
+                + File.separator + "Images";
 
         @Override
         public Image getImage(final SceneType scene, final ImageType image) {
