@@ -21,4 +21,14 @@ public class DataJSONLanguages extends AbstractData {
 	private List<String> language_name_map;
 	@JsonProperty("language_map")
 	private Map<String, List<String>> language_map;
+	
+	public Map<String, String> getDescription() {
+		return description;
+	}
+	public List<String> getLanguage_name_map() {
+		return language_name_map;
+	}
+	public Map<String, List<String>> getLanguage_map() {
+		return language_map;
+	}
 }

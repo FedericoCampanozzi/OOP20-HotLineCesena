@@ -6,7 +6,7 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 
 import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
-import hotlinecesena.controller.generator.RectangolarWorldGeneratorBuilder;
+import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
@@ -19,14 +19,14 @@ public class DataWorldMap extends AbstractData {
 	private int xMin, xMax, yMin, yMax;
 	
 	public DataWorldMap() throws IOException {
-		WorldGeneratorBuilder sgwb = new RectangolarWorldGeneratorBuilder()
+		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
 				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(7, 13, 7, 13, 1, 5, 15, 25))
 				.generateRooms(10, 20)
 				.generatePlayer()
-				//.generateAmmo(0, 2)
-				//.generateEnemy(1, 6)
-				//.generateMedikit(1, 3)
-				//.generateObstacoles(3, 8)
+				.generateAmmo(0, 2)
+				.generateEnemy(1, 6)
+				.generateMedikit(1, 3)
+				.generateObstacoles(3, 8)
 				.finishes()
 				.build();
 		
@@ -46,7 +46,7 @@ public class DataWorldMap extends AbstractData {
 
 		for (int i = this.getMinX(); i <= this.getMaxX(); i++) {
 			for (int j = this.getMinY(); j <= this.getMaxY(); j++) {
-				debug += this.getWorldMap().get(new Pair<>(i, j));
+				debug += this.getWorldMap().get(new Pair<>(i, j)).getDecotification();
 			}
 
 			debug += "\n";

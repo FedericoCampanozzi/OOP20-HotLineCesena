@@ -2,6 +2,8 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -22,7 +24,13 @@ public class DataJSONSettings  extends AbstractData  {
 	private int volume;
     @JsonProperty("tileSize")
 	private int tileSize;
+    @JsonProperty("niceseeds")
+	private List<Long> niceseeds;
     
+	public List<Long> getNiceseeds() {
+		return niceseeds;
+	}
+
 	public int getMonitorX() {
 		return monitorX;
 	}
