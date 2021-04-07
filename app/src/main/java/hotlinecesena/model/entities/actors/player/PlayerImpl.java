@@ -10,6 +10,11 @@ import hotlinecesena.model.inventory.Inventory;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
+/**
+ *
+ * Player implementation.
+ *
+ */
 public final class PlayerImpl extends AbstractActor implements Player {
 
     private static final double ACTIVATION_RADIUS = 5.0;
@@ -17,7 +22,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     private final Map<ActorStatus, Double> noiseLevels;
 
     /**
-     *
+     * Instantiates a new {@code Player}.
      * @param position starting position in which this actor will be located.
      * @param angle starting angle that this actor will face.
      * @param width this actor's width.
@@ -53,7 +58,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
-
     private boolean hasCollided(final Point2D newPos) {
         return this.getGameMaster().getEnemy().getEnemies()
                 .stream()
@@ -61,7 +65,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
                         newPos, this.getWidth(), this.getHeight(),
                         e.getPosition(), e.getWidth(), e.getHeight()));
         //|| this.getGameMaster().getPhysicsCollision().getObstacles().stream...
-
     }
 
     @Override
@@ -79,6 +82,10 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
+    /**
+     * @implSpec
+     * Updates the inventory and sets the {@link ActorStatus} to {@code IDLE}.
+     */
     @Override
     public void update(final double timeElapsed) {
         this.setActorStatus(ActorStatus.IDLE);

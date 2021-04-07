@@ -15,6 +15,11 @@ import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
 
+/**
+ *
+ * {@link PlayerController} implementation.
+ *
+ */
 public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     private final Player player;

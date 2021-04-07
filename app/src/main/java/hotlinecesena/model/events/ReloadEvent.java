@@ -11,6 +11,11 @@ import hotlinecesena.model.entities.items.WeaponType;
  */
 public class ReloadEvent<A extends Actor> extends AbstractItemEvent<A, WeaponType> {
 
+    /**
+     * Instantiates a new {@code ReloadEvent}.
+     * @param source the Actor that triggered this event.
+     * @param weaponType {@link WeaponType} of the weapon that was reloaded.
+     */
     public ReloadEvent(final A source, final WeaponType weaponType) {
         super(source, weaponType);
     }

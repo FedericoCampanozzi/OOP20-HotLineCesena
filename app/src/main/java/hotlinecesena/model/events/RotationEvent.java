@@ -11,6 +11,11 @@ public final class RotationEvent<M extends MovableEntity> extends AbstractEvent<
 
     private final double newAngle;
 
+    /**
+     * Instantiates a new {@code RotationEvent}.
+     * @param source the MovableEntity that triggered this event.
+     * @param newAngle the new angle faced by the MovableEntity.
+     */
     public RotationEvent(final M source, final double newAngle) {
         super(source);
         this.newAngle = newAngle;
