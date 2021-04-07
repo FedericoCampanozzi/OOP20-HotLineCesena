@@ -5,6 +5,7 @@ import java.util.Objects;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -31,6 +32,21 @@ public final class PlayerImpl extends AbstractActor implements Player {
             final Map<ActorStatus, Double> noise) {
         super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
+    }
+
+    /**
+     * @throws NullPointerException if the given direction is null.
+     */
+    @Override
+    public void move(final Point2D direction) {
+        Objects.requireNonNull(direction);
+        if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+            final Point2D oldPos = this.getPosition();
+            final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
+            this.setPosition(newPos);
+            this.publish(new MovementEvent<>(this, newPos));
+            this.setActorStatus(ActorStatus.MOVING);
+        }
     }
 
     @Override
