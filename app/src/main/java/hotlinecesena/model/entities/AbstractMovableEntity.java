@@ -85,17 +85,24 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     }
 
     /**
-     * @implNote
-     * Can be overridden if subclasses require that other conditions be satisfied
-     * before setting a new angle.
+     * @apiNote
+     * Template method.
+     *
      */
     @Override
     public final void setAngle(final double angle) {
-        if (this.angle != angle) {
+        if (this.angle != angle && this.canInitiateRotation()) {
             this.angle = angle;
             this.publish(new RotationEvent<>(this, angle));
         }
     }
+
+    /**
+     * Other conditions that need to be satisfied in order to begin
+     * rotation.
+     * @return {@code true} if this entity can rotate, {@code false} otherwise.
+     */
+    protected abstract boolean canInitiateRotation();
 
     @Override
     public final double getSpeed() {
