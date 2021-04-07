@@ -12,10 +12,10 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.MediaPlayer;
 
 /**
- * Models the controller audio that allow an easy
- * access to the {@link ProxyAudio} by exposing
- * few ways to directly play the needed sound with
- * the correct volume settings
+ * Controller audio that allow an easy access 
+ * to the {@link ProxyAudio} by exposing few ways
+ * to directly play the needed sound with the 
+ * correct volume settings
  */
 public class AudioController {
 

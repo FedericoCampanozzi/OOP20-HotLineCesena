@@ -20,7 +20,7 @@ import hotlinecesena.view.loader.AudioType;
 import javafx.scene.media.AudioClip;
 
 /**
- * Models the controller that will reproduce an {@code AudioClip}
+ * Controller that will reproduce an {@code AudioClip}
  * based on the event
  * @see AudioController
  * @see AudioClip
