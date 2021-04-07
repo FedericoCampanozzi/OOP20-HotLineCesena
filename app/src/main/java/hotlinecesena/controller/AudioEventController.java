@@ -72,6 +72,7 @@ public class AudioEventController implements Subscriber{
     private void onDeathEvent(final DeathEvent<Actor> e) {
         this.audio = new AudioController(Optional.of(e.getSource()));
         this.audio.playAudioClip(AudioType.DEATH);
+        e.getSource().unregister(this);
     }
 
     /**
@@ -94,7 +95,7 @@ public class AudioEventController implements Subscriber{
             case SHOTGUN:
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("No such weapon type");
         }
     }
 
@@ -119,7 +120,7 @@ public class AudioEventController implements Subscriber{
                 this.audio.playAudioClip(AudioType.RELOAD_SHOTGUN);
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("No such weapon type");
         }
     }
 
@@ -152,7 +153,7 @@ public class AudioEventController implements Subscriber{
                 this.audio.playAudioClip(AudioType.PICKUP_MEDKIT);
                 break;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("No such item");
         }
     }
 }
