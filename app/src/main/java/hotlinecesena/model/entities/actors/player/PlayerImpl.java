@@ -5,7 +5,9 @@ import java.util.Objects;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.inventory.Inventory;
+import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
 public final class PlayerImpl extends AbstractActor implements Player {
@@ -31,6 +33,35 @@ public final class PlayerImpl extends AbstractActor implements Player {
             final Map<ActorStatus, Double> noise) {
         super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
+    }
+
+    /**
+     *
+     * @throws NullPointerException if the supplied direction is null.
+     */
+    @Override
+    public void move(final Point2D direction) {
+        Objects.requireNonNull(direction);
+        if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+            final Point2D oldPos = this.getPosition();
+            final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
+            if (!this.hasCollided(newPos)) {
+                this.setPosition(newPos);
+                this.publish(new MovementEvent<>(this, newPos));
+                this.setActorStatus(ActorStatus.MOVING);
+            }
+        }
+    }
+
+
+    private boolean hasCollided(final Point2D newPos) {
+        return this.getGameMaster().getEnemy().getEnemies()
+                .stream()
+                .anyMatch(e -> MathUtils.isCollision(
+                        newPos, this.getWidth(), this.getHeight(),
+                        e.getPosition(), e.getWidth(), e.getHeight()));
+        //|| this.getGameMaster().getPhysicsCollision().getObstacles().stream...
+
     }
 
     @Override
