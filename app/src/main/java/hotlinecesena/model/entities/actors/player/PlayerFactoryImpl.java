@@ -20,8 +20,8 @@ public final class PlayerFactoryImpl implements PlayerFactory {
     private static final double SPEED = 450;
     private static final double MAX_HEALTH = 100;
     private final Inventory inv = new NaiveInventoryImpl(
-            new WeaponImpl(WeaponType.PISTOL), Map.of(
-                    AmmunitionType.PISTOL_AMMO, 30));
+            new WeaponImpl(WeaponType.PISTOL),
+            Map.of(AmmunitionType.PISTOL_AMMO, 30));
     private final Map<ActorStatus, Double> noise = Map.of(
             ActorStatus.IDLE, 0.0,
             ActorStatus.MOVING, 5.0,
