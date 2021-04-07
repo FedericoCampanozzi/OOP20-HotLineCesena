@@ -12,6 +12,11 @@ public final class MovementEvent<M extends MovableEntity> extends AbstractEvent<
 
     private final Point2D newPos;
 
+    /**
+     * Instantiates a new {@code MovementEvent}.
+     * @param source the MovableEntity that triggered this event.
+     * @param newPos new position of the MovableEntity.
+     */
     public MovementEvent(final M source, final Point2D newPos) {
         super(source);
         this.newPos = newPos;

@@ -8,6 +8,7 @@ import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.inventory.Inventory;
 import hotlinecesena.model.entities.actors.enemy.ai.AI;
 import hotlinecesena.model.entities.actors.enemy.ai.AIImpl;
+import hotlinecesena.model.events.MovementEvent;
 import javafx.geometry.Point2D;
 
 /**
@@ -57,8 +58,9 @@ public class EnemyImpl extends AbstractActor implements Enemy {
             final Point2D current = this.getPosition();
             final Point2D next = current.add(direction.multiply(!this.pursuit ?
                     ENEMY_NORMAL_SPEED : ENEMY_PURSUIT_SPEED));
-            this.enemyAI.setEnemyPos(next);
             this.setPosition(next);
+            this.enemyAI.setEnemyPos(next);
+            this.publish(new MovementEvent<>(this, next));
         }
     }
 

@@ -10,6 +10,11 @@ import hotlinecesena.model.entities.items.WeaponType;
  */
 public final class AttackPerformedEvent<A extends Actor> extends AbstractItemEvent<A, WeaponType> {
 
+    /**
+     * Instantiates a new {@code AttackPerformedEvent}.
+     * @param source the entity that triggered this event.
+     * @param weaponType the {@link WeaponType} of the weapon used.
+     */
     public AttackPerformedEvent(final A source, final WeaponType weaponType) {
         super(source, weaponType);
     }

@@ -5,9 +5,16 @@ import java.util.Objects;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.inventory.Inventory;
+import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
+/**
+ *
+ * Player implementation.
+ *
+ */
 public final class PlayerImpl extends AbstractActor implements Player {
 
     private static final double ACTIVATION_RADIUS = 5.0;
@@ -15,7 +22,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     private final Map<ActorStatus, Double> noiseLevels;
 
     /**
-     *
+     * Instantiates a new {@code Player}.
      * @param position starting position in which this actor will be located.
      * @param angle starting angle that this actor will face.
      * @param width this actor's width.
@@ -33,6 +40,33 @@ public final class PlayerImpl extends AbstractActor implements Player {
         noiseLevels = Objects.requireNonNull(noise);
     }
 
+    /**
+     *
+     * @throws NullPointerException if the supplied direction is null.
+     */
+    @Override
+    public void move(final Point2D direction) {
+        Objects.requireNonNull(direction);
+        if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+            final Point2D oldPos = this.getPosition();
+            final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
+            if (!this.hasCollided(newPos)) {
+                this.setPosition(newPos);
+                this.publish(new MovementEvent<>(this, newPos));
+                this.setActorStatus(ActorStatus.MOVING);
+            }
+        }
+    }
+
+    private boolean hasCollided(final Point2D newPos) {
+        return this.getGameMaster().getEnemy().getEnemies()
+                .stream()
+                .anyMatch(e -> MathUtils.isCollision(
+                        newPos, this.getWidth(), this.getHeight(),
+                        e.getPosition(), e.getWidth(), e.getHeight()));
+        //|| this.getGameMaster().getPhysicsCollision().getObstacles().stream...
+    }
+
     @Override
     public double getNoiseRadius() {
         final ActorStatus status = this.getActorStatus();
@@ -48,6 +82,10 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
+    /**
+     * @implSpec
+     * Updates the inventory and sets the {@link ActorStatus} to {@code IDLE}.
+     */
     @Override
     public void update(final double timeElapsed) {
         this.setActorStatus(ActorStatus.IDLE);

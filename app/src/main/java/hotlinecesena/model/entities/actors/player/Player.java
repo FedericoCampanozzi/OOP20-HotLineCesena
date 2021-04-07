@@ -15,8 +15,8 @@ public interface Player extends Actor {
     void use();
 
     /**
-     *
-     * @return the radius of the noise currently emitted by the player based on their state.
+     * Returns the radius of the noise currently emitted by the player based on their state.
+     * @return the radius of the noise.
      */
     double getNoiseRadius();
 

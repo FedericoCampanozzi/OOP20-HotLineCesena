@@ -23,6 +23,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     private final Inventory inventory;
 
     /**
+     * Base constructor for AbstractActors.
      * @param position starting position in which this actor will be located.
      * @param angle starting angle that this actor will face.
      * @param width this actor's width.
@@ -41,17 +42,11 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     /**
-     * @implSpec
-     * Prohibits movements when this actor is dead.
+     * Prohibits rotations when this Actor is dead.
      */
     @Override
-    protected final boolean canInitiateMovement(final Point2D direction) {
+    protected final boolean canInitiateRotation() {
         return this.isAlive();
-    }
-
-    @Override
-    protected final void onSuccessfulMovement() {
-        status = ActorStatus.MOVING;
     }
 
     @Override

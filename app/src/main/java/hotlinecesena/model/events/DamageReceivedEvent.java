@@ -11,6 +11,11 @@ public final class DamageReceivedEvent<A extends Actor> extends AbstractEvent<A>
 
     private final double damagePoints;
 
+    /**
+     * Instantiates a new {@code DamageReceivedEvent}.
+     * @param source the Actor that triggered this event.
+     * @param damagePoints the damage received by the Actor.
+     */
     public DamageReceivedEvent(final A source, final double damagePoints) {
         super(source);
         this.damagePoints = damagePoints;

@@ -28,7 +28,7 @@ public final class InputListenerFX implements InputListener {
 
     /**
      * Instantiates a new InputListenerFX while also binding keyboard and mouse
-     * event handlers to the {@link Scene} passed as argument.
+     * event handlers to the given {@link Scene}.
      * @param scene the {@code Scene} on which the event handlers will be set.
      */
     public InputListenerFX(final Scene scene) {
@@ -46,7 +46,7 @@ public final class InputListenerFX implements InputListener {
     /**
      * Combines sets of {@code KeyCode}s and {@code MouseButton}s into a single
      * set of generic enums for simplicity.
-     * @return
+     * @return a Set containing both keyboard and mouse inputs.
      */
     private Set<Enum<?>> combineInputs() {
         return Stream.concat(keyboardInputs.stream(), mouseInputs.stream())
@@ -54,8 +54,7 @@ public final class InputListenerFX implements InputListener {
     }
 
     /**
-     * Handles key presses and key releases.
-     * @param scene
+     * Sets event handlers for key presses and releases.
      */
     private void setKeyEventHandlers() {
         scene.setOnKeyReleased(e -> this.forgetInput(keyboardInputs, e.getCode()));
@@ -63,8 +62,7 @@ public final class InputListenerFX implements InputListener {
     }
 
     /**
-     * Handles mouse button presses and releases.
-     * @param scene
+     * Sets event handlers for mouse button presses and releases.
      */
     private void setMouseButtonHandlers() {
         scene.setOnMouseReleased(e -> this.forgetInput(mouseInputs, e.getButton()));
@@ -72,8 +70,7 @@ public final class InputListenerFX implements InputListener {
     }
 
     /**
-     * Handles mouse movement.
-     * @param scene
+     * Sets event handlers for mouse movement.
      */
     private void setMouseMovementHandlers() {
         //Mouse moved, no buttons pressed

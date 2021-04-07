@@ -3,8 +3,10 @@ package hotlinecesena.controller.input;
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toUnmodifiableSet;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.EnumSet;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -41,11 +43,11 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @throws NullPointerException if {@code inputs} or {@code spritePosition} are null.
      */
     @Override
-    public Set<Command> interpret(final Pair<Set<Enum<?>>, Point2D> inputs, final Point2D spritePosition,
+    public Collection<Command> interpret(final Pair<Set<Enum<?>>, Point2D> inputs, final Point2D spritePosition,
             final double deltaTime) {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
-        final Set<Command> commandsToDeliver = new HashSet<>();
+        final List<Command> commandsToDeliver = new ArrayList<>();
         final Set<PlayerAction> actions = this.convertBindings(inputs.getKey());
 
         final Point2D newMovementDir = this.processMovementDirection(actions);
