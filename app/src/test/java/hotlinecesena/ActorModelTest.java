@@ -43,8 +43,8 @@ class ActorModelTest {
 
     private void setup() {
         final Inventory inv = new NaiveInventoryImpl(
-                new WeaponImpl(WeaponType.PISTOL), Map.of(
-                        AmmunitionType.PISTOL_AMMO, 30));
+                new WeaponImpl(WeaponType.PISTOL),
+                Map.of(AmmunitionType.PISTOL_AMMO, 30));
         actor = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv, Map.of());
     }
 

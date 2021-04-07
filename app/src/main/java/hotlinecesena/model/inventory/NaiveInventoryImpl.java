@@ -18,7 +18,7 @@ import hotlinecesena.model.entities.items.Weapon;
 public final class NaiveInventoryImpl implements Inventory {
 
     private Optional<Weapon> weapon = Optional.empty();
-    private Map<Item, Integer> collectibles;
+    private final Map<Item, Integer> collectibles = new HashMap<>();
     private double reloadTimeRemaining = 0.0;
     private int ammoForReloading;
 
@@ -37,7 +37,6 @@ public final class NaiveInventoryImpl implements Inventory {
      */
     public NaiveInventoryImpl(final Weapon weapon, final Map<Item, Integer> collectibles) {
         this.weapon = Optional.ofNullable(weapon);
-        this.collectibles = new HashMap<>();
         this.collectibles.putAll(Objects.requireNonNull(collectibles));
     }
 
