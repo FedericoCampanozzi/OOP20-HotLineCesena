@@ -1,78 +1,91 @@
 package hotlinecesena.view;
 
-import java.net.URL;
+import java.io.IOException;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.SimbolsType;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.RowConstraints;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Pair;
 
-public class WorldView implements Initializable{
-	
-	// private static final int WIDTH = (int) (Screen.getPrimary().getBounds().getMaxX() / 2);
-	// private static final int HEIGHT = (int) (Screen.getPrimary().getBounds().getMaxY() / 2);
-	
-	private GridPane gridPane = new GridPane();
-	DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
-    Map<Pair<Integer, Integer>, SimbolsType> worldMap = world.getWorldMap();
-
-	@FXML
+public class WorldView {
+	private static final String TITLE = "Hotline Cesena";
+	private static final int TILE_SIZE = 16;
+	private final Stage primaryStage;
 	private BorderPane borderPane;
+	private GridPane gridPane = new GridPane();
+	private SceneSwapper sceneSwapper = new SceneSwapper();
+	ProxyImage proxyImage = new ProxyImage();
+	DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
+    Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
+	//private SceneSwapper sceneSwapper = new SceneSwapper();
 	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		Stage primaryStage = (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
-		// primaryStage.setWidth(WIDTH);
-		// primaryStage.setHeight(HEIGHT);
-        
-        int rows = world.getMaxY() - world.getMinY() + 1;
+	public WorldView(final Stage primaryStage) {
+		this.primaryStage = primaryStage;
+	}
+	
+	public final void start() {
+		this.primaryStage.setTitle(TITLE);
+		this.borderPane = new BorderPane();
+		final Scene scene = new Scene(this.borderPane, 600, 400);
+		primaryStage.setScene(scene);
+		borderPane.setCenter(gridPane);
+		
+		int rows = world.getMaxY() - world.getMinY() + 1;
     	int cols = world.getMaxX() - world.getMinX() + 1;
-    	
-    	System.out.println("rows: " + rows);
-    	System.out.println("cols: " + cols);
-    		
-    	for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-    		RowConstraints rc = new RowConstraints();
-    		rc.setVgrow(Priority.ALWAYS) ; // allow row to grow
-    		rc.setFillHeight(true); // ask nodes to fill height for row
-    		// other settings as needed...
-    		gridPane.getRowConstraints().add(rc);
-    	}
-    	for (int colIndex = 0; colIndex < cols; colIndex++) {
-    		ColumnConstraints cc = new ColumnConstraints();
-    		cc.setHgrow(Priority.ALWAYS) ; // allow column to grow
-    		cc.setFillWidth(true); // ask nodes to fill space for column
-    		// other settings as needed...
-    		gridPane.getColumnConstraints().add(cc);
-    	}
         for (int row = 0 ; row < rows ; row++) {
             for (int col = 0 ; col < cols ; col++) {
-            	Button button = createButton(col, row);
-            	gridPane.add(button, col, row);
+            	ImageView tile = createImage(col, row);
+            	tile.setFitHeight(TILE_SIZE);
+            	tile.setFitWidth(TILE_SIZE);
+            	gridPane.add(tile, col, row);
             }
         }
-        borderPane.setCenter(gridPane);    
-        primaryStage.setFullScreen(true);
+        primaryStage.setResizable(false);
+        primaryStage.setWidth(cols * TILE_SIZE);
+        primaryStage.setHeight(rows * TILE_SIZE);
+        primaryStage.setX(0);
+        primaryStage.setY(0);
+        
+        primaryStage.getScene().setOnKeyReleased(new EventHandler<KeyEvent>() {
+
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.ESCAPE) {
+					try {
+						sceneSwapper.newStageWithScene("PauseView.fxml");
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		});
 	}
-
-	 private Button createButton(int col, int row) {
-		 	Button button = new Button();
-	        button.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-	        button.setDisable(true);
-	        button.setText(Character.toString(worldMap.get(new Pair<Integer, Integer> (world.getMinX() + col, world.getMinY() + row)).getDecotification()));
-	        return button;
-	    }
-
+	
+	private ImageView createImage(int col, int row) {
+		ImageView tile = new ImageView();
+        char c = worldMap.get(new Pair<Integer, Integer> (world.getMinX() + col, world.getMinY() + row)).getDecotification();
+        tile.setImage((c == 'W') ? proxyImage.getImage(SceneType.GAME, ImageType.WALL)
+                : (c == '_') ? proxyImage.getImage(SceneType.GAME, ImageType.GRASS)
+                : (c == 'P') ? proxyImage.getImage(SceneType.GAME, ImageType.PLAYER)
+                : (c == 'E') ? proxyImage.getImage(SceneType.GAME, ImageType.ENEMY_1)
+                : (c == 'M') ? proxyImage.getImage(SceneType.GAME, ImageType.MEDKIT)
+                : (c == 'A') ? proxyImage.getImage(SceneType.GAME, ImageType.AMMO_PISTOL)
+                : (c == 'O') ? proxyImage.getImage(SceneType.GAME, ImageType.BOX)
+                : proxyImage.getImage(SceneType.GAME, ImageType.FLOOR));
+		return tile;
+	}
 }

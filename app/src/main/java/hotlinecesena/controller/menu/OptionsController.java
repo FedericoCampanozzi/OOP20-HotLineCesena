@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import hotlinecesena.controller.GameController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.utilities.SceneSwapper;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -15,12 +16,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 import javafx.util.Pair;
 
 public class OptionsController implements Initializable {
 	
 	private int volValue;
-	GameController gameController = new GameController();
+	SceneSwapper sceneSwapper = new SceneSwapper();
 	private List<Pair<Integer, Integer>> resolutions = new ArrayList<>();
 	
 	public OptionsController(){
@@ -61,8 +64,14 @@ public class OptionsController implements Initializable {
 	@FXML
 	private Button backButton;
 	
-	public void backClick() throws IOException {
-		gameController.changeScene("StartMenuView.fxml");
+	public void backClick(final ActionEvent event) throws IOException {
+		int count = Stage.getWindows().stream().filter(Window::isShowing).toArray().length;
+		if (count == 2) {
+			sceneSwapper.changeScene("PauseView.fxml", event);
+		}
+		else {
+			sceneSwapper.changeScene("StartMenuView.fxml", event);
+		}
 	}
 	
 	public void volSliderValueChanged() throws IOException {
@@ -73,5 +82,4 @@ public class OptionsController implements Initializable {
 		volValue = value;
 		percVolLabel.setText(Integer.toString(volValue) + "%");
 	}
-
 }
