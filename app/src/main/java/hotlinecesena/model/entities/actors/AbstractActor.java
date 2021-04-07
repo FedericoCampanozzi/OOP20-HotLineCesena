@@ -42,6 +42,19 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     /**
+     * Prohibits movements when this actor is dead.
+     */
+    @Override
+    protected final boolean canInitiateMovement(final Point2D direction) {
+        return this.isAlive();
+    }
+
+    @Override
+    protected final void onSuccessfulMovement() {
+        status = ActorStatus.MOVING;
+    }
+
+    /**
      * Prohibits rotations when this Actor is dead.
      */
     @Override
