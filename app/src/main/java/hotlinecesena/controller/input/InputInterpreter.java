@@ -1,5 +1,6 @@
 package hotlinecesena.controller.input;
 
+import java.util.Collection;
 import java.util.Set;
 
 import hotlinecesena.model.entities.actors.player.Command;
@@ -21,12 +22,12 @@ import javafx.util.Pair;
 public interface InputInterpreter {
 
     /**
-     *
+     * Interprets all inputs received from the View.
      * @param inputs raw inputs captured by the {@link InputListener}.
      * @param spritePosition position of the player's sprite on the screen. Used to
      * prevent unwanted rotations when the cursor is too close to the player.
      * @param deltaTime time elapsed since the last frame.
      * @return a set of {@link Command}s that an external controller may execute.
      */
-    Set<Command> interpret(Pair<Set<Enum<?>>, Point2D> inputs, Point2D spritePosition, double deltaTime);
+    Collection<Command> interpret(Pair<Set<Enum<?>>, Point2D> inputs, Point2D spritePosition, double deltaTime);
 }
