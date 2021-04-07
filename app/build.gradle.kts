@@ -23,7 +23,7 @@ java {
 
 javafx {
     version = javaFxVersion
-    modules("javafx.controls", "javafx.fxml", "javafx.media")
+    modules("javafx.controls", "javafx.fxml", "javafx.media", "javafx.swing")
 }
 
 dependencies {
