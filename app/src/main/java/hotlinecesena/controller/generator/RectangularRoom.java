@@ -9,19 +9,19 @@ import java.util.Set;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 
-public class RectangolarRoom extends AbstractRoom {
+public class RectangularRoom extends AbstractRoom {
 	private  int w;
 	private  int h;
 	private  int d;
 	
-	private RectangolarRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center, int width, int height) {
+	private RectangularRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center, int width, int height) {
 		super();
 		this.map = map;
 		this.w = width;
 		this.h = height;
 	}
 	
-	public RectangolarRoom(int width, int height, int nDoor) {
+	public RectangularRoom(int width, int height, int nDoor) {
 		super();
 		
 		if (width % 2 == 0) {
@@ -74,7 +74,7 @@ public class RectangolarRoom extends AbstractRoom {
 
 	@Override
 	public Room deepCopy() {
-		return new RectangolarRoom(this.map, this.center, this.w, this.h);
+		return new RectangularRoom(this.map, this.center, this.w, this.h);
 	}
 	
 	public int getWidth() {

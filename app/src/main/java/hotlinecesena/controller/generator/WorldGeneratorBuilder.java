@@ -23,6 +23,8 @@ public interface WorldGeneratorBuilder {
 	WorldGeneratorBuilder generateAmmo(int minRoom, int maxRoom);
 	
 	WorldGeneratorBuilder generateMedikit(int minRoom, int maxRoom);
+	
+	WorldGeneratorBuilder generateWeapons(int minRoom, int maxRoom);
 
 	public WorldGeneratorBuilder finishes();
 

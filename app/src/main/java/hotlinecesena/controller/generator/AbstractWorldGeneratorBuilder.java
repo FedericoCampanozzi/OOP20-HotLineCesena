@@ -50,20 +50,26 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	}
 	
 	@Override
-	public WorldGeneratorBuilder generateObstacoles( int minInRoom, int maxInRoom) {
+	public WorldGeneratorBuilder generateObstacoles(int minInRoom, int maxInRoom) {
 		generateTotalRandomness(SymbolsType.OBSTACOLES, minInRoom, maxInRoom);
 		return this;
 	}
 	
 	@Override
-	public WorldGeneratorBuilder generateAmmo( int minInRoom, int maxInRoom) {
+	public WorldGeneratorBuilder generateAmmo(int minInRoom, int maxInRoom) {
 		generateTotalRandomness(SymbolsType.AMMO, minInRoom, maxInRoom);
 		return this;
 	}
 	
 	@Override
-	public WorldGeneratorBuilder generateMedikit( int minInRoom, int maxInRoom) {
+	public WorldGeneratorBuilder generateMedikit(int minInRoom, int maxInRoom) {
 		generateTotalRandomness(SymbolsType.MEDIKIT, minInRoom, maxInRoom);
+		return this;
+	}
+	
+	@Override
+	public WorldGeneratorBuilder generateWeapons(int minInRoom, int maxInRoom) {
+		generateTotalRandomness(SymbolsType.WEAPONS, minInRoom, maxInRoom);
 		return this;
 	}
 	
@@ -120,7 +126,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 				}
 				
-				// j +
+				// j+
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR &&
 						getOrNull(i, j + 1, SymbolsType.DOOR) &&
 						getOrNull(i, j + 2, SymbolsType.WALKABLE) ) {
@@ -128,7 +134,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 					this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
 				}
 				
-				// j -
+				// j-
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
 						getOrNull(i, j - 1, SymbolsType.DOOR) &&
 						getOrNull(i, j - 2, SymbolsType.WALKABLE) ) {
@@ -136,7 +142,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 					this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
 				}
 				
-				// i +
+				// i+
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
 						getOrNull(i + 1, j, SymbolsType.DOOR)&&
 						getOrNull(i + 2, j, SymbolsType.WALKABLE) ) {
@@ -144,7 +150,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 					this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
 				}
 				
-				// i -
+				// i-
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
 						getOrNull(i - 1, j, SymbolsType.DOOR) &&
 						getOrNull(i - 2, j, SymbolsType.WALKABLE) ) {

@@ -9,9 +9,9 @@ import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 import javafx.util.Pair;
 
-public class RectangolarWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
+public class RectangularWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
-	public RectangolarWorldGeneratorBuilder() {
+	public RectangularWorldGeneratorBuilder() {
 		super();
 	}
 	
@@ -22,7 +22,7 @@ public class RectangolarWorldGeneratorBuilder extends AbstractWorldGeneratorBuil
 		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
-			RectangolarRoom toPut = (RectangolarRoom)this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
+			RectangularRoom toPut = (RectangularRoom)this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
 
 			if (this.rooms.isEmpty()) {
 				generateRoom(new Pair<>(0, 0), toPut);

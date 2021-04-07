@@ -21,13 +21,14 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
-			OctagonalRoom toPut = (OctagonalRoom)this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
+			OctagonalRoom toPut = (OctagonalRoom) this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
 
 			if (this.rooms.isEmpty()) {
 				generateRoom(new Pair<>(0, 0), toPut);
 			} else {
+				final int w = (toPut.getWidth() - 1) / 2;
 				Pair<Integer, Integer> doorLink = getConnectionsLinking();
-				Pair<Integer, Integer> dir = new Pair<>((rnd.nextInt(3) - 1) * ((toPut.getWidth() / 2) + 1), (rnd.nextInt(3) - 1) * ((toPut.getWidth() / 2) + 1));
+				Pair<Integer, Integer> dir = new Pair<>((rnd.nextInt(3) - 1) * (w + 2), (rnd.nextInt(3) - 1) * (w + 2));
 				Pair<Integer, Integer> center = Utilities.sumPair(doorLink, dir);
 				if (canPutRoom(center, doorLink, dir, toPut)) {
 					generateRoom(center, toPut);
@@ -94,5 +95,62 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 			}
 		}
 		return allDoors.get(rnd.nextInt(allDoors.size()));
+	}
+	
+	@Override
+	public WorldGeneratorBuilder finishes() {
+		this.xMin = xMin - MAP_PADDING;
+		this.xMax = xMax + MAP_PADDING;
+		this.yMax = yMax + MAP_PADDING;
+		this.yMin = yMin - MAP_PADDING;
+		
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+
+				if (!this.map.containsKey(new Pair<>(i, j))) {
+					this.map.put(new Pair<>(i, j), SymbolsType.VOID);
+				}
+				
+				if (this.map.get(new Pair<>(i, j)) == SymbolsType.OBSTACOLES && (
+						getOrVoid(i + 1, j, SymbolsType.WALL) ||
+						getOrVoid(i - 1, j, SymbolsType.WALL) ||
+						getOrVoid(i, j + 1, SymbolsType.WALL) ||
+						getOrVoid(i, j - 1, SymbolsType.WALL) ||
+						getOrVoid(i + 1, j + 1, SymbolsType.WALL) ||
+						getOrVoid(i - 1, j - 1, SymbolsType.WALL) ||
+						getOrVoid(i - 1, j + 1, SymbolsType.WALL) ||
+						getOrVoid(i + 1, j - 1, SymbolsType.WALL))) {
+					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
+				}
+			}
+		}
+		
+		
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+				if (this.map.get(new Pair<>(i, j)).equals(SymbolsType.DOOR) && !(
+						get(i + 1, j, SymbolsType.DOOR) ||
+						get(i - 1, j, SymbolsType.DOOR) ||
+						get(i, j + 1, SymbolsType.DOOR) ||
+						get(i, j - 1, SymbolsType.DOOR) ||
+						get(i + 1, j + 1, SymbolsType.DOOR) ||
+						get(i - 1, j - 1, SymbolsType.DOOR) ||
+						get(i - 1, j + 1, SymbolsType.DOOR) ||
+						get(i + 1, j - 1, SymbolsType.DOOR)
+						)) {
+					this.map.put(new Pair<>(i, j), SymbolsType.WALL);
+				}
+			}
+		}
+		
+		return this;
+	}
+	
+	private boolean get(int i, int j, SymbolsType type) {
+		return this.map.get(new Pair<>(i,j)).equals(type);
+	}
+	
+	private boolean getOrVoid(int i, int j, SymbolsType type) {
+		return !this.map.containsKey(new Pair<>(i,j)) || this.map.get(new Pair<>(i,j)).equals(SymbolsType.VOID) || this.map.get(new Pair<>(i,j)).equals(type);
 	}
 }
