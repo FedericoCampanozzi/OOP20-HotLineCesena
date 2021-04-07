@@ -93,6 +93,7 @@ public class AudioEventController implements Subscriber{
                 this.audio.playAudioClip(AudioType.SHOOT);
                 break;
             case SHOTGUN:
+                this.audio.playAudioClip(AudioType.SHOOT_SHOTGUN);
                 break;
             default:
                 throw new IllegalArgumentException("No such weapon type");
