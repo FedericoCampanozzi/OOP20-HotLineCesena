@@ -77,13 +77,15 @@ public final class MathUtils {
      * @param deltaTime
      * @return blend value
      */
-    public static double blend(final double sharpness, final int acceleration, final double deltaTime) {
+    public static double blend(final double sharpness, final double acceleration, final double deltaTime) {
         return 1 - Math.pow(1 - sharpness, deltaTime * acceleration);
     }
 
     /**
      * Checks whether two objects, both characterized by a position, a width and a height,
      * are colliding with each other.
+     * <br>
+     * Adapted from the method {@code intersects} of JavaFX's {@link BoundingBox}.
      * @param p1 coordinates of the first object
      * @param w1 width of the first object
      * @param h1 height of the first object
@@ -94,9 +96,12 @@ public final class MathUtils {
      */
     public static boolean isCollision(final Point2D p1, final double w1, final double h1,
             final Point2D p2, final double w2, final double h2) {
-        return p2.getX() + w2 >= p1.getX()
-                && p2.getY() + h2 >= p1.getY()
-                && p2.getX() <= p1.getX() + w1
-                && p2.getY() <= p1.getY() + h1;
+        // Compute center coordinates for each object
+        final Point2D center1 = p1.subtract(w1 * 0.5, h1 * 0.5);
+        final Point2D center2 = p2.subtract(w2 * 0.5, h2 * 0.5);
+        return center2.getX() + w2 >= center1.getX()
+                && center2.getY() + h2 >= center1.getY()
+                && center2.getX() <= center1.getX() + w1
+                && center2.getY() <= center1.getY() + h1;
     }
 }
