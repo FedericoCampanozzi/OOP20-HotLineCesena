@@ -26,7 +26,28 @@ public class DataJSONSettings  extends AbstractData  {
 	private int tileSize;
     @JsonProperty("niceseeds")
 	private List<Long> niceseeds;
+    @JsonProperty("isMusicActive")
+	private boolean isMusicActive;
+    @JsonProperty("isEffectActive")
+	private boolean isEffectActive;
     
+    
+	public void setMusicActive(boolean isMusicActive) {
+		this.isMusicActive = isMusicActive;
+	}
+
+	public void setEffectActive(boolean isEffectActive) {
+		this.isEffectActive = isEffectActive;
+	}
+
+	public boolean isMusicActive() {
+		return isMusicActive;
+	}
+
+	public boolean isEffectActive() {
+		return isEffectActive;
+	}
+
 	public List<Long> getNiceseeds() {
 		return niceseeds;
 	}
