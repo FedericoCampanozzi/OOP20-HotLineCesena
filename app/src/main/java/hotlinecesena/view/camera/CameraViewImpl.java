@@ -2,7 +2,8 @@ package hotlinecesena.view.camera;
 
 import java.util.Objects;
 
-import hotlinecesena.model.camera.Camera;
+import hotlinecesena.utilities.MathUtils;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -12,15 +13,12 @@ import javafx.scene.transform.Translate;
  */
 public final class CameraViewImpl implements CameraView {
 
-    private static final float VIEW_SCALE = 2.0f;
-    private static final float CENTERING_X = 2.5f;
-    private static final float CENTERING_Y = 2.8f;
-    private final Camera camera;
+    private static final double ACCEL = 30.0;
+    private static final double SHARPNESS = 0.2;
     private Pane pane;
     private final Translate paneTranslate = new Translate();
 
-    public CameraViewImpl(final Camera camera, final Pane pane) {
-        this.camera = Objects.requireNonNull(camera);
+    public CameraViewImpl(final Pane pane) {
         this.setPane(pane);
     }
 
@@ -39,13 +37,14 @@ public final class CameraViewImpl implements CameraView {
     }
 
     @Override
-    public void update(final double deltaTime) {
-        camera.update(deltaTime); //TODO Should not be updated from the View. Perhaps from DAL?
-        final double transX = camera.getCameraPosition().getX() * VIEW_SCALE
-                - pane.getScene().getWidth() / CENTERING_X;
-        final double transY = camera.getCameraPosition().getY() * VIEW_SCALE
-                - pane.getScene().getHeight() / CENTERING_Y;
-        paneTranslate.setX(-transX);
-        paneTranslate.setY(-transY);
+    public void update(final Point2D spritePosition, final double deltaTime) {
+        final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
+        final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
+        final Point2D newPos = MathUtils.lerp(
+                currentPos,
+                spritePosition.subtract(pane.getScene().getWidth() / 2, pane.getScene().getHeight() / 2),
+                blend);
+        paneTranslate.setX(-newPos.getX());
+        paneTranslate.setY(-newPos.getY());
     }
 }

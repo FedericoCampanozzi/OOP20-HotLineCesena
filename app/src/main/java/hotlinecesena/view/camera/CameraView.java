@@ -1,11 +1,13 @@
 package hotlinecesena.view.camera;
 
+import hotlinecesena.view.entities.Sprite;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
 /**
  *
- * Controller for JavaFX which follows the movements of a {@link Camera}.
+ * Controller for JavaFX which follows the movements of a {@link Sprite}.
  *
  */
 public interface CameraView {
@@ -23,9 +25,10 @@ public interface CameraView {
     void removePane();
 
     /**
-     * Updates the {@link Translate} position based on {@link Camera} movements.
+     * Updates the {@link Translate} position based on the movements of a {@link Sprite}.
      *
-     * @param deltaTime
+     * @param spritePosition Sprite position on the view.
+     * @param deltaTime time elapsed since the last update.
      */
-    void update(double deltaTime);
+    void update(Point2D spritePosition, double deltaTime);
 }
