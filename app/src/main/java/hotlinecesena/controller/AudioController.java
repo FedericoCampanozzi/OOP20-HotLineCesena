@@ -19,8 +19,9 @@ import javafx.scene.media.MediaPlayer;
  */
 public class AudioController {
 
-    private final static int PERCENTAGE = 100;
-    private final static int BACKGROUND = 10;
+    private final static int POINT_O_PERCENT = 1000;
+    private final static int PERCENT = 100;
+    private final static int BACKGROUND_VOLUME = 10;
 
     private final SoundLoader loader;
     private final Optional<Entity> caller;
@@ -58,9 +59,9 @@ public class AudioController {
      * @see Entity
      */
     private void volumeSettings() {
-        this.volume /= PERCENTAGE;
+        this.volume = (this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT;
         this.volume = this.caller.isPresent() && this.caller.get() instanceof Enemy ?
-                this.volume /  BACKGROUND : this.volume;
+                this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
     /**
@@ -94,7 +95,8 @@ public class AudioController {
      */
     public void playMusic() {
         this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
-        this.audio.setVolume((this.volume / PERCENTAGE) / BACKGROUND);
+        System.out.println(this.volume);
+        this.audio.setVolume(this.volume);
         this.audio.setAutoPlay(true);
     }
 }
