@@ -1,6 +1,7 @@
 package hotlinecesena.view.entities;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
 
 /**
@@ -31,8 +32,14 @@ public interface Sprite {
     void updateImage(Image image);
 
     /**
-     * Returns this sprite's position relative to the View.
-     * @return this sprite's position.
+     * Returns this sprite's position relative to its parent node.
+     * @return this sprite's position relative to its parent node.
      */
-    Point2D getSpritePosition();
+    Point2D getPositionRelativeToParent();
+
+    /**
+     * Returns this sprite's position relative to the {@link Scene}.
+     * @return this sprite's position relative to the {@code Scene}.
+     */
+    Point2D getPositionRelativeToScene();
 }
