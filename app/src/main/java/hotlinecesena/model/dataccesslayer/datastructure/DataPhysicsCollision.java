@@ -14,13 +14,11 @@ public class DataPhysicsCollision extends AbstractData {
 	
 	public DataPhysicsCollision(DataWorldMap world, DataJSONSettings settings) throws IOException {
 		obstacles = world.getWorldMap().entrySet().stream()
-				.filter(itm -> itm.getValue().equals(SymbolsType.WALL))
-				.filter(itm -> itm.getValue().equals(SymbolsType.OBSTACOLES))
+				.filter(itm -> itm.getValue().equals(SymbolsType.WALL) || itm.getValue().equals(SymbolsType.OBSTACOLES))
 				.map(itm -> {
 					javafx.geometry.Point2D pt = Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize());
 					return new BoundingBox(pt.getX(), pt.getY(), settings.getTileSize(), settings.getTileSize());
-				})
-				.collect(toList());
+				}).collect(toList());
 	}
 
 	public List<BoundingBox> getObstacles() {
