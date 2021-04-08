@@ -14,7 +14,9 @@ import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -51,10 +53,7 @@ public class WorldView {
         final int cols = world.getMaxX() - world.getMinX() + 1;
         for (int row = 0 ; row < rows ; row++) {
             for (int col = 0 ; col < cols ; col++) {
-                final ImageView tile = this.createImage(col, row);
-                tile.setFitHeight(TILE_SIZE);
-                tile.setFitWidth(TILE_SIZE);
-                gridPane.add(tile, row, col);
+                pickImage(col, row);
             }
         }
         primaryStage.setResizable(false);
@@ -89,18 +88,64 @@ public class WorldView {
         }
         gc.loop();
     }
+    
+    private void pickImage(final int col, final int row) {
+    	final char c = worldMap.get(new Pair<Integer, Integer> (world.getMinX() + col, world.getMinY() + row)).getDecotification();
+    	if (c == 'W' || c == '_' || c == '.') {
+			createImage(c, col, row);
+		}
+    	else {
+			blendImages(c, col, row);
+		}
+    }
 
-    private ImageView createImage(final int col, final int row) {
+    private void createImage(final char c, final int col, final int row) {
         final ImageView tile = new ImageView();
-        final char c = worldMap.get(new Pair<Integer, Integer> (world.getMinX() + col, world.getMinY() + row)).getDecotification();
-        tile.setImage((c == 'W') ? proxyImage.getImage(SceneType.GAME, ImageType.WALL)
-                : (c == '_') ? proxyImage.getImage(SceneType.GAME, ImageType.GRASS)
-                        : (c == 'P') ? proxyImage.getImage(SceneType.GAME, ImageType.PLAYER)
-                                : (c == 'E') ? proxyImage.getImage(SceneType.GAME, ImageType.ENEMY_1)
-                                        : (c == 'M') ? proxyImage.getImage(SceneType.GAME, ImageType.MEDKIT)
-                                                : (c == 'A') ? proxyImage.getImage(SceneType.GAME, ImageType.AMMO_PISTOL)
-                                                        : (c == 'O') ? proxyImage.getImage(SceneType.GAME, ImageType.BOX)
-                                                                : proxyImage.getImage(SceneType.GAME, ImageType.FLOOR));
-        return tile;
+        switch (c) {
+		case 'W':
+			tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.WALL));
+			break;
+		case '_':
+			tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.GRASS));
+			break;
+		case '.':
+			tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.FLOOR));
+			break;
+		}
+        tile.setFitHeight(TILE_SIZE);
+        tile.setFitWidth(TILE_SIZE);
+        gridPane.add(tile, col, row);
+    }
+    
+    private void blendImages(final char symbol, final int col, final int row) {
+    	final ImageView top = new ImageView();
+    	final ImageView bottom = new ImageView(proxyImage.getImage(SceneType.GAME, ImageType.FLOOR));
+    	switch (symbol) {
+		case 'P':
+			top.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER));
+			break;
+		case 'E':
+			top.setImage(proxyImage.getImage(SceneType.GAME, ImageType.ENEMY_1));
+			break;
+		case 'M':
+			top.setImage(proxyImage.getImage(SceneType.GAME, ImageType.MEDKIT));
+			break;
+		case 'A':
+			top.setImage(proxyImage.getImage(SceneType.GAME, ImageType.AMMO_PISTOL));
+			break;
+		case 'O':
+			top.setImage(proxyImage.getImage(SceneType.GAME, ImageType.BOX));
+			break;
+		}
+    	top.setFitHeight(TILE_SIZE);
+    	top.setFitWidth(TILE_SIZE);
+    	bottom.setFitHeight(TILE_SIZE);
+        bottom.setFitWidth(TILE_SIZE);
+    	top.setBlendMode(BlendMode.SRC_OVER);
+    	Group blend = new Group(
+    			bottom,
+    			top
+    	);
+		gridPane.add(blend, col, row);
     }
 }
