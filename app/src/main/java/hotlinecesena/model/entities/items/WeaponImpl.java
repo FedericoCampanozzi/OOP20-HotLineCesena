@@ -8,6 +8,7 @@ public class WeaponImpl implements Weapon {
 	
 	private int currentAmmo;
 	private WeaponType weaponType;
+	private double lastTime = System.currentTimeMillis();
 	
 	public WeaponImpl(WeaponType weaponType) {
 		this.weaponType = weaponType;
@@ -15,10 +16,20 @@ public class WeaponImpl implements Weapon {
 	}
 
 	@Override
-	public Consumer<Actor> usage() {
-		// Genera proiettili
-		return null;
-	}
+    public Consumer<Actor> usage() {
+        return actor -> {
+            final double currentTime = System.currentTimeMillis();
+            if (currentAmmo > 0 && (currentTime - lastTime > this.getRateOfFire())) {
+                weaponType.usage().accept(actor);
+                currentAmmo -= 1;
+            }
+            lastTime = currentTime;
+        };
+    }
+
+    public double getRateOfFire() {
+        return weaponType.getRateOfFire();
+    }
 
 	@Override
 	public int getMaxStacks() {
