@@ -5,15 +5,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import hotlinecesena.utilities.SceneSwapper;
-import hotlinecesena.view.loader.AudioType;
-import hotlinecesena.view.loader.ProxyAudio;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.media.MediaPlayer;
-import javafx.util.Duration;
 
 public class LoadingController implements Initializable{
 	
@@ -21,15 +17,11 @@ public class LoadingController implements Initializable{
 	ProgressBar progressBar;
 	
 	private static final double EPSILON = 0.0000005;
-	private MediaPlayer mediaPlayer;
-	ProxyAudio proxyAudio = new ProxyAudio();
 	SceneSwapper sceneSwapper = new SceneSwapper();
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		mediaPlayer = proxyAudio.getMediaPlayer(AudioType.BACKGROUND);
-		mediaPlayer.play();
-		mediaPlayer.seek(Duration.ZERO);
+		
 		final Task<Void> task = new Task<Void>() {
             final int N_ITERATIONS = 100;
 
