@@ -52,13 +52,13 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         return deltaTime -> {
             player.update(deltaTime);
             final Collection<Command> commands = interpreter.interpret(
-                    listener.deliverInputs(), sprite.getSpritePosition(), deltaTime
+                    listener.deliverInputs(), sprite.getPositionRelativeToScene(), deltaTime
                     );
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(player));
             }
             //TODO To be updated from the GameLoop
-            camera.update(deltaTime);
+            camera.update(sprite.getPositionRelativeToParent(), deltaTime);
         };
     }
 
@@ -74,6 +74,6 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     @Subscribe
     private void handleRotationEvent(final RotationEvent<Player> e) {
-        sprite.updateRotation(e.getNewAngle());
+        sprite.updateRotation(e.getSource().getAngle());
     }
 }
