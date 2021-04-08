@@ -19,13 +19,11 @@ public class DataGUIPath extends AbstractData {
 	@Override
 	public void read() throws IOException {
 		for(final File f : new File(GUI_XML_FOLDER_PATH).listFiles()) {
-			this.paths.put(f.getName(), f.getAbsolutePath());
+			this.paths.put(f.getName(), new File(f.getParent()).getName() + File.separator + f.getName());
 		}
 	}
 
 	public String getPath(String key) {
 		return paths.get(key);
 	}
-	
-	
 }

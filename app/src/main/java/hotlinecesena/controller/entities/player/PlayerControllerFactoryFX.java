@@ -12,15 +12,18 @@ import java.util.Map;
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
 import hotlinecesena.model.camera.CameraImpl;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
-import hotlinecesena.model.entities.actors.player.PlayerFactoryImpl;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -30,7 +33,7 @@ import javafx.scene.layout.Pane;
 public final class PlayerControllerFactoryFX implements PlayerControllerFactory {
 
     // TODO: All temporary, will replace with values given by DAL
-    private static final String SPRITE_NAME = "index.png";
+    private static final Image SPRITE = new ProxyImage().getImage(SceneType.GAME, ImageType.PLAYER);
     private final Scene scene;
     private final Pane pane;
     // TODO: Read bindings from file?
@@ -50,8 +53,8 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
 
     @Override
     public PlayerController createPlayerController() {
-        final Player playerModel = new PlayerFactoryImpl().createPlayer();
-        final Sprite view = new SpriteImpl(new Image(SPRITE_NAME), pane);
+        final Player playerModel = JSONDataAccessLayer.getInstance().getPlayer().getPly();
+        final Sprite view = new SpriteImpl(SPRITE, pane);
         final InputListener listener = new InputListenerFX(scene);
         final InputInterpreter interpreter = new InputInterpreterImpl(
                 bindings);

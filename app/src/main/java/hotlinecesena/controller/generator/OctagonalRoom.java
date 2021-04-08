@@ -24,7 +24,7 @@ public class OctagonalRoom extends AbstractRoom {
 		if (edge % 2 == 0) {
 			edge -= 1;
 		}
-		this.width = 3 * edge;
+		this.width = (3 * (edge-1)) + 1;
 		this.edge = edge;
 		this.nDoor = nDoor;
 		generate();
@@ -32,8 +32,8 @@ public class OctagonalRoom extends AbstractRoom {
 	
 	@Override
 	public void generate() {
-		
 		final int edge2 = (edge-1)/2;
+		final int width2 = (width-1)/2;
 		final Random rnd = new Random();
 		final List<Pair<Integer, Integer>> walls = new ArrayList<>();
 		final List<Pair<Integer, Integer>> dirs = new ArrayList<>();
@@ -79,6 +79,15 @@ public class OctagonalRoom extends AbstractRoom {
 					) {
 				this.map.put(door, SymbolsType.DOOR);
 				i++;
+			}
+		}
+		
+		for (int i = -width2 + 1; i <= width2 - 1; i++) {
+			for (int j = -width2 + 1; j <= width2 - 1; j++) {
+
+				if (Utilities.distance(new Pair<>(i, j), center) < (((double) this.width - 2) / 2.0d)) {
+					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);	
+				}
 			}
 		}
 	}

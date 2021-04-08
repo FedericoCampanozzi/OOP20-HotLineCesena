@@ -63,8 +63,12 @@ public final class PlayerImpl extends AbstractActor implements Player {
                 .stream()
                 .anyMatch(e -> MathUtils.isCollision(
                         newPos, this.getWidth(), this.getHeight(),
-                        e.getPosition(), e.getWidth(), e.getHeight()));
-        //|| this.getGameMaster().getPhysicsCollision().getObstacles().stream...
+                        e.getPosition(), e.getWidth(), e.getHeight()))
+                || this.getGameMaster().getPhysics().getObstacles()
+                .stream()
+                .anyMatch(o -> MathUtils.isCollision(
+                        newPos, this.getWidth(), this.getHeight(),
+                        new Point2D(o.getMinX() + o.getWidth() / 2, o.getMinY() + o.getHeight() / 2), o.getWidth(), o.getHeight()));
     }
 
     @Override

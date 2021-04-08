@@ -37,7 +37,7 @@ public final class BaseRoomsGeneratorFactory {
 		final int nBaseRooms = Utilities.RandomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
 		final List<Room> baseRooms = new ArrayList<>();
 		for (int i = 0; i < nBaseRooms; i++) {
-			baseRooms.add(new RectangolarRoom(
+			baseRooms.add(new RectangularRoom(
 					Utilities.RandomBetween(rnd, wMin, wMax), 
 					Utilities.RandomBetween(rnd, hMin, hMax),
 					Utilities.RandomBetween(rnd, dMin, dMax)

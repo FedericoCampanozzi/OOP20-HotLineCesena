@@ -15,11 +15,11 @@ import hotlinecesena.utilities.Utilities;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
-public class DataJSONEnemy extends AbstractData {
+public class DataEnemy extends AbstractData {
 	
 	private final List<Enemy> enemies = new ArrayList<>();
 	
-	public DataJSONEnemy(DataWorldMap world, DataJSONSettings settings) {
+	public DataEnemy(DataWorldMap world, DataJSONSettings settings) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		EnemyFactoryImpl eFact = new EnemyFactoryImpl();

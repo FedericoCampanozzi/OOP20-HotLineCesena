@@ -18,9 +18,24 @@ public class JSONDataAccessLayer {
 	private DataJSONRanking ranking;
 	private DataJSONLanguages languages;
 	private DataWorldMap world;
-	private DataJSONPlayer player;
-	private DataJSONEnemy enemy;
+	private DataPlayer player;
+	private DataEnemy enemy;
 	private DataGUIPath guiPath;
+	private DataPhysicsCollision physics;
+	private DataItems items;
+	private DataBullet bullets;
+	
+	public DataBullet getBullets() {
+		return bullets;
+	}
+	
+	public DataItems getDataItems() {
+		return items;
+	}
+	
+	public DataPhysicsCollision getPhysics() {
+		return physics;
+	}
 	
 	public DataJSONSettings getSettings() {
 		return settings;
@@ -38,11 +53,11 @@ public class JSONDataAccessLayer {
 		return world;
 	}
 
-	public DataJSONPlayer getPlayer() {
+	public DataPlayer getPlayer() {
 		return player;
 	}
 
-	public DataJSONEnemy getEnemy() {
+	public DataEnemy getEnemy() {
 		return enemy;
 	}
 
@@ -54,12 +69,16 @@ public class JSONDataAccessLayer {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			this.settings = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "settings.json"), DataJSONSettings.class);
+			SEED = settings.getNiceseeds().get(new Random().nextInt(settings.getNiceseeds().size()));
 			this.ranking = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "ranking.json"), DataJSONRanking.class);
 			this.languages = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "languages.json"), DataJSONLanguages.class);
 			this.world = new DataWorldMap();
-			this.player = new DataJSONPlayer(this.world, this.settings);
 			this.guiPath = new DataGUIPath();
-			this.enemy = new DataJSONEnemy(this.world, this.settings);
+			this.player = new DataPlayer(this.world, this.settings);
+			this.enemy = new DataEnemy(this.world, this.settings);
+			this.items = new DataItems(this.world);
+			this.bullets = new DataBullet();
+			this.physics = new DataPhysicsCollision(this.world, this.settings);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,10 +91,7 @@ public class JSONDataAccessLayer {
 		return singleton;
 	}
 	
-	public static void generateSeed() {
-		if(SEED != 0)
-		{
-			SEED = new Random().nextLong();
-		}
+	public static void generateDebugSeed() {
+		SEED = new Random().nextLong();
 	}
 }

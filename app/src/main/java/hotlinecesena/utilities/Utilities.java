@@ -8,6 +8,10 @@ import javafx.util.Pair;
 
 public class Utilities {
 	
+	public static double distance(Pair<Integer,Integer> p1, Pair<Integer, Integer> p2) {
+		return Math.sqrt((p2.getKey() - p1.getKey()) * (p2.getKey() - p1.getKey()) + (p2.getValue() - p1.getValue()) * (p2.getValue() - p1.getValue()));
+	}
+	
 	public static Pair<Integer,Integer> sumPair(Pair<Integer,Integer> p1, Pair<Integer, Integer> p2) {
 		return new Pair<>(p1.getKey() + p2.getKey(), p1.getValue() + p2.getValue());
 	}
