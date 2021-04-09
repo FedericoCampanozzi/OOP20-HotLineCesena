@@ -1,7 +1,5 @@
 package hotlinecesena.view.entities;
 
-import java.util.Objects;
-
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -16,7 +14,7 @@ import javafx.scene.transform.Translate;
  */
 public final class SpriteImpl implements Sprite {
 
-    private final Group imageGroup;
+    private final ImageView imageGroup;
     private final Rotate rotate;
     private final Translate trans;
 
@@ -28,13 +26,13 @@ public final class SpriteImpl implements Sprite {
      * @throws IllegalArgumentException if the given group does not contain
      * exactly two {@code ImageView}s.
      */
-    public SpriteImpl(final Group group) {
-        if (group.getChildren().size() != 2) {
-            throw new IllegalArgumentException();
-        }
-        imageGroup = Objects.requireNonNull(group);
-        final ImageView bottomImage = (ImageView) imageGroup.getChildren().get(0);
-        bottomImage.setImage(null); //Necessary to avoid the "floating raft" effect
+    public SpriteImpl(final ImageView view) {
+        //        if (group.getChildren().size() != 2) {
+        //            throw new IllegalArgumentException();
+        //        }
+        //final ImageView bottomImage = (ImageView) imageGroup.getChildren().get(0);
+        //bottomImage.setImage(null); //Necessary to avoid the "floating raft" effect
+        imageGroup = view;
         rotate = new Rotate();
         trans = new Translate();
         imageGroup.getTransforms().addAll(rotate, trans);
@@ -45,12 +43,10 @@ public final class SpriteImpl implements Sprite {
      */
     @Override
     public void updatePosition(final Point2D entityPos) {
-        Objects.requireNonNull(entityPos);
-        final ImageView topImage = (ImageView) imageGroup.getChildren().get(1);
-        rotate.setPivotX(entityPos.getX() + topImage.getFitWidth() / 2);
-        rotate.setPivotY(entityPos.getY() + topImage.getFitHeight() / 2);
-        trans.setX(entityPos.getX());
-        trans.setY(entityPos.getY());
+        rotate.setPivotX(entityPos.getX() / 100 + imageGroup.getFitWidth() / 2);
+        rotate.setPivotY(entityPos.getY() / 100 + imageGroup.getFitHeight() / 2);
+        trans.setX(entityPos.getX() / 100);
+        trans.setY(entityPos.getY() / 100);
     }
 
     @Override
@@ -63,8 +59,6 @@ public final class SpriteImpl implements Sprite {
      */
     @Override
     public void updateImage(final Image image) {
-        final ImageView topImage = (ImageView) imageGroup.getChildren().get(1);
-        topImage.setImage(Objects.requireNonNull(image));
     }
 
     @Override
