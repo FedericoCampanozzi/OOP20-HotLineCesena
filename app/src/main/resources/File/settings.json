@@ -11,7 +11,7 @@
   "monitorY" : 600,
   "isFullScreen" : true,
   "volume" : 25,
-  "tileSize" : 5,
+  "tileSize" : 100,
   "isMusicActive" : true,
   "isEffectActive" : true
 }
