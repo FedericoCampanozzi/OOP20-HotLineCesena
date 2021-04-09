@@ -1,18 +1,18 @@
 package hotlinecesena.controller;
 
-import static java.util.stream.Collectors.toSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.Map.Entry;
+import static java.util.stream.Collectors.toSet;
 
 import javafx.util.Pair;
 
 public class MissionController {
 	
 	private final GameLoopController glc = new GameLoopController();
-	Map<String, Pair<Supplier<Boolean>,Boolean>> quests = new HashMap<>();
+	private final Map<String, Pair<Supplier<Boolean>,Boolean>> quests = new HashMap<>();
 	
 	public MissionController() {
 		glc.addMethodToUpdate((d) -> this.update(d));
@@ -33,6 +33,12 @@ public class MissionController {
 	
 	public void completeQuest(String name) {
 		this.quests.put(name, new Pair<>(this.quests.get(name).getKey(),true));
+	}
+	
+	public Set<Pair<String,Boolean>> getMissions(){
+		return quests.entrySet().stream()
+				.map(itm -> new Pair<>(itm.getKey(), itm.getValue().getValue()))
+				.collect(toSet());
 	}
 	
 	public Set<String> missionPending(){

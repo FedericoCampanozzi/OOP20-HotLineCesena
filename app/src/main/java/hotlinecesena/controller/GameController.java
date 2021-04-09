@@ -1,35 +1,39 @@
 package hotlinecesena.controller;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 
 public class GameController extends Application {
+
+	private final MissionController mc = new MissionController();
 	
-	private static final int SCENE_WIDTH = 600;
-    private static final int SCENE_HEIGHT = 400;
-    
+	public MissionController getMissionController() {
+		return this.mc;
+	}
+	
 	public static void main(String[] args) throws IOException {
-		JSONDataAccessLayer.generateSeed();
 		JSONDataAccessLayer.getInstance();
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("StartMenuView.fxml")));
+	public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("LoadingView.fxml")));
         primaryStage.setTitle("HotLine Cesena");
-        primaryStage.setScene(new Scene(root, SCENE_WIDTH, SCENE_HEIGHT));
+        primaryStage.setScene(new Scene(root, JSONDataAccessLayer.getInstance().getSettings().getMonitorX(), 
+        		JSONDataAccessLayer.getInstance().getSettings().getMonitorY()));
         primaryStage.setResizable(false);
         primaryStage.show();
+        generateMissions();
 	}
 	
-	public void changeScene(String fxml) throws IOException{
-		Window owner = Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
-		owner.getScene().setRoot(FXMLLoader.load(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath(fxml))));
+	private void generateMissions() {
+        mc.addQuest("uccidi tutti i nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size() == 
+        		JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemy());
 	}
 }
