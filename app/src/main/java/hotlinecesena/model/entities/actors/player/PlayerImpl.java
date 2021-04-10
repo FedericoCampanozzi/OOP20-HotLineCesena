@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
@@ -56,7 +57,9 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies())
+            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies().stream()
+                    .filter(e -> e.getActorStatus() != ActorStatus.DEAD)
+                    .collect(Collectors.toUnmodifiableSet()))
                     && !this.hasCollided(newPos, this.getGameMaster().getPhysics().getObstacles())) {
                 this.setPosition(newPos);
                 this.publish(new MovementEvent<>(this, newPos));
