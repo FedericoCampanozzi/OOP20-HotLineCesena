@@ -3,10 +3,9 @@ package hotlinecesena.controller;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import hotlinecesena.controller.menu.LoadingController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.utilities.SceneSwapper;
 
 public class GameController extends Application {
 
@@ -23,10 +22,10 @@ public class GameController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("LoadingView.fxml")));
+		new SceneSwapper().swapScene(new LoadingController(primaryStage), "LoadingView.fxml", primaryStage);
+		primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+		primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
         primaryStage.setTitle("HotLine Cesena");
-        primaryStage.setScene(new Scene(root, JSONDataAccessLayer.getInstance().getSettings().getMonitorX(), 
-        		JSONDataAccessLayer.getInstance().getSettings().getMonitorY()));
         primaryStage.setResizable(false);
         primaryStage.show();
         generateMissions();
