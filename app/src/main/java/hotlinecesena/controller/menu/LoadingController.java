@@ -6,18 +6,23 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Stage;
 
 public class LoadingController implements Initializable{
 	
 	@FXML
 	ProgressBar progressBar;
 	
+	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private static final double EPSILON = 0.0000005;
-	SceneSwapper sceneSwapper = new SceneSwapper();
+	private Stage stage;
+	
+	public LoadingController(Stage stage) {
+		this.stage = stage;
+	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -45,11 +50,12 @@ public class LoadingController implements Initializable{
             if (progressBar.getProgress() >= 1 - EPSILON) {
                 progressBar.setStyle("-fx-accent: forestgreen;");
                 try {
-					sceneSwapper.changeScene("StartMenuView.fxml", new ActionEvent(progressBar, null));
+					sceneSwapper.swapScene(new StartMenuController(stage), "StartMenuView.fxml", stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+                
             }
         });
         

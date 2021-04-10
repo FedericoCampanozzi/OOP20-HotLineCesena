@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
@@ -17,7 +18,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import javafx.util.Pair;
 
 public class OptionsController implements Initializable {
@@ -45,13 +45,18 @@ public class OptionsController implements Initializable {
 	@FXML
 	private Button backButton;
 	
-	SceneSwapper sceneSwapper = new SceneSwapper();
+	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private Map<Pair<Integer, Integer>, Label> resolutions = new LinkedHashMap<>();
-	private int numStageOpen;
+	private Optional<Stage> worldStage;
+	private Stage optionsStage;
+	
+	public OptionsController(Stage optionsStage, Optional<Stage> worldStage) {
+		this.optionsStage = optionsStage;
+		this.worldStage = worldStage;
+	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		numStageOpen = Stage.getWindows().stream().filter(Window::isShowing).toArray().length;
 		
 		// Initialize audio settings
 		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
@@ -74,13 +79,12 @@ public class OptionsController implements Initializable {
 		
 	}	
 	
-	
 	public void backClick(final ActionEvent event) throws IOException {
-		if (numStageOpen == 2) {
-			sceneSwapper.changeScene("PauseView.fxml", event);
+		if (worldStage.isPresent()) {
+			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage), "PauseView.fxml", optionsStage);
 		}
 		else {
-			sceneSwapper.changeScene("StartMenuView.fxml", event);
+			sceneSwapper.swapScene(new StartMenuController(optionsStage), "StartMenuView.fxml", optionsStage);
 		}
 	}
 	

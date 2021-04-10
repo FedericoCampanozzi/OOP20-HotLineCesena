@@ -3,7 +3,6 @@ package hotlinecesena.controller.menu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -24,8 +23,13 @@ public class StartMenuController implements Initializable{
 	@FXML
 	private Button exitButton;
 	
-	private static SceneSwapper sceneSwapper = new SceneSwapper();
-	AudioController audioController = new AudioController(Optional.empty());
+	private SceneSwapper sceneSwapper = new SceneSwapper();
+	private AudioController audioController = new AudioController(Optional.empty());
+	private Stage stage;
+	
+	public StartMenuController(Stage stage) {
+		this.stage = stage;
+	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -33,12 +37,11 @@ public class StartMenuController implements Initializable{
 	}
 	
 	public void newGameClick(final ActionEvent event) throws IOException {
-		final Stage primaryStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        new WorldController(primaryStage);
+        new WorldController(stage);
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.changeScene("OptionsView.fxml", event);
+		sceneSwapper.swapScene(new OptionsController(stage, Optional.empty()), "OptionsView.fxml", stage);
 	}
 	
 	public void exitClick(final ActionEvent event) throws IOException {

@@ -1,15 +1,19 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.Optional;
+import java.util.ResourceBundle;
+
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
-public class PauseController{
+public class PauseController implements Initializable{
 	@FXML
 	Button resumeButton;
 	@FXML
@@ -18,8 +22,17 @@ public class PauseController{
 	Button quitButton;
 	
 	SceneSwapper sceneSwapper = new SceneSwapper();
-	private Stage worldStage;
+	private Optional<Stage> worldStage;
 	private Stage pauseStage;
+	
+	public PauseController(Stage pauseStage, Optional<Stage> worldStage) {
+		this.pauseStage = pauseStage;
+		this.worldStage = worldStage;
+	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+	}
 	
 	public void resumeClick(final ActionEvent event) throws IOException {
 		pauseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();;
@@ -27,12 +40,13 @@ public class PauseController{
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.changeScene("OptionsView.fxml", event);
+		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage), "OptionsView.fxml", pauseStage);
 	}
 	
 	public void quitClick(final ActionEvent event) throws IOException {
-		worldStage = (Stage) Stage.getWindows().stream().filter(Window::isShowing).findFirst().orElse(null);
-		worldStage.close();
-		sceneSwapper.changeScene("StartMenuView.fxml", event);
+		if (worldStage.isPresent()) {
+			worldStage.get().close();
+		}
+		sceneSwapper.swapScene(new StartMenuController(pauseStage), "StartMenuView.fxml", pauseStage);
 	}
 }
