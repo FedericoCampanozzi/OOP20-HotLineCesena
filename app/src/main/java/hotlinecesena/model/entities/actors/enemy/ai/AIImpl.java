@@ -137,10 +137,7 @@ public class AIImpl implements AI{
     private boolean inLineOfSight(final Point2D target) {
         double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
         double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
-        
-        System.out.println("ENEMY: " + this.rotation);
-        System.out.println("ENEMY TO PLAYER: " + this.rotationToTarget(target));
-        
+
         if(negative45DegreesAngle <= -LOOK_WEST) {
             return -this.rotationToTarget(target) >= negative45DegreesAngle
                     && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
