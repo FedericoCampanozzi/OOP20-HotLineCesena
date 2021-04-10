@@ -1,24 +1,13 @@
 package hotlinecesena.model.entities.items;
 
-import java.util.function.Consumer;
-
-import hotlinecesena.model.entities.actors.Actor;
-
 public enum WeaponType {
 
-    SHOTGUN(actor -> {
-        Projectile shotgunProjectile = new Projectile(actor.getPosition(), actor.getAngle(), 1, 1, 50, 40);
-    }, 25, 7, AmmunitionType.SHOTGUN_AMMO, 1, 7, 8, 5, 0.5),
+    SHOTGUN(50, 6, AmmunitionType.SHOTGUN_AMMO, 1, 7, 8, 5, 1000.0),
 
-    RIFLE(actor -> {
-    	Projectile rifleProjectile = new Projectile(actor.getPosition(), actor.getAngle(), 1, 1, 50, 10);
-    }, 20, 5, AmmunitionType.RIFLE_AMMO, 1, 30, 5, 4, 0.1),
+    RIFLE(25, 8, AmmunitionType.RIFLE_AMMO, 1, 30, 5, 4, 100.0),
 
-    PISTOL(actor -> {
-    	Projectile pistolProjectile = new Projectile(actor.getPosition(), actor.getAngle(), 1, 1, 50, 30);
-    }, 5, 5, AmmunitionType.PISTOL_AMMO, 1, 10, 3, 3, 0.5);
+    PISTOL(15, 6, AmmunitionType.PISTOL_AMMO, 1, 10, 3, 3, 500.0);
 
-    private Consumer<Actor> attackFunc;
     private double damage;
     private double projectileSpeed;
     private AmmunitionType compatibleAmmo;
@@ -28,10 +17,9 @@ public enum WeaponType {
     private double reloadTime;
     private double rateOfFire;
 
-    WeaponType(final Consumer<Actor> attackFunc, final double damage, final double projectileSpeed,
+    WeaponType(final double damage, final double projectileSpeed,
             final AmmunitionType compatibleAmmo, final int maxStacks, final int magazineSize,
             final double noise, final double reloadTime, final double rateOfFire) {
-        this.attackFunc = attackFunc;
         this.damage = damage;
         this.projectileSpeed = projectileSpeed;
         this.compatibleAmmo = compatibleAmmo;
@@ -40,10 +28,6 @@ public enum WeaponType {
         this.noise = noise;
         this.reloadTime = reloadTime;
         this.rateOfFire = rateOfFire;
-    }
-
-    public Consumer<Actor> usage() {
-        return attackFunc;
     }
 
     public double getDamage() {

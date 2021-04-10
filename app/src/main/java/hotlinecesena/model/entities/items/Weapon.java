@@ -13,6 +13,8 @@ public interface Weapon extends Item {
     int getMagazineSize();
 
     int getCurrentAmmo();
-    
+
     WeaponType getWeaponType();
+
+    double getRateOfFire();
 }

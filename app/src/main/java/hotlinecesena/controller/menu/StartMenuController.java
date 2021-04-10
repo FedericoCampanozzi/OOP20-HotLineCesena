@@ -24,7 +24,7 @@ public class StartMenuController implements Initializable{
 	private Button exitButton;
 	
 	private SceneSwapper sceneSwapper = new SceneSwapper();
-	private AudioController audioController = new AudioController(Optional.empty());
+	private AudioController audioController = new AudioController();
 	private Stage stage;
 	
 	public StartMenuController(Stage stage) {
