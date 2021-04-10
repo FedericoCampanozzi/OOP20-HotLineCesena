@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.google.common.eventbus.EventBus;
 
+import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.events.Event;
 import hotlinecesena.model.events.Subscriber;
@@ -65,17 +66,17 @@ public abstract class AbstractEntity implements Entity {
      * Convenience method to be used internally.
      * @return the instance of the {@link JSONDataAccessLayer}.
      */
-    protected final JSONDataAccessLayer getGameMaster() {
+    protected final DataAccessLayer getGameMaster() {
         return JSONDataAccessLayer.getInstance();
     }
 
     /**
-     * Posts an {@link Event} on this entity's {@link EventBus}.
+     * Publishes an {@link Event} on this entity's {@link EventBus}.
      * <br>
      * Events may not be posted by external objects.
      *
-     * @param event
-     * @throws NullPointerException if the supplied event is null.
+     * @param event the event to be published
+     * @throws NullPointerException if the given event is null.
      */
     protected final void publish(final Event<? extends Entity> event) {
         bus.post(Objects.requireNonNull(event));
