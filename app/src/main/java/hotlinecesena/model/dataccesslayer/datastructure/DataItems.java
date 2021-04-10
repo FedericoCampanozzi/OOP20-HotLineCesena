@@ -18,17 +18,13 @@ public class DataItems extends AbstractData {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		items = world.getWorldMap().entrySet().stream()
-				.filter(itm -> isItem(itm.getValue()))
+				.filter(itm -> itm.getValue().equals(SymbolsType.ITEM))
 				.collect(toMap(
 						itm -> Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize()), 
 						itm -> ItemsType.values()[rnd.nextInt(ItemsType.values().length)] 
 				));
 	}
 	
-	private boolean isItem(SymbolsType type) {
-		return type.equals(SymbolsType.AMMO) || type.equals(SymbolsType.MEDIKIT); 
-	}
-
 	public Map<Point2D, ItemsType> getItems() {
 		return items;
 	}

@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.google.common.eventbus.EventBus;
 
+import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.events.Event;
 import hotlinecesena.model.events.Subscriber;
@@ -65,7 +66,7 @@ public abstract class AbstractEntity implements Entity {
      * Convenience method to be used internally.
      * @return the instance of the {@link JSONDataAccessLayer}.
      */
-    protected final JSONDataAccessLayer getGameMaster() {
+    protected final DataAccessLayer getGameMaster() {
         return JSONDataAccessLayer.getInstance();
     }
 

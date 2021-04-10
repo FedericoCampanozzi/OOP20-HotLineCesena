@@ -24,8 +24,12 @@ public class MapGeneratorTest {
 	
 	@Test
 	public void visualTestGenerator() {
+		File outFolder = new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "GeneratedMap");
+		if (!outFolder.exists()){
+			outFolder.mkdirs();
+		}
 		// clear directory
-		for (File f : new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "GeneratedMap").listFiles()) {
+		for (File f : new File(outFolder.getAbsolutePath()).listFiles()) {
 			f.delete();
 		}
 		
@@ -46,8 +50,7 @@ public class MapGeneratorTest {
 					.generateRooms(10, 20)
 					.generatePlayer()
 					.generateEnemy(1, 4)
-					.generateAmmo(0, 2)
-					.generateMedikit(0, 2)
+					.generateItem(2, 5)
 					.generateObstacoles(3, 8)
 					.generateWeapons(0, 2)
 					.finishes()
@@ -65,9 +68,8 @@ public class MapGeneratorTest {
 					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(7, 13, 7, 13, 1, 5, 15, 25))
 					.generateRooms(10, 20)
 					.generatePlayer()
-					.generateAmmo(0, 2)
 					.generateEnemy(1, 6)
-					.generateMedikit(1, 3)
+					.generateItem(2, 5)
 					.generateObstacoles(3, 8)
 					.finishes()
 					.build();
@@ -84,9 +86,8 @@ public class MapGeneratorTest {
 					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateOctagonalRoomList(3, 7, 4, 8, 15, 25))
 					.generateRooms(10, 20)
 					.generatePlayer()
-					.generateAmmo(0, 2)
 					.generateEnemy(1, 6)
-					.generateMedikit(1, 3)
+					.generateItem(2, 5)
 					.generateObstacoles(3, 8)
 					.finishes()
 					.build();
