@@ -1,7 +1,5 @@
 package hotlinecesena.controller;
 
-import java.util.Optional;
-
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
@@ -24,22 +22,24 @@ public class AudioController {
     private final static int BACKGROUND_VOLUME = 10;
 
     private final SoundLoader loader;
-    private final Optional<Entity> caller;
     private AudioClip clip;
     private MediaPlayer audio;
     private double volume;
+    private boolean playEffects;
+    private boolean playMusic;
 
     /**
      * Class constructor
      * @param caller the entity that create a new instance
      * @see Entity
      */
-    public AudioController(final Optional<Entity> caller) {
+    public AudioController() {
         this.loader = new ProxyAudio();
-        this.caller = caller;
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
+        this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
+        this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
-        this.volumeSettings();
+        this.volume = (this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT;
     }
 
     /**
@@ -47,7 +47,7 @@ public class AudioController {
      * already playing in the background
      * @param value the new volume setting
      */
-    private void updateVolume(final double value) {
+    private void updateMusicVolume(final double value) {
         if(this.audio != null) {
             this.audio.setVolume(value);
         }
@@ -58,24 +58,25 @@ public class AudioController {
      * {@code Entity} that created this instance
      * @see Entity
      */
-    private void volumeSettings() {
-        this.volume = (this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT;
-        this.volume = this.caller.isPresent() && this.caller.get() instanceof Enemy ?
+    private double volumeSettings(final Entity caller) {
+        return caller instanceof Enemy ?
                 this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
     /**
-     * Sets the new volume for this instance
+     * Updates the volume and checks if music or sounds
+     * have been disabled for this instance
      * of the {@code AudioController} and
      * updates the volume if a {@code MediaPlayer}
      * track is already playing
      * @param value the new volume setting
      */
-    public void setVolume(final double value) {
-        this.volume = value;
-        this.volumeSettings();
-
-        this.updateVolume(this.volume);
+    public void updateSettings() {
+        this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
+        this.playEffects = true;
+        this.playMusic = true;
+        
+        this.updateMusicVolume(this.volume);
     }
 
     /**
@@ -84,9 +85,13 @@ public class AudioController {
      * @param type the path of the file that wants to
      * be reproduced
      */
-    public void playAudioClip(final AudioType type) {
-        this.clip = this.loader.getAudioClip(type);
-        this.clip.play(this.volume);
+    public void playAudioClip(final AudioType type, final Entity caller) {
+        if (this.playEffects) {
+            this.clip = this.loader.getAudioClip(type);
+            if (!this.clip.isPlaying()) {
+                this.clip.play(this.volumeSettings(caller));
+            }
+        }
     }
 
     /**
@@ -94,9 +99,10 @@ public class AudioController {
      * by its relative path
      */
     public void playMusic() {
-        this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
-        System.out.println(this.volume);
-        this.audio.setVolume(this.volume);
-        this.audio.setAutoPlay(true);
+        if (this.playMusic) {
+            this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
+            this.audio.setVolume(this.volume  / BACKGROUND_VOLUME);
+            this.audio.setAutoPlay(true);
+        }
     }
 }
