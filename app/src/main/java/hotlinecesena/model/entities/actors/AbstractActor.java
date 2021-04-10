@@ -7,6 +7,7 @@ import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.ReloadEvent;
+import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -15,7 +16,7 @@ import javafx.geometry.Point2D;
  * Base class to extend when creating new Actor specializations.
  *
  */
-public abstract class AbstractActor extends AbstractMovableEntity implements Actor {
+public abstract class AbstractActor extends AbstractMovableEntity implements Actor, Subscriber {
 
     private final double maxHealth;
     private double currentHealth;
@@ -52,11 +53,12 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     @Override
     public final void attack() {
         if (this.isAlive()) {
-            inventory.getWeapon().ifPresent(weapon -> {
-                if (!inventory.isReloading() && weapon.getCurrentAmmo() > 0) {
-                    weapon.usage().accept(this);
+            inventory.getWeapon().ifPresent(w -> {
+                final int previousAmmo = w.getCurrentAmmo();
+                w.usage().accept(this);
+                if (w.getCurrentAmmo() < previousAmmo) {
                     status = ActorStatus.ATTACKING;
-                    this.publish(new AttackPerformedEvent<>(this, weapon.getWeaponType()));
+                    this.publish(new AttackPerformedEvent<>(this, w.getWeaponType()));
                 }
             });
         }
@@ -139,5 +141,15 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      */
     protected final void setActorStatus(final ActorStatus s) {
         status = s;
+    }
+
+    /**
+     * @implSpec
+     * Updates the inventory and sets the {@link ActorStatus} to {@code IDLE}.
+     */
+    @Override
+    public final void update(final double timeElapsed) {
+        this.setActorStatus(ActorStatus.IDLE);
+        this.getInventory().update(timeElapsed);
     }
 }

@@ -62,4 +62,12 @@ public interface Actor extends MovableEntity {
      * @return this actor's current status.
      */
     ActorStatus getActorStatus();
+
+    /**
+     * Updates, if required by specific implementations, certain Actor
+     * functionalities that are based on time.
+     *
+     * @param timeElapsed
+     */
+    void update(double timeElapsed);
 }
