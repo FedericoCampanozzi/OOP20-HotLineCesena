@@ -4,5 +4,5 @@ import hotlinecesena.view.entities.Sprite;
 
 public interface PlayerControllerFactory {
 
-    PlayerController createPlayerController(final Sprite sprite);
+    PlayerController createPlayerController(Sprite sprite);
 }

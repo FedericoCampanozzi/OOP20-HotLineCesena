@@ -47,8 +47,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     public PlayerController createPlayerController(final Sprite sprite) {
         final Player playerModel = JSONDataAccessLayer.getInstance().getPlayer().getPly();
         final InputListener listener = new InputListenerFX(scene);
-        final InputInterpreter interpreter = new InputInterpreterImpl(
-                bindings);
+        final InputInterpreter interpreter = new InputInterpreterImpl(bindings);
         final CameraView camera = new CameraViewImpl(pane);
         return new PlayerControllerFX(playerModel, sprite, interpreter, camera, listener);
     }
