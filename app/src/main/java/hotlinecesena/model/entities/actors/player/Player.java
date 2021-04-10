@@ -19,12 +19,4 @@ public interface Player extends Actor {
      * @return the radius of the noise.
      */
     double getNoiseRadius();
-
-    /**
-     *
-     * Updates certain player functionalities that are based on time.
-     *
-     * @param timeElapsed
-     */
-    void update(double timeElapsed);
 }
