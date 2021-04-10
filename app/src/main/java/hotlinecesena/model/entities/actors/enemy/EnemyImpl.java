@@ -18,8 +18,8 @@ public class EnemyImpl extends AbstractActor implements Enemy {
 
     private static final int ENEMY_MAX_HEALTH = 1;
     private static final double ENEMY_INITIAL_ANGLE = 0;
-    private static final double ENEMY_NORMAL_SPEED = 0.25;
-    private static final double ENEMY_PURSUIT_SPEED = 0.50;
+    private static final double ENEMY_NORMAL_SPEED = 1;
+    private static final double ENEMY_PURSUIT_SPEED = 1;
     private static final double ENEMY_WIDTH = 64;
     private static final double ENEMY_HEIGHT = 64;
 
@@ -60,7 +60,9 @@ public class EnemyImpl extends AbstractActor implements Enemy {
                     ENEMY_NORMAL_SPEED : ENEMY_PURSUIT_SPEED));
             this.setPosition(next);
             this.enemyAI.setEnemyPos(next);
-            this.publish(new MovementEvent<>(this, next));
+            if(!current.equals(next)) {
+                this.publish(new MovementEvent<>(this, next));
+            }
         }
     }
 
