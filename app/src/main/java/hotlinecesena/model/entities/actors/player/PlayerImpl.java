@@ -1,8 +1,10 @@
 package hotlinecesena.model.entities.actors.player;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 
+import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.events.MovementEvent;
@@ -50,7 +52,8 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-            if (!this.hasCollided(newPos)) {
+            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies())
+                    && !this.hasCollided(newPos, this.getGameMaster().getPhysics().getObstacles())) {
                 this.setPosition(newPos);
                 this.publish(new MovementEvent<>(this, newPos));
                 this.setActorStatus(ActorStatus.MOVING);
@@ -58,17 +61,11 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
-    private boolean hasCollided(final Point2D newPos) {
-        return this.getGameMaster().getEnemy().getEnemies()
-                .stream()
+    private boolean hasCollided(final Point2D newPos, final Collection<? extends Entity> entities) {
+        return entities.stream()
                 .anyMatch(e -> MathUtils.isCollision(
                         newPos, this.getWidth(), this.getHeight(),
-                        e.getPosition(), e.getWidth(), e.getHeight()))
-                || this.getGameMaster().getPhysics().getObstacles()
-                .stream()
-                .anyMatch(o -> MathUtils.isCollision(
-                        newPos, this.getWidth(), this.getHeight(),
-                        new Point2D(o.getMinX(), o.getMinY()), o.getWidth(), o.getHeight()));
+                        e.getPosition(), e.getWidth(), e.getHeight()));
     }
 
     @Override
@@ -84,15 +81,5 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (!this.getInventory().isReloading()) {
             //this.publish(new PickUpEvent<Player, ItemsType>(this, ItemsType.MEDIKIT));
         }
-    }
-
-    /**
-     * @implSpec
-     * Updates the inventory and sets the {@link ActorStatus} to {@code IDLE}.
-     */
-    @Override
-    public void update(final double timeElapsed) {
-        this.setActorStatus(ActorStatus.IDLE);
-        this.getInventory().update(timeElapsed);
     }
 }
