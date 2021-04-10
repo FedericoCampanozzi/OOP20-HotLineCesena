@@ -96,12 +96,9 @@ public final class MathUtils {
      */
     public static boolean isCollision(final Point2D p1, final double w1, final double h1,
             final Point2D p2, final double w2, final double h2) {
-        // Compute center coordinates for each object
-        final Point2D center1 = p1.subtract(w1 * 0.5, h1 * 0.5);
-        final Point2D center2 = p2.subtract(w2 * 0.5, h2 * 0.5);
-        return center2.getX() + w2 >= center1.getX()
-                && center2.getY() + h2 >= center1.getY()
-                && center2.getX() <= center1.getX() + w1
-                && center2.getY() <= center1.getY() + h1;
+        return p2.getX() + w2 >= p1.getX()
+                && p2.getY() + h2 >= p1.getY()
+                && p2.getX() <= p1.getX() + w1
+                && p2.getY() <= p1.getY() + h1;
     }
 }
