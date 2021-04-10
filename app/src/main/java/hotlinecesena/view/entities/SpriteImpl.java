@@ -1,7 +1,8 @@
 package hotlinecesena.view.entities;
 
+import java.util.Objects;
+
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
@@ -14,28 +15,19 @@ import javafx.scene.transform.Translate;
  */
 public final class SpriteImpl implements Sprite {
 
-    private final ImageView imageGroup;
+    private final ImageView imageView;
     private final Rotate rotate;
     private final Translate trans;
 
     /**
-     * Instantiates a new {@code SpriteImpl} with a given {@link Group}
-     * which must contain two {@link ImageView}s.
-     * @param group the blend group.
-     * @throws NullPointerException if the given group is null.
-     * @throws IllegalArgumentException if the given group does not contain
-     * exactly two {@code ImageView}s.
+     * Instantiates a new {@code SpriteImpl} with a given {@link ImageView}.
+     * @param view the {@code ImageView} to be used.
      */
     public SpriteImpl(final ImageView view) {
-        //        if (group.getChildren().size() != 2) {
-        //            throw new IllegalArgumentException();
-        //        }
-        //final ImageView bottomImage = (ImageView) imageGroup.getChildren().get(0);
-        //bottomImage.setImage(null); //Necessary to avoid the "floating raft" effect
-        imageGroup = view;
+        imageView = view;
         rotate = new Rotate();
-        trans = new Translate();
-        imageGroup.getTransforms().addAll(rotate, trans);
+        trans = (Translate) view.getTransforms().get(0);
+        imageView.getTransforms().addAll(rotate, trans);
     }
 
     /**
@@ -43,10 +35,11 @@ public final class SpriteImpl implements Sprite {
      */
     @Override
     public void updatePosition(final Point2D entityPos) {
-        rotate.setPivotX(entityPos.getX() / 100 + imageGroup.getFitWidth() / 2);
-        rotate.setPivotY(entityPos.getY() / 100 + imageGroup.getFitHeight() / 2);
-        trans.setX(entityPos.getX() / 100);
-        trans.setY(entityPos.getY() / 100);
+        Objects.requireNonNull(entityPos);
+        rotate.setPivotX(entityPos.getX() / 2 + imageView.getFitWidth() / 2);
+        rotate.setPivotY(entityPos.getY() / 2 + imageView.getFitHeight() / 2);
+        trans.setX(entityPos.getX() / 2);
+        trans.setY(entityPos.getY() / 2);
     }
 
     @Override
@@ -54,20 +47,18 @@ public final class SpriteImpl implements Sprite {
         rotate.setAngle(entityAngle);
     }
 
-    /**
-     * @throws NullPointerException if the given image is null.
-     */
     @Override
     public void updateImage(final Image image) {
+        imageView.setImage(image);
     }
 
     @Override
     public Point2D getPositionRelativeToParent() {
-        return imageGroup.localToParent(Point2D.ZERO);
+        return imageView.localToParent(Point2D.ZERO);
     }
 
     @Override
     public Point2D getPositionRelativeToScene() {
-        return imageGroup.localToScene(Point2D.ZERO);
+        return imageView.localToScene(Point2D.ZERO);
     }
 }
