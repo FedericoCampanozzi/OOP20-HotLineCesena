@@ -1,7 +1,5 @@
 package hotlinecesena.controller;
 
-import java.util.Optional;
-
 import com.google.common.eventbus.Subscribe;
 import com.sun.jdi.event.Event;
 
@@ -35,10 +33,11 @@ public class AudioEventController implements Subscriber{
      * instantiated to listen to their {@code Event}
      */
     public AudioEventController() {
+        this.audio = new AudioController();
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
             e.register(this);
         });
-        JSONDataAccessLayer.getInstance().getPlayer().getPly().register(this);   
+        JSONDataAccessLayer.getInstance().getPlayer().getPly().register(this);
     }
 
     /**
@@ -48,8 +47,8 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onMoveEvent(final MovementEvent<Actor> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
-        this.audio.playAudioClip(AudioType.WALK);
+        //this.audio = new AudioController();
+        this.audio.playAudioClip(AudioType.WALK, e.getSource());
     }
 
     /**
@@ -59,8 +58,7 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onRotationEvent(final RotationEvent<Actor> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));  
-        this.audio.playAudioClip(AudioType.WALK);
+        // NOTHING
     }
 
     /**
@@ -70,8 +68,8 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onDeathEvent(final DeathEvent<Actor> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
-        this.audio.playAudioClip(AudioType.DEATH);
+        //this.audio = new AudioController(Optional.of(e.getSource()));
+        this.audio.playAudioClip(AudioType.DEATH, e.getSource());
         e.getSource().unregister(this);
     }
 
@@ -83,17 +81,17 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onAttackEvent(final AttackPerformedEvent<Actor> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
+        //this.audio = new AudioController(Optional.of(e.getSource()));
 
         switch(e.getItemType()) {
             case PISTOL:
-                this.audio.playAudioClip(AudioType.SHOOT_PISTOL);
+                this.audio.playAudioClip(AudioType.SHOOT_PISTOL, e.getSource());
                 break;
             case RIFLE:
-                this.audio.playAudioClip(AudioType.SHOOT);
+                this.audio.playAudioClip(AudioType.SHOOT, e.getSource());
                 break;
             case SHOTGUN:
-                this.audio.playAudioClip(AudioType.SHOOT_SHOTGUN);
+                this.audio.playAudioClip(AudioType.SHOOT_SHOTGUN, e.getSource());
                 break;
             default:
                 throw new IllegalArgumentException("No such weapon type");
@@ -108,17 +106,17 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onReloadEvent(final ReloadEvent<Actor> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
+        //this.audio = new AudioController(Optional.of(e.getSource()));
 
         switch(e.getItemType()) {
             case PISTOL:
-                this.audio.playAudioClip(AudioType.RELOAD_PISTOL);
+                this.audio.playAudioClip(AudioType.RELOAD_PISTOL, e.getSource());
                 break;
             case RIFLE:
-                this.audio.playAudioClip(AudioType.RELOAD);
+                this.audio.playAudioClip(AudioType.RELOAD, e.getSource());
                 break;
             case SHOTGUN:
-                this.audio.playAudioClip(AudioType.RELOAD_SHOTGUN);
+                this.audio.playAudioClip(AudioType.RELOAD_SHOTGUN, e.getSource());
                 break;
             default:
                 throw new IllegalArgumentException("No such weapon type");
@@ -132,8 +130,8 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onWeaponPickUpEvent(final PickUpEvent<Actor, WeaponType> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
-        this.audio.playAudioClip(AudioType.PICKUP_WEAPON);
+        //this.audio = new AudioController(Optional.of(e.getSource()));
+        this.audio.playAudioClip(AudioType.PICKUP_WEAPON, e.getSource());
     }
 
     /**
@@ -144,14 +142,14 @@ public class AudioEventController implements Subscriber{
      */
     @Subscribe
     private void onItemPickUpEvent(final PickUpEvent<Actor, ItemsType> e) {
-        this.audio = new AudioController(Optional.of(e.getSource()));
+        //this.audio = new AudioController(Optional.of(e.getSource()));
 
         switch(e.getItemType()) {
             case AMMO_BAG:
-                this.audio.playAudioClip(AudioType.PICKUP_ITEM);
+                this.audio.playAudioClip(AudioType.PICKUP_ITEM, e.getSource());
                 break;
             case MEDIKIT:
-                this.audio.playAudioClip(AudioType.PICKUP_MEDKIT);
+                this.audio.playAudioClip(AudioType.PICKUP_MEDKIT, e.getSource());
                 break;
             default:
                 throw new IllegalArgumentException("No such item");
