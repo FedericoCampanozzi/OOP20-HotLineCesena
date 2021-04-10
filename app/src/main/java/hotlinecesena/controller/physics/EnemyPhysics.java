@@ -42,13 +42,13 @@ public class EnemyPhysics {
                 .getEnemy()
                 .getEnemies()
                 .stream()
-                    .filter(e -> !e.getPosition().equals(current))
                     .map(e -> e.getPosition())
                     .collect(Collectors.toSet()));
         allowedMoveSet.remove(JSONDataAccessLayer.getInstance()
                 .getPlayer()
                 .getPly()
                     .getPosition());
+        allowedMoveSet.add(current);
 
         return allowedMoveSet.contains(sum(current, next));
     }
