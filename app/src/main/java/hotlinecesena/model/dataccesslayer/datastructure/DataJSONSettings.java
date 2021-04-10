@@ -13,25 +13,120 @@ import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 
 public class DataJSONSettings  extends AbstractData  {
-	
-	@JsonProperty("monitorX")
+
+    @JsonProperty("monitorX")
 	private int monitorX;
     @JsonProperty("monitorY")
-	private int monitorY;
+    private int monitorY;
     @JsonProperty("isFullScreen")
-	private boolean isFullScreen;
+    private boolean isFullScreen;
     @JsonProperty("volume")
-	private int volume;
+    private int volume;
     @JsonProperty("tileSize")
-	private int tileSize;
+    private int tileSize;
     @JsonProperty("niceseeds")
-	private List<Long> niceseeds;
+    private List<Long> niceseeds;
     @JsonProperty("isMusicActive")
-	private boolean isMusicActive;
+    private boolean isMusicActive;
     @JsonProperty("isEffectActive")
-	private boolean isEffectActive;
+    private boolean isEffectActive;
+    @JsonProperty("minEnemyForRoom")
+    private int minEnemyForRoom;
+    @JsonProperty("maxEnemyForRoom")
+    private int maxEnemyForRoom;
+    @JsonProperty("minObstaclesForRoom")
+    private int minObstaclesForRoom;
+    @JsonProperty("maxObstaclesForRoom")
+    private int maxObstaclesForRoom;
+    @JsonProperty("minItemForRoom")
+    private int minItemForRoom;
+    @JsonProperty("maxItemForRoom")
+    private int maxItemForRoom;
+    @JsonProperty("minRoomWidth")
+    private int minRoomWidth;
+    @JsonProperty("maxRoomWidth")
+    private int maxRoomWidth;
+    @JsonProperty("minRoomHeight")
+    private int minRoomHeight;
+    @JsonProperty("maxRoomHeight")
+    private int maxRoomHeight;
+    @JsonProperty("minRoomDoor")
+    private int minRoomDoor;
+    @JsonProperty("maxRoomDoor")
+    private int maxRoomDoor;
+    @JsonProperty("minBaseRoom")
+    private int minBaseRoom;
+    @JsonProperty("maxBaseRoom")
+    private int maxBaseRoom;
+    @JsonProperty("minRoom")
+    private int minRoom;
+    @JsonProperty("maxRoom")
+    private int maxRoom;
     
-    
+	public int getMinEnemyForRoom() {
+		return minEnemyForRoom;
+	}
+
+	public int getMaxEnemyForRoom() {
+		return maxEnemyForRoom;
+	}
+
+	public int getMinObstaclesForRoom() {
+		return minObstaclesForRoom;
+	}
+
+	public int getMaxObstaclesForRoom() {
+		return maxObstaclesForRoom;
+	}
+
+	public int getMinItemForRoom() {
+		return minItemForRoom;
+	}
+
+	public int getMaxItemForRoom() {
+		return maxItemForRoom;
+	}
+
+	public int getMinRoomWidth() {
+		return minRoomWidth;
+	}
+
+	public int getMaxRoomWidth() {
+		return maxRoomWidth;
+	}
+
+	public int getMinRoomHeight() {
+		return minRoomHeight;
+	}
+
+	public int getMaxRoomHeight() {
+		return maxRoomHeight;
+	}
+
+	public int getMinRoomDoor() {
+		return minRoomDoor;
+	}
+
+	public int getMaxRoomDoor() {
+		return maxRoomDoor;
+	}
+
+	public int getMinBaseRoom() {
+		return minBaseRoom;
+	}
+
+	public int getMaxBaseRoom() {
+		return maxBaseRoom;
+	}
+
+	public int getMinRoom() {
+		return minRoom;
+	}
+
+	public int getMaxRoom() {
+		return maxRoom;
+	}
+
 	public void setMusicActive(boolean isMusicActive) {
 		this.isMusicActive = isMusicActive;
 	}

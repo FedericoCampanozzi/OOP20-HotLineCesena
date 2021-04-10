@@ -109,7 +109,7 @@ public class AIImpl implements AI{
         distanceX = Math.abs(target.getX() - this.current.getX());
         distanceY = Math.abs(target.getY() - this.current.getY());
 
-        return Math.toDegrees(Math.atan2(this.current.getY() > target.getY() ? distanceY : -distanceY,
+        return Math.toDegrees(Math.atan2(this.current.getY() > target.getY() ? -distanceY : distanceY,
                 this.current.getX() > target.getX() ? -distanceX : distanceX));
     }
 
@@ -137,6 +137,9 @@ public class AIImpl implements AI{
     private boolean inLineOfSight(final Point2D target) {
         double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
         double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
+        
+        System.out.println("ENEMY: " + this.rotation);
+        System.out.println("ENEMY TO PLAYER: " + this.rotationToTarget(target));
         
         if(negative45DegreesAngle <= -LOOK_WEST) {
             return -this.rotationToTarget(target) >= negative45DegreesAngle

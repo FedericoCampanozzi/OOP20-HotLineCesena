@@ -88,7 +88,7 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 			SEED = settings.getNiceseeds().get(new Random().nextInt(settings.getNiceseeds().size()));
 			this.ranking = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "ranking.json"), DataJSONRanking.class);
 			this.languages = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "languages.json"), DataJSONLanguages.class);
-			this.world = new DataWorldMap();
+			this.world = new DataWorldMap(this.settings);
 			this.guiPath = new DataGUIPath();
 			this.player = new DataPlayer(this.world, this.settings);
 			this.enemy = new DataEnemy(this.world, this.settings);

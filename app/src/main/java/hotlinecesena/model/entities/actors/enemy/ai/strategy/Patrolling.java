@@ -70,7 +70,7 @@ public class Patrolling implements MovementStrategy{
             this.nextMove = this.newMove();
         }
 
-        return this.nextMove;
+        return EnemyPhysics.isMoveAllowed(pos, this.nextMove.get(), map) ? this.nextMove : DirectionList.NONE;
     }
 
     /**
