@@ -1,9 +1,6 @@
 package hotlinecesena.model.dataccesslayer.datastructure;
 
-import java.io.IOException;
 import javafx.util.Pair;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.actors.player.Player;
@@ -15,7 +12,7 @@ public class DataPlayer  extends AbstractData {
 
 	private Player ply;
 	
-	public DataPlayer(DataWorldMap world, DataJSONSettings settings) throws JsonGenerationException, JsonMappingException, IOException {
+	public DataPlayer(DataWorldMap world, DataJSONSettings settings){
 		Pair<Integer,Integer> pos = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.PLAYER))
 				.map((itm)-> itm.getKey())

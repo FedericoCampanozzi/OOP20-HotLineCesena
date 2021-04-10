@@ -18,15 +18,19 @@ public class DataWorldMap extends AbstractData {
 	private Map<Pair<Integer, Integer>, SymbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	
-	public DataWorldMap() throws IOException {
+	public DataWorldMap(DataJSONSettings settings) throws IOException {
 		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(7, 13, 7, 13, 1, 5, 15, 25))
-				.generateRooms(10, 20)
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
+						settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
+						settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
+						settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
+						settings.getMinBaseRoom(), settings.getMaxBaseRoom()
+				))
+				.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 				.generatePlayer()
-				.generateAmmo(0, 2)
-				.generateEnemy(1, 6)
-				.generateMedikit(1, 3)
-				.generateObstacoles(3, 8)
+				.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
+				.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
+				.generateObstacoles(settings.getMinObstaclesForRoom(), settings.getMaxObstaclesForRoom())
 				.finishes()
 				.build();
 		

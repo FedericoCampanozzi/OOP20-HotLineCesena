@@ -8,11 +8,10 @@ public enum SymbolsType {
 	WALKABLE('.', Color.WHITE),
 	ENEMY('E', Color.LIGHT_GRAY),
 	PLAYER('P', Color.ORANGE),
-	MEDIKIT('M', Color.GREEN),
-	AMMO('A', Color.YELLOW),
 	OBSTACOLES('O', Color.RED),
 	WEAPONS('*', Color.BLUE),
-	WALL('W', Color.GRAY);
+	WALL('W', Color.GRAY),
+	ITEM('I', Color.YELLOW);
 	
 	private final char c;
 	private final Color color;

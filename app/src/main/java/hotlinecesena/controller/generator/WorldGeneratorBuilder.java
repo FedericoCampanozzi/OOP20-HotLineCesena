@@ -20,9 +20,7 @@ public interface WorldGeneratorBuilder {
 
 	WorldGeneratorBuilder generateObstacoles(int minRoom, int maxRoom);
 
-	WorldGeneratorBuilder generateAmmo(int minRoom, int maxRoom);
-	
-	WorldGeneratorBuilder generateMedikit(int minRoom, int maxRoom);
+	WorldGeneratorBuilder generateItem(int minRoom, int maxRoom);
 	
 	WorldGeneratorBuilder generateWeapons(int minRoom, int maxRoom);
 

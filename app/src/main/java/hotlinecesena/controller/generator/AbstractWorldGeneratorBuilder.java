@@ -56,14 +56,8 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	}
 	
 	@Override
-	public WorldGeneratorBuilder generateAmmo(int minInRoom, int maxInRoom) {
-		generateTotalRandomness(SymbolsType.AMMO, minInRoom, maxInRoom);
-		return this;
-	}
-	
-	@Override
-	public WorldGeneratorBuilder generateMedikit(int minInRoom, int maxInRoom) {
-		generateTotalRandomness(SymbolsType.MEDIKIT, minInRoom, maxInRoom);
+	public WorldGeneratorBuilder generateItem(int minInRoom, int maxInRoom) {
+		generateTotalRandomness(SymbolsType.ITEM, minInRoom, maxInRoom);
 		return this;
 	}
 	
