@@ -22,6 +22,7 @@ import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
 import javafx.geometry.BoundingBox;
+import javafx.scene.image.Image;
 
 /**
  * Controls the actions that each enemy
@@ -35,6 +36,7 @@ public class EnemyController implements Updatable, Subscriber {
     private final Sprite sprite;
     private final Player player;
     private long lastTime;
+    private long timeToDeath;
 
     /**
      * Class constructor
@@ -82,7 +84,8 @@ public class EnemyController implements Updatable, Subscriber {
         return deltaTime -> {
             long current = System.currentTimeMillis();
                 // TODO to relief performance check if enemy is in range (es. cameraDimension) from the player to start beeing animated
-                if(!this.enemy.getActorStatus().equals(ActorStatus.DEAD)) {
+                if(!this.enemy.getActorStatus().equals(ActorStatus.DEAD) && current - lastTime > 350) {
+                    this.timeToDeath = current;
                     this.enemy.setIsInPursuit(this.enemy.getAI().isInPursuit(this.player.getPosition(), this.player.getNoiseRadius()));
 
                     if(this.enemy.getAI().isShooting(this.player.getPosition())) {
@@ -91,12 +94,16 @@ public class EnemyController implements Updatable, Subscriber {
                         this.enemy.move(this.enemy.getAI().getNextMove(
                                 this.player.getPosition(),
                                 this.enemy.isChasingTarget(),
-                                this.enemy.getWalkable()).multiply(deltaTime));
+                                this.enemy.getWalkable()));
                     }
 
                     this.enemy.setIsInPursuit(this.enemy.getAI().isInPursuit(this.player.getPosition(), this.player.getNoiseRadius()));
                     this.enemy.setAngle(this.enemy.getAI().getRotation(this.player.getPosition(), this.enemy.isChasingTarget()));
                     lastTime = System.currentTimeMillis();
+                }
+                
+                if(this.enemy.getActorStatus().equals(ActorStatus.DEAD) && current - timeToDeath > 5000) {
+                    this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.BLANK));
                 }
         };
     }
@@ -128,8 +135,9 @@ public class EnemyController implements Updatable, Subscriber {
      */
     @Subscribe
     private void onDeathEvent(final DeathEvent<Enemy> e) {
-        this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.ENEMY_1));
+        this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.ENEMY_DEAD));
         e.getSource().unregister(this);
-        JSONDataAccessLayer.getInstance().getEnemy().getEnemies().remove(e.getSource());
+        this.timeToDeath = System.currentTimeMillis();
+        //JSONDataAccessLayer.getInstance().getEnemy().getEnemies().remove(this.enemy);
     }
 }

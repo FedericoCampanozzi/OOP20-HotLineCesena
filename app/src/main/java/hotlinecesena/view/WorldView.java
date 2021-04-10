@@ -2,13 +2,9 @@ package hotlinecesena.view;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import hotlinecesena.controller.GameLoopController;
-import hotlinecesena.controller.entities.player.PlayerController;
-import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
-import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
@@ -29,8 +25,6 @@ public class WorldView {
     ProxyImage proxyImage = new ProxyImage();
     DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
     Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
-    private final GameLoopController gc = new GameLoopController();
-    private PlayerController pc;
 
     private final Map<Pair<Integer, Integer>, ImageView> enemiesPos = new LinkedHashMap<>();
     private final Map<Pair<Integer, Integer>, ImageView> itemsPos = new LinkedHashMap<>();
@@ -47,6 +41,8 @@ public class WorldView {
         final Scene scene = new Scene(borderPane, 600, 400);
         primaryStage.setScene(scene);
         borderPane.setCenter(gridPane);
+        
+        
 
         this.worldMap.forEach((p, s) -> {
             final char c = s.getDecotification();
@@ -104,7 +100,7 @@ public class WorldView {
             final ImageView tile = new ImageView();
             switch(c) {
                 case 'P':
-                    tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER));
+                    tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL));
                     this.playersPos = new Pair<>(new Pair<>(p.getKey() * TILE_SIZE, p.getValue() * TILE_SIZE), tile);
                     System.out.println(new Pair<>(p.getKey() * TILE_SIZE, p.getValue() * TILE_SIZE));
                     System.out.println(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
@@ -129,23 +125,37 @@ public class WorldView {
         primaryStage.setHeight(900);
         primaryStage.setX(0);
         primaryStage.setY(0);
-        
-        pc = new PlayerControllerFactoryFX(primaryStage.getScene(), gridPane)
-                .createPlayerController(new SpriteImpl(this.playersPos.getValue()));
-        gc.addMethodToUpdate(pc.getUpdateMethod());
-
-        System.out.println("Obstacles: ");
-        for (final var o : JSONDataAccessLayer.getInstance().getPhysics().getObstacles()) {
-            System.out.println(o.getMinX() + "; " + o.getMinY());
-        }
-        System.out.println("Enemies: ");
-        for (final var o : JSONDataAccessLayer.getInstance().getEnemy().getEnemies()) {
-            System.out.println(o.getPosition());
-        }
-        gc.loop();
+        this.gridPane.setScaleX(100);
+        this.gridPane.setScaleY(100);
     }
 
     public GridPane getGridPane() {
         return gridPane;
     }
+
+	public Map<Pair<Integer, Integer>, ImageView> getEnemiesPos() {
+		return enemiesPos;
+	}
+
+	public Map<Pair<Integer, Integer>, ImageView> getItemsPos() {
+		return itemsPos;
+	}
+
+	public Map<Pair<Integer, Integer>, ImageView> getObstaclesPos() {
+		return obstaclesPos;
+	}
+
+	public Pair<Pair<Integer, Integer>, ImageView> getPlayersPos() {
+		return playersPos;
+	}
+
+	public BorderPane getBorderPane() {
+		return borderPane;
+	}
+
+	public Stage getStage() {
+		return primaryStage;
+	}
+    
+    
 }
