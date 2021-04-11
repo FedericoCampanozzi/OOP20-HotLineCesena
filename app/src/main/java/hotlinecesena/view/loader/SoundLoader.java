@@ -6,7 +6,7 @@ import javafx.scene.media.MediaPlayer;
 /**
  * SoundLoader is the actual class that perform {@code AudioClip} and
  * {@code MediaPlayer} audio file loading.
- * Once loaded the requested audio file can be reproduced when needed
+ * Once loaded the requested audio file can be reproduced when needed.
  */
 public interface SoundLoader {
 
@@ -15,21 +15,21 @@ public interface SoundLoader {
      * The audio is loaded by adding an absolute path to the two
      * arguments
      * @param type
-     * @return
+     * @return a playable audio
      * @see AudioClip
      * @see AudioType
      */
-    public AudioClip getAudioClip(AudioType type);
+    AudioClip getAudioClip(AudioType type);
 
     /**
      * Returns an {@code MediaPlayer} object that can then be reproduced.
      * The audio is loaded by adding an absolute path to the two
      * arguments
      * @param type
-     * @return
+     * @return a playable media
      * @see MediaPlayer
      * @see AudioType
      */
-    public MediaPlayer getMediaPlayer(AudioType type);
+    MediaPlayer getMediaPlayer(AudioType type);
 
 }

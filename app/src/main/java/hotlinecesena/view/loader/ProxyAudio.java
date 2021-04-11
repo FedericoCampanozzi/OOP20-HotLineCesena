@@ -13,15 +13,15 @@ import javafx.scene.media.MediaPlayer;
  * ProxyAudio is the surrogate of {@link SoundLoader}, the proxy is able
  * to control and secure access to the real audio loader (very similarly to {@link ProxyImage}),
  * and is able to add extra functionalities without changing the way an
- * audio file is loaded
+ * audio file is loaded.
  */
-public class ProxyAudio implements SoundLoader{
+public final class ProxyAudio implements SoundLoader {
 
     private final ProxyAudioLoader audioLoader;
     private final Map<String, AudioClip> loadedAudioClips;
 
     /**
-     * Class constructor
+     * Class constructor.
      */
     public ProxyAudio() {
         this.audioLoader = new ProxyAudioLoader();
@@ -37,7 +37,7 @@ public class ProxyAudio implements SoundLoader{
      */
     @Override
     public AudioClip getAudioClip(final AudioType type) {
-        if(this.loadedAudioClips.containsKey(type.toString())) {
+        if (this.loadedAudioClips.containsKey(type.toString())) {
             return this.loadedAudioClips.get(type.toString());
         } else {
             this.loadedAudioClips.put(type.toString(), audioLoader.getAudioClip(type));
@@ -51,20 +51,20 @@ public class ProxyAudio implements SoundLoader{
     }
 
     private static class ProxyAudioLoader implements SoundLoader {
-        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator +
-                "resources" + File.separator + "FX";
+        private static final String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator
+                + "resources" + File.separator + "FX";
 
         @Override
         public AudioClip getAudioClip(final AudioType type) {
-            return new AudioClip(Paths.get(ABSOLUTE_PATH + File.separator +
-                    type.toString()).toUri().toString());
+            return new AudioClip(Paths.get(ABSOLUTE_PATH + File.separator
+                    + type.toString()).toUri().toString());
         }
 
         @Override
         public MediaPlayer getMediaPlayer(final AudioType type) {
-            final Media media = new Media(Paths.get(ABSOLUTE_PATH + File.separator +
-                    type.toString()).toUri().toString());
+            final Media media = new Media(Paths.get(ABSOLUTE_PATH + File.separator
+                    + type.toString()).toUri().toString());
             return new MediaPlayer(media);
-        }  
+        }
     }
 }
