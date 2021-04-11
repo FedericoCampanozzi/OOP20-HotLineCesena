@@ -45,4 +45,11 @@ public interface Enemy extends Actor {
      */
     boolean isChasingTarget();
 
+    /**
+     * Returns the type of movement that the enemy
+     * is currently performing.
+     * @return the type of the enemy
+     */
+    EnemyType getEnemyType();
+
 }

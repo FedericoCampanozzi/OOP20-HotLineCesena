@@ -84,4 +84,9 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
     public boolean isChasingTarget() {
         return this.pursuit;
     }
+
+    @Override
+    public EnemyType getEnemyType() {
+        return this.enemyType;
+    }
 }
