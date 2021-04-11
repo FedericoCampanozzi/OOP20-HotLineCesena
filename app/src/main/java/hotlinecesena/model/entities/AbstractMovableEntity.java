@@ -1,5 +1,7 @@
 package hotlinecesena.model.entities;
 
+import java.util.Objects;
+
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.events.RotationEvent;
@@ -39,6 +41,20 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     @Override
     public abstract void move(@Nonnull Point2D direction);
 
+    /**
+     *
+     * @throws NullPointerException if the given position or entity are null.
+     */
+    @Override
+    public final boolean isCollidingWith(@Nonnull final Point2D newPosition, @Nonnull final Entity other) {
+        Objects.requireNonNull(newPosition);
+        final Point2D otherPos = Objects.requireNonNull(other).getPosition();
+        return otherPos.getX() + other.getWidth() >= newPosition.getX()
+                && otherPos.getY() + other.getHeight() >= newPosition.getY()
+                && otherPos.getX() <= newPosition.getX() + this.getWidth()
+                && otherPos.getY() <= newPosition.getY() + this.getHeight();
+    }
+
     @Override
     public final double getAngle() {
         return angle;
@@ -47,7 +63,6 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     /**
      * @apiNote
      * Template method depending on canInitiateRotation().
-     *
      */
     @Override
     public final void setAngle(final double angle) {

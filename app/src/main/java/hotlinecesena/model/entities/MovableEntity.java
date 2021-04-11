@@ -17,6 +17,15 @@ public interface MovableEntity extends Entity {
     void move(Point2D direction);
 
     /**
+     * Tests whether this entity will collide with another.
+     * @param newPosition the new position in which this entity is going to move.
+     * @param other the other entity.
+     * @return {@code true} if this entity will collide with
+     * another, {@code false} otherwise.
+     */
+    boolean isCollidingWith(Point2D newPosition, Entity other);
+
+    /**
      * Gets the angle this actor is currently facing.
      *
      * @return the actor's angle.
