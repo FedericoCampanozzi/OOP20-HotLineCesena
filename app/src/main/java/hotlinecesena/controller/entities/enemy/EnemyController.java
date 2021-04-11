@@ -27,6 +27,7 @@ public final class EnemyController implements Updatable, Subscriber {
 
     private static final int UPDATED_INTERVAL = 350;
     private static final int UPDATE_AFTER_DEATH = 5000;
+    private static final int WAIT_TO_START = 5000;
 
     private final ProxyImage loader;
     private final Enemy enemy;
@@ -34,6 +35,7 @@ public final class EnemyController implements Updatable, Subscriber {
     private final Player player;
     private long lastTime;
     private long timeAfterDeath;
+    private long timeToStart;
 
     /**
      * Class constructor.
@@ -52,15 +54,18 @@ public final class EnemyController implements Updatable, Subscriber {
         this.sprite = sprite;
         this.player = player;
         this.lastTime = System.currentTimeMillis();
+        this.timeToStart = System.currentTimeMillis();
+        this.sprite.updatePosition(this.enemy.getPosition());
     }
 
     @Override
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
-            long current = System.currentTimeMillis();
+            final long current = System.currentTimeMillis();
                 if (!this.enemy.getActorStatus().equals(ActorStatus.DEAD)
                         && !this.player.getActorStatus().equals(ActorStatus.DEAD)
-                        && current - lastTime > UPDATED_INTERVAL) {
+                        && current - lastTime > UPDATED_INTERVAL
+                        && current - timeToStart > WAIT_TO_START) {
 
                     this.timeAfterDeath = current;
                     this.enemy.setIsInPursuit(true);
@@ -77,7 +82,7 @@ public final class EnemyController implements Updatable, Subscriber {
 
                     this.enemy.setIsInPursuit(this.enemy.getAI().isInPursuit(this.player.getPosition(), this.player.getNoiseRadius()));
                     this.enemy.setAngle(this.enemy.getAI().getRotation(this.player.getPosition(), this.enemy.isChasingTarget()));
-                    lastTime = System.currentTimeMillis();
+                    this.lastTime = System.currentTimeMillis();
                 }
 
                 if (this.enemy.getActorStatus().equals(ActorStatus.DEAD) && current - timeAfterDeath > UPDATE_AFTER_DEATH) {
