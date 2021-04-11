@@ -13,13 +13,13 @@ import javafx.scene.media.MediaPlayer;
  * Controller audio that allow an easy access 
  * to the {@link ProxyAudio} by exposing few ways
  * to directly play the needed sound with the 
- * correct volume settings
+ * correct volume settings.
  */
 public class AudioController {
 
-    private final static int POINT_O_PERCENT = 1000;
-    private final static int PERCENT = 100;
-    private final static int BACKGROUND_VOLUME = 10;
+    private static final int POINT_O_PERCENT = 1000;
+    private static final int PERCENT = 100;
+    private static final int BACKGROUND_VOLUME = 10;
 
     private final SoundLoader loader;
     private AudioClip clip;
@@ -29,9 +29,7 @@ public class AudioController {
     private boolean playMusic;
 
     /**
-     * Class constructor
-     * @param caller the entity that create a new instance
-     * @see Entity
+     * Class constructor.
      */
     public AudioController() {
         this.loader = new ProxyAudio();
@@ -44,23 +42,24 @@ public class AudioController {
 
     /**
      * Updates the volume of the audio that is
-     * already playing in the background
+     * already playing in the background.
      * @param value the new volume setting
      */
     private void updateMusicVolume(final double value) {
-        if(this.audio != null) {
+        if (this.audio != null) {
             this.audio.setVolume(value);
         }
     }
 
     /**
      * Calculates the volume based on the
-     * {@code Entity} that created this instance
+     * {@code Entity}.
+     * @return the value for the volume
      * @see Entity
      */
     private double volumeSettings(final Entity caller) {
-        return caller instanceof Enemy ?
-                this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
+        return caller instanceof Enemy 
+                ? this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
     /**
@@ -68,22 +67,23 @@ public class AudioController {
      * have been disabled for this instance
      * of the {@code AudioController} and
      * updates the volume if a {@code MediaPlayer}
-     * track is already playing
-     * @param value the new volume setting
+     * track is already playing.
      */
     public void updateSettings() {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
-        this.playEffects = true;
-        this.playMusic = true;
-        
+        this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
+        this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
+
         this.updateMusicVolume(this.volume);
     }
 
     /**
      * Plays the {@code AudioClip} of the audio file specified
-     * by its relative path
+     * by its relative path.
      * @param type the path of the file that wants to
+     * @param caller the entity invoking this method
      * be reproduced
+     * @see Entity
      */
     public void playAudioClip(final AudioType type, final Entity caller) {
         if (this.playEffects) {
@@ -96,7 +96,7 @@ public class AudioController {
 
     /**
      * Plays the {@code MediaPlayer} of the audio file specified
-     * by its relative path
+     * by its relative path.
      */
     public void playMusic() {
         if (this.playMusic) {
