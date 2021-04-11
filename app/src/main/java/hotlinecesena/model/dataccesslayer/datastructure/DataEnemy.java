@@ -50,6 +50,8 @@ public class DataEnemy extends AbstractData {
 	}
 	
 	public int getDeathEnemyCount() {
-		return this.totalEnemy - this.enemies.size();
+		return this.enemies.stream()
+                .filter(itm -> itm.getActorStatus().equals(ActorStatus.DEAD))
+                .collect(toSet()).size();
 	}
 }
