@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
@@ -35,23 +37,39 @@ public final class NaiveInventoryImpl implements Inventory {
      * @param collectibles the starting quantity of collectibles. Can be an empty {@link Map}.
      * @throws NullPointerException if the given {@code collectibles} is null.
      */
-    public NaiveInventoryImpl(final Weapon weapon, final Map<Item, Integer> collectibles) {
+    public NaiveInventoryImpl(final Weapon weapon, @Nonnull final Map<Item, Integer> collectibles) {
         this.weapon = Optional.ofNullable(weapon);
         this.collectibles.putAll(Objects.requireNonNull(collectibles));
     }
 
+    /**
+     * @throws NullPointerException if the given item is null.
+     */
     @Override
-    public void add(final Item item, final int quantity) {
+    public void add(@Nonnull final Item item, final int quantity) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
-            final Weapon w = (Weapon) item;
-            weapon.ifPresent(this::drop);
-            weapon = Optional.of(w);
+            this.addWeapon((Weapon) item);
         } else {
             final int ownedQuantity = collectibles.getOrDefault(item, 0);
             final int newQuantity = quantity + ownedQuantity;
             collectibles.put(item, newQuantity > item.getMaxStacks() ? item.getMaxStacks() : newQuantity);
         }
+    }
+
+    /**
+     * @throws NullPointerException if the given weapon is null.
+     */
+    @Override
+    public void addWeapon(@Nonnull final Weapon weapon) {
+        Objects.requireNonNull(weapon);
+        this.weapon.ifPresent(this::drop);
+        this.weapon = Optional.of(weapon);
+    }
+
+    private void drop(final Item item) {
+        //TODO
+        weapon = Optional.empty();
     }
 
     /**
@@ -67,11 +85,6 @@ public final class NaiveInventoryImpl implements Inventory {
         }
     }
 
-    private void drop(final Item item) {
-        //TODO
-        weapon = Optional.empty();
-    }
-
     @Override
     public Optional<Weapon> getWeapon() {
         return weapon;
@@ -79,8 +92,7 @@ public final class NaiveInventoryImpl implements Inventory {
 
     /**
      * @implSpec
-     * Depends on time.
-     *
+     * Based on time.
      */
     @Override
     public void reloadWeapon() {

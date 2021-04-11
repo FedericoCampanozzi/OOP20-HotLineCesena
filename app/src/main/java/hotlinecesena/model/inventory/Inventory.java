@@ -8,17 +8,23 @@ import hotlinecesena.model.entities.items.Weapon;
 
 /**
  *
- * Models an inventory for {@link Actor}s which may contain weapons and/or items.
+ * Models an inventory for {@link Actor}s which may contain weapons and items.
  *
  */
 public interface Inventory {
 
     /**
-     * Adds an {@link Item} to this inventory.
+     * Adds a given quantity of an {@link Item} to this inventory.
      * @param item the {@code Item} to be added.
      * @param quantity quantity of the item to be added.
      */
     void add(Item item, int quantity);
+
+    /**
+     * Adds a {@link Weapon} to this inventory.
+     * @param weapon the {@code Weapon} to be added.
+     */
+    void addWeapon(Weapon weapon);
 
     /**
      * Returns the quantity of a given {@link Item} present in this inventory.
