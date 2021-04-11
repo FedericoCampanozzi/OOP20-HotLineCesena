@@ -4,25 +4,19 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <right>
-      <HBox prefHeight="100.0" BorderPane.alignment="CENTER">
+      <HBox fx:id="weaponHBox" prefHeight="100.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="bulletLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" style="-fx-background-color: transparent;" text="18/120">
                <font>
                   <Font name="Arial Black" size="30.0" />
                </font>
             </Label>
-            <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="/Images/GUI/rifle.png" />
-               </image></ImageView>
          </children>
          <BorderPane.margin>
             <Insets right="20.0" />

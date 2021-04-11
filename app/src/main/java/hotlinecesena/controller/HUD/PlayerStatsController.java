@@ -9,7 +9,6 @@ import hotlinecesena.controller.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
@@ -22,6 +21,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.util.Pair;
 
 public class PlayerStatsController implements Initializable, Updatable{
@@ -33,9 +33,9 @@ public class PlayerStatsController implements Initializable, Updatable{
 	@FXML
 	private Label bulletLabel;
 	@FXML
-	private ImageView weaponImage;
-	@FXML
 	private CheckBox missionCheckBox;
+	@FXML
+	private HBox weaponHBox;
 	
 	private ProxyImage proxyImage = new ProxyImage();
 	private List<Pair<String, Boolean>> missions;
@@ -56,7 +56,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 		borderPane.prefWidthProperty().bind(worldView.getBorderPane().widthProperty());
 		lifeBar.setProgress(player.getMaxHealth());
 		missionCheckBox.setText(missions.get(currentMission).getKey());
-		System.out.println(JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size());
+		ImageView weaponImage = new ImageView(proxyImage.getImage(SceneType.GAME, ImageType.RIFLE));
+		weaponHBox.getChildren().add(weaponImage);
 	}
 
 	@Override
@@ -75,14 +76,9 @@ public class PlayerStatsController implements Initializable, Updatable{
 	                    + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
 	                    ), () -> bulletLabel.setText("0/0"));
 			
-			
-			
 			// Update of missions view
 			missions = missionController.getMissions();
 			missionCheckBox.setSelected(missions.get(currentMission).getValue());
-			
-			System.out.println(missions);
-			System.out.println("Enemies dead: " + JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount());
 			
 			// ************
 			worldView.getBorderPane().setOnKeyPressed(e -> {

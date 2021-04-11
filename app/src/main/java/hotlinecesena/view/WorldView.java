@@ -1,6 +1,8 @@
 package hotlinecesena.view;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
@@ -9,6 +11,8 @@ import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.utilities.Utilities;
+import hotlinecesena.view.entities.Sprite;
+import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
@@ -30,6 +34,7 @@ public class WorldView {
     ProxyImage proxyImage = new ProxyImage();
     DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
     Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
+    List<Sprite> enemiesSprite = new ArrayList<>();
 
     private final Map<Pair<Integer, Integer>, ImageView> enemiesPos = new LinkedHashMap<>();
     private final Map<Pair<Integer, Integer>, ImageView> itemsPos = new LinkedHashMap<>();
@@ -48,13 +53,12 @@ public class WorldView {
         borderPane.setCenter(gridPane);
 
         this.worldMap.forEach((p, s) -> {
-            final char c = s.getDecotification();
             final ImageView tile = new ImageView();
-            switch(c) {
-                case 'W':
+            switch(s) {
+                case WALL:
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.WALL));
                     break;
-                case '_':
+                case VOID:
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.GRASS));
                     break;
                 default:
@@ -101,11 +105,10 @@ public class WorldView {
                 		tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.SHOTGUN));
                         this.obstaclesPos.put(p, tile);
                 	}
-                	
                 	break;
-                	
+			default:
+				break;
             }
-            
             final Translate trans = new Translate();
             tile.getTransforms().add(trans);
             tile.setFitHeight(1);
@@ -116,21 +119,20 @@ public class WorldView {
         });
         
         this.worldMap.forEach((p,s) -> {
-            final char c = s.getDecotification();
             final ImageView tile = new ImageView();
-            switch(c) {
-                case 'P':
+            switch(s) {
+                case PLAYER:
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL));
                     this.playersPos = new Pair<>(new Pair<>(p.getKey(), p.getValue()), tile);
                     System.out.println(new Pair<>(p.getKey(), p.getValue()));
                     System.out.println(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
                     break;
-                case 'E':
+                case ENEMY:
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.ENEMY_1));
                     this.enemiesPos.put(p, tile);
                     break;
             }
-            
+
             final Translate trans = new Translate();
             tile.getTransforms().add(trans);
             tile.setFitHeight(1);
@@ -138,6 +140,10 @@ public class WorldView {
             gridPane.add(tile, 0, 0);
             trans.setX(p.getKey());
             trans.setY(p.getValue());
+        });
+        
+        enemiesPos.forEach((p, i) -> {
+            enemiesSprite.add(new SpriteImpl(i));
         });
         
         primaryStage.setResizable(false);
@@ -176,6 +182,11 @@ public class WorldView {
 	public Stage getStage() {
 		return primaryStage;
 	}
+
+	public List<Sprite> getEnemiesSprite() {
+		return enemiesSprite;
+	}
     
+	
     
 }
