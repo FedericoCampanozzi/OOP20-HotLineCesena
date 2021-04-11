@@ -1,19 +1,20 @@
 package hotlinecesena.model.entities.actors.player;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
+import hotlinecesena.model.dataccesslayer.datastructure.DataPhysicsCollision.Obstacle;
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.events.ItemPickUpEvent;
@@ -63,10 +64,12 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies().stream()
-                    .filter(e -> e.getActorStatus() != ActorStatus.DEAD)
-                    .collect(Collectors.toUnmodifiableSet()))
-                    && !this.hasCollided(newPos, this.getGameMaster().getPhysics().getObstacles())) {
+            final Stream<Enemy> enemies = this.getGameMaster().getEnemy().getEnemies()
+                    .stream()
+                    .filter(e -> e.getActorStatus() != ActorStatus.DEAD);
+            final Stream<Obstacle> obstacles = this.getGameMaster().getPhysics().getObstacles().stream();
+
+            if (!(this.hasCollided(newPos, enemies) || this.hasCollided(newPos, obstacles))) {
                 this.setPosition(newPos);
                 this.publish(new MovementEvent<>(this, newPos));
                 this.setActorStatus(ActorStatus.MOVING);
@@ -74,11 +77,8 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
-    private boolean hasCollided(final Point2D newPos, final Collection<? extends Entity> entities) {
-        return entities.stream()
-                .anyMatch(e -> MathUtils.isCollision(
-                        newPos, this.getWidth(), this.getHeight(),
-                        e.getPosition(), e.getWidth(), e.getHeight()));
+    private boolean hasCollided(final Point2D newPos, final Stream<? extends Entity> stream) {
+        return stream.anyMatch(e -> this.isCollidingWith(newPos, e));
     }
 
     @Override
