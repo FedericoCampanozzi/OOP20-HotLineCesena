@@ -26,7 +26,7 @@ public interface InputListener {
     /**
      *
      * Binds keyboard and mouse event handlers to the given {@link Scene}.
-     * @param node the JavaFX {@code Scene} to which the event handlers
+     * @param scene the JavaFX {@code Scene} to which the event handlers
      * will be set.
      */
     void setEventHandlers(Scene scene);
@@ -34,7 +34,7 @@ public interface InputListener {
     /**
      * Removes this listener's event handlers from the given {@link Scene},
      * if it contains them.
-     * @param node the JavaFX {@code Scene} from which this listener's
+     * @param scene the JavaFX {@code Scene} from which this listener's
      * event handlers will be removed.
      */
     void removeEventHandlersFrom(Scene scene);
