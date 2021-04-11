@@ -2,6 +2,8 @@ package hotlinecesena.model.entities.actors;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 import hotlinecesena.model.entities.AbstractMovableEntity;
 import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
@@ -34,8 +36,9 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
      * @throws NullPointerException if the given {@code position} or {@code inventory} are null.
      */
-    protected AbstractActor(final Point2D position, final double angle, final double width, final double height,
-            final double speed, final double maxHealth, final Inventory inventory) {
+    protected AbstractActor(@Nonnull final Point2D position, final double angle, final double width,
+            final double height, final double speed, final double maxHealth,
+            @Nonnull final Inventory inventory) {
         super(position, angle, width, height, speed);
         this.maxHealth = maxHealth;
         currentHealth = maxHealth;
@@ -86,7 +89,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
             this.publish(new DamageReceivedEvent<>(this, damage));
         }
-        if (!this.isAlive()) {
+        if (currentHealth == 0) {
             status = ActorStatus.DEAD;
             this.publish(new DeathEvent<>(this));
         }
@@ -138,9 +141,10 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      * Status may not be modified by external objects.
      *
      * @param s the new status
+     * @throws NullPointerException if the given status is null.
      */
-    protected final void setActorStatus(final ActorStatus s) {
-        status = s;
+    protected final void setActorStatus(@Nonnull final ActorStatus s) {
+        status = Objects.requireNonNull(s);
     }
 
     /**
