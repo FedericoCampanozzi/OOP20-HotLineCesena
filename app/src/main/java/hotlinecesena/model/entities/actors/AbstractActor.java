@@ -149,7 +149,9 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
      */
     @Override
     public final void update(final double timeElapsed) {
-        this.setActorStatus(ActorStatus.IDLE);
-        this.getInventory().update(timeElapsed);
+        if (status != ActorStatus.DEAD) {
+            this.setActorStatus(ActorStatus.IDLE);
+            this.getInventory().update(timeElapsed);
+        }
     }
 }
