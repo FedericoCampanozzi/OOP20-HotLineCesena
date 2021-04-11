@@ -45,7 +45,8 @@ class InputListenerTest {
         robot = new FxRobot();
         testScene = new Scene(new Pane(), WIDTH, HEIGHT);
         testScene.setFill(Color.BLACK);
-        listener = new InputListenerFX(testScene);
+        listener = new InputListenerFX();
+        listener.setEventHandlers(testScene);
         stage.setScene(testScene);
         stage.requestFocus();
         stage.show();
