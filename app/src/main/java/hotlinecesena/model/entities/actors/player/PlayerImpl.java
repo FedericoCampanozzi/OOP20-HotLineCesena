@@ -3,16 +3,22 @@ package hotlinecesena.model.entities.actors.player;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.items.ItemsType;
+import hotlinecesena.model.entities.items.Weapon;
+import hotlinecesena.model.events.ItemPickUpEvent;
 import hotlinecesena.model.events.MovementEvent;
-import hotlinecesena.model.events.PickUpEvent;
+import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.model.inventory.Inventory;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
@@ -40,9 +46,9 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * @param noise a {@link Map} associating noise levels to certain or all {@link ActorStatus}es.
      * @throws NullPointerException if the given {@code position}, {@code inventory} or {@code noise} are null.
      */
-    public PlayerImpl(final Point2D position, final double angle, final double width, final double height,
-            final double speed, final double maxHealth, final Inventory inventory,
-            final Map<ActorStatus, Double> noise) {
+    public PlayerImpl(@Nonnull final Point2D position, final double angle, final double width,
+            final double height, final double speed, final double maxHealth,
+            @Nonnull final Inventory inventory, @Nonnull final Map<ActorStatus, Double> noise) {
         super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
     }
@@ -52,7 +58,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * @throws NullPointerException if the supplied direction is null.
      */
     @Override
-    public void move(final Point2D direction) {
+    public void move(@Nonnull final Point2D direction) {
         Objects.requireNonNull(direction);
         if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
             final Point2D oldPos = this.getPosition();
@@ -84,20 +90,35 @@ public final class PlayerImpl extends AbstractActor implements Player {
 
     @Override
     public void use() {
-        if (!this.getInventory().isReloading()) {
-            final var itemIterator = this.getGameMaster().getDataItems().getItems().entrySet().iterator();
-            final Set<Point2D> toBeRemoved = new HashSet<>();
-            itemIterator.forEachRemaining(entry -> {
-                final Point2D itemPos = entry.getKey();
-                final ItemsType item = entry.getValue();
-                if (MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
-                        itemPos, ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS)) {
-                    item.usage().accept(this);
-                    toBeRemoved.add(itemPos);
-                    this.publish(new PickUpEvent<Player, ItemsType>(this, item));
-                }
-            });
-            toBeRemoved.forEach(p -> this.getGameMaster().getDataItems().getItems().remove(p));
-        }
+        this.useItem();
+        this.pickUpWeapon();
+    }
+
+    private void useItem() {
+        final Map<Point2D, ItemsType> itemsOnMap = this.getGameMaster().getDataItems().getItems();
+        final Set<Point2D> toBeRemoved = new HashSet<>();
+        itemsOnMap.forEach((itemPos, item) -> {
+            if (MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
+                    itemPos, ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS)) {
+                item.usage().accept(this);
+                toBeRemoved.add(itemPos);
+                this.publish(new ItemPickUpEvent<>(this, item, itemPos));
+            }
+        });
+        toBeRemoved.forEach(p -> this.getGameMaster().getDataItems().getItems().remove(p));
+    }
+
+    private void pickUpWeapon() {
+        final Map<Point2D, Weapon> weaponsOnMap = this.getGameMaster().getWeapons().getWeapons();
+        final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
+                .stream()
+                .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
+                        e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
+                .findFirst();
+        weaponFound.ifPresent(entry -> {
+            this.getInventory().addWeapon(entry.getValue());
+            weaponsOnMap.remove(entry.getKey());
+            this.publish(new WeaponPickUpEvent<>(this, entry.getValue().getWeaponType(), entry.getKey()));
+        });
     }
 }
