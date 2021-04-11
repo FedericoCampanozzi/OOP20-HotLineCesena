@@ -3,21 +3,23 @@ package hotlinecesena.controller.HUD;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
+import java.util.Set;
 
+import hotlinecesena.controller.GameController;
+import hotlinecesena.controller.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.view.WorldView;
-import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
-import hotlinecesena.view.loader.SceneType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.util.Pair;
 
 public class PlayerStatsController implements Initializable, Updatable{
 	
@@ -29,10 +31,14 @@ public class PlayerStatsController implements Initializable, Updatable{
 	private Label bulletLabel;
 	@FXML
 	private ImageView weaponImage;
+	@FXML
+	private CheckBox missionCheckBox;
 	
-	private WorldView worldView;
-	ProxyImage proxyImage = new ProxyImage();
+	private ProxyImage proxyImage = new ProxyImage();
+	private MissionController missionController = new GameController().getMissionController();
+	private Set<Pair<String, Boolean>> missions = missionController.getMissions();
 	private Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
+	private WorldView worldView;
 	private int nReloading = 0;
 
 	public PlayerStatsController(WorldView view) {
@@ -43,6 +49,7 @@ public class PlayerStatsController implements Initializable, Updatable{
 	public void initialize(URL location, ResourceBundle resources) {
 		borderPane.prefWidthProperty().bind(worldView.getBorderPane().widthProperty());
 		lifeBar.setProgress(player.getMaxHealth());
+		
 	}
 
 	@Override
@@ -59,8 +66,6 @@ public class PlayerStatsController implements Initializable, Updatable{
 					+ "/"
 					+ (player.getInventory().getWeapon().get().getCompatibleAmmunition().getMaxStacks()
 							- (player.getInventory().getWeapon().get().getMagazineSize()) * nReloading));
-			
-			
 		};
 	}
 
