@@ -1,7 +1,7 @@
 package hotlinecesena.controller.input;
 
 import static java.util.stream.Collectors.toCollection;
-import static java.util.stream.Collectors.toUnmodifiableSet;
+import static java.util.stream.Collectors.toUnmodifiableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.actors.Direction;
 import hotlinecesena.model.entities.actors.player.Command;
@@ -35,7 +37,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param bindings bindings of inputs to player actions.
      * @throws NullPointerException if {@code bindings} is null.
      */
-    public InputInterpreterImpl(final Map<Enum<?>, PlayerAction> bindings) {
+    public InputInterpreterImpl(@Nonnull final Map<Enum<?>, PlayerAction> bindings) {
         this.bindings = Objects.requireNonNull(bindings);
     }
 
@@ -43,24 +45,27 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @throws NullPointerException if {@code inputs} or {@code spritePosition} are null.
      */
     @Override
-    public Collection<Command> interpret(final Pair<Set<Enum<?>>, Point2D> inputs, final Point2D spritePosition,
-            final double deltaTime) {
+    public Collection<Command> interpret(@Nonnull final Pair<Set<Enum<?>>, Point2D> inputs,
+            @Nonnull final Point2D spritePosition, final double deltaTime) {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
         final List<Command> commandsToDeliver = new ArrayList<>();
         final Set<PlayerAction> actions = this.convertBindings(inputs.getKey());
 
+        // Compute new movement direction
         final Point2D newMovementDir = this.processMovementDirection(actions);
         if (!newMovementDir.equals(Point2D.ZERO)) {
             commandsToDeliver.add(p -> p.move(newMovementDir.multiply(deltaTime)));
         }
 
+        // Compute new angle
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
         if (!currentMouseCoords.equals(newMouseCoords)) {
             commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
             currentMouseCoords = newMouseCoords;
         }
 
+        // Compute all other actions
         commandsToDeliver.addAll(this.computeRemainingCommands(actions));
 
         return commandsToDeliver;
@@ -113,10 +118,10 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param actions
      * @return
      */
-    private Set<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
+    private List<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
         return actions.stream()
                 .map(PlayerAction::getCommand)
                 .flatMap(Optional::stream)
-                .collect(toUnmodifiableSet());
+                .collect(toUnmodifiableList());
     }
 }
