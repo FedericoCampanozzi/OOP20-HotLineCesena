@@ -66,6 +66,7 @@ public class AudioEventController implements Subscriber {
      */
     @Subscribe
     private void onAttackEvent(final AttackPerformedEvent<Actor> e) {
+        this.audio = new AudioController();
         switch (e.getItemType()) {
             case PISTOL:
                 this.audio.playAudioClip(AudioType.SHOOT_PISTOL, e.getSource());
