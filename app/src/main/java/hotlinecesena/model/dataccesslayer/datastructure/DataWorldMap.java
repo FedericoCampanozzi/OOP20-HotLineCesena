@@ -30,6 +30,7 @@ public class DataWorldMap extends AbstractData {
 				.generatePlayer()
 				.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
 				.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
+				.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
 				.generateObstacoles(settings.getMinObstaclesForRoom(), settings.getMaxObstaclesForRoom())
 				.finishes()
 				.build();

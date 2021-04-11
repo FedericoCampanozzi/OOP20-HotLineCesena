@@ -1,23 +1,23 @@
 {
   "niceseeds" : [
-	8393931071175945719,
-	-5363128378482606260,
-	-8700563560019497442,
-	-5823085181711065721,
-	4439634665316524553,
-	5175133408687632910
+	-1876572582404006336,
+	-4604155821425858059,
+	7758504347021546737,
+	-3828445475458028434,
+	2848246939196278164,
+	2495155647589469002
   ],
   "monitorX" : 800,
   "monitorY" : 600,
   "isFullScreen" : true,
   "volume" : 25,
-  "tileSize" : 100,
+  "obstaclesEdge" : 0.75,
   "isMusicActive" : true,
   "isEffectActive" : true,
   "minEnemyForRoom" : 1,
   "maxEnemyForRoom" : 4,
-  "minObstaclesForRoom" : 4,
-  "maxObstaclesForRoom" : 7,
+  "minObstaclesForRoom" : 3,
+  "maxObstaclesForRoom" : 6,
   "minItemForRoom" : 3,
   "maxItemForRoom" : 8,
   "minRoomWidth" : 11,
@@ -26,8 +26,10 @@
   "maxRoomHeight" : 21,
   "minRoomDoor" : 1,
   "maxRoomDoor" : 4, 
+  "minRoomWeapons" : 1,
+  "maxRoomWeapons" : 3, 
   "minBaseRoom" : 25,
   "maxBaseRoom" : 35,
-  "minRoom" : 12,
-  "maxRoom" : 18
+  "minRoom" : 5,
+  "maxRoom" : 8
 }

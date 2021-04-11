@@ -54,6 +54,19 @@ public final class NaiveInventoryImpl implements Inventory {
         }
     }
 
+    /**
+     * @throws NullPointerException if the given item is null.
+     */
+    @Override
+    public int getQuantityOf(final Item item) {
+        Objects.requireNonNull(item);
+        if (item instanceof Weapon) {
+            return weapon.isPresent() ? 1 : 0;
+        } else {
+            return collectibles.getOrDefault(item, 0);
+        }
+    }
+
     private void drop(final Item item) {
         //TODO
         weapon = Optional.empty();

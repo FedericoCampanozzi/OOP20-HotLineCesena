@@ -68,8 +68,8 @@ public class Utilities {
 	 * @param tileSize the size of tile
 	 * @return the point
 	 */
-	public static Point2D convertPairToPoint2D(Pair<Integer,Integer> p, int tileSize) {
-		return new Point2D(tileSize * p.getKey(), tileSize * p.getValue());
+	public static Point2D convertPairToPoint2D(Pair<Integer,Integer> p) {
+		return new Point2D((double)p.getKey(), (double)p.getValue());
 	}
 	
 	/**
@@ -80,7 +80,7 @@ public class Utilities {
 	 * @return
 	 */
 	public static int RandomBetween(Random rnd, int lowerBound, int upperBound) {
-		if(upperBound < lowerBound) {
+		if(upperBound  < lowerBound) {
 			throw new IllegalArgumentException();
 		}
 		return rnd.nextInt(upperBound - lowerBound) + lowerBound;

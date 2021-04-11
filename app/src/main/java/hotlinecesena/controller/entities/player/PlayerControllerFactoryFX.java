@@ -6,6 +6,7 @@ import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH
 import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
 import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
 import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.USE;
 
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
             KeyCode.D,             MOVE_EAST,
             KeyCode.A,             MOVE_WEST,
             KeyCode.R,             RELOAD,
+            KeyCode.E,             USE,
             MouseButton.PRIMARY,   ATTACK
             );
 

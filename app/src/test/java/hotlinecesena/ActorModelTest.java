@@ -4,21 +4,21 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
+import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
-import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.entities.items.AmmunitionType;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
@@ -28,8 +28,6 @@ import javafx.geometry.Point2D;
 
 /**
  * Runs a series of tests on methods common to all Actors.
- * <br>
- * In this case, Player was chosen as an Actor implementation.
  */
 @TestInstance(Lifecycle.PER_METHOD)
 class ActorModelTest {
@@ -45,7 +43,7 @@ class ActorModelTest {
         final Inventory inv = new NaiveInventoryImpl(
                 new WeaponImpl(WeaponType.PISTOL),
                 Map.of(AmmunitionType.PISTOL_AMMO, 30));
-        actor = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv, Map.of());
+        actor = new ActorTest(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv);
     }
 
     @BeforeEach
@@ -65,11 +63,11 @@ class ActorModelTest {
         assertThat(actor.getAngle(), comparesEqualTo(90.0));
     }
 
-    @Test
-    void actorAttackTest() {
-        actor.attack();
-        assertEquals(ActorStatus.ATTACKING, actor.getActorStatus());
-    }
+    //    @Test
+    //    void actorAttackTest() {
+    //        actor.attack();
+    //        assertEquals(ActorStatus.ATTACKING, actor.getActorStatus());
+    //    }
 
     @Test
     void actorReloadTest() {
@@ -124,5 +122,24 @@ class ActorModelTest {
         final double unrealHp = 50000.0;
         actor.heal(unrealHp);
         assertThat(actor.getCurrentHealth(), comparesEqualTo(0.0));
+    }
+
+    private final class ActorTest extends AbstractActor {
+
+        private ActorTest(final Point2D position, final double angle, final double width, final double height,
+                final double speed, final double maxHealth, final Inventory inventory) {
+            super(position, angle, width, height, speed, maxHealth, inventory);
+        }
+
+        @Override
+        public void move(final Point2D direction) {
+            Objects.requireNonNull(direction);
+            if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+                final Point2D oldPos = this.getPosition();
+                final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
+                this.setPosition(newPos);
+                this.setActorStatus(ActorStatus.MOVING);
+            }
+        }
     }
 }

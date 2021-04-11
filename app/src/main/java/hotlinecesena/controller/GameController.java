@@ -8,13 +8,6 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.SceneSwapper;
 
 public class GameController extends Application {
-
-	private final MissionController mc = new MissionController();
-	
-	public MissionController getMissionController() {
-		return this.mc;
-	}
-	
 	public static void main(String[] args) throws IOException {
 		JSONDataAccessLayer.getInstance();
 		launch(args);
@@ -28,11 +21,6 @@ public class GameController extends Application {
         primaryStage.setTitle("HotLine Cesena");
         primaryStage.setResizable(false);
         primaryStage.show();
-        generateMissions();
-	}
-	
-	private void generateMissions() {
-        mc.addQuest("uccidi tutti i nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size() == 
-        		JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemy());
+        new AudioEventController();
 	}
 }

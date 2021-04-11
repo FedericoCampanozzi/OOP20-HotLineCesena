@@ -16,13 +16,13 @@ public class DataWeapons {
 
 	private final Map<Point2D, Weapon> weapons;
 	
-	public DataWeapons(final DataWorldMap world, DataJSONSettings settings) {
+	public DataWeapons(final DataWorldMap world) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		this.weapons = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.WEAPONS))
 				.collect(toMap(
-						itm -> Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize()), 
+						itm -> Utilities.convertPairToPoint2D(itm.getKey()), 
 						itm -> new WeaponImpl(WeaponType.values()[rnd.nextInt(WeaponType.values().length)])
 				));
 	}

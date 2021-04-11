@@ -1,15 +1,15 @@
 package hotlinecesena.model.dataccesslayer.datastructure;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.entities.items.Projectile;
 
 public class DataBullet extends AbstractData {
 
-	private final Set<Projectile> projectile = new HashSet<>();
+    private final List<Projectile> projectile = new CopyOnWriteArrayList<>();
 
-	public Set<Projectile> getProjectile() {
-		return projectile;
-	}
+    public List<Projectile> getProjectile() {
+        return projectile;
+    }
 }

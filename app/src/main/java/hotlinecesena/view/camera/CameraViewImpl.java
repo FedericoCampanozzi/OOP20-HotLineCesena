@@ -13,6 +13,7 @@ import javafx.scene.transform.Translate;
  */
 public final class CameraViewImpl implements CameraView {
 
+    private static final double HUD_HEIGHT = 100; //TODO Gotta retrieve this from DAL
     private static final double ACCEL = 30.0;
     private static final double SHARPNESS = 0.2;
     private Pane pane;
@@ -42,7 +43,9 @@ public final class CameraViewImpl implements CameraView {
         final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
         final Point2D newPos = MathUtils.lerp(
                 currentPos,
-                spritePosition.subtract(pane.getScene().getWidth() / 2, pane.getScene().getHeight() / 2),
+                spritePosition.subtract(
+                        pane.getScene().getWidth() / 2,
+                        (pane.getScene().getHeight() - HUD_HEIGHT) / 2),
                 blend);
         paneTranslate.setX(-newPos.getX());
         paneTranslate.setY(-newPos.getY());

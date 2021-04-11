@@ -1,13 +1,18 @@
 package hotlinecesena.model.entities.actors.player;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.model.events.MovementEvent;
+import hotlinecesena.model.events.PickUpEvent;
 import hotlinecesena.model.inventory.Inventory;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
@@ -19,7 +24,7 @@ import javafx.geometry.Point2D;
  */
 public final class PlayerImpl extends AbstractActor implements Player {
 
-    private static final double ACTIVATION_RADIUS = 5.0;
+    private static final double ITEM_USAGE_RADIUS = 1.5;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
 
@@ -52,7 +57,9 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies())
+            if (!this.hasCollided(newPos, this.getGameMaster().getEnemy().getEnemies().stream()
+                    .filter(e -> e.getActorStatus() != ActorStatus.DEAD)
+                    .collect(Collectors.toUnmodifiableSet()))
                     && !this.hasCollided(newPos, this.getGameMaster().getPhysics().getObstacles())) {
                 this.setPosition(newPos);
                 this.publish(new MovementEvent<>(this, newPos));
@@ -77,9 +84,20 @@ public final class PlayerImpl extends AbstractActor implements Player {
 
     @Override
     public void use() {
-        //TODO
         if (!this.getInventory().isReloading()) {
-            //this.publish(new PickUpEvent<Player, ItemsType>(this, ItemsType.MEDIKIT));
+            final var itemIterator = this.getGameMaster().getDataItems().getItems().entrySet().iterator();
+            final Set<Point2D> toBeRemoved = new HashSet<>();
+            itemIterator.forEachRemaining(entry -> {
+                final Point2D itemPos = entry.getKey();
+                final ItemsType item = entry.getValue();
+                if (MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
+                        itemPos, ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS)) {
+                    item.usage().accept(this);
+                    toBeRemoved.add(itemPos);
+                    this.publish(new PickUpEvent<Player, ItemsType>(this, item));
+                }
+            });
+            toBeRemoved.forEach(p -> this.getGameMaster().getDataItems().getItems().remove(p));
         }
     }
 }

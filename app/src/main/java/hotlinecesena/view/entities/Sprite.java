@@ -3,6 +3,7 @@ package hotlinecesena.view.entities;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.transform.Translate;
 
 /**
  *
@@ -42,4 +43,10 @@ public interface Sprite {
      * @return this sprite's position relative to the {@code Scene}.
      */
     Point2D getPositionRelativeToScene();
+
+    /**
+     * Returns this sprite's {@link Translate} position.
+     * @return this sprite's {@link Translate} position.
+     */
+    Point2D getTranslatePosition();
 }

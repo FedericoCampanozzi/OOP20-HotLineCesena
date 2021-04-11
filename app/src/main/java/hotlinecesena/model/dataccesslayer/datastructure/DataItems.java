@@ -14,13 +14,13 @@ public class DataItems extends AbstractData {
 
 	private final Map<Point2D, ItemsType> items;
 	
-	public DataItems(DataWorldMap world, DataJSONSettings settings) {
+	public DataItems(DataWorldMap world) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		items = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.ITEM))
 				.collect(toMap(
-						itm -> Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize()), 
+						itm -> Utilities.convertPairToPoint2D(itm.getKey()), 
 						itm -> ItemsType.values()[rnd.nextInt(ItemsType.values().length)] 
 				));
 	}
