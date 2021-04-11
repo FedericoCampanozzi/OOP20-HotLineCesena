@@ -16,6 +16,7 @@ import javafx.scene.transform.Translate;
 public final class SpriteImpl implements Sprite {
 
     private final ImageView imageView;
+    private Point2D imageOffset;
     private final Rotate rotate;
     private final Translate trans;
 
@@ -25,7 +26,7 @@ public final class SpriteImpl implements Sprite {
      */
     public SpriteImpl(final ImageView view) {
         imageView = view;
-        imageView.setPreserveRatio(true);
+        imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
         rotate = new Rotate();
         trans = (Translate) view.getTransforms().get(0);
         imageView.getTransforms().addAll(rotate, trans);
@@ -37,8 +38,8 @@ public final class SpriteImpl implements Sprite {
     @Override
     public void updatePosition(final Point2D entityPos) {
         Objects.requireNonNull(entityPos);
-        rotate.setPivotX(entityPos.getX() / 2 + imageView.getFitWidth() / 2);
-        rotate.setPivotY(entityPos.getY() / 2 + imageView.getFitHeight() / 2);
+        rotate.setPivotX(entityPos.getX() / 2 + imageOffset.getX());
+        rotate.setPivotY(entityPos.getY() / 2 + imageOffset.getY());
         trans.setX(entityPos.getX() / 2);
         trans.setY(entityPos.getY() / 2);
     }
@@ -51,16 +52,17 @@ public final class SpriteImpl implements Sprite {
     @Override
     public void updateImage(final Image image) {
         imageView.setImage(image);
+        imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
     }
 
     @Override
     public Point2D getPositionRelativeToParent() {
-        return imageView.localToParent(Point2D.ZERO);
+        return imageView.localToParent(imageOffset);
     }
 
     @Override
     public Point2D getPositionRelativeToScene() {
-        return imageView.localToScene(Point2D.ZERO);
+        return imageView.localToScene(imageOffset);
     }
 
     @Override
