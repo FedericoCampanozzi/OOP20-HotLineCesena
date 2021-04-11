@@ -10,7 +10,7 @@ import hotlinecesena.model.entities.actors.Actor;
 public interface Player extends Actor {
 
     /**
-     * Uses items found on ground.
+     * Uses or picks up items found on ground.
      */
     void use();
 
