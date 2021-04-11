@@ -1,9 +1,9 @@
 package hotlinecesena.controller;
 
 import java.io.IOException;
-
 import hotlinecesena.controller.HUD.PlayerStatsController;
 import hotlinecesena.controller.entities.ProjectileController;
+import hotlinecesena.controller.entities.enemy.EnemyController;
 import hotlinecesena.controller.entities.player.PlayerController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
@@ -36,13 +36,21 @@ public class WorldController{
 		view.getBorderPane().setBottom(loader.load());
 		gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
 		
+		
+		JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
+            final EnemyController ec = new EnemyController(e, view.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly()); 
+            gameLoopController.addMethodToUpdate(ec.getUpdateMethod());
+            view.getEnemiesSprite().remove(0);
+        });
+
+		
 		playerController = new PlayerControllerFactoryFX(primaryStage.getScene(), view.getGridPane())
                 .createPlayerController(new SpriteImpl(view.getPlayersPos().getValue()));
         gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
         
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
-
+        
 		gameLoopController.loop();
 	}
 	
