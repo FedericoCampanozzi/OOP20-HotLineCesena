@@ -11,15 +11,21 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
 /**
  * Pathfinder is the actual class that returns a path from a node to another
- * which implements an algorithm called A* to function
+ * which implements an algorithm called A* to function.
  */
-public class Pathfinder {
+public final class Pathfinder {
+
+    /**
+     * Class constructor.
+     */
+    private Pathfinder() {
+
+    }
 
     /**
      * Return an ordered list from the starting position to the end position
@@ -41,25 +47,34 @@ public class Pathfinder {
 
         final PriorityQueue<Node> toVisit = new PriorityQueue<>();
         final Set<Node> visited = new HashSet<>();
-        final int dimensionX = JSONDataAccessLayer.getInstance().getWorld().getMaxX() -
-                JSONDataAccessLayer.getInstance().getWorld().getMinX() + 1;
-        final int dimensionY = JSONDataAccessLayer.getInstance().getWorld().getMaxY() -
-                JSONDataAccessLayer.getInstance().getWorld().getMinY() + 1;
+        final Pair<Integer, Integer> startPair = new Pair<>((int) start.getX(), (int) start.getY());
+        final Pair<Integer, Integer> endPair = new Pair<>((int) end.getX(), (int) end.getY());
+
+        final int dimensionX = JSONDataAccessLayer.getInstance().getWorld().getMaxX()
+                - JSONDataAccessLayer.getInstance().getWorld().getMinX();
+        final int dimensionY = JSONDataAccessLayer.getInstance().getWorld().getMaxY()
+                - JSONDataAccessLayer.getInstance().getWorld().getMinY();
         final Map<Pair<Integer, Integer>, Node> altNodeMap = new HashMap<>();
         Node current;
+        Node startNode = null;
+        Node endNode = null;
 
-        for(int y=JSONDataAccessLayer.getInstance().getWorld().getMinY(); y < dimensionY; y++) {
-            for(int x=JSONDataAccessLayer.getInstance().getWorld().getMinX(); x < dimensionX; x++) {
-                final double heuristic = Math.abs(x - end.getX()) + Math.abs(y - end.getY());
-                final Node node = new Node(0, (int) heuristic, x, y);
+        for (int y = JSONDataAccessLayer.getInstance().getWorld().getMinY(); y <= dimensionY; y++) {
+            for (int x = JSONDataAccessLayer.getInstance().getWorld().getMinX(); x <= dimensionX; x++) {
+                final int heuristic = Math.abs(x - (int) end.getX()) + Math.abs(y - (int) end.getY());
+                final Node node = new Node(0, heuristic, x, y);
                 altNodeMap.put(new Pair<>(x, y), node);
             }
         }
 
-        final Node startNode = altNodeMap.getOrDefault(new Pair<>((int) start.getX(), (int) start.getY()), new Node(0, 0, 0, 0));
-        final Node endNode = altNodeMap.getOrDefault(new Pair<>((int) end.getX(), (int) end.getY()), new Node(0, 0, 0, 0));
+        if (altNodeMap.containsKey(startPair) && altNodeMap.containsKey(endPair)) {
+            startNode = altNodeMap.get(startPair);
+            endNode = altNodeMap.get(endPair);
+        } else {
+            return List.of(start);
+        }
 
-        if(startNode.equals(endNode)) {
+        if (startNode.equals(endNode)) {
             return noPathAviable(startNode);
         }
 
@@ -69,28 +84,28 @@ public class Pathfinder {
             current = toVisit.poll();
             visited.add(current);
 
-            if(current.equals(endNode)) {
+            if (current.equals(endNode)) {
                 return getPath(current);
             }
 
-            for(int y=current.y - 1; y < current.y + 2; y++) {
-                for(int x=current.x - 1; x < current.x + 2; x++) {
-                    if(map.contains(new Point2D(x,y))) {
-                        final Node neighbor = altNodeMap.getOrDefault(new Pair<>(x, y), new Node(0, 0, 0, 0));
+            for (int y = current.y - 1; y < current.y + 2; y++) {
+                for (int x = current.x - 1; x < current.x + 2; x++) {
+                    if (map.contains(new Point2D(x, y))) {
+                        final Node neighbor = altNodeMap.get(new Pair<>(x, y));
 
-                        if(visited.contains(neighbor)) {
+                        if (visited.contains(neighbor)) {
                             continue;
                         }
 
-                        final int calculatedCost = neighbor.heuristic +
-                                neighbor.moveCost +
-                                neighbor.totalCost;
+                        final int calculatedCost = neighbor.heuristic
+                                + neighbor.moveCost
+                                + neighbor.totalCost;
 
-                        if(calculatedCost < neighbor.totalCost || !toVisit.contains(neighbor)) {
+                        if (calculatedCost < neighbor.totalCost || !toVisit.contains(neighbor)) {
                             neighbor.totalCost = calculatedCost;
                             neighbor.parent = Optional.of(current);
 
-                            if(!toVisit.contains(neighbor)) {
+                            if (!toVisit.contains(neighbor)) {
                                 toVisit.add(neighbor);
                             }
                         }
@@ -98,7 +113,7 @@ public class Pathfinder {
                 }
             }
 
-        } while(!toVisit.isEmpty());
+        } while (!toVisit.isEmpty());
 
         return noPathAviable(startNode);
     }
@@ -106,7 +121,7 @@ public class Pathfinder {
     /**
      * Returns a list of points containing only the starting
      * position, due to the fact that there was no available
-     * path to reach the end position from the start
+     * path to reach the end position from the start.
      * @param start the starting node of the research
      * @return a list of points that need to be traversed
      * to reach the desired end
@@ -123,7 +138,7 @@ public class Pathfinder {
 
     /**
      * Returns a list of points containing all the points traversed
-     * to reach the end position
+     * to reach the end position.
      * @param current the current node which coincide with
      * the last node if the search as been completed successfully
      * @return a list of points that need to be traversed
@@ -131,7 +146,7 @@ public class Pathfinder {
      */
     private static List<Point2D> getPath(Node current) {
         final List<Point2D> path = new ArrayList<>();
-        while(!current.parent.isEmpty()) {
+        while (!current.parent.isEmpty()) {
             path.add(current.getPosition());
             current = current.parent.get();
         }
@@ -160,13 +175,13 @@ public class Pathfinder {
         private final int y;
 
         /**
-         * Class constructor
+         * Class constructor.
          * @param moveCost the moveCost of this node
          * @param heuristic the heuristics of this node
          * @param posX the current x position of the node
          * @param posY the current y position of the node
          */
-        public Node(final int moveCost, final int heuristic,
+        Node(final int moveCost, final int heuristic,
                 final int posX, final int posY) {
 
             this.moveCost = moveCost;
@@ -179,7 +194,7 @@ public class Pathfinder {
         /**
          * Compare this object {@code totalCost} with the
          * next {@code totalCost}, needed to create an
-         * ordered list of nodes
+         * ordered list of nodes.
          * @param next the {@code Node} to be compared to
          */
         @Override
@@ -189,7 +204,7 @@ public class Pathfinder {
 
         /**
          * Gets the position of {@code Node} based on its {@code x}
-         * and {@code y}
+         * and {@code y}.
          * @return the position of this {@code Node}
          */
         public Point2D getPosition() {
