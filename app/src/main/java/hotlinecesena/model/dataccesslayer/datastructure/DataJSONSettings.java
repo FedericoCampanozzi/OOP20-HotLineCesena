@@ -22,8 +22,6 @@ public class DataJSONSettings  extends AbstractData  {
     private boolean isFullScreen;
     @JsonProperty("volume")
     private int volume;
-    @JsonProperty("tileSize")
-    private int tileSize;
     @JsonProperty("niceseeds")
     private List<Long> niceseeds;
     @JsonProperty("isMusicActive")
@@ -62,7 +60,25 @@ public class DataJSONSettings  extends AbstractData  {
     private int minRoom;
     @JsonProperty("maxRoom")
     private int maxRoom;
+    @JsonProperty("obstaclesEdge")
+    private float obstaclesEdge;
+    @JsonProperty("minRoomWeapons")
+    private int minRoomWeapons;
+    @JsonProperty("maxRoomWeapons")
+    private int maxRoomWeapons;
     
+	public int getMinRoomWeapons() {
+		return minRoomWeapons;
+	}
+
+	public int getMaxRoomWeapons() {
+		return maxRoomWeapons;
+	}
+
+	public float getObstaclesEdge() {
+		return obstaclesEdge;
+	}
+
 	public int getMinEnemyForRoom() {
 		return minEnemyForRoom;
 	}
@@ -178,15 +194,7 @@ public class DataJSONSettings  extends AbstractData  {
 	public void setVolume(int volume) {
 		this.volume = volume;
 	}
-
-	public int getTileSize() {
-		return tileSize;
-	}
-
-	public void setTileSize(int tileSize) {
-		this.tileSize = tileSize;
-	}
-
+	
 	@Override
 	public void write() throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();
