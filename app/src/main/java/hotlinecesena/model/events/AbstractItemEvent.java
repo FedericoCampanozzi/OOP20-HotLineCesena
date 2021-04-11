@@ -26,6 +26,4 @@ public abstract class AbstractItemEvent<A extends Actor, I extends Enum<I>> exte
     public final I getItemType() {
         return this.itemType;
     }
-
-
 }
