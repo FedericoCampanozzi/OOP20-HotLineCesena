@@ -21,6 +21,13 @@ public interface Inventory {
     void add(Item item, int quantity);
 
     /**
+     * Returns the quantity of a given {@link Item} present in this inventory.
+     * @param item the item to look for in the inventory
+     * @return the quantity of the given item, or {@code 0} if it's not present.
+     */
+    int getQuantityOf(Item item);
+
+    /**
      * Returns the weapon currently equipped in this inventory.
      * @return an {@link Optional} containing the equipped weapon, if
      * present, otherwise returns an empty optional.
