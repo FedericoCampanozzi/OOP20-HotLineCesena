@@ -1,5 +1,7 @@
 package hotlinecesena.model.entities;
 
+import javax.annotation.Nonnull;
+
 import hotlinecesena.model.events.RotationEvent;
 import javafx.geometry.Point2D;
 
@@ -21,7 +23,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
      * @param speed the speed at which this entity will move.
      * @throws NullPointerException if given position is null.
      */
-    protected AbstractMovableEntity(final Point2D position, final double angle, final double width,
+    protected AbstractMovableEntity(@Nonnull final Point2D position, final double angle, final double width,
             final double height, final double speed) {
         super(position, width, height);
         this.angle = angle;
@@ -35,7 +37,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
      * Subclasses may require different movement logics.
      */
     @Override
-    public abstract void move(Point2D direction);
+    public abstract void move(@Nonnull Point2D direction);
 
     @Override
     public final double getAngle() {

@@ -2,6 +2,8 @@ package hotlinecesena.model.entities;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.eventbus.EventBus;
 
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
@@ -26,9 +28,9 @@ public abstract class AbstractEntity implements Entity {
      * @param position starting position in which this entity will be located.
      * @param width this entity's width.
      * @param height this entity's height.
-     * @throws NullPointerException if given position is null.
+     * @throws NullPointerException if the given position is null.
      */
-    protected AbstractEntity(final Point2D position, final double width, final double height) {
+    protected AbstractEntity(@Nonnull final Point2D position, final double width, final double height) {
         this.position = Objects.requireNonNull(position);
         this.width = width;
         this.height = height;
@@ -48,7 +50,7 @@ public abstract class AbstractEntity implements Entity {
      * @param pos the new position.
      * @throws NullPointerException if the supplied {@link Point2D} is null.
      */
-    protected final void setPosition(final Point2D pos) {
+    protected final void setPosition(@Nonnull final Point2D pos) {
         position = Objects.requireNonNull(pos);
     }
 
@@ -78,7 +80,7 @@ public abstract class AbstractEntity implements Entity {
      * @param event the event to be published
      * @throws NullPointerException if the given event is null.
      */
-    protected final void publish(final Event<? extends Entity> event) {
+    protected final void publish(@Nonnull final Event<? extends Entity> event) {
         bus.post(Objects.requireNonNull(event));
     }
 
@@ -86,7 +88,7 @@ public abstract class AbstractEntity implements Entity {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public final void register(final Subscriber subscriber) {
+    public final void register(@Nonnull final Subscriber subscriber) {
         bus.register(Objects.requireNonNull(subscriber));
     }
 
@@ -94,7 +96,7 @@ public abstract class AbstractEntity implements Entity {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public final void unregister(final Subscriber subscriber) {
+    public final void unregister(@Nonnull final Subscriber subscriber) {
         bus.unregister(Objects.requireNonNull(subscriber));
     }
 }
