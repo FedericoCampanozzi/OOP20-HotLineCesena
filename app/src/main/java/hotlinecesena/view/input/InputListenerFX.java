@@ -29,6 +29,11 @@ public final class InputListenerFX implements InputListener {
     public InputListenerFX() {
     }
 
+    @Override
+    public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
+        return new Pair<>(Set.copyOf(inputs), new Point2D(currentMouseCoords.getX(), currentMouseCoords.getY()));
+    }
+
     /**
      * @throws NullPointerException if the given scene is null.
      */
@@ -36,12 +41,12 @@ public final class InputListenerFX implements InputListener {
     public void setEventHandlers(@Nonnull final Scene scene) {
         Objects.requireNonNull(scene);
         // Setting keyboard events
-        scene.setOnKeyReleased(this.getKeyReleasedEvent());
-        scene.setOnKeyPressed(this.getKeyPressedEvent());
+        scene.setOnKeyReleased(this.getOnKeyReleasedHandler());
+        scene.setOnKeyPressed(this.getOnKeyPressedHandler());
 
         // Setting mouse button events
-        scene.setOnMouseReleased(this.getMouseReleasedEvent());
-        scene.setOnMousePressed(this.getMousePressedEvent());
+        scene.setOnMouseReleased(this.getOnMouseReleasedHandler());
+        scene.setOnMousePressed(this.getOnMousePressedHandler());
 
         // Setting mouse movement events
         scene.setOnMouseMoved(this.captureMouseCoordinates());
@@ -55,48 +60,43 @@ public final class InputListenerFX implements InputListener {
     public void removeEventHandlersFrom(@Nonnull final Scene scene) {
         Objects.requireNonNull(scene);
         // Removing keyboard events
-        scene.removeEventHandler(KeyEvent.KEY_RELEASED, this.getKeyReleasedEvent());
-        scene.removeEventHandler(KeyEvent.KEY_PRESSED, this.getKeyPressedEvent());
+        scene.removeEventHandler(KeyEvent.KEY_RELEASED, this.getOnKeyReleasedHandler());
+        scene.removeEventHandler(KeyEvent.KEY_PRESSED, this.getOnKeyPressedHandler());
 
         // Removing mouse button events
-        scene.removeEventHandler(MouseEvent.MOUSE_RELEASED, this.getMouseReleasedEvent());
-        scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, this.getMousePressedEvent());
+        scene.removeEventHandler(MouseEvent.MOUSE_RELEASED, this.getOnMouseReleasedHandler());
+        scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, this.getOnMousePressedHandler());
 
         // Removing mouse movement events
         scene.removeEventHandler(MouseEvent.MOUSE_MOVED, this.captureMouseCoordinates());
         scene.removeEventHandler(MouseEvent.MOUSE_DRAGGED, this.captureMouseCoordinates());
     }
 
-    @Override
-    public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
-        return new Pair<>(inputs, currentMouseCoords);
-    }
-
     /**
      * Handler for key releases.
      */
-    private EventHandler<KeyEvent> getKeyReleasedEvent() {
+    private EventHandler<KeyEvent> getOnKeyReleasedHandler() {
         return e -> this.forgetInput(e.getCode());
     }
 
     /**
      * Handler for key presses.
      */
-    private EventHandler<KeyEvent> getKeyPressedEvent() {
+    private EventHandler<KeyEvent> getOnKeyPressedHandler() {
         return e -> this.captureInput(e.getCode());
     }
 
     /**
      * Handler for mouse buttons releases.
      */
-    private EventHandler<MouseEvent> getMouseReleasedEvent() {
+    private EventHandler<MouseEvent> getOnMouseReleasedHandler() {
         return e -> this.forgetInput(e.getButton());
     }
 
     /**
      * Handler for mouse buttons presses.
      */
-    private EventHandler<MouseEvent> getMousePressedEvent() {
+    private EventHandler<MouseEvent> getOnMousePressedHandler() {
         return e -> this.captureInput(e.getButton());
     }
 
