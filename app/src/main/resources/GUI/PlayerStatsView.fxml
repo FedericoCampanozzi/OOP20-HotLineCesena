@@ -21,7 +21,7 @@
             </Label>
             <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../Images/GUI/pistol.png" />
+                  <Image url="/Images/GUI/rifle.png" />
                </image></ImageView>
          </children>
          <BorderPane.margin>

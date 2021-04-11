@@ -9,8 +9,11 @@ import hotlinecesena.controller.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.view.WorldView;
+import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -59,7 +62,6 @@ public class PlayerStatsController implements Initializable, Updatable{
 	@Override
 	public Consumer<Double> getUpdateMethod() {
 		return deltaTime -> {
-			missions = missionController.getMissions();
 			// Update of life bar
 			lifeBar.setProgress(player.getCurrentHealth());
 			if (lifeBar.getProgress() <= 10) {
@@ -67,14 +69,20 @@ public class PlayerStatsController implements Initializable, Updatable{
 			}
 			
 			// Update of ammo counter
-			 player.getInventory().getWeapon().ifPresentOrElse(weapon -> bulletLabel.setText(
+			player.getInventory().getWeapon().ifPresentOrElse(weapon -> bulletLabel.setText(
 	                    weapon.getCurrentAmmo()
 	                    + "/"
 	                    + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
 	                    ), () -> bulletLabel.setText("0/0"));
 			
+			
+			
 			// Update of missions view
+			missions = missionController.getMissions();
 			missionCheckBox.setSelected(missions.get(currentMission).getValue());
+			
+			System.out.println(missions);
+			System.out.println("Enemies dead: " + JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount());
 			
 			// ************
 			worldView.getBorderPane().setOnKeyPressed(e -> {

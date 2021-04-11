@@ -36,13 +36,14 @@ public class WorldController{
 		view.getBorderPane().setBottom(loader.load());
 		gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
 		
+		
 		playerController = new PlayerControllerFactoryFX(primaryStage.getScene(), view.getGridPane())
                 .createPlayerController(new SpriteImpl(view.getPlayersPos().getValue()));
         gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
         
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
-
+        
 		gameLoopController.loop();
 	}
 	
