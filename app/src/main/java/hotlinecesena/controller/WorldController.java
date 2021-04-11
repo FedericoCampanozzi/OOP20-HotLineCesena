@@ -27,7 +27,7 @@ public class WorldController{
 		view = new WorldView(this.primaryStage);
 		view.start();
 		
-		missionController = new MissionController(gameLoopController);
+		missionController = new MissionController();
 		gameLoopController.addMethodToUpdate(d -> missionController.update(d));
 		
 		playerStatsController = new PlayerStatsController(view, missionController);
