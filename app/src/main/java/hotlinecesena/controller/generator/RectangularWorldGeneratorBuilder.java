@@ -17,6 +17,7 @@ public class RectangularWorldGeneratorBuilder extends AbstractWorldGeneratorBuil
 	
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
+		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
 		

@@ -1,26 +1,29 @@
 package hotlinecesena;
 
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
-
-import org.junit.jupiter.api.Test;
-
+import javafx.util.Pair;
 import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
 import hotlinecesena.controller.generator.OctagonalWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.QuadraticWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import javafx.util.Pair;
+import hotlinecesena.model.dataccesslayer.datastructure.*;
 
 public class MapGeneratorTest {
 
 	private static final int N_IMAGE = 10;
+	private final DataJSONSettings settings = JSONDataAccessLayer.getInstance().getSettings();
 	
 	@Test
 	public void visualTestGenerator() {
@@ -43,16 +46,20 @@ public class MapGeneratorTest {
 		System.out.println("Finish");
 	}
 
-	private static void generateQuadratic(int fileIndex) {
+	private void generateQuadratic(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new QuadraticWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(7, 13, 1, 5, 15, 25))
-					.generateRooms(10, 20)
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
+							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
+							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
+					))
+					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
-					.generateEnemy(1, 4)
-					.generateItem(2, 5)
-					.generateObstacoles(3, 8)
-					.generateWeapons(0, 2)
+					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
+					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
+					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
+					.generateObstacoles(settings.getMinObstaclesForRoom(), settings.getMaxObstaclesForRoom())
 					.finishes()
 					.build();
 			saveImageFile(sgwb, JSONDataAccessLayer.FILE_FOLDER_PATH + "GeneratedMap" + File.separator + "TestQ["
@@ -62,15 +69,21 @@ public class MapGeneratorTest {
 		}
 	}
 
-	private static void generateRectangular(int fileIndex) {
+	private void generateRectangular(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(7, 13, 7, 13, 1, 5, 15, 25))
-					.generateRooms(10, 20)
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
+							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
+							settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
+							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
+							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
+					))
+					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
-					.generateEnemy(1, 6)
-					.generateItem(2, 5)
-					.generateObstacoles(3, 8)
+					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
+					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
+					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
+					.generateObstacoles(settings.getMinObstaclesForRoom(), settings.getMaxObstaclesForRoom())
 					.finishes()
 					.build();
 			saveImageFile(sgwb, JSONDataAccessLayer.FILE_FOLDER_PATH + "GeneratedMap" + File.separator + "TestR["
@@ -80,15 +93,20 @@ public class MapGeneratorTest {
 		}
 	}
 
-	private static void generateEsagonal(int fileIndex) {
+	private void generateEsagonal(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new OctagonalWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateOctagonalRoomList(3, 7, 4, 8, 15, 25))
-					.generateRooms(10, 20)
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateOctagonalRoomList(
+							3, 5,
+							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
+							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
+					))
+					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
-					.generateEnemy(1, 6)
-					.generateItem(2, 5)
-					.generateObstacoles(3, 8)
+					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
+					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
+					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
+					.generateObstacoles(settings.getMinObstaclesForRoom(), settings.getMaxObstaclesForRoom())
 					.finishes()
 					.build();
 			saveImageFile(sgwb, JSONDataAccessLayer.FILE_FOLDER_PATH + "GeneratedMap" + File.separator + "TestE["
@@ -98,7 +116,7 @@ public class MapGeneratorTest {
 		}
 	}
 
-	private static void saveImageFile(WorldGeneratorBuilder builder, String path) throws IOException {
+	private void saveImageFile(WorldGeneratorBuilder builder, String path) throws IOException {
 		int pixSize = 9;
 		int width = pixSize * (builder.getMaxX() - builder.getMinX() + 1);
 		int height = pixSize * (builder.getMaxY() - builder.getMinY() + 1);
@@ -125,4 +143,108 @@ public class MapGeneratorTest {
 
 	}
 
+	@Test
+	/**
+	 * I can create builder like i want :
+	 * for example i can call first generateWeapons than generateEnemy or the other way around
+	 */
+	public void correctBuilderFlow() {
+		new QuadraticWorldGeneratorBuilder()
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+						8, 10,
+						1, 2,
+						3, 4
+				))
+				.generateRooms(1, 2)
+				.generatePlayer()
+				.generateEnemy(1, 2)
+				.generateItem(1, 2)
+				.generateWeapons(1, 2)
+				.generateObstacoles(1, 2)
+				.finishes()
+				.build();
+		
+		new QuadraticWorldGeneratorBuilder()
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				8, 10,
+				1, 2,
+				3, 4
+		))
+		.generateRooms(1, 2)
+		.generatePlayer()
+		.generateWeapons(1, 2)
+		.generateItem(1, 2)
+		.generateEnemy(1, 2)
+		.generateObstacoles(1, 2)
+		.finishes()
+		.build();
+		
+		
+		new QuadraticWorldGeneratorBuilder()
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				8, 10,
+				1, 2,
+				3, 4
+		))
+		.generateRooms(1, 2)
+		.generatePlayer()
+		.generateObstacoles(1, 2)
+		.generateEnemy(1, 2)
+		.generateWeapons(1, 2)
+		.finishes()
+		.generateItem(1, 2)
+		.build();
+	}
+	@Test
+	/**
+	 * I have to call first addSomeBaseRoom or addSingleRoom
+	 * Than generateRooms and than others method
+	 */
+	public void wrongBuilderFlow() {
+		   try{
+			   new QuadraticWorldGeneratorBuilder()
+			   .generatePlayer()
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+						8, 10,
+						1, 2,
+						3, 4
+				))
+				.generateRooms(1, 2)
+				.generateEnemy(1, 2)
+				.generateItem(1, 2)
+				.generateWeapons(1, 2)
+				.generateObstacoles(1, 2)
+				.finishes()
+				.build();
+		   }
+		   catch(IllegalStateException exc){
+		        assertTrue(true);
+		   }
+		   catch(Exception e){
+		        fail("Wrong exception thrown, call first addSomeBaseRoom or addSingleRoom");
+		   }
+		   
+		   try{
+			   new QuadraticWorldGeneratorBuilder()
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+						8, 10,
+						1, 2,
+						3, 4
+				))
+				.generatePlayer()
+				.generateRooms(1, 2)
+				.generateEnemy(1, 2)
+				.generateItem(1, 2)
+				.generateWeapons(1, 2)
+				.generateObstacoles(1, 2)
+				.finishes()
+				.build();
+		   }
+		   catch(IllegalStateException exc){
+		        assertTrue(true);
+		   }
+		   catch(Exception e){
+		        fail("Wrong exception thrown, after call addSomeBaseRoom or addSingleRoom call generateRooms");
+		   }
+	}
 }

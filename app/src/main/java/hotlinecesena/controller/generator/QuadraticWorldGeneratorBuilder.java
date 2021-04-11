@@ -17,8 +17,10 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 	
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
+		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
+		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
 			QuadraticRoom toPut = (QuadraticRoom)this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
@@ -35,8 +37,6 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				Pair<Integer, Integer> dir = new Pair<>(dirY, dirX);
 				Pair<Integer, Integer> center = Utilities.sumPair(doorLink, dir);
 				if (canPutRoom(center, doorLink, dir, toPut)) {
-					//Non e' safe
-					//center = Utilities.sumPair(center, new Pair<>(-(int)Math.signum(dirY), -(int)Math.signum(dirX)));
 					generateRoom(center, toPut);
 					toPut.setCenter(center);
 				}

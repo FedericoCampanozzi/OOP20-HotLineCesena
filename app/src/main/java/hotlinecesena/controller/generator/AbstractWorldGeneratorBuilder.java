@@ -9,7 +9,7 @@ import static java.util.stream.Collectors.*;
 public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBuilder {
 	
 	protected final static int MAX_POSSIBILITY = 10_000;
-	protected final static int MAP_PADDING = 3;
+	protected final static int MAP_PADDING = 10;
 	protected Random rnd = new Random();
 	protected int xMin, xMax, yMin, yMax;
 	
@@ -37,6 +37,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 
 	@Override
 	public WorldGeneratorBuilder generatePlayer() {
+		haveInitMapAndBaseRoom();
 		Room r = this.rooms.get(rnd.nextInt(this.rooms.size()));
 		r.getMap().put(r.getCenter(), SymbolsType.PLAYER);
 		this.map.put(r.getCenter(), SymbolsType.PLAYER);
@@ -45,24 +46,28 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	
 	@Override
 	public WorldGeneratorBuilder generateEnemy(int minInRoom, int maxInRoom) {
+		haveInitMapAndBaseRoom();
 		generateTotalRandomness(SymbolsType.ENEMY, minInRoom, maxInRoom);
 		return this;
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateObstacoles(int minInRoom, int maxInRoom) {
+		haveInitMapAndBaseRoom();
 		generateTotalRandomness(SymbolsType.OBSTACOLES, minInRoom, maxInRoom);
 		return this;
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateItem(int minInRoom, int maxInRoom) {
+		haveInitMapAndBaseRoom();
 		generateTotalRandomness(SymbolsType.ITEM, minInRoom, maxInRoom);
 		return this;
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateWeapons(int minInRoom, int maxInRoom) {
+		haveInitMapAndBaseRoom();
 		generateTotalRandomness(SymbolsType.WEAPONS, minInRoom, maxInRoom);
 		return this;
 	}
@@ -88,66 +93,63 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	
 	@Override
 	public WorldGeneratorBuilder finishes() {
+		haveInitMapAndBaseRoom();
 		this.xMin = xMin - MAP_PADDING;
 		this.xMax = xMax + MAP_PADDING;
 		this.yMax = yMax + MAP_PADDING;
 		this.yMin = yMin - MAP_PADDING;
 		
+		//fill null positions
 		for (int i = xMin; i <= xMax; i++) {
 			for (int j = yMin; j <= yMax; j++) {
 
 				if (!this.map.containsKey(new Pair<>(i, j))) {
 					this.map.put(new Pair<>(i, j), SymbolsType.VOID);
 				}
-				
-				if (this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && (
-						getOrNull(i + 1, j, SymbolsType.VOID) ||
-						getOrNull(i - 1, j, SymbolsType.VOID) ||
-						getOrNull(i, j + 1, SymbolsType.VOID) ||
-						getOrNull(i, j - 1, SymbolsType.VOID))) {
+			}
+		}
+		
+		//adjust DOOR and OBSTACOLES spawn
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+
+				if (this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && checkAdjacent4(i, j, SymbolsType.VOID)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALL);
 				}
-				
-				if (this.map.get(new Pair<>(i, j)) == SymbolsType.OBSTACOLES && (
-						getOrNull(i + 1, j, SymbolsType.WALL) ||
-						getOrNull(i - 1, j, SymbolsType.WALL) ||
-						getOrNull(i, j + 1, SymbolsType.WALL) ||
-						getOrNull(i, j - 1, SymbolsType.WALL) ||
-						getOrNull(i + 1, j + 1, SymbolsType.WALL) ||
-						getOrNull(i - 1, j - 1, SymbolsType.WALL) ||
-						getOrNull(i - 1, j + 1, SymbolsType.WALL) ||
-						getOrNull(i + 1, j - 1, SymbolsType.WALL))) {
+
+				if (this.map.get(new Pair<>(i, j)) == SymbolsType.OBSTACOLES
+						&& checkAdjacent8(i, j, SymbolsType.WALL)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 				}
 				
 				// j+
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR &&
-						getOrNull(i, j + 1, SymbolsType.DOOR) &&
-						getOrNull(i, j + 2, SymbolsType.WALKABLE) ) {
+						get(i, j + 1, SymbolsType.DOOR) &&
+						get(i, j + 2, SymbolsType.WALKABLE) ) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
 				}
 				
 				// j-
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						getOrNull(i, j - 1, SymbolsType.DOOR) &&
-						getOrNull(i, j - 2, SymbolsType.WALKABLE) ) {
+						get(i, j - 1, SymbolsType.DOOR) &&
+						get(i, j - 2, SymbolsType.WALKABLE) ) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
 				}
 				
 				// i+
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						getOrNull(i + 1, j, SymbolsType.DOOR)&&
-						getOrNull(i + 2, j, SymbolsType.WALKABLE) ) {
+						get(i + 1, j, SymbolsType.DOOR)&&
+						get(i + 2, j, SymbolsType.WALKABLE) ) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
 				}
 				
 				// i-
 				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						getOrNull(i - 1, j, SymbolsType.DOOR) &&
-						getOrNull(i - 2, j, SymbolsType.WALKABLE) ) {
+						get(i - 1, j, SymbolsType.DOOR) &&
+						get(i - 2, j, SymbolsType.WALKABLE) ) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
 				}
@@ -156,7 +158,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 
 		for (int i = xMin; i <= xMax; i++) {
 			for (int j = yMin; j <= yMax; j++) {
-				if (this.map.get(new Pair<>(i, j)).equals(SymbolsType.DOOR)) {
+				if (get(i, j, SymbolsType.DOOR)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALL);
 				}
 			}
@@ -165,36 +167,71 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		return this;
 	}
 	
-	private boolean getOrNull(int i, int j, SymbolsType type) {
-		return !this.map.containsKey(new Pair<>(i,j)) || this.map.get(new Pair<>(i,j)).equals(type);
+	
+	protected boolean checkAdjacent4(int i, int j, SymbolsType type) {
+		return get(i + 1, j, type) || get(i - 1, j, type) || get(i, j + 1, type) || get(i, j - 1, type);
+	}
+	
+	protected boolean checkAdjacent8(int i, int j, SymbolsType type) {
+		return checkAdjacent4(i, j, type) || get(i + 1, j + 1, type) || get(i - 1, j - 1, type)
+				|| get(i - 1, j + 1, type) || get(i + 1, j - 1, type);
+	}
+	
+	protected boolean get(int i, int j, SymbolsType type) {
+		return this.map.get(new Pair<>(i,j)).equals(type);
+	}
+	
+	protected void haveInitMapAndBaseRoom() {
+		this.haveInitMap();
+		this.haveInitBaseRoom();
+	}
+
+	//check if generate have called
+	protected void haveInitMap() {
+		if(this.rooms.isEmpty()) {
+			throw new IllegalStateException();
+		}
+	}
+
+	//check if addSingleBaseRoom or addSomeBaseRoom have called
+	protected void haveInitBaseRoom() {
+		if(this.baseRooms.isEmpty()) {
+			throw new IllegalStateException();
+		}
 	}
 	
 	@Override
 	public WorldGeneratorBuilder build() {
+		haveInitMapAndBaseRoom();
 		return this;
 	}
 	@Override
 	public Map<Pair<Integer, Integer>, SymbolsType> getMap(){
+		haveInitMapAndBaseRoom();
 		return this.map;
 	}
 	
 	@Override
 	public int getMinX() {
+		haveInitMapAndBaseRoom();
 		return this.xMin;
 	}
 	
 	@Override
 	public int getMaxX() {
+		haveInitMapAndBaseRoom();
 		return this.xMax;
 	}
 	
 	@Override
 	public int getMinY() {
+		haveInitMapAndBaseRoom();
 		return this.yMin;
 	}
 	
 	@Override
 	public int getMaxY() {
+		haveInitMapAndBaseRoom();
 		return this.yMax;
 	}
 }
