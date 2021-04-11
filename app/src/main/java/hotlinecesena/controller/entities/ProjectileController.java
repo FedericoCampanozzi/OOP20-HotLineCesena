@@ -65,8 +65,8 @@ public final class ProjectileController implements Updatable {
         final double spriteScale = 0.2;
         final ImageView top = new ImageView(loader.getImage(SceneType.GAME, ImageType.BULLET));
         top.getTransforms().add(new Translate());
-        top.setFitHeight(this.getDAL().getSettings().getTileSize() * spriteScale);
-        top.setFitWidth(this.getDAL().getSettings().getTileSize() * spriteScale);
+        top.setFitHeight(spriteScale);
+        top.setFitWidth(spriteScale);
         worldView.getGridPane().add(top, 0, 0);
 
         final Sprite projSprite = new SpriteImpl(top);

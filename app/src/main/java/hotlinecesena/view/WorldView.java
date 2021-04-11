@@ -18,7 +18,6 @@ import javafx.util.Pair;
 
 public class WorldView {
     private static final String TITLE = "Hotline Cesena";
-    private static final int TILE_SIZE = JSONDataAccessLayer.getInstance().getSettings().getTileSize();
     private final Stage primaryStage;
     private BorderPane borderPane;
     private final GridPane gridPane = new GridPane();
@@ -38,7 +37,7 @@ public class WorldView {
     public final void start() {
         primaryStage.setTitle(TITLE);
         borderPane = new BorderPane();
-        final Scene scene = new Scene(borderPane, 600, 400);
+        final Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         borderPane.setCenter(gridPane);
         
@@ -61,11 +60,11 @@ public class WorldView {
                 
                 final Translate trans = new Translate();
                 tile.getTransforms().add(trans);
-                tile.setFitHeight(TILE_SIZE);
-                tile.setFitWidth(TILE_SIZE);
+                tile.setFitHeight(1);
+                tile.setFitWidth(1);
                 gridPane.add(tile, 0, 0);
-                trans.setX(p.getKey() * TILE_SIZE);
-                trans.setY(p.getValue() * TILE_SIZE);
+                trans.setX(p.getKey());
+                trans.setY(p.getValue());
         });
         
         this.worldMap.forEach((p,s) -> {
@@ -88,11 +87,11 @@ public class WorldView {
             
             final Translate trans = new Translate();
             tile.getTransforms().add(trans);
-            tile.setFitHeight(TILE_SIZE);
-            tile.setFitWidth(TILE_SIZE);
+            tile.setFitHeight(1);
+            tile.setFitWidth(1);
             gridPane.add(tile, 0, 0);
-            trans.setX(p.getKey() * TILE_SIZE);
-            trans.setY(p.getValue() * TILE_SIZE);
+            trans.setX(p.getKey());
+            trans.setY(p.getValue());
         });
         
         this.worldMap.forEach((p,s) -> {
@@ -101,8 +100,8 @@ public class WorldView {
             switch(c) {
                 case 'P':
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL));
-                    this.playersPos = new Pair<>(new Pair<>(p.getKey() * TILE_SIZE, p.getValue() * TILE_SIZE), tile);
-                    System.out.println(new Pair<>(p.getKey() * TILE_SIZE, p.getValue() * TILE_SIZE));
+                    this.playersPos = new Pair<>(new Pair<>(p.getKey(), p.getValue()), tile);
+                    System.out.println(new Pair<>(p.getKey(), p.getValue()));
                     System.out.println(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
                     break;
                 case 'E':
@@ -113,11 +112,11 @@ public class WorldView {
             
             final Translate trans = new Translate();
             tile.getTransforms().add(trans);
-            tile.setFitHeight(TILE_SIZE);
-            tile.setFitWidth(TILE_SIZE);
+            tile.setFitHeight(1);
+            tile.setFitWidth(1);
             gridPane.add(tile, 0, 0);
-            trans.setX(p.getKey() * TILE_SIZE);
-            trans.setY(p.getValue() * TILE_SIZE);
+            trans.setX(p.getKey());
+            trans.setY(p.getValue());
         });
         
         primaryStage.setResizable(false);
@@ -125,8 +124,8 @@ public class WorldView {
         primaryStage.setHeight(900);
         primaryStage.setX(0);
         primaryStage.setY(0);
-        this.gridPane.setScaleX(100);
-        this.gridPane.setScaleY(100);
+        borderPane.setScaleX(100);
+        borderPane.setScaleY(100);
     }
 
     public GridPane getGridPane() {
