@@ -1,10 +1,12 @@
 package hotlinecesena;
 
-import javafx.geometry.Point2D;
+import java.util.Random;
 import javafx.util.Pair;
 import org.junit.jupiter.api.Test;
 import hotlinecesena.utilities.Utilities;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class UtilitiesTest {
 
@@ -38,10 +40,17 @@ public class UtilitiesTest {
 		assertEquals(p1s, Utilities.mulPairScalar(p1, s));
 	}
 	@Test
-	public void testConvertPairToPoint2D() {
-		final Pair<Integer,Integer> p1 = new Pair<Integer,Integer>(1,1);
-		final Point2D p = new Point2D(5.0, 5.0);
-		final int tileSize = 5;
-		assertEquals(p, Utilities.convertPairToPoint2D(p1, tileSize));
+	/**
+	 * Can't generate a number if upperBound > lowerBound
+	 */
+	public void wrongParametresForRandom() {
+		try {
+			Utilities.RandomBetween(new Random(), 10, 5);
+		} catch (IllegalArgumentException exc) {
+			assertTrue(true);
+		} catch (Exception e) {
+			fail("Can't generate a number if upperBound > lowerBound");
+		}
 	}
+
 }
