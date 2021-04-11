@@ -5,7 +5,8 @@ import javafx.geometry.Point2D;
 
 /**
  *
- * Represents a basic game entity to which a set of coordinates is associated.
+ * Represents a basic game entity characterized by a
+ * position, a width and a height.
  *
  */
 public interface Entity extends Publisher {
