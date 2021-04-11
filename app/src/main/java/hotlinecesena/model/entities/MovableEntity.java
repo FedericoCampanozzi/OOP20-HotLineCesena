@@ -26,9 +26,9 @@ public interface MovableEntity extends Entity {
     boolean isCollidingWith(Point2D newPosition, Entity other);
 
     /**
-     * Gets the angle this actor is currently facing.
+     * Gets the angle this entity is currently facing.
      *
-     * @return the actor's angle.
+     * @return the entity's angle.
      */
     double getAngle();
 
