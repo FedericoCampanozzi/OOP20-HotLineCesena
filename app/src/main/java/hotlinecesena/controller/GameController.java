@@ -10,6 +10,7 @@ import hotlinecesena.utilities.SceneSwapper;
 public class GameController extends Application {
 
 	private final MissionController mc = new MissionController();
+	private final GameLoopController lc = new GameLoopController();
 	
 	public MissionController getMissionController() {
 		return this.mc;
@@ -29,10 +30,12 @@ public class GameController extends Application {
         primaryStage.setResizable(false);
         primaryStage.show();
         generateMissions();
+        new AudioEventController();
+        lc.loop();
 	}
 	
 	private void generateMissions() {
-        mc.addQuest("uccidi tutti i nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size() == 
-        		JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemy());
+        mc.addQuest("uccidi 3 nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount() == 3);
+        mc.addQuest("uccidi tutti i nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().isEmpty());
 	}
 }

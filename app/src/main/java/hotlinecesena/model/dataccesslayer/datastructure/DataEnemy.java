@@ -1,7 +1,6 @@
 package hotlinecesena.model.dataccesslayer.datastructure;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -20,36 +19,37 @@ import static java.util.stream.Collectors.*;
 public class DataEnemy extends AbstractData {
 	
 	private final List<Enemy> enemies = new ArrayList<>();
+	private final int totalEnemy;
 	
-	public DataEnemy(DataWorldMap world, DataJSONSettings settings) {
+	public DataEnemy(DataWorldMap world) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		EnemyFactoryImpl eFact = new EnemyFactoryImpl();
 		Set<Point2D> walkable = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.WALKABLE))
-				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize()))
+				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
 		Set<Point2D> wall = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.WALL))
-				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey(), settings.getTileSize()))
+				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
 
 		for (Pair<Integer, Integer> pii : world.getWorldMap().keySet()) {
 			if (world.getWorldMap().get(pii).equals(SymbolsType.ENEMY)) {
-				Point2D pos = Utilities.convertPairToPoint2D(pii, settings.getTileSize());
+				Point2D pos = Utilities.convertPairToPoint2D(pii);
 				EnemyType et = EnemyType.values()[rnd.nextInt(EnemyType.values().length)];
 				enemies.add(eFact.getEnemy(pos, et, walkable, wall));
 			}
 		}
+		
+		totalEnemy = this.enemies.size();
 	}
 	
 	public List<Enemy> getEnemies() {
 		return enemies;
 	}
 	
-	public int getDeathEnemy() {
-		return this.enemies.stream()
-				.filter(itm -> itm.getActorStatus().equals(ActorStatus.DEAD))
-				.collect(toSet()).size();
+	public int getDeathEnemyCount() {
+		return this.totalEnemy - this.enemies.size();
 	}
 }
