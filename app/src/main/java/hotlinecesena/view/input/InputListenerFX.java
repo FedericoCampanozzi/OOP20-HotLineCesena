@@ -1,99 +1,119 @@
 package hotlinecesena.view.input;
 
-import java.util.EnumSet;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.annotation.Nonnull;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Pair;
 
 /**
  *
- * Specific implementation created to listen for inputs in JavaFX.
+ * Listener implementation.
  *
  */
 public final class InputListenerFX implements InputListener {
 
-    private final Scene scene;
-    private final Set<KeyCode> keyboardInputs = EnumSet.noneOf(KeyCode.class);
-    private final Set<MouseButton> mouseInputs = EnumSet.noneOf(MouseButton.class);
+    private final Set<Enum<?>> inputs = new HashSet<>();
     private Point2D currentMouseCoords = Point2D.ZERO;
 
     /**
-     * Instantiates a new InputListenerFX while also binding keyboard and mouse
-     * event handlers to the given {@link Scene}.
-     * @param scene the {@code Scene} on which the event handlers will be set.
+     * Instantiates a new InputListenerFX.
      */
-    public InputListenerFX(final Scene scene) {
-        this.scene = Objects.requireNonNull(scene);
-        this.setKeyEventHandlers();
-        this.setMouseButtonHandlers();
-        this.setMouseMovementHandlers();
+    public InputListenerFX() {
     }
 
+    /**
+     * @throws NullPointerException if the given scene is null.
+     */
     @Override
-    public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
-        return new Pair<>(this.combineInputs(), currentMouseCoords);
-    }
+    public void setEventHandlers(@Nonnull final Scene scene) {
+        Objects.requireNonNull(scene);
+        // Setting keyboard events
+        scene.setOnKeyReleased(this.getKeyReleasedEvent());
+        scene.setOnKeyPressed(this.getKeyPressedEvent());
 
-    /**
-     * Combines sets of {@code KeyCode}s and {@code MouseButton}s into a single
-     * set of generic enums for simplicity.
-     * @return a Set containing both keyboard and mouse inputs.
-     */
-    private Set<Enum<?>> combineInputs() {
-        return Stream.concat(keyboardInputs.stream(), mouseInputs.stream())
-                .collect(Collectors.toUnmodifiableSet());
-    }
+        // Setting mouse button events
+        scene.setOnMouseReleased(this.getMouseReleasedEvent());
+        scene.setOnMousePressed(this.getMousePressedEvent());
 
-    /**
-     * Sets event handlers for key presses and releases.
-     */
-    private void setKeyEventHandlers() {
-        scene.setOnKeyReleased(e -> this.forgetInput(keyboardInputs, e.getCode()));
-        scene.setOnKeyPressed(e -> this.captureInput(keyboardInputs, e.getCode()));
-    }
-
-    /**
-     * Sets event handlers for mouse button presses and releases.
-     */
-    private void setMouseButtonHandlers() {
-        scene.setOnMouseReleased(e -> this.forgetInput(mouseInputs, e.getButton()));
-        scene.setOnMousePressed(e -> this.captureInput(mouseInputs, e.getButton()));
-    }
-
-    /**
-     * Sets event handlers for mouse movement.
-     */
-    private void setMouseMovementHandlers() {
-        //Mouse moved, no buttons pressed
+        // Setting mouse movement events
         scene.setOnMouseMoved(this.captureMouseCoordinates());
-        //Mouse moved while buttons pressed
         scene.setOnMouseDragged(this.captureMouseCoordinates());
     }
 
     /**
-     * Event handler common to setOnMouseMoved and setOnMouseDragged properties.
-     * @return an {@link EventHandler} for capturing mouse coordinates.
+     * @throws NullPointerException if the given scene is null.
+     */
+    @Override
+    public void removeEventHandlersFrom(@Nonnull final Scene scene) {
+        Objects.requireNonNull(scene);
+        // Removing keyboard events
+        scene.removeEventHandler(KeyEvent.KEY_RELEASED, this.getKeyReleasedEvent());
+        scene.removeEventHandler(KeyEvent.KEY_PRESSED, this.getKeyPressedEvent());
+
+        // Removing mouse button events
+        scene.removeEventHandler(MouseEvent.MOUSE_RELEASED, this.getMouseReleasedEvent());
+        scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, this.getMousePressedEvent());
+
+        // Removing mouse movement events
+        scene.removeEventHandler(MouseEvent.MOUSE_MOVED, this.captureMouseCoordinates());
+        scene.removeEventHandler(MouseEvent.MOUSE_DRAGGED, this.captureMouseCoordinates());
+    }
+
+    @Override
+    public Pair<Set<Enum<?>>, Point2D> deliverInputs() {
+        return new Pair<>(inputs, currentMouseCoords);
+    }
+
+    /**
+     * Handler for key releases.
+     */
+    private EventHandler<KeyEvent> getKeyReleasedEvent() {
+        return e -> this.forgetInput(e.getCode());
+    }
+
+    /**
+     * Handler for key presses.
+     */
+    private EventHandler<KeyEvent> getKeyPressedEvent() {
+        return e -> this.captureInput(e.getCode());
+    }
+
+    /**
+     * Handler for mouse buttons releases.
+     */
+    private EventHandler<MouseEvent> getMouseReleasedEvent() {
+        return e -> this.forgetInput(e.getButton());
+    }
+
+    /**
+     * Handler for mouse buttons presses.
+     */
+    private EventHandler<MouseEvent> getMousePressedEvent() {
+        return e -> this.captureInput(e.getButton());
+    }
+
+    /**
+     * Handler common to setOnMouseMoved and setOnMouseDragged properties.
      */
     private EventHandler<MouseEvent> captureMouseCoordinates() {
         return e -> currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
     }
 
-    private <T extends Enum<T>> void captureInput(final Set<T> field, final T code) {
-        field.add(code);
+    private <T extends Enum<T>> void captureInput(final T code) {
+        inputs.add(code);
     }
 
-    private <T extends Enum<T>> void forgetInput(final Set<T> field, final T code) {
-        if (field.contains(code)) {
-            field.remove(code);
+    private <T extends Enum<T>> void forgetInput(final T code) {
+        if (inputs.contains(code)) {
+            inputs.remove(code);
         }
     }
 }
