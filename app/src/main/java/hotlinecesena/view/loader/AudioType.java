@@ -1,12 +1,7 @@
 package hotlinecesena.view.loader;
 
-import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.items.Item;
-import hotlinecesena.model.entities.items.Weapon;
-
 /**
- * Collections of all the possible sounds that can be reproduced
+ * Collections of all the possible sounds that can be reproduced.
  */
 public enum AudioType {
 
@@ -20,7 +15,7 @@ public enum AudioType {
     /**
      * Relative path to the shoot audio file
      * To be reproduce every time an actor shoots
-     * with a rifle
+     * with a rifle.
      * @see Actor
      * @see Weapon
      */
@@ -29,7 +24,7 @@ public enum AudioType {
     /**
      * Relative path to the shoot audio file
      * To be reproduce every time an actor shoots
-     * with a pistol
+     * with a pistol.
      * @see Actor
      * @see Weapon
      */
@@ -38,7 +33,7 @@ public enum AudioType {
     /**
      * Relative path to the shoot audio file
      * To be reproduce every time an actor shoots
-     * with a shotgun
+     * with a shotgun.
      * @see Actor
      * @see Weapon
      */
@@ -47,7 +42,7 @@ public enum AudioType {
     /**
      * Relative path to the reload audio file
      * To be reproduce every time an actor reload
-     * its rifle
+     * its rifle.
      * @see Actor
      * @see Weapon
      */
@@ -56,7 +51,7 @@ public enum AudioType {
     /**
      * Relative path to the reload audio file
      * To be reproduce every time an actor reload
-     * its pistol
+     * its pistol.
      * @see Actor
      * @see Weapon
      */
@@ -65,7 +60,7 @@ public enum AudioType {
     /**
      * Relative path to the reload audio file
      * To be reproduce every time an actor reload
-     * its shotgun
+     * its shotgun.
      * @see Actor
      * @see Weapon
      */
@@ -73,7 +68,7 @@ public enum AudioType {
 
     /**
      * Relative path to the death audio file
-     * To be reproduce every time an actor dies
+     * To be reproduce every time an actor dies.
      * @see Actor
      */
     DEATH("death.wav"),
@@ -81,32 +76,32 @@ public enum AudioType {
     /**
      * Relative path to the pickup audio file
      * To be reproduce every time the player picks
-     * up a weapon
+     * up a weapon.
      * @see Player
      * @see Weapon
      */
     PICKUP_WEAPON("pickUpWeapon.wav"),
-    
+
     /**
      * Relative path to the pickup audio file
      * To be reproduce every time the player picks
-     * up a weapon
+     * up a weapon.
      * @see Player
      * @see Item
      */
     PICKUP_ITEM("pickUpItem.wav"),
-    
+
     /**
      * Relative path to the pickup audio file
      * To be reproduce every time the player picks
-     * up a weapon
+     * up a weapon.
      * @see Player
      * @see Item
      */
     PICKUP_MEDKIT("medkit.wav"),
 
     /**
-     * Relative path to the background music for the game
+     * Relative path to the background music for the game.
      */
     BACKGROUND("music.mp3");
 
@@ -116,7 +111,7 @@ public enum AudioType {
      * @param path the relative path to each audio file
      * @see String 
      */
-    private AudioType(final String path) {
+    AudioType(final String path) {
         this.path = path;
     }
 

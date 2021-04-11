@@ -9,6 +9,7 @@ import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
 import static hotlinecesena.model.entities.actors.player.PlayerAction.USE;
 
 import java.util.Map;
+import java.util.Objects;
 
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
@@ -25,6 +26,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 
+/**
+ *
+ * Factory implementation to be used with JavaFX.
+ *
+ */
 public final class PlayerControllerFactoryFX implements PlayerControllerFactory {
 
     private final Scene scene;
@@ -40,13 +46,25 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
             MouseButton.PRIMARY,   ATTACK
             );
 
+    /**
+     * Instantiates a new factory with the given {@link Scene} and {@link Pane},
+     * which will be temporarily used to set the {@link InputListener} and the
+     * {@link CameraView}.
+     * @param scene the scene to which the event handlers created by the {@code InputListener}
+     * will be added.
+     * @param pane the pane to which the {@code CameraView} will be attached.
+     */
     public PlayerControllerFactoryFX(final Scene scene, final Pane pane) {
         this.scene = scene;
         this.pane = pane;
     }
 
+    /**
+     * @throws NullPointerException if the given sprite is null.
+     */
     @Override
     public PlayerController createPlayerController(final Sprite sprite) {
+        Objects.requireNonNull(sprite);
         final Player playerModel = JSONDataAccessLayer.getInstance().getPlayer().getPly();
         final InputListener listener = new InputListenerFX(scene);
         final InputInterpreter interpreter = new InputInterpreterImpl(bindings);

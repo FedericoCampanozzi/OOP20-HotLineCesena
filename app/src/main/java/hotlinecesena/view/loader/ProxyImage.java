@@ -11,7 +11,7 @@ import javafx.scene.image.Image;
  * ProxyImage is the surrogate of {@link ImageLoader}, the proxy is able
  * to control and secure access to the real audio loader (very similarly to {@link ProxyAudio})
  * and is able to add extra functionalities without changing the way an
- * audio file is loaded
+ * audio file is loaded.
  */
 public class ProxyImage implements ImageLoader {
 
@@ -32,7 +32,7 @@ public class ProxyImage implements ImageLoader {
      */
     @Override
     public Image getImage(final SceneType scene, final ImageType image) {
-        if(this.loadedImages.containsKey(image)) {
+        if (this.loadedImages.containsKey(image)) {
             return loadedImages.get(image);
         } else {
             this.loadedImages.put(image, this.imageLoader.getImage(scene, image));
@@ -41,13 +41,13 @@ public class ProxyImage implements ImageLoader {
     }
 
     private static class ProxyImageLoader implements ImageLoader {
-        private final static String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources"
+        private static final String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources"
                 + File.separator + "Images";
 
         @Override
         public Image getImage(final SceneType scene, final ImageType image) {
-            return new Image(Paths.get(ABSOLUTE_PATH + File.separator + scene.toString() +
-                    File.separator + image.toString()).toUri().toString());
+            return new Image(Paths.get(ABSOLUTE_PATH + File.separator + scene.toString()
+                    + File.separator + image.toString()).toUri().toString());
         }
     } 
 }

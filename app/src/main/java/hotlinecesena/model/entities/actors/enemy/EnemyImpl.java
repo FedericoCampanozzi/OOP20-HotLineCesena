@@ -2,7 +2,6 @@ package hotlinecesena.model.entities.actors.enemy;
 
 import java.util.Set;
 
-import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.inventory.Inventory;
@@ -12,9 +11,9 @@ import hotlinecesena.model.events.MovementEvent;
 import javafx.geometry.Point2D;
 
 /**
- * Class that represent the generic enemy implementation
+ * Class that represent the generic enemy implementation.
  */
-public class EnemyImpl extends AbstractActor implements Enemy {
+public final class EnemyImpl extends AbstractActor implements Enemy {
 
     private static final int ENEMY_MAX_HEALTH = 1;
     private static final double ENEMY_INITIAL_ANGLE = 0;
@@ -30,7 +29,7 @@ public class EnemyImpl extends AbstractActor implements Enemy {
     private boolean pursuit;
 
     /**
-     * Class constructor
+     * Class constructor.
      * @param pos the starting position
      * @param inv the weapon that is equipped
      * @param type the type of movement that the enemy will inherit
@@ -54,13 +53,13 @@ public class EnemyImpl extends AbstractActor implements Enemy {
 
     @Override
     public void move(final Point2D direction) {
-        if(!this.getActorStatus().equals(ActorStatus.DEAD)) {
+        if (!this.getActorStatus().equals(ActorStatus.DEAD)) {
             final Point2D current = this.getPosition();
-            final Point2D next = current.add(direction.multiply(!this.pursuit ?
-                    ENEMY_NORMAL_SPEED : ENEMY_PURSUIT_SPEED));
+            final Point2D next = current.add(direction.multiply(!this.pursuit
+                    ? ENEMY_NORMAL_SPEED : ENEMY_PURSUIT_SPEED));
             this.setPosition(next);
             this.enemyAI.setEnemyPos(next);
-            if(!current.equals(next)) {
+            if (!current.equals(next)) {
                 this.publish(new MovementEvent<>(this, next));
             }
         }
