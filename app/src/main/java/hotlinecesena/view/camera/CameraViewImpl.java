@@ -2,6 +2,8 @@ package hotlinecesena.view.camera;
 
 import java.util.Objects;
 
+import javax.annotation.Nonnull;
+
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
@@ -19,8 +21,10 @@ public final class CameraViewImpl implements CameraView {
     private Pane pane;
     private final Translate paneTranslate = new Translate();
 
-    public CameraViewImpl(final Pane pane) {
-        this.setPane(pane);
+    /**
+     * Instantiates a new Camera.
+     */
+    public CameraViewImpl() {
     }
 
     /**
@@ -37,8 +41,12 @@ public final class CameraViewImpl implements CameraView {
         pane.getTransforms().remove(paneTranslate);
     }
 
+    /**
+     * @throws NullPointerException if the given spritePosition is null.
+     */
     @Override
-    public void update(final Point2D spritePosition, final double deltaTime) {
+    public void update(@Nonnull final Point2D spritePosition, final double deltaTime) {
+        Objects.requireNonNull(spritePosition);
         final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
         final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
         final Point2D newPos = MathUtils.lerp(
