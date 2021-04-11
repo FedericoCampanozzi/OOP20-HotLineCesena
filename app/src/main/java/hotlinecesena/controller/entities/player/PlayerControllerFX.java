@@ -12,6 +12,7 @@ import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.model.events.Subscriber;
+import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
@@ -19,6 +20,7 @@ import hotlinecesena.view.loader.ImageLoader;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
+import javafx.scene.image.Image;
 
 /**
  *
@@ -86,5 +88,25 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     @Subscribe
     private void handleDeathEvent(final DeathEvent<Player> e) {
         sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER_DEAD));
+    }
+
+    @Subscribe
+    private void handleWeaponPickUpEvent(final WeaponPickUpEvent<Player> e) {
+        Image image = null;
+        switch (e.getItemType()) {
+        case PISTOL:
+            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL);
+            break;
+        case SHOTGUN:
+            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_SHOTGUN);
+            break;
+        case RIFLE:
+            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE);
+            break;
+        default:
+            image = loader.getImage(SceneType.GAME, ImageType.PLAYER);
+            break;
+        }
+        sprite.updateImage(image);
     }
 }
