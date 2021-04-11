@@ -35,6 +35,7 @@ public class WorldView {
     DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
     Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
     List<Sprite> enemiesSprite = new ArrayList<>();
+    List<Sprite> itemsSprite = new ArrayList<>();
 
     private final Map<Pair<Integer, Integer>, ImageView> enemiesPos = new LinkedHashMap<>();
     private final Map<Pair<Integer, Integer>, ImageView> itemsPos = new LinkedHashMap<>();
@@ -153,6 +154,13 @@ public class WorldView {
         primaryStage.setY(0);
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
+        
+        System.out.println(JSONDataAccessLayer.getInstance().getDataItems().getItems());
+        System.out.println(itemsPos.keySet());
+        System.out.println("X" + JSONDataAccessLayer.getInstance().getWorld().getMaxX());
+        System.out.println("x" + JSONDataAccessLayer.getInstance().getWorld().getMinX());
+        System.out.println("Y" + JSONDataAccessLayer.getInstance().getWorld().getMaxY());
+        System.out.println("y" + JSONDataAccessLayer.getInstance().getWorld().getMinY());
     }
 
     public GridPane getGridPane() {

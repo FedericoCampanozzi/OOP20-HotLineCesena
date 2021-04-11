@@ -9,6 +9,7 @@ import hotlinecesena.controller.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
@@ -36,6 +37,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 	private CheckBox missionCheckBox;
 	@FXML
 	private HBox weaponHBox;
+	@FXML
+	private ImageView weaponImageView;
 	
 	private ProxyImage proxyImage = new ProxyImage();
 	private List<Pair<String, Boolean>> missions;
@@ -44,6 +47,7 @@ public class PlayerStatsController implements Initializable, Updatable{
 	
 	private WorldView worldView;
 	private int currentMission = 0;
+	private Weapon currentWeapon;
 
 	public PlayerStatsController(WorldView view, MissionController missionController) {
 		this.worldView = view;
@@ -54,10 +58,7 @@ public class PlayerStatsController implements Initializable, Updatable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		borderPane.prefWidthProperty().bind(worldView.getBorderPane().widthProperty());
-		lifeBar.setProgress(player.getMaxHealth());
 		missionCheckBox.setText(missions.get(currentMission).getKey());
-		ImageView weaponImage = new ImageView(proxyImage.getImage(SceneType.GAME, ImageType.RIFLE));
-		weaponHBox.getChildren().add(weaponImage);
 	}
 
 	@Override
@@ -65,7 +66,7 @@ public class PlayerStatsController implements Initializable, Updatable{
 		return deltaTime -> {
 			// Update of life bar
 			lifeBar.setProgress(player.getCurrentHealth());
-			if (lifeBar.getProgress() <= 10) {
+			if (lifeBar.getProgress() <= 0.2) {
 				lifeBar.setStyle("-fx-accent: red;");
 			}
 			
@@ -75,6 +76,20 @@ public class PlayerStatsController implements Initializable, Updatable{
 	                    + "/"
 	                    + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
 	                    ), () -> bulletLabel.setText("0/0"));
+			currentWeapon = player.getInventory().getWeapon().get();
+			switch (currentWeapon.getWeaponType()) {
+			case RIFLE:
+				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.RIFLE));
+				break;
+			case SHOTGUN:
+				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.SHOTGUN));
+				break;
+			case PISTOL:
+				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.PISTOL));
+				break;
+			default:
+				break;
+			}
 			
 			// Update of missions view
 			missions = missionController.getMissions();
