@@ -84,16 +84,12 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @return
      */
     private Point2D processMovementDirection(final Set<PlayerAction> actions) {
-        Point2D direction = actions.stream()
+        return actions.stream()
                 .map(PlayerAction::getDirection)
                 .flatMap(Optional::stream)
                 .map(Direction::get)
-                .reduce(Point2D.ZERO, Point2D::add);
-        final double magnitude = direction.magnitude();
-        if (magnitude > 1) {
-            direction = MathUtils.normalizeWithMagnitude(direction, magnitude);
-        }
-        return direction;
+                .reduce(Point2D.ZERO, Point2D::add)
+                .normalize();
     }
 
     /**

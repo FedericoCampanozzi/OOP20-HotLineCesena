@@ -1,5 +1,6 @@
 package hotlinecesena.utilities;
 
+import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
 
 /**
@@ -9,17 +10,6 @@ import javafx.geometry.Point2D;
 public final class MathUtils {
 
     private MathUtils() {
-    }
-
-    /**
-     * Normalizes a vector given its magnitude.
-     *
-     * @param vector the vector to be normalized
-     * @param magnitude the vector's magnitude
-     * @return the normalized vector
-     */
-    public static Point2D normalizeWithMagnitude(final Point2D vector, final double magnitude) {
-        return vector.multiply(1 / magnitude);
     }
 
     /**
