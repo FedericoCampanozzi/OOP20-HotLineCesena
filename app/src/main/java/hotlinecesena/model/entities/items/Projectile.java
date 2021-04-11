@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.AbstractMovableEntity;
+import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.utilities.MathUtils;
@@ -65,6 +66,7 @@ public final class Projectile extends AbstractMovableEntity {
     private Optional<Enemy> hasHitEnemy(final Point2D newPos) {
         return this.getGameMaster().getEnemy().getEnemies()
                 .stream()
+                .filter(enemy -> !enemy.getActorStatus().equals(ActorStatus.DEAD))
                 .filter(enemy -> MathUtils.isCollision(
                         newPos, this.getWidth(), this.getHeight(),
                         enemy.getPosition(), enemy.getWidth(), enemy.getHeight()))

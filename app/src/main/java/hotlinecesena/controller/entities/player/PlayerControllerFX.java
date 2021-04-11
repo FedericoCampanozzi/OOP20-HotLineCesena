@@ -8,12 +8,17 @@ import com.google.common.eventbus.Subscribe;
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
+import hotlinecesena.view.loader.ImageLoader;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
 
 /**
  *
@@ -29,6 +34,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     private final Sprite sprite;
     //TODO Camera to be held by the GameController/WorldView
     private final CameraView camera;
+    private final ImageLoader loader = new ProxyImage();
 
     public PlayerControllerFX(final Player player, final Sprite sprite, final InputInterpreter interpreter,
             final CameraView camera, final InputListener listener) {
@@ -75,5 +81,10 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     @Subscribe
     private void handleRotationEvent(final RotationEvent<Player> e) {
         sprite.updateRotation(e.getSource().getAngle());
+    }
+
+    @Subscribe
+    private void handleDeathEvent(final DeathEvent<Player> e) {
+        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER_DEAD));
     }
 }

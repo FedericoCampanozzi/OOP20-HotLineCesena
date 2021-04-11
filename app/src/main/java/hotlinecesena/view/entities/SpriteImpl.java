@@ -25,6 +25,7 @@ public final class SpriteImpl implements Sprite {
      */
     public SpriteImpl(final ImageView view) {
         imageView = view;
+        imageView.setPreserveRatio(true);
         rotate = new Rotate();
         trans = (Translate) view.getTransforms().get(0);
         imageView.getTransforms().addAll(rotate, trans);
@@ -60,5 +61,10 @@ public final class SpriteImpl implements Sprite {
     @Override
     public Point2D getPositionRelativeToScene() {
         return imageView.localToScene(Point2D.ZERO);
+    }
+
+    @Override
+    public Point2D getTranslatePosition() {
+        return new Point2D(trans.getX(), trans.getY());
     }
 }
