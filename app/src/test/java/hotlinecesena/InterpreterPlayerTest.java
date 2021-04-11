@@ -6,13 +6,16 @@ import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH
 import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
 import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
 import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
+import static hotlinecesena.model.entities.actors.player.PlayerAction.USE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 
+import java.util.Collection;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
@@ -27,6 +30,7 @@ import org.testfx.util.WaitForAsyncUtils;
 
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
+import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
@@ -68,6 +72,7 @@ class InterpreterPlayerTest {
             KeyCode.D,             MOVE_EAST,
             KeyCode.A,             MOVE_WEST,
             KeyCode.R,             RELOAD,
+            KeyCode.E,             USE,
             MouseButton.PRIMARY,   ATTACK
             );
 
@@ -95,7 +100,7 @@ class InterpreterPlayerTest {
     @Test
     void deliverNothingWhenReceivingNoInputs() {
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
         assertThat(commands, empty());
     }
 
@@ -103,7 +108,7 @@ class InterpreterPlayerTest {
     void deliverNothingWhenReceivingUnboundInputs() {
         robot.press(KeyCode.J);
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
         assertThat(commands, empty());
     }
 
@@ -111,30 +116,24 @@ class InterpreterPlayerTest {
     void deliverAttack() {
         robot.moveTo(testScene).press(MouseButton.PRIMARY); //It won't register without moveTo
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
         assertThat(PlayerAction.ATTACK.getCommand().get(), is(in(commands)));
     }
 
     @Test
-    void deliverMoveNorthThenMovePlayer() {
-        final Point2D dest = new Point2D(0, -1);
-        robot.press(KeyCode.W);
+    void deliverUse() {
+        robot.moveTo(testScene).press(KeyCode.E);
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
-        assertThat(commands, not(empty()));
-        commands.forEach(c -> c.execute(player));
-        assertThat(player.getPosition(), equalTo(dest));
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        assertThat(PlayerAction.USE.getCommand().get(), is(in(commands)));
     }
 
     @Test
-    void deliverNormalizedDiagonalMovement() {
-        final Point2D dest = new Point2D(1, -1).normalize();
-        robot.press(KeyCode.W, KeyCode.D);
+    void deliverMovement() {
+        robot.press(KeyCode.W);
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
-        assertThat(commands, not(empty()));
-        commands.forEach(c -> c.execute(player));
-        assertThat(player.getPosition(), equalTo(dest));
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        assertThat(commands, hasSize(1));
     }
 
     @Test
@@ -143,7 +142,7 @@ class InterpreterPlayerTest {
         final double angle = MathUtils.mouseToDegrees(mouseCoords);
         robot.moveBy(0, testScene.getHeight() / 2);
         WaitForAsyncUtils.waitForFxEvents();
-        final var commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
         assertThat(commands, not(empty()));
         commands.forEach(c -> c.execute(player));
         assertThat(Math.floor(player.getAngle()), equalTo(Math.floor(angle)));

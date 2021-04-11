@@ -4,11 +4,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +22,7 @@ import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.items.AmmunitionType;
+import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.inventory.Inventory;
@@ -43,7 +46,7 @@ class ActorModelTest {
         final Inventory inv = new NaiveInventoryImpl(
                 new WeaponImpl(WeaponType.PISTOL),
                 Map.of(AmmunitionType.PISTOL_AMMO, 30));
-        actor = new ActorTest(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv);
+        actor = new TestActor(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv);
     }
 
     @BeforeEach
@@ -52,25 +55,34 @@ class ActorModelTest {
     }
 
     @Test
-    void actorMoveTest() {
+    void actorMove() {
         actor.move(DirectionList.NORTH.get());
         assertThat(actor.getPosition(), equalTo(DirectionList.NORTH.get().multiply(SPEED)));
     }
 
     @Test
-    void actorRotateTest() {
+    void actorRotate() {
         actor.setAngle(90.0);
         assertThat(actor.getAngle(), comparesEqualTo(90.0));
     }
 
-    //    @Test
-    //    void actorAttackTest() {
-    //        actor.attack();
-    //        assertEquals(ActorStatus.ATTACKING, actor.getActorStatus());
-    //    }
+    @Test
+    void actorAttack() {
+        assertThat(actor.getInventory().getWeapon(), not(Optional.empty()));
+        final Weapon w = actor.getInventory().getWeapon().get();
+        assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
+        assertFalse(actor.getInventory().isReloading());
+        try {
+            Thread.sleep((long) w.getRateOfFire());
+        } catch (final InterruptedException e) {
+            e.printStackTrace();
+        }
+        actor.attack();
+        assertEquals(ActorStatus.ATTACKING, actor.getActorStatus());
+    }
 
     @Test
-    void actorReloadTest() {
+    void actorReload() {
         final double reloadTime = actor.getInventory().getWeapon().get().getReloadTime();
         actor.attack();
         actor.reload();
@@ -93,7 +105,7 @@ class ActorModelTest {
     }
 
     @Test
-    void actorHurtTest() {
+    void actorTakeDamage() {
         final double damage = 50.0;
         actor.takeDamage(damage);
         assertThat(actor.getCurrentHealth(), comparesEqualTo(MAX_HP - damage));
@@ -124,9 +136,9 @@ class ActorModelTest {
         assertThat(actor.getCurrentHealth(), comparesEqualTo(0.0));
     }
 
-    private final class ActorTest extends AbstractActor {
+    private final class TestActor extends AbstractActor {
 
-        private ActorTest(final Point2D position, final double angle, final double width, final double height,
+        private TestActor(final Point2D position, final double angle, final double width, final double height,
                 final double speed, final double maxHealth, final Inventory inventory) {
             super(position, angle, width, height, speed, maxHealth, inventory);
         }
