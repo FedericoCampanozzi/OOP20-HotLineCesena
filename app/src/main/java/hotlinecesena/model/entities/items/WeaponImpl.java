@@ -12,7 +12,6 @@ public class WeaponImpl implements Weapon {
     private int currentAmmo;
     private final WeaponType weaponType;
     private double lastTime = System.currentTimeMillis();
-    private int nReloading = 0;
 
     public WeaponImpl(final WeaponType weaponType) {
         this.weaponType = weaponType;
@@ -61,7 +60,6 @@ public class WeaponImpl implements Weapon {
             throw new IllegalArgumentException();
         }
         currentAmmo = currentAmmo + bullets;
-        nReloading++;
     }
 
     @Override
@@ -93,9 +91,4 @@ public class WeaponImpl implements Weapon {
     public WeaponType getWeaponType() {
         return weaponType;
     }
-    
-    @Override
-    public int getNReloading() {
-		return nReloading;
-	}
 }

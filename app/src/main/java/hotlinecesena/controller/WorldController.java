@@ -20,13 +20,17 @@ public class WorldController{
     private PlayerController playerController;
     private ProjectileController projectileController;
     private PlayerStatsController playerStatsController;
+    private MissionController missionController;
 	
 	public WorldController(Stage primaryStage) throws IOException{
 		this.primaryStage = primaryStage;
 		view = new WorldView(this.primaryStage);
 		view.start();
 		
-		playerStatsController = new PlayerStatsController(view);
+		missionController = new MissionController(gameLoopController);
+		gameLoopController.addMethodToUpdate(d -> missionController.update(d));
+		
+		playerStatsController = new PlayerStatsController(view, missionController);
 		FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("PlayerStatsView.fxml")));
 		loader.setController(playerStatsController);
 		view.getBorderPane().setBottom(loader.load());

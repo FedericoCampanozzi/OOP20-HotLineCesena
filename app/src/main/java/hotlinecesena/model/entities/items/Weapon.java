@@ -17,6 +17,4 @@ public interface Weapon extends Item {
     WeaponType getWeaponType();
 
     double getRateOfFire();
-
-	int getNReloading();
 }
