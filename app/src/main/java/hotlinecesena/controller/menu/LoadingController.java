@@ -28,7 +28,7 @@ public class LoadingController implements Initializable{
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		final Task<Void> task = new Task<Void>() {
-            final int N_ITERATIONS = 100;
+            final int N_ITERATIONS = 10;
 
             @Override
             protected Void call() throws Exception {

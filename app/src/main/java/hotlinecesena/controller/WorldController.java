@@ -30,7 +30,6 @@ public class WorldController{
 		FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("PlayerStatsView.fxml")));
 		loader.setController(playerStatsController);
 		view.getBorderPane().setBottom(loader.load());
-		view.getBorderPane().getBottom().toFront();
 		gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
 		
 		playerController = new PlayerControllerFactoryFX(primaryStage.getScene(), view.getGridPane())

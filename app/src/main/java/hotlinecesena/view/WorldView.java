@@ -18,6 +18,8 @@ import javafx.util.Pair;
 
 public class WorldView {
     private static final String TITLE = "Hotline Cesena";
+    private static final int SCALE = 100;
+    
     private final Stage primaryStage;
     private BorderPane borderPane;
     private final GridPane gridPane = new GridPane();
@@ -40,8 +42,6 @@ public class WorldView {
         final Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         borderPane.setCenter(gridPane);
-        
-        
 
         this.worldMap.forEach((p, s) -> {
             final char c = s.getDecotification();
@@ -124,8 +124,8 @@ public class WorldView {
         primaryStage.setHeight(900);
         primaryStage.setX(0);
         primaryStage.setY(0);
-        borderPane.setScaleX(100);
-        borderPane.setScaleY(100);
+        borderPane.getCenter().setScaleX(SCALE);
+        borderPane.getCenter().setScaleY(SCALE);
     }
 
     public GridPane getGridPane() {

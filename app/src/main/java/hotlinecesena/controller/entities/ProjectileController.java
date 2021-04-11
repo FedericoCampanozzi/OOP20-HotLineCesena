@@ -53,7 +53,7 @@ public final class ProjectileController implements Updatable {
                     proj.move(DELTA_VECTOR.multiply(deltaTime));
                     sprite.updatePosition(proj.getPosition());
                 } else {
-                    sprite.updateImage(EMPTY_IMAGE);
+                    sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.BLANK));
                     projectileMap.remove(proj);
                     projectilesInModel.remove(proj);
                 }

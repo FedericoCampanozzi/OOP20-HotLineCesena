@@ -42,7 +42,7 @@ public final class CameraViewImpl implements CameraView {
         final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
         final Point2D newPos = MathUtils.lerp(
                 currentPos,
-                spritePosition.subtract(pane.getScene().getWidth() / 2, pane.getScene().getHeight() / 2),
+                spritePosition.subtract(pane.getScene().getWidth() / 2, (pane.getScene().getHeight() - 100) / 2),
                 blend);
         paneTranslate.setX(-newPos.getX());
         paneTranslate.setY(-newPos.getY());
