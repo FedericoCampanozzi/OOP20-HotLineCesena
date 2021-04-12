@@ -57,18 +57,13 @@ public final class NaiveInventoryImpl implements Inventory {
         }
     }
 
-    /**
-     * @throws NullPointerException if the given weapon is null.
-     */
-    @Override
-    public void addWeapon(@Nonnull final Weapon weapon) {
-        Objects.requireNonNull(weapon);
+    private void addWeapon(final Weapon weapon) {
         this.weapon.ifPresent(this::drop);
         this.weapon = Optional.of(weapon);
     }
 
     private void drop(final Item item) {
-        //TODO
+        //TODO Not implemented.
         weapon = Optional.empty();
     }
 
@@ -76,7 +71,7 @@ public final class NaiveInventoryImpl implements Inventory {
      * @throws NullPointerException if the given item is null.
      */
     @Override
-    public int getQuantityOf(final Item item) {
+    public int getQuantityOf(@Nonnull final Item item) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
             return weapon.isPresent() ? 1 : 0;
@@ -88,6 +83,20 @@ public final class NaiveInventoryImpl implements Inventory {
     @Override
     public Optional<Weapon> getWeapon() {
         return weapon;
+    }
+
+    /**
+     * Not implemented.
+     */
+    @Override
+    public void switchToNextWeapon() {
+    }
+
+    /**
+     * Not implemented.
+     */
+    @Override
+    public void switchToPreviousWeapon() {
     }
 
     /**
