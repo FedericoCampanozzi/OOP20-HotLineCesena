@@ -9,7 +9,7 @@
    <center>
       <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Loading..." />
+            <Label fx:id="labelLoading" text="Loading..." />
             <ProgressBar fx:id="progressBar" prefWidth="200.0" progress="0.3" />
          </children>
       </VBox>

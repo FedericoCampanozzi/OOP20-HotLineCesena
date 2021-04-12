@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,11 +24,13 @@ public class PauseController implements Initializable{
 	
 	SceneSwapper sceneSwapper = new SceneSwapper();
 	private Optional<Stage> worldStage;
+	private AudioControllerImpl audioControllerImpl;
 	private Stage pauseStage;
 	
-	public PauseController(Stage pauseStage, Optional<Stage> worldStage) {
+	public PauseController(Stage pauseStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl) {
 		this.pauseStage = pauseStage;
 		this.worldStage = worldStage;
+		this.audioControllerImpl = audioControllerImpl;
 	}
 	
 	@Override
@@ -40,13 +43,13 @@ public class PauseController implements Initializable{
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage), "OptionsView.fxml", pauseStage);
+		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage, audioControllerImpl), "OptionsView.fxml", pauseStage);
 	}
 	
 	public void quitClick(final ActionEvent event) throws IOException {
 		if (worldStage.isPresent()) {
 			worldStage.get().close();
 		}
-		sceneSwapper.swapScene(new StartMenuController(pauseStage), "StartMenuView.fxml", pauseStage);
+		sceneSwapper.swapScene(new StartMenuController(pauseStage, audioControllerImpl), "StartMenuView.fxml", pauseStage);
 	}
 }

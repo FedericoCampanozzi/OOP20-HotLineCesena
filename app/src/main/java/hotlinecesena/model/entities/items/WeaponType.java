@@ -2,11 +2,11 @@ package hotlinecesena.model.entities.items;
 
 public enum WeaponType {
 
-    SHOTGUN(50, 6, AmmunitionType.SHOTGUN_AMMO, 1, 7, 8, 5, 1000.0),
+    SHOTGUN(50, 6, AmmunitionType.SHOTGUN_AMMO, 1, 7, 80, 5, 1000.0),
 
-    RIFLE(25, 8, AmmunitionType.RIFLE_AMMO, 1, 30, 5, 4, 100.0),
+    RIFLE(25, 8, AmmunitionType.RIFLE_AMMO, 1, 30, 50, 4, 100.0),
 
-    PISTOL(15, 6, AmmunitionType.PISTOL_AMMO, 1, 10, 3, 3, 500.0);
+    PISTOL(15, 6, AmmunitionType.PISTOL_AMMO, 1, 10, 30, 3, 500.0);
 
     private double damage;
     private double projectileSpeed;

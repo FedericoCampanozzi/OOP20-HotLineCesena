@@ -30,6 +30,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 	@FXML
 	private ProgressBar lifeBar;
 	@FXML
+	private Label hpLabel;
+	@FXML
 	private BorderPane borderPane;
 	@FXML
 	private Label bulletLabel;
@@ -65,7 +67,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 	public Consumer<Double> getUpdateMethod() {
 		return deltaTime -> {
 			// Update of life bar
-			lifeBar.setProgress(player.getCurrentHealth());
+			lifeBar.setProgress(player.getCurrentHealth() / player.getMaxHealth());
+			hpLabel.setText(((int) player.getCurrentHealth()) + "/" + ((int) player.getMaxHealth()));
 			if (lifeBar.getProgress() <= 0.2) {
 				lifeBar.setStyle("-fx-accent: red;");
 			}
@@ -95,7 +98,6 @@ public class PlayerStatsController implements Initializable, Updatable{
 			missions = missionController.getMissions();
 			missionCheckBox.setSelected(missions.get(currentMission).getValue());
 			
-			// ************
 			worldView.getBorderPane().setOnKeyPressed(e -> {
 			    if (e.getCode() == KeyCode.M) {
 			    	currentMission++;
