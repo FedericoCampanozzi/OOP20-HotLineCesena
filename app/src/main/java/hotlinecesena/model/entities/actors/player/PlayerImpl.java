@@ -115,16 +115,18 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * Picks up a nearby weapon, if present.
      */
     private void pickUpWeapon() {
-        final Map<Point2D, Weapon> weaponsOnMap = this.getGameMaster().getWeapons().getWeapons();
-        final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
-                .stream()
-                .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
-                        e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
-                .findFirst();
-        weaponFound.ifPresent(entry -> {
-            this.getInventory().addWeapon(entry.getValue());
-            weaponsOnMap.remove(entry.getKey());
-            this.publish(new WeaponPickUpEvent<>(this, entry.getValue().getWeaponType(), entry.getKey()));
-        });
+        if (!this.getInventory().isReloading()) {
+            final Map<Point2D, Weapon> weaponsOnMap = this.getGameMaster().getWeapons().getWeapons();
+            final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
+                    .stream()
+                    .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
+                            e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
+                    .findFirst();
+            weaponFound.ifPresent(entry -> {
+                this.getInventory().add(entry.getValue(), 1);
+                weaponsOnMap.remove(entry.getKey());
+                this.publish(new WeaponPickUpEvent<>(this, entry.getValue().getWeaponType(), entry.getKey()));
+            });
+        }
     }
 }

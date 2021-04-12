@@ -21,12 +21,6 @@ public interface Inventory {
     void add(Item item, int quantity);
 
     /**
-     * Adds a {@link Weapon} to this inventory.
-     * @param weapon the {@code Weapon} to be added.
-     */
-    void addWeapon(Weapon weapon);
-
-    /**
      * Returns the quantity of a given {@link Item} present in this inventory.
      * @param item the item to look for in the inventory
      * @return the quantity of the given item, or {@code 0} if it's not present.
@@ -44,6 +38,10 @@ public interface Inventory {
      * Handles reloading for the currently equipped weapon.
      */
     void reloadWeapon();
+
+    void switchToNextWeapon();
+
+    void switchToPreviousWeapon();
 
     /**
      * Checks to see if the reload action for the equipped weapon is currently ongoing.

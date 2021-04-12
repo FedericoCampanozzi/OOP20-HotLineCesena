@@ -29,7 +29,7 @@ public interface InputListener {
      * @param scene the JavaFX {@code Scene} to which the event handlers
      * will be added.
      */
-    void setEventHandlers(Scene scene);
+    void addEventHandlers(Scene scene);
 
     /**
      * Removes this listener's event handlers from the given {@link Scene},

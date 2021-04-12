@@ -38,7 +38,7 @@ public final class InputListenerFX implements InputListener {
      * @throws NullPointerException if the given scene is null.
      */
     @Override
-    public void setEventHandlers(@Nonnull final Scene scene) {
+    public void addEventHandlers(@Nonnull final Scene scene) {
         Objects.requireNonNull(scene);
         // Setting keyboard events
         scene.setOnKeyReleased(this.getOnKeyReleasedHandler());

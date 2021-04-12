@@ -57,18 +57,13 @@ public final class NaiveInventoryImpl implements Inventory {
         }
     }
 
-    /**
-     * @throws NullPointerException if the given weapon is null.
-     */
-    @Override
-    public void addWeapon(@Nonnull final Weapon weapon) {
-        Objects.requireNonNull(weapon);
+    private void addWeapon(final Weapon weapon) {
         this.weapon.ifPresent(this::drop);
         this.weapon = Optional.of(weapon);
     }
 
     private void drop(final Item item) {
-        //TODO
+        //TODO Not implemented.
         weapon = Optional.empty();
     }
 
@@ -76,7 +71,7 @@ public final class NaiveInventoryImpl implements Inventory {
      * @throws NullPointerException if the given item is null.
      */
     @Override
-    public int getQuantityOf(final Item item) {
+    public int getQuantityOf(@Nonnull final Item item) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
             return weapon.isPresent() ? 1 : 0;
@@ -91,13 +86,27 @@ public final class NaiveInventoryImpl implements Inventory {
     }
 
     /**
+     * Not implemented.
+     */
+    @Override
+    public void switchToNextWeapon() {
+    }
+
+    /**
+     * Not implemented.
+     */
+    @Override
+    public void switchToPreviousWeapon() {
+    }
+
+    /**
      * @implSpec
      * Based on time.
      */
     @Override
     public void reloadWeapon() {
         weapon.ifPresent(weapon -> {
-            if (!this.isReloading()) {
+            if (!this.isReloading() && weapon.getCurrentAmmo() < weapon.getMagazineSize()) {
                 final int ammoOwned = collectibles.getOrDefault(weapon.getCompatibleAmmunition(), 0);
                 if (ammoOwned > 0) {
                     ammoForReloading = ammoOwned;

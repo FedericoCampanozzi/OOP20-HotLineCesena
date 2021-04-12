@@ -13,7 +13,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 
 import java.util.Collection;
 import java.util.Map;
@@ -83,7 +82,7 @@ class InterpreterPlayerTest {
         testScene = new Scene(new Pane(), S_WIDTH, S_HEIGHT);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX();
-        listener.setEventHandlers(testScene);
+        listener.addEventHandlers(testScene);
         interpreter = new InputInterpreterImpl(bindings);
         stage.setScene(testScene);
         stage.requestFocus();
@@ -144,7 +143,7 @@ class InterpreterPlayerTest {
         robot.moveBy(0, testScene.getHeight() / 2);
         WaitForAsyncUtils.waitForFxEvents();
         final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
-        assertThat(commands, not(empty()));
+        assertThat(commands, hasSize(1));
         commands.forEach(c -> c.execute(player));
         assertThat(Math.floor(player.getAngle()), equalTo(Math.floor(angle)));
         // Without truncating: player.getAngle() == 56.3; angle == 56.2 --> TEST FAILS
