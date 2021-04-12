@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioController;
+import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.WorldController;
 import hotlinecesena.utilities.SceneSwapper;
 
@@ -24,7 +25,7 @@ public class StartMenuController implements Initializable{
 	private Button exitButton;
 	
 	private SceneSwapper sceneSwapper = new SceneSwapper();
-	private AudioController audioController = new AudioController();
+	private AudioController audioController = new AudioControllerImpl();
 	private Stage stage;
 	
 	public StartMenuController(Stage stage) {
