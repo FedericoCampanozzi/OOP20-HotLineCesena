@@ -32,6 +32,7 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
      * Class constructor.
      * @param pos the starting position
      * @param inv the weapon that is equipped
+     * @param rotation the angle that the enemy faces
      * @param type the type of movement that the enemy will inherit
      * @param walkable collections of points that are traversable by
      * the enemy
@@ -39,10 +40,10 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
      * enemy vision
      * @see WorldGeneratorBuilder
      */
-    public EnemyImpl(final Point2D pos, final Inventory inv, final EnemyType type,
-            final  Set<Point2D> walkable, final Set<Point2D> walls) {
+    public EnemyImpl(final Point2D pos, final Inventory inv, final double rotation,
+            final EnemyType type, final  Set<Point2D> walkable, final Set<Point2D> walls) {
 
-        super(pos, ENEMY_INITIAL_ANGLE, ENEMY_NORMAL_SPEED, ENEMY_MAX_HEALTH,
+        super(pos, rotation, ENEMY_NORMAL_SPEED, ENEMY_MAX_HEALTH,
                 ENEMY_WIDTH, ENEMY_HEIGHT, inv);
         this.enemyType = type;
         this.walkableSet = walkable;
