@@ -62,13 +62,7 @@ public final class AudioControllerImpl implements AudioController {
                 ? this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
-    /**
-     * Updates the volume and checks if music or sounds
-     * have been disabled for this instance
-     * of the {@code AudioController} and
-     * updates the volume if a {@code MediaPlayer}
-     * track is already playing.
-     */
+    @Override
     public void updateSettings() {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
