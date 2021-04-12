@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -126,7 +127,7 @@
                                                    <top>
                                                       <AnchorPane prefHeight="50.0" prefWidth="296.0" BorderPane.alignment="CENTER">
                                                          <children>
-                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="296.0" text="Editable commands" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                            <Label alignment="CENTER" prefHeight="17.0" prefWidth="296.0" text="Movement commands" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                <font>
                                                                   <Font name="Arial Black" size="22.0" />
                                                                </font>
@@ -197,22 +198,22 @@
                                                             </AnchorPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                <center>
-                                                                  <Button fx:id="upButton" alignment="CENTER" mnemonicParsing="false" text="W" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                                                  <Button fx:id="upButton" alignment="CENTER" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="W" textAlignment="CENTER" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                <center>
-                                                                  <Button fx:id="leftButton" alignment="CENTER" mnemonicParsing="false" text="A" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                                                  <Button fx:id="leftButton" alignment="CENTER" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="A" textAlignment="CENTER" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                <center>
-                                                                  <Button fx:id="downButton" alignment="CENTER" mnemonicParsing="false" text="S" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                                                  <Button fx:id="downButton" alignment="CENTER" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="S" textAlignment="CENTER" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                <center>
-                                                                  <Button fx:id="rightButton" alignment="CENTER" mnemonicParsing="false" text="D" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                                                                  <Button fx:id="rightButton" alignment="CENTER" disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="D" textAlignment="CENTER" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                          </children>
@@ -225,7 +226,7 @@
                                              <children>
                                                 <BorderPane layoutY="-16.0" prefHeight="248.0" prefWidth="296.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                    <top>
-                                                      <Label alignment="CENTER" prefHeight="50.0" prefWidth="296.0" text="Uneditable commands" textFill="WHITE" BorderPane.alignment="CENTER">
+                                                      <Label alignment="CENTER" prefHeight="50.0" prefWidth="296.0" text="Other commands" textFill="WHITE" BorderPane.alignment="CENTER">
                                                          <font>
                                                             <Font name="Arial Black" size="22.0" />
                                                          </font>
@@ -246,7 +247,7 @@
                                                          <children>
                                                             <AnchorPane>
                                                                <children>
-                                                                  <Label prefHeight="72.0" prefWidth="148.0" text="Inventory" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                                  <Label prefHeight="72.0" prefWidth="148.0" text="Scroll mission" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                                      <font>
                                                                         <Font name="Arial" size="20.0" />
                                                                      </font>
@@ -294,22 +295,27 @@
                                                             </AnchorPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                                                                <center>
-                                                                  <Button disable="true" mnemonicParsing="false" text="I" BorderPane.alignment="CENTER" />
+                                                                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+                                                                     <children>
+                                                                        <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="M" />
+                                                                        <Button mnemonicParsing="false" text="N" />
+                                                                     </children>
+                                                                  </HBox>
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                                                                <center>
-                                                                  <Button disable="true" mnemonicParsing="false" text="Esc" BorderPane.alignment="CENTER" />
+                                                                  <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="Esc" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                                                <center>
-                                                                  <Button disable="true" mnemonicParsing="false" text="R" BorderPane.alignment="CENTER" />
+                                                                  <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="R" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                                                <center>
-                                                                  <Button disable="true" mnemonicParsing="false" text="Mouse_1" BorderPane.alignment="CENTER" />
+                                                                  <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="Mouse_1" BorderPane.alignment="CENTER" />
                                                                </center>
                                                             </BorderPane>
                                                          </children>

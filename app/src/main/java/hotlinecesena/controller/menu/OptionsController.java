@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.SceneSwapper;
@@ -62,10 +65,17 @@ public class OptionsController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		// Initialize audio settings
-		audioControllerImpl.playMusic();
+		musicRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isMusicActive());
+		soundsRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isEffectActive());
 		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
-		percVolLabel.setText(Integer.toString(startVolumeValue) + "%");
+		audioControllerImpl.playMusic();
 		volSlider.setValue(startVolumeValue);
+		try {
+			updateVolume(startVolumeValue);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// Initialize graphic settings
 		resolutions.put(new Pair<Integer, Integer>(600,  400), null);
@@ -78,18 +88,15 @@ public class OptionsController implements Initializable {
 			res.setValue(label);
 		}
 		resolutionComboBox.getItems().addAll(resolutions.values());
-
-		// Initialize controls settings
-		
 	}	
 	
 	public void backClick(final ActionEvent event) throws IOException {
 		if (worldStage.isPresent()) {
-			//audioControllerImpl.stopMusic();
+			audioControllerImpl.stopMusic();
 			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage, audioControllerImpl), "PauseView.fxml", optionsStage);
 		}
 		else {
-			//audioControllerImpl.stopMusic();
+			audioControllerImpl.stopMusic();
 			sceneSwapper.swapScene(new StartMenuController(optionsStage, audioControllerImpl), "StartMenuView.fxml", optionsStage);
 		}
 	}
@@ -98,9 +105,10 @@ public class OptionsController implements Initializable {
 		updateVolume((int) volSlider.getValue());
 	}
 	
-	private void updateVolume(int value) {
+	private void updateVolume(int value) throws JsonGenerationException, JsonMappingException, IOException {
 		percVolLabel.setText(Integer.toString(value) + "%");
 		JSONDataAccessLayer.getInstance().getSettings().setVolume(value);
+		JSONDataAccessLayer.getInstance().getSettings().write();
 		audioControllerImpl.updateSettings();
 	}
 	
@@ -114,6 +122,7 @@ public class OptionsController implements Initializable {
 	}
 	
 	public void resolutionChoosed() {
+		/*
 		Pair<Integer, Integer> res = new Pair<Integer, Integer>(null, null);
 		res = resolutions.keySet()
 					.stream()
@@ -125,26 +134,31 @@ public class OptionsController implements Initializable {
 		optionsStage.setY(res.getValue());
 		worldStage.get().setX(res.getKey());
 		worldStage.get().setY(res.getValue());
+		*/
 	}
 	
-	public void musicRDClick() {
+	public void musicRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setMusicActive(true);
+			JSONDataAccessLayer.getInstance().getSettings().write();
 			audioControllerImpl.updateSettings();
 		}
 		else {
 			JSONDataAccessLayer.getInstance().getSettings().setMusicActive(false);
+			JSONDataAccessLayer.getInstance().getSettings().write();
 			audioControllerImpl.updateSettings();
 		}
 	}
 	
-	public void soundsRDClick() {
+	public void soundsRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(true);
+			JSONDataAccessLayer.getInstance().getSettings().write();
 			audioControllerImpl.updateSettings();
 		}
 		else {
 			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(false);
+			JSONDataAccessLayer.getInstance().getSettings().write();
 			audioControllerImpl.updateSettings();
 		}
 	}
