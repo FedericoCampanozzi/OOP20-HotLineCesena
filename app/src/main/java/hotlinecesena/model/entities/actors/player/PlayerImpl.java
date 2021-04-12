@@ -94,6 +94,9 @@ public final class PlayerImpl extends AbstractActor implements Player {
         this.pickUpWeapon();
     }
 
+    /**
+     * Uses nearby items, if there are any.
+     */
     private void useItem() {
         final Map<Point2D, ItemsType> itemsOnMap = this.getGameMaster().getDataItems().getItems();
         final Set<Point2D> toBeRemoved = new HashSet<>();
@@ -105,9 +108,12 @@ public final class PlayerImpl extends AbstractActor implements Player {
                 this.publish(new ItemPickUpEvent<>(this, item, itemPos));
             }
         });
-        toBeRemoved.forEach(p -> this.getGameMaster().getDataItems().getItems().remove(p));
+        toBeRemoved.forEach(itemsOnMap::remove);
     }
 
+    /**
+     * Picks up a nearby weapon, if present.
+     */
     private void pickUpWeapon() {
         final Map<Point2D, Weapon> weaponsOnMap = this.getGameMaster().getWeapons().getWeapons();
         final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
