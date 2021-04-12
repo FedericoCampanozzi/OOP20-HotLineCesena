@@ -46,7 +46,7 @@ class InputListenerTest {
         testScene = new Scene(new Pane(), WIDTH, HEIGHT);
         testScene.setFill(Color.BLACK);
         listener = new InputListenerFX();
-        listener.setEventHandlers(testScene);
+        listener.addEventHandlers(testScene);
         stage.setScene(testScene);
         stage.requestFocus();
         stage.show();
