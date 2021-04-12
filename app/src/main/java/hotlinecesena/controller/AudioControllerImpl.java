@@ -47,13 +47,28 @@ public final class AudioControllerImpl implements AudioController {
      */
     private void updateMusicVolume(final double value) {
         if (this.audio != null) {
-            this.audio.setVolume(value);
+            this.audio.setVolume(((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT) - BACKGROUND_VOLUME / PERCENT);
+        }
+    }
+
+    /**
+     * Starts or stops the music based on option
+     * menu
+     */
+    private void startAndStop() {
+        if (this.audio == null && playMusic) {
+            this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
+            this.audio.play();
+        } else if (this.audio != null && !playMusic) {
+            this.audio.stop();
+            this.audio = null;
         }
     }
 
     /**
      * Calculates the volume based on the
      * {@code Entity}.
+     * @param caller the entity invoking this method
      * @return the value for the volume
      * @see Entity
      */
@@ -68,7 +83,11 @@ public final class AudioControllerImpl implements AudioController {
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
-        this.updateMusicVolume(this.volume);
+        this.startAndStop();
+        
+        if (this.playMusic) {
+            this.updateMusicVolume(this.volume);
+        }
     }
 
     @Override
