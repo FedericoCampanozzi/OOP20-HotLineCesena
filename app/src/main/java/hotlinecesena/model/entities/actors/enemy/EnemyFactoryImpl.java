@@ -20,9 +20,9 @@ public final class EnemyFactoryImpl implements EnemyFactory {
 
         switch (type) {
             case BOSS:
-                return new EnemyImpl(pos, randomInventory(), EnemyType.PATROLLING, walkable, walls);
+                return new EnemyImpl(pos, this.randomInventory(), this.randomRotation(), EnemyType.PATROLLING, walkable, walls);
             default:
-                return new EnemyImpl(pos, randomInventory(), type, walkable, walls);
+                return new EnemyImpl(pos, this.randomInventory(), this.randomRotation(), type, walkable, walls);
         }
     }
 
@@ -38,5 +38,9 @@ public final class EnemyFactoryImpl implements EnemyFactory {
                 Map.of(weapon.getCompatibleAmmo(), 100));
 
         return retval;
+    }
+    
+    private double randomRotation() {
+        return new Random().nextInt(360);
     }
 }
