@@ -106,7 +106,7 @@ public final class NaiveInventoryImpl implements Inventory {
     @Override
     public void reloadWeapon() {
         weapon.ifPresent(weapon -> {
-            if (!this.isReloading()) {
+            if (!this.isReloading() && weapon.getCurrentAmmo() < weapon.getMagazineSize()) {
                 final int ammoOwned = collectibles.getOrDefault(weapon.getCompatibleAmmunition(), 0);
                 if (ammoOwned > 0) {
                     ammoForReloading = ammoOwned;
