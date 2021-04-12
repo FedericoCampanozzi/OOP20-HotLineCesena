@@ -103,6 +103,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     @Subscribe
     private void handleDeathEvent(final DeathEvent<Player> e) {
-        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER_DEAD));
+        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
+        sprite.updateRotation(0);
     }
 }
