@@ -21,14 +21,14 @@ class EnemyModelTest {
     @Test
     void enemyShoot() {
         
-        Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.IDLE, null, Collections.emptySet());
+        Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.IDLE, null, Collections.emptySet());
         final Point2D target = new Point2D(2,2);
         
         // ENEMY SHOULD HAVE A CLEAR LINE OF SIGHT
         assertTrue(idle.getAI().isShooting(target));
         
         Set<Point2D> wall = new HashSet<>() {{ add(new Point2D(1,1)); }};
-        idle = new EnemyImpl(new Point2D(0,0), null, EnemyType.IDLE, null, wall);
+        idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.IDLE, null, wall);
         
         // WALL IS BLOCKING THE ENEMY VIEW
         assertFalse(idle.getAI().isShooting(target));
@@ -36,7 +36,7 @@ class EnemyModelTest {
     
     @Test
     void enemyIdle() {
-        final Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.IDLE, null, null);
+        final Enemy idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.IDLE, null, null);
         
         Point2D current = idle.getPosition();
         
@@ -49,7 +49,7 @@ class EnemyModelTest {
     @Test
     void enemyPatrolling() {
         final Set<Point2D> walkable = new HashSet<>() {{ add(new Point2D(0,0)); add(new Point2D(1,0)); add(new Point2D(1,1)); add(new Point2D(0,1));}};
-        final Enemy patrol = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), EnemyType.PATROLLING, walkable, null);
+        final Enemy patrol = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.PATROLLING, walkable, null);
         
         assertEquals(DirectionList.EAST.get(), patrol.getAI().getNextMove(null, false, walkable));
         

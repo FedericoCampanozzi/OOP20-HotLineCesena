@@ -1,10 +1,12 @@
 package hotlinecesena.view.camera;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
 import hotlinecesena.utilities.MathUtils;
+import hotlinecesena.view.entities.Sprite;
 import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
@@ -15,16 +17,28 @@ import javafx.scene.transform.Translate;
  */
 public final class CameraViewImpl implements CameraView {
 
-    private static final double HUD_HEIGHT = 100; //TODO Gotta retrieve this from DAL
+    private static final double HUD_HEIGHT = 99; //TODO Gotta retrieve this from DAL
     private static final double ACCEL = 30.0;
     private static final double SHARPNESS = 0.2;
     private Pane pane;
+    private Sprite sprite;
     private final Translate paneTranslate = new Translate();
 
     /**
-     * Instantiates a new Camera.
+     * Instantiates a new Camera and binds it to a given {@link Sprite}.
+     * @param sprite the {@code Sprite} to which this camera will be bound to.
+     * @throws NullPointerException if the given sprite is null.
      */
-    public CameraViewImpl() {
+    public CameraViewImpl(@Nonnull final Sprite sprite) {
+        this.bindToSprite(sprite);
+    }
+
+    /**
+     * @throws NullPointerException if the supplied {@code sprite} is null.
+     */
+    @Override
+    public void bindToSprite(@Nonnull final Sprite sprite) {
+        this.sprite = Objects.requireNonNull(sprite);
     }
 
     /**
@@ -37,25 +51,34 @@ public final class CameraViewImpl implements CameraView {
     }
 
     @Override
-    public void removePane() {
-        pane.getTransforms().remove(paneTranslate);
+    public void removeCameraFromPane() {
+        if (pane != null && pane.getTransforms().contains(paneTranslate)) {
+            pane.getTransforms().remove(paneTranslate);
+        }
     }
 
     /**
-     * @throws NullPointerException if the given spritePosition is null.
+     * @implSpec Updates the {@link Translate} position based on the movements of
+     * the attached {@link Sprite}.
+     * @throws IllegalStateException if this camera is not attached to a pane
+     * or is not bound to a sprite.
      */
     @Override
-    public void update(@Nonnull final Point2D spritePosition, final double deltaTime) {
-        Objects.requireNonNull(spritePosition);
-        final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
-        final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
-        final Point2D newPos = MathUtils.lerp(
-                currentPos,
-                spritePosition.subtract(
-                        pane.getScene().getWidth() / 2,
-                        (pane.getScene().getHeight() - HUD_HEIGHT) / 2),
-                blend);
-        paneTranslate.setX(-newPos.getX());
-        paneTranslate.setY(-newPos.getY());
+    public Consumer<Double> getUpdateMethod() {
+        return deltaTime -> {
+            if (pane == null || sprite == null) {
+                throw new IllegalStateException("Camera not properly initialized.");
+            }
+            final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
+            final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
+            final Point2D newPos = MathUtils.lerp(
+                    currentPos,
+                    sprite.getPositionRelativeToParent().subtract(
+                            pane.getScene().getWidth() / 2,
+                            (pane.getScene().getHeight() - HUD_HEIGHT) / 2),
+                    blend);
+            paneTranslate.setX(-newPos.getX());
+            paneTranslate.setY(-newPos.getY());
+        };
     }
 }
