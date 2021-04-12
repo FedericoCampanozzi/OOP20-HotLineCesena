@@ -17,10 +17,7 @@ import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*;
 
 public class DataEnemy extends AbstractData {
-	
 	private final List<Enemy> enemies = new ArrayList<>();
-	private final int totalEnemy;
-	
 	public DataEnemy(DataWorldMap world) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
@@ -33,7 +30,6 @@ public class DataEnemy extends AbstractData {
 				.filter(itm -> itm.getValue().equals(SymbolsType.WALL))
 				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
-
 		for (Pair<Integer, Integer> pii : world.getWorldMap().keySet()) {
 			if (world.getWorldMap().get(pii).equals(SymbolsType.ENEMY)) {
 				Point2D pos = Utilities.convertPairToPoint2D(pii);
@@ -41,8 +37,6 @@ public class DataEnemy extends AbstractData {
 				enemies.add(eFact.getEnemy(pos, et, walkable, wall));
 			}
 		}
-		
-		totalEnemy = this.enemies.size();
 	}
 	
 	public List<Enemy> getEnemies() {

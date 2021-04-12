@@ -3,7 +3,6 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -11,7 +10,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-
+/*
+import javafx.util.Pair;
+import static java.util.stream.Collectors.*;
+*/
 public class DataJSONSettings  extends AbstractData  {
 
     @JsonProperty("monitorX")
@@ -66,8 +68,27 @@ public class DataJSONSettings  extends AbstractData  {
     private int minRoomWeapons;
     @JsonProperty("maxRoomWeapons")
     private int maxRoomWeapons;
+    @JsonProperty("resX")
+    private List<Integer> resX;
+    @JsonProperty("resY")
+    private List<Integer> resY;
+    @JsonProperty("defaultLanguage")
+    private int defaultLanguage;
     
-	public int getMinRoomWeapons() {
+    public int getDefaultLanguage() {
+		return defaultLanguage;
+	}
+
+	/*
+    public List<Pair<Integer, Integer>> getResolutions(){
+		List<Pair<Integer, Integer>> list = new ArrayList<>();
+		for (int i = 0; i < resX.size(); i++) {
+			list.add(new Pair<>(resX.get(i), resY.get(i)));
+		}
+		return list;
+    }
+    */
+    public int getMinRoomWeapons() {
 		return minRoomWeapons;
 	}
 

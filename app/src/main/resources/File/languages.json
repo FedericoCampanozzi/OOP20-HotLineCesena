@@ -1,11 +1,13 @@
 {
-  "description" : {
-    "languages_known" : "lingue-mappate",
-    "id_fxml" : "id messaggio nel file .fxml",
-    "languages_translation" : "per ogni lingua mappata mi serve una traduzione"
-  },
-  "language_name_map" : [ "id_fxml", "italian", "english", "german", "russian" ],
-  "language_map" : {
-    "languages_translation" : [ "win_message", "vittoria", "victory", "Sieg", "победа" ]
-  }
+  "decodifications" : [
+	{
+		"idFxml" : "lbl_win",
+		"fileName" : "opt.fxml",
+		"languagesTranslation" : [ "win_message", "vittoria", "victory", "Sieg", "победа" ]
+	}, {
+		"idFxml" : "lbl_loose",
+		"fileName" : "opt.fxml",
+		"languagesTranslation" : [ "loose_message", "sconfitta", "loose", "Niederlage", "Поражение" ]
+	}
+  ]
 }

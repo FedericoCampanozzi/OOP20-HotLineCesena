@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -37,8 +36,11 @@ public class DataJSONRanking extends AbstractData {
 		public void setPoints(int points) {
 			this.points = points;
 		}
-		public int getTime() {
-			return time;
+		public String getTime() {
+			long second = (time / 1000) % 60;
+			long minute = (time / (1000 * 60)) % 60;
+			long hour = (time / (1000 * 60 * 60)) % 24;
+			return String.format("%02d:%02d:%02d", hour, minute, second);
 		}
 		public void setTime(int time) {
 			this.time = time;
