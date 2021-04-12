@@ -4,14 +4,13 @@ import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.Actor;
-import hotlinecesena.model.entities.items.ItemsType;
-import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DeathEvent;
+import hotlinecesena.model.events.ItemPickUpEvent;
 import hotlinecesena.model.events.MovementEvent;
-import hotlinecesena.model.events.PickUpEvent;
 import hotlinecesena.model.events.ReloadEvent;
 import hotlinecesena.model.events.Subscriber;
+import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.view.loader.AudioType;
 
 /**
@@ -108,10 +107,10 @@ public class AudioEventController implements Subscriber {
     /**
      * Event triggered every time the player picks up a
      * weapon and will reproduce the related sound.
-     * @param e the {@code Entity} that has triggered this event.
+     * @param e the {@code Actor} that has triggered this event.
      */
     @Subscribe
-    private void onWeaponPickUpEvent(final PickUpEvent<Actor, WeaponType> e) {
+    private void onWeaponPickUpEvent(final WeaponPickUpEvent<Actor> e) {
         this.audio.playAudioClip(AudioType.PICKUP_WEAPON, e.getSource());
     }
 
@@ -119,10 +118,10 @@ public class AudioEventController implements Subscriber {
      * Event triggered every time the player picks up an
      * item and will reproduce the related sound to the
      * type of item picked up.
-     * @param e the {@code Entity} that has triggered this event.
+     * @param e the {@code Actor} that has triggered this event.
      */
     @Subscribe
-    private void onItemPickUpEvent(final PickUpEvent<Actor, ItemsType> e) {
+    private void onItemPickUpEvent(final ItemPickUpEvent<Actor> e) {
         switch (e.getItemType()) {
             case AMMO_BAG:
                 this.audio.playAudioClip(AudioType.PICKUP_ITEM, e.getSource());
