@@ -85,11 +85,11 @@ public class OptionsController implements Initializable {
 	
 	public void backClick(final ActionEvent event) throws IOException {
 		if (worldStage.isPresent()) {
-			audioControllerImpl.stopMusic();
+			//audioControllerImpl.stopMusic();
 			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage, audioControllerImpl), "PauseView.fxml", optionsStage);
 		}
 		else {
-			audioControllerImpl.stopMusic();
+			//audioControllerImpl.stopMusic();
 			sceneSwapper.swapScene(new StartMenuController(optionsStage, audioControllerImpl), "StartMenuView.fxml", optionsStage);
 		}
 	}

@@ -75,7 +75,6 @@ public class WorldController{
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
                 SceneSwapper sceneSwapper = new SceneSwapper();
                 try {
-                	gameLoopController.setEnable(false);
 					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl), "RankingView.fxml", primaryStage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
