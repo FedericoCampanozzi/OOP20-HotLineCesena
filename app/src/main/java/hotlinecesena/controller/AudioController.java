@@ -30,9 +30,13 @@ public interface AudioController {
     void playAudioClip(AudioType type, Entity caller);
 
     /**
-     * Plays the {@code MediaPlayer} of the audio file specified
-     * by its relative path.
+     * Plays the music playing in the background
      */
     void playMusic();
+
+    /**
+     * Pause the music playing in the background.
+     */
+    void stopMusic();
 
 }

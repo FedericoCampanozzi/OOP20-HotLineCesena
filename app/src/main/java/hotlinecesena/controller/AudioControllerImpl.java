@@ -89,4 +89,11 @@ public final class AudioControllerImpl implements AudioController {
             this.audio.setAutoPlay(true);
         }
     }
+
+    @Override
+    public void stopMusic() {
+        if (this.audio != null) {
+            this.audio.stop();
+        }
+    }
 }
