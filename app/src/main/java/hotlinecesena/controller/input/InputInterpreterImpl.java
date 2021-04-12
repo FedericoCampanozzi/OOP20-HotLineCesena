@@ -28,7 +28,7 @@ import javafx.util.Pair;
  */
 public final class InputInterpreterImpl implements InputInterpreter {
 
-    private static final float DEADZONE = 65.0f;
+    private static final float DEADZONE = 50.0f;
     private final Map<Enum<?>, PlayerAction> bindings;
     private Point2D currentMouseCoords = Point2D.ZERO;
 
