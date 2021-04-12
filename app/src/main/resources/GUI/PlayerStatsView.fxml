@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <right>
+      <HBox fx:id="weaponHBox" prefHeight="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="bulletLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="100.0" style="-fx-background-color: transparent;" text="18/120">
+               <font>
+                  <Font name="Arial Black" size="30.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="weaponImageView" fitHeight="100.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+         </children>
+         <BorderPane.margin>
+            <Insets right="20.0" />
+         </BorderPane.margin>
+      </HBox>
+   </right>
+   <left>
+      <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
+         <children>
+            <Label style="-fx-background-color: transparent;" text="HP">
+               <font>
+                  <Font name="Arial Black" size="30.0" />
+               </font></Label>
+            <ProgressBar fx:id="lifeBar" prefHeight="30.0" prefWidth="300.0" progress="1.0" style="-fx-accent: forestgreen;" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets left="20.0" />
+         </BorderPane.margin>
+      </HBox>
+   </left>
+   <center>
+      <CheckBox fx:id="missionCheckBox" disable="false" mnemonicParsing="false" style="-fx-opacity: 1;" text="Mission" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Arial Black" size="20.0" />
+         </font>
+      </CheckBox>
+   </center>
+</BorderPane>
