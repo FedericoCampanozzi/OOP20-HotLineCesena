@@ -3,17 +3,19 @@ package hotlinecesena.controller.entities.player;
 import java.util.Collection;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.MovementEvent;
 import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.WeaponPickUpEvent;
-import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.loader.ImageLoader;
@@ -30,22 +32,17 @@ import javafx.scene.image.Image;
 public final class PlayerControllerFX implements PlayerController, Subscriber {
 
     private final Player player;
-    //TODO Listener to be held by the GameController/WorldView
-    private final InputListener listener;
     private final InputInterpreter interpreter;
     private final Sprite sprite;
-    //TODO Camera to be held by the GameController/WorldView
-    private final CameraView camera;
+    private final InputListener listener;
     private final ImageLoader loader = new ProxyImage();
 
     public PlayerControllerFX(final Player player, final Sprite sprite, final InputInterpreter interpreter,
-            final CameraView camera, final InputListener listener) {
+            final InputListener listener) {
         this.player = player;
         this.sprite = sprite;
-        this.listener = listener;
         this.interpreter = interpreter;
-        this.camera = camera;
-
+        this.listener = listener;
         this.setup();
     }
 
@@ -53,6 +50,27 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         player.register(this);
         sprite.updatePosition(player.getPosition());
         sprite.updateRotation(player.getAngle());
+        player.getInventory().getWeapon().ifPresent(weapon -> {
+            sprite.updateImage(this.getImageByWeapon(weapon.getWeaponType()));
+        });
+    }
+
+    private @Nonnull Image getImageByWeapon(final WeaponType weapon) {
+        Image outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER);
+        switch (weapon) {
+        case PISTOL:
+            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL);
+            break;
+        case SHOTGUN:
+            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_SHOTGUN);
+            break;
+        case RIFLE:
+            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE);
+            break;
+        default:
+            break;
+        }
+        return outImage;
     }
 
     @Override
@@ -65,14 +83,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(player));
             }
-            //TODO To be updated from the GameLoop
-            camera.update(sprite.getPositionRelativeToParent(), deltaTime);
         };
-    }
-
-    @Override
-    public CameraView getCamera() {
-        return camera;
     }
 
     @Subscribe
@@ -86,27 +97,12 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     @Subscribe
-    private void handleDeathEvent(final DeathEvent<Player> e) {
-        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER_DEAD));
+    private void handleWeaponPickUpEvent(final WeaponPickUpEvent<Player> e) {
+        sprite.updateImage(this.getImageByWeapon(e.getItemType()));
     }
 
     @Subscribe
-    private void handleWeaponPickUpEvent(final WeaponPickUpEvent<Player> e) {
-        Image image = null;
-        switch (e.getItemType()) {
-        case PISTOL:
-            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL);
-            break;
-        case SHOTGUN:
-            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_SHOTGUN);
-            break;
-        case RIFLE:
-            image = loader.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE);
-            break;
-        default:
-            image = loader.getImage(SceneType.GAME, ImageType.PLAYER);
-            break;
-        }
-        sprite.updateImage(image);
+    private void handleDeathEvent(final DeathEvent<Player> e) {
+        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER_DEAD));
     }
 }
