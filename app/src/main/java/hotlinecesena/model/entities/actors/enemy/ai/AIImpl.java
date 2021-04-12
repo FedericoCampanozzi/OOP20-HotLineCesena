@@ -17,7 +17,7 @@ import javafx.geometry.Point2D;
 public final class AIImpl implements AI {
 
     private static final int FIELD_OF_VIEW = 90;
-    private static final int VISION_RADIUS = 3;
+    private static final int VISION_RADIUS = 7;
     private static final int HALF = 2;
     private static final double LOOK_NORTH = -90;
     private static final double LOOK_SOUTH = 90;
