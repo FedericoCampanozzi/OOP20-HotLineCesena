@@ -25,17 +25,21 @@ import hotlinecesena.view.loader.SceneType;
  */
 public final class EnemyController implements Updatable, Subscriber {
 
+    private static final int SECONDS = 1000;
     private static final int UPDATED_INTERVAL = 350;
-    private static final int UPDATE_AFTER_DEATH = 5000;
-    private static final int WAIT_TO_START = 5000;
+    private static final int UPDATE_AFTER_DEATH = 5 * SECONDS;
+    private static final int WAIT_TO_START = 3 * SECONDS;
+    private static final int STOP_PURSUIT = 8 * SECONDS;
 
     private final ProxyImage loader;
     private final Enemy enemy;
     private final Sprite sprite;
     private final Player player;
+
     private long lastTime;
     private long timeAfterDeath;
     private long timeToStart;
+    private long dropPursuit;
 
     /**
      * Class constructor.
@@ -56,6 +60,7 @@ public final class EnemyController implements Updatable, Subscriber {
         this.lastTime = System.currentTimeMillis();
         this.timeToStart = System.currentTimeMillis();
         this.sprite.updatePosition(this.enemy.getPosition());
+        this.sprite.updateRotation(this.enemy.getAngle());
     }
 
     @Override
@@ -68,7 +73,19 @@ public final class EnemyController implements Updatable, Subscriber {
                         && current - timeToStart > WAIT_TO_START) {
 
                     this.timeAfterDeath = current;
+
+                    if (this.enemy.getAI().isInPursuit(this.player.getPosition(), this.player.getNoiseRadius())
+                            || this.enemy.getAI().isShooting(this.player.getPosition())) {
+
+                        this.enemy.setIsInPursuit(true);
+                        this.dropPursuit = System.currentTimeMillis();
+                    } else if (this.enemy.isChasingTarget() && current - this.dropPursuit > STOP_PURSUIT) {
+                        this.enemy.setIsInPursuit(false);
+                    }
+
+                    //To better fit the short demo enemies will always chase the enemy
                     this.enemy.setIsInPursuit(true);
+
                     this.enemy.update(deltaTime);
 
                     if (this.enemy.getAI().isShooting(this.player.getPosition())) {
@@ -118,7 +135,8 @@ public final class EnemyController implements Updatable, Subscriber {
      */
     @Subscribe
     private void onDeathEvent(final DeathEvent<Enemy> e) {
-        this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.ENEMY_DEAD));
+        this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
+        this.sprite.updateRotation(0);
         e.getSource().unregister(this);
         this.timeAfterDeath = System.currentTimeMillis();
     }
