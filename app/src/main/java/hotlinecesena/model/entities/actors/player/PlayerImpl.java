@@ -31,7 +31,7 @@ import javafx.geometry.Point2D;
  */
 public final class PlayerImpl extends AbstractActor implements Player {
 
-    private static final double ITEM_USAGE_RADIUS = 1.5;
+    private static final double ITEM_USAGE_RADIUS = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
 
@@ -123,9 +123,16 @@ public final class PlayerImpl extends AbstractActor implements Player {
                             e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
                     .findFirst();
             weaponFound.ifPresent(entry -> {
-                this.getInventory().add(entry.getValue(), 1);
-                weaponsOnMap.remove(entry.getKey());
-                this.publish(new WeaponPickUpEvent<>(this, entry.getValue().getWeaponType(), entry.getKey()));
+                final Weapon w = entry.getValue();
+                final Point2D pos = entry.getKey();
+                /*
+                 * If the player already owns the same kind of weapon, ignore it.
+                 */
+                if (this.getInventory().getQuantityOf(w) != 1) {
+                    this.getInventory().add(w, 1);
+                    weaponsOnMap.remove(pos);
+                    this.publish(new WeaponPickUpEvent<>(this, w.getWeaponType(), pos));
+                }
             });
         }
     }
