@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.event.ActionEvent;
@@ -49,16 +50,19 @@ public class OptionsController implements Initializable {
 	private Map<Pair<Integer, Integer>, Label> resolutions = new LinkedHashMap<>();
 	private Optional<Stage> worldStage;
 	private Stage optionsStage;
+	private AudioControllerImpl audioControllerImpl;
 	
-	public OptionsController(Stage optionsStage, Optional<Stage> worldStage) {
+	public OptionsController(Stage optionsStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl) {
 		this.optionsStage = optionsStage;
 		this.worldStage = worldStage;
+		this.audioControllerImpl = audioControllerImpl;
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		// Initialize audio settings
+		audioControllerImpl.playMusic();
 		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
 		percVolLabel.setText(Integer.toString(startVolumeValue) + "%");
 		volSlider.setValue(startVolumeValue);
@@ -81,10 +85,12 @@ public class OptionsController implements Initializable {
 	
 	public void backClick(final ActionEvent event) throws IOException {
 		if (worldStage.isPresent()) {
-			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage), "PauseView.fxml", optionsStage);
+			//audioControllerImpl.stopMusic();
+			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage, audioControllerImpl), "PauseView.fxml", optionsStage);
 		}
 		else {
-			sceneSwapper.swapScene(new StartMenuController(optionsStage), "StartMenuView.fxml", optionsStage);
+			//audioControllerImpl.stopMusic();
+			sceneSwapper.swapScene(new StartMenuController(optionsStage, audioControllerImpl), "StartMenuView.fxml", optionsStage);
 		}
 	}
 	
@@ -95,6 +101,7 @@ public class OptionsController implements Initializable {
 	private void updateVolume(int value) {
 		percVolLabel.setText(Integer.toString(value) + "%");
 		JSONDataAccessLayer.getInstance().getSettings().setVolume(value);
+		audioControllerImpl.updateSettings();
 	}
 	
 	public void fullScreenRadioButtonChangedState() {
@@ -114,5 +121,31 @@ public class OptionsController implements Initializable {
 					.findFirst().get();
 		JSONDataAccessLayer.getInstance().getSettings().setMonitorX(res.getKey());
 		JSONDataAccessLayer.getInstance().getSettings().setMonitorY(res.getValue());
+		optionsStage.setX(res.getKey());
+		optionsStage.setY(res.getValue());
+		worldStage.get().setX(res.getKey());
+		worldStage.get().setY(res.getValue());
+	}
+	
+	public void musicRDClick() {
+		if (musicRadioButton.isSelected()) {
+			JSONDataAccessLayer.getInstance().getSettings().setMusicActive(true);
+			audioControllerImpl.updateSettings();
+		}
+		else {
+			JSONDataAccessLayer.getInstance().getSettings().setMusicActive(false);
+			audioControllerImpl.updateSettings();
+		}
+	}
+	
+	public void soundsRDClick() {
+		if (musicRadioButton.isSelected()) {
+			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(true);
+			audioControllerImpl.updateSettings();
+		}
+		else {
+			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(false);
+			audioControllerImpl.updateSettings();
+		}
 	}
 }

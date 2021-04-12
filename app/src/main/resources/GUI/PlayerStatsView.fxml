@@ -28,7 +28,7 @@
    <left>
       <HBox alignment="CENTER" prefHeight="100.0" spacing="10.0" style="-fx-background-color: transparent;" BorderPane.alignment="CENTER">
          <children>
-            <Label style="-fx-background-color: transparent;" text="HP">
+            <Label fx:id="hpLabel" style="-fx-background-color: transparent;" text="HP">
                <font>
                   <Font name="Arial Black" size="30.0" />
                </font></Label>

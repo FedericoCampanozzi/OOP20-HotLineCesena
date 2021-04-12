@@ -1,12 +1,9 @@
 package hotlinecesena.controller.entities;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -32,14 +29,14 @@ public final class ProjectileController implements Updatable {
     private static final double SPRITE_SCALE = 0.2;
     private static final int DEFAULT_POOL_SIZE = 30;
     private static final Point2D OUT_OF_BOUNDS = new Point2D(500_000, 500_000);
-    private final List<Sprite> spritePool = new ArrayList<>(DEFAULT_POOL_SIZE);
+    private final Set<Sprite> spritePool = new HashSet<>(DEFAULT_POOL_SIZE);
     private final Map<Projectile, Sprite> projectileMap = new HashMap<>();
     private final ImageLoader loader = new ProxyImage();
     private final WorldView worldView;
 
     public ProjectileController(final WorldView worldView) {
         this.worldView = worldView;
-        this.initSpritePool();
+        this.expandPool(DEFAULT_POOL_SIZE);
     }
 
     @Override
@@ -48,22 +45,19 @@ public final class ProjectileController implements Updatable {
             final List<Projectile> projectilesInModel = this.getDAL().getBullets().getProjectile();
             final Set<Projectile> removeSet = new HashSet<>();
 
-            if (projectilesInModel.size() > spritePool.size()) {
-                this.expandPool(projectilesInModel.size() - spritePool.size());
+            if (spritePool.size() < projectilesInModel.size()) {
+                this.expandPool(DEFAULT_POOL_SIZE);
             }
-
-            if (projectileMap.size() != projectilesInModel.size()) {
-                final Projectile newProjectile = projectilesInModel.get(projectilesInModel.size() - 1);
-                final Sprite newSprite = this.findUnusedSprite();
-                newSprite.updateRotation(newProjectile.getAngle());
-                projectileMap.put(newProjectile, newSprite);
+            if (projectileMap.size() < projectilesInModel.size()) {
+                for (final Projectile current : projectilesInModel) {
+                    if (!projectileMap.containsKey(current)) {
+                        final Sprite unusedSprite = this.findUnusedSprite();
+                        unusedSprite.updateRotation(current.getAngle());
+                        projectileMap.put(current, unusedSprite);
+                    }
+                }
             }
-
-            final Iterator<Entry<Projectile, Sprite>> projIterator = projectileMap.entrySet().iterator();
-            projIterator.forEachRemaining(currentEntry -> {
-                final Projectile proj = currentEntry.getKey();
-                final Sprite sprite = currentEntry.getValue();
-
+            projectileMap.forEach((proj, sprite) -> {
                 if (proj.getProjectileStatus() == ProjectileStatus.MOVING) {
                     proj.move(DELTA_VECTOR.multiply(deltaTime));
                     sprite.updatePosition(proj.getPosition());
@@ -92,14 +86,8 @@ public final class ProjectileController implements Updatable {
         return projSprite;
     }
 
-    private void initSpritePool() {
-        for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
-            spritePool.add(this.createSprite());
-        }
-    }
-
     private void expandPool(final int extra) {
-        for (int i = spritePool.size() - 1; i < spritePool.size() + extra - 1; i++) {
+        for (int i = 0; i < extra; i++) {
             spritePool.add(this.createSprite());
         }
     }
