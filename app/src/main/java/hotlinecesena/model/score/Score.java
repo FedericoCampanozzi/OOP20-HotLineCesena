@@ -6,7 +6,7 @@ import javafx.util.Pair;
 
 public interface Score {
 
-    Map<String, Pair<Integer, Integer>> getPartialScores();
+    Map<PartialType, Pair<Integer, Double>> getPartialScores();
 
     int getTotalScore();
 }

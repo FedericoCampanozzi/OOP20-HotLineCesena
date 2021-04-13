@@ -2,9 +2,9 @@ package hotlinecesena.model.score;
 
 public interface PartialScore {
 
-    String getName();
+    PartialType getType();
 
     int getPartialPoints();
 
-    int getFactor();
+    double getFactor();
 }
