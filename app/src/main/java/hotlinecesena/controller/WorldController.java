@@ -1,18 +1,18 @@
 package hotlinecesena.controller;
 
 import java.io.IOException;
+import java.util.Optional;
+import java.util.Set;
 
 import hotlinecesena.controller.HUD.PlayerStatsController;
 import hotlinecesena.controller.entities.ProjectileController;
 import hotlinecesena.controller.entities.enemy.EnemyController;
 import hotlinecesena.controller.entities.player.PlayerController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
+import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
-import hotlinecesena.model.score.PartialScoreFactoryImpl;
-import hotlinecesena.model.score.Score;
-import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.utilities.SceneSwapper;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
@@ -22,6 +22,7 @@ import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class WorldController{
@@ -36,6 +37,7 @@ public class WorldController{
     private final MissionController missionController;
     private final InputListener listener;
     private final AudioControllerImpl audioControllerImpl;
+    private final SceneSwapper sceneSwapper = new SceneSwapper();
     //private final Score score;
 
     public WorldController(final Stage primaryStage, AudioControllerImpl audioControllerImpl) throws IOException{
@@ -81,7 +83,6 @@ public class WorldController{
         
         gameLoopController.addMethodToUpdate(d -> {
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
-                SceneSwapper sceneSwapper = new SceneSwapper();
                 try {
                 	audioControllerImpl.stopMusic();
                 	gameLoopController.stop();
@@ -94,6 +95,25 @@ public class WorldController{
 					e1.printStackTrace();
 				}
             }
+        });
+        
+        gameLoopController.addMethodToUpdate(d -> {
+        	view.getBorderPane().setOnKeyReleased(e -> {
+        		if (e.getCode() == KeyCode.ESCAPE) {
+            		try {
+            			audioControllerImpl.stopMusic();
+                		gameLoopController.stop();
+                    	Stage stage = new Stage();
+                    	stage.setWidth(800);
+                    	stage.setHeight(600);
+                    	stage.show();
+        				sceneSwapper.swapScene(new PauseController(stage, Optional.of(primaryStage), audioControllerImpl, gameLoopController), "PauseView.fxml", stage);
+        			} catch (IOException e1) {
+        				// TODO Auto-generated catch block
+        				e1.printStackTrace();
+        			}
+    			}
+        	});
         });
 
         gameLoopController.loop();

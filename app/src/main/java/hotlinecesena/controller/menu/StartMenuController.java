@@ -41,7 +41,7 @@ public class StartMenuController implements Initializable{
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(stage, Optional.empty(), audioControllerImpl), "OptionsView.fxml", stage);
+		sceneSwapper.swapScene(new OptionsController(stage, Optional.empty(), audioControllerImpl, Optional.empty()), "OptionsView.fxml", stage);
 	}
 	
 	public void exitClick(final ActionEvent event) throws IOException {

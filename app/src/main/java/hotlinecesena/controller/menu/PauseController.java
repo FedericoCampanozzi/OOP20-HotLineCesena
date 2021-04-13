@@ -6,11 +6,11 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
+import hotlinecesena.controller.GameLoopController;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
@@ -26,11 +26,13 @@ public class PauseController implements Initializable{
 	private Optional<Stage> worldStage;
 	private AudioControllerImpl audioControllerImpl;
 	private Stage pauseStage;
+	private GameLoopController gameLoopController;
 	
-	public PauseController(Stage pauseStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl) {
+	public PauseController(Stage pauseStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl, GameLoopController gameLoopController) {
 		this.pauseStage = pauseStage;
 		this.worldStage = worldStage;
 		this.audioControllerImpl = audioControllerImpl;
+		this.gameLoopController = gameLoopController;
 	}
 	
 	@Override
@@ -38,12 +40,13 @@ public class PauseController implements Initializable{
 	}
 	
 	public void resumeClick(final ActionEvent event) throws IOException {
-		pauseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();;
+		audioControllerImpl.playMusic();
+		gameLoopController.restart();
 		pauseStage.close();
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage, audioControllerImpl), "OptionsView.fxml", pauseStage);
+		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage, audioControllerImpl, Optional.of(this)), "OptionsView.fxml", pauseStage);
 	}
 	
 	public void quitClick(final ActionEvent event) throws IOException {

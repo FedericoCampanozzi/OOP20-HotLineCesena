@@ -54,11 +54,13 @@ public class OptionsController implements Initializable {
 	private Optional<Stage> worldStage;
 	private Stage optionsStage;
 	private AudioControllerImpl audioControllerImpl;
+	private Optional<PauseController> pauseController;
 	
-	public OptionsController(Stage optionsStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl) {
+	public OptionsController(Stage optionsStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl, Optional<PauseController> pauseController) {
 		this.optionsStage = optionsStage;
 		this.worldStage = worldStage;
 		this.audioControllerImpl = audioControllerImpl;
+		this.pauseController = pauseController;
 	}
 	
 	@Override
@@ -93,7 +95,7 @@ public class OptionsController implements Initializable {
 	public void backClick(final ActionEvent event) throws IOException {
 		if (worldStage.isPresent()) {
 			audioControllerImpl.stopMusic();
-			sceneSwapper.swapScene(new PauseController(optionsStage, worldStage, audioControllerImpl), "PauseView.fxml", optionsStage);
+			sceneSwapper.swapScene(pauseController.get(), "PauseView.fxml", optionsStage);
 		}
 		else {
 			audioControllerImpl.stopMusic();
