@@ -40,4 +40,8 @@ public class GameLoopController {
 	public void stop() {
 		this.animationTimer.stop();
 	}
+	
+	public void restart() {
+		this.animationTimer.start();
+	}
 }
