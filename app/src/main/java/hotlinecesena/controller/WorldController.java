@@ -77,6 +77,7 @@ public class WorldController{
                 SceneSwapper sceneSwapper = new SceneSwapper();
                 try {
                 	audioControllerImpl.stopMusic();
+                	gameLoopController.stop();
 					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl), "RankingView.fxml", primaryStage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block

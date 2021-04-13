@@ -3,6 +3,8 @@ package hotlinecesena.model.entities.items;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import hotlinecesena.model.entities.AbstractMovableEntity;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
@@ -26,7 +28,7 @@ public final class Projectile extends AbstractMovableEntity {
     }
 
     @Override
-    protected void executeMovement(@Nonnull final Point2D direction) {
+    protected void executeMovement(@Nonnull final Point2D pointDeltaTime) {
         Objects.requireNonNull(pointDeltaTime);
         final Point2D oldPos = this.getPosition();
         final Point2D unitVector = this.directionFromAngle(this.getAngle());

@@ -77,25 +77,22 @@ public class PlayerStatsController implements Initializable, Updatable{
 			}
 			
 			// Update of ammo counter
-			player.getInventory().getWeapon().ifPresentOrElse(weapon -> bulletLabel.setText(
-	                    weapon.getCurrentAmmo()
-	                    + "/"
-	                    + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
-	                    ), () -> bulletLabel.setText("0/0"));
-			currentWeapon = player.getInventory().getWeapon().get();
-			switch (currentWeapon.getWeaponType()) {
-			case RIFLE:
-				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.RIFLE));
-				break;
-			case SHOTGUN:
-				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.SHOTGUN));
-				break;
-			case PISTOL:
-				weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.PISTOL));
-				break;
-			default:
-				break;
-			}
+			player.getInventory().getWeapon().ifPresent(weapon -> {
+                switch (weapon.getWeaponType()) {
+                case RIFLE:
+                    weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.RIFLE));
+                    break;
+                case SHOTGUN:
+                    weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.SHOTGUN));
+                    break;
+                case PISTOL:
+                    weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.PISTOL));
+                    break;
+                default:
+                    weaponImageView.setImage(proxyImage.getImage(SceneType.GAME, ImageType.BLANK));
+                    break;
+                }
+            });
 			
 			// Update of missions view
 			missions = missionController.getMissions();
