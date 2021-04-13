@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -36,6 +37,8 @@ public class RankingController implements Initializable{
 	@FXML
 	private Button backButton;
 	@FXML
+	private Button addScoreButton;
+	@FXML
 	private TableView<Row> tableView;
 	@FXML
 	private TableColumn<Row, Integer> rank;
@@ -56,12 +59,13 @@ public class RankingController implements Initializable{
 	private List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
 	private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
 	private Row matchStats = new Row();
-	private int totalScore;
+	private Random random = new Random();
+	//private int totalScore;
 	
-	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl, Score score) {
+	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl) {
 		this.stage = stage;
 		this.audioControllerImpl = audioControllerImpl;
-		totalScore = score.getTotalScore();
+		//totalScore = score.getTotalScore();
 	}
 	
 	@Override
@@ -104,13 +108,16 @@ public class RankingController implements Initializable{
 		TextField input = textInputDialog.getEditor();
 		if (input.getText() != null && input.getText().toString().length() != 0) {
 			matchStats.setName(input.getText());
-			matchStats.setPoints(1);
+			matchStats.setPoints(random.nextInt());
 			matchStats.setEnemyKilled(JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount());
-			matchStats.setTime(1);
-			matchStats.setCunning(matchStats.getEnemyKilled() / 1);
+			matchStats.setTime(convertTime(random.nextInt()));
+			matchStats.setCunning(random.nextInt());
 		}
 		recordList.add(matchStats);
 		updateList();
+		JSONDataAccessLayer.getInstance().getRanking().write();
+		addScoreButton.setDisable(true);
+		addScoreButton.setVisible(false);
 	}
 	
 	private void sortRecords() {
@@ -122,4 +129,11 @@ public class RankingController implements Initializable{
 		recordObservableList = FXCollections.observableList(recordList);
 		tableView.refresh();
 	}
+	
+	public String convertTime(int time) {
+        long second = (time / 1000) % 60;
+        long minute = (time / (1000 * 60)) % 60;
+        long hour = (time / (1000 * 60 * 60)) % 24;
+        return String.format("%02d:%02d:%02d", hour, minute, second);
+    }
 }

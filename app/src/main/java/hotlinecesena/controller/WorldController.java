@@ -36,7 +36,7 @@ public class WorldController{
     private final MissionController missionController;
     private final InputListener listener;
     private final AudioControllerImpl audioControllerImpl;
-    private final Score score;
+    //private final Score score;
 
     public WorldController(final Stage primaryStage, AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;
@@ -77,7 +77,7 @@ public class WorldController{
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
         
-        score = new ScoreImpl(new PartialScoreFactoryImpl());
+        //score = new ScoreImpl(new PartialScoreFactoryImpl());
         
         gameLoopController.addMethodToUpdate(d -> {
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
@@ -88,7 +88,7 @@ public class WorldController{
                 	primaryStage.setWidth(800);
                 	primaryStage.setHeight(600);
                 	primaryStage.centerOnScreen();
-					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl, score), "RankingView.fxml", primaryStage);
+					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl), "RankingView.fxml", primaryStage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
