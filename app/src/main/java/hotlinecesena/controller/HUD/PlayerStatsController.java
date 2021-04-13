@@ -76,13 +76,12 @@ public class PlayerStatsController implements Initializable, Updatable{
 			
 			// Update of ammo counter
 			
-			player.getInventory().getWeapon().ifPresent(weapon -> {
-				bulletLabel.setText(
-		                weapon.getCurrentAmmo()
-		                + "/"
-		                + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
-		                );
-				bulletLabel.setText("0/0");
+			player.getInventory().getWeapon().ifPresentOrElse(weapon -> {
+                bulletLabel.setText(
+                        weapon.getCurrentAmmo()
+                        + "/"
+                        + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
+                        );
                 switch (weapon.getWeaponType()) {
                 case RIFLE:
                     weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.RIFLE));
@@ -97,7 +96,7 @@ public class PlayerStatsController implements Initializable, Updatable{
                     weaponImageView.setImage(proxyImage.getImage(SceneType.GAME, ImageType.BLANK));
                     break;
                 }
-            });
+            }, () -> bulletLabel.setText("0/0"));
 			
 			// Update of missions view
 			missions = missionController.getMissions();
