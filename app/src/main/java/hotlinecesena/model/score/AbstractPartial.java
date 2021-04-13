@@ -19,12 +19,17 @@ public abstract class AbstractPartial implements PartialScore, Subscriber {
         return name;
     }
 
+    @Override
+    public final int getPartialPoints() {
+        return pointsPerUnit * this.getFactor();
+    }
+
     /**
      * Template method that depends on formula().
      */
     @Override
-    public final int getPartialPoints() {
-        return pointsPerUnit * this.formula();
+    public final int getFactor() {
+        return this.formula();
     }
 
     protected abstract int formula();
