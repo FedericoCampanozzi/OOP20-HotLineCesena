@@ -26,7 +26,7 @@ public final class Projectile extends AbstractMovableEntity {
     }
 
     @Override
-    public void move(final Point2D pointDeltaTime) {
+    protected void executeMovement(@Nonnull final Point2D direction) {
         Objects.requireNonNull(pointDeltaTime);
         final Point2D oldPos = this.getPosition();
         final Point2D unitVector = this.directionFromAngle(this.getAngle());

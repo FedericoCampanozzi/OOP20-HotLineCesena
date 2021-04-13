@@ -115,9 +115,11 @@ public class OptionsController implements Initializable {
 	public void fullScreenRadioButtonChangedState() {
 		if (fullScreenRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setFullScreen(true);
+			worldStage.get().setFullScreen(true);
 		}
 		else {
 			JSONDataAccessLayer.getInstance().getSettings().setFullScreen(false);
+			worldStage.get().setFullScreen(false);
 		}
 	}
 	
