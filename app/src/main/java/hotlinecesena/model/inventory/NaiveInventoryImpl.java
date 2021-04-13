@@ -141,7 +141,7 @@ public final class NaiveInventoryImpl implements Inventory {
                  * obscure reason, finish reloading it.
                  * Otherwise, reset everything.
                  */
-                weapon.filter(w -> w == reloadBuffer.getKey())
+                weapon.filter(w -> w == reloadBuffer.getLeft())
                 .ifPresent(w -> {
                     final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
                     if (reloadBuffer.getRight() > ammoNeeded) {
