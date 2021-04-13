@@ -10,6 +10,9 @@ import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.score.PartialScoreFactoryImpl;
+import hotlinecesena.model.score.Score;
+import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.utilities.SceneSwapper;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
@@ -33,11 +36,13 @@ public class WorldController{
     private final MissionController missionController;
     private final InputListener listener;
     private final AudioControllerImpl audioControllerImpl;
+    private final Score score;
 
     public WorldController(final Stage primaryStage, AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;
         this.audioControllerImpl = audioControllerImpl;
         this.audioControllerImpl.playMusic();
+        new AudioEventController();
         view = new WorldView(this.primaryStage);
         view.start();
 
@@ -72,13 +77,18 @@ public class WorldController{
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
         
+        score = new ScoreImpl(new PartialScoreFactoryImpl());
+        
         gameLoopController.addMethodToUpdate(d -> {
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
                 SceneSwapper sceneSwapper = new SceneSwapper();
                 try {
                 	audioControllerImpl.stopMusic();
                 	gameLoopController.stop();
-					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl), "RankingView.fxml", primaryStage);
+                	primaryStage.setWidth(800);
+                	primaryStage.setHeight(600);
+                	primaryStage.centerOnScreen();
+					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl, score), "RankingView.fxml", primaryStage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();

@@ -75,7 +75,6 @@ public class PlayerStatsController implements Initializable, Updatable{
 			}
 			
 			// Update of ammo counter
-			
 			player.getInventory().getWeapon().ifPresentOrElse(weapon -> {
                 bulletLabel.setText(
                         weapon.getCurrentAmmo()
@@ -120,5 +119,4 @@ public class PlayerStatsController implements Initializable, Updatable{
 			});
 		};
 	}
-
 }

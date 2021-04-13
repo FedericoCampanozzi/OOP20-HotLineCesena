@@ -162,8 +162,7 @@ public class WorldView implements Subscriber {
         primaryStage.setResizable(false);
         primaryStage.setWidth(1600);
         primaryStage.setHeight(900);
-        primaryStage.setX(0);
-        primaryStage.setY(0);
+        primaryStage.centerOnScreen();
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
         

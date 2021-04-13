@@ -12,15 +12,19 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking.Row;
+import hotlinecesena.model.score.Score;
 import hotlinecesena.utilities.SceneSwapper;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.ObjectBinding;
+import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -32,40 +36,59 @@ public class RankingController implements Initializable{
 	@FXML
 	private Button backButton;
 	@FXML
-	private TableView<Record> tableView;
+	private TableView<Row> tableView;
 	@FXML
-	private TableColumn<Record, Integer> rank;
+	private TableColumn<Row, Integer> rank;
 	@FXML
-	private TableColumn<Record, String> name;
+	private TableColumn<Row, String> name;
 	@FXML
-	private TableColumn<Record, Integer> points;
+	private TableColumn<Row, Integer> points;
 	@FXML
-	private TableColumn<Record, String> time;
+	private TableColumn<Row, String> time;
 	@FXML
-	private TableColumn<Record, Integer> kills;
+	private TableColumn<Row, Integer> enemyKilled;
+	@FXML
+	private TableColumn<Row, Integer> cunning;
 	
 	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private AudioControllerImpl audioControllerImpl;
 	private Stage stage;
 	private List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
-	private ObservableList<Record> records = FXCollections.observableArrayList();
+	private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
+	private Row matchStats = new Row();
+	private int totalScore;
 	
-	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl) {
+	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl, Score score) {
 		this.stage = stage;
 		this.audioControllerImpl = audioControllerImpl;
+		totalScore = score.getTotalScore();
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		recordList.sort(Comparator.comparing(Row::getPoints).reversed());
-		updateRecords();
-		rank.setCellValueFactory(new PropertyValueFactory<>("rank"));
+		rank.setCellFactory(col -> {
+	      TableCell<Row, Integer> indexCell = new TableCell<>();
+	      ReadOnlyObjectProperty<TableRow<Row>> rowProperty = indexCell.tableRowProperty();
+	      ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
+	        TableRow<Row> row = rowProperty.get();
+	        if (row != null) {
+	          int rowIndex = row.getIndex();
+	          if (rowIndex < row.getTableView().getItems().size()) {
+	            return Integer.toString(rowIndex + 1);
+	          }
+	        }
+	        return null;
+	      }, rowProperty);
+	      indexCell.textProperty().bind(rowBinding);
+	      return indexCell;
+	    });
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 		points.setCellValueFactory(new PropertyValueFactory<>("points"));
 		time.setCellValueFactory(new PropertyValueFactory<>("time"));
-		kills.setCellValueFactory(new PropertyValueFactory<>("kills"));
+		enemyKilled.setCellValueFactory(new PropertyValueFactory<>("enemyKilled"));
+		cunning.setCellValueFactory(new PropertyValueFactory<>("cunning"));
 		
-		tableView.setItems(records);
+		tableView.setItems(recordObservableList);
 	}
 	
 	public void backButtonClick() throws IOException {
@@ -80,70 +103,23 @@ public class RankingController implements Initializable{
 		textInputDialog.showAndWait();
 		TextField input = textInputDialog.getEditor();
 		if (input.getText() != null && input.getText().toString().length() != 0) {
-			int kills = JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount();
-			records.add(new Record(
-					0,
-					input.getText(),
-					0,	//(int) (kills / worldController.getMatchTime() * 1000000),
-					"a",	//this.getConvertTime(worldController.getMatchTime()),
-					kills));
+			matchStats.setName(input.getText());
+			matchStats.setPoints(1);
+			matchStats.setEnemyKilled(JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount());
+			matchStats.setTime(1);
+			matchStats.setCunning(matchStats.getEnemyKilled() / 1);
 		}
-		this.updateRecords();
+		recordList.add(matchStats);
+		updateList();
+	}
+	
+	private void sortRecords() {
+		recordList.sort(Comparator.comparing(Row::getPoints).reversed());
+	}
+	
+	private void updateList() {
+		sortRecords();
+		recordObservableList = FXCollections.observableList(recordList);
 		tableView.refresh();
 	}
-	
-	public class Record {
-		
-		private final SimpleIntegerProperty rank;
-		private final SimpleStringProperty name;
-		private final SimpleIntegerProperty points;
-		private final SimpleStringProperty time;
-		private final SimpleIntegerProperty kills;
-		
-		public Record(int rank, String name, int points, String time, int kills) {
-			this.rank = new SimpleIntegerProperty(rank);
-			this.name = new SimpleStringProperty(name);
-			this.points = new SimpleIntegerProperty(points);
-			this.time = new SimpleStringProperty(time);
-			this.kills = new SimpleIntegerProperty(kills);
-		}
-
-		public int getRank() {
-			return rank.get();
-		}
-
-		public String getName() {
-			return name.get();
-		}
-
-		public int getPoints() {
-			return points.get();
-		}
-
-		public String getTime() {
-			return time.get();
-		}
-
-		public int getKills() {
-			return kills.get();
-		}
-	}
-	
-	private void updateRecords() {
-		recordList.sort(Comparator.comparing(Row::getPoints).reversed());
-		ObservableList<Record> newList = FXCollections.observableArrayList();
-		for (int i = 0; i < recordList.size(); i++) {
-			var r = recordList.get(i);
-			newList.add(new Record(i + 1, r.getName(), r.getPoints(), r.getTime(), r.getEnemy_killed()));
-		}
-		records = (ObservableList<Record>) newList;
-	}
-	
-	public String getConvertTime(long l) {
-        long second = (l / 1000) % 60;
-        long minute = (l / (1000 * 60)) % 60;
-        long hour = (l / (1000 * 60 * 60)) % 24;
-        String timeConverted = String.format("%02d:%02d:%02d", hour, minute, second);
-        return timeConverted;
-    }
 }
