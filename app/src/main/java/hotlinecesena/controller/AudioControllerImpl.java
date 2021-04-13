@@ -19,7 +19,7 @@ public final class AudioControllerImpl implements AudioController {
 
     private static final int POINT_O_PERCENT = 1000;
     private static final int PERCENT = 100;
-    private static final int BACKGROUND_VOLUME = 30;
+    private static final int BACKGROUND_VOLUME = 75;
 
     private final SoundLoader loader;
     private AudioClip clip;
@@ -36,6 +36,8 @@ public final class AudioControllerImpl implements AudioController {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
+        
+        this.volume = ((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT);
     }
 
     /**
@@ -43,9 +45,9 @@ public final class AudioControllerImpl implements AudioController {
      * already playing in the background.
      * @param value the new volume setting
      */
-    private void updateMusicVolume(final double value) {
+    private void updateMusicVolume() {
         if (this.audio != null) {
-            this.audio.setVolume(((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT) - BACKGROUND_VOLUME / PERCENT);
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
         }
     }
 
@@ -57,7 +59,7 @@ public final class AudioControllerImpl implements AudioController {
         if (this.audio == null && playMusic) {
             this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
             this.audio.play();
-            this.updateMusicVolume(this.volume);
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
         } else if (this.audio != null && !playMusic) {
             this.audio.stop();
             this.audio = null;
@@ -82,10 +84,12 @@ public final class AudioControllerImpl implements AudioController {
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
+        this.volume = ((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT);
+
         this.startAndStop();
 
         if (this.playMusic) {
-            this.updateMusicVolume(this.volume);
+            this.updateMusicVolume();
         }
     }
 
@@ -104,7 +108,7 @@ public final class AudioControllerImpl implements AudioController {
         if (this.playMusic) {
             this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
             this.audio.setAutoPlay(true);
-            this.updateMusicVolume(this.volume);
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
         }
     }
 
