@@ -39,7 +39,12 @@ public final class EnemyFactoryImpl implements EnemyFactory {
 
         return retval;
     }
-    
+
+    /**
+     * Returns a new random angle, to randomise
+     * enemies initial rotation.
+     * @return a double that represent the rotation
+     */
     private double randomRotation() {
         return new Random().nextInt(360);
     }
