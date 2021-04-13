@@ -10,7 +10,7 @@ import hotlinecesena.model.events.DamageReceivedEvent;
 public final class CunningPartial extends AbstractPartial {
 
     private static final String NAME = "Cunning";
-    private static final int POINTS = 1500;
+    private static final int POINTS = 500;
     private int attacksPerformed = 0;
     private int hits = 0;
 
