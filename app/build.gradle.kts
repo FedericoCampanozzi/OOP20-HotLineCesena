@@ -1,14 +1,19 @@
-final var SEP = File.separator
-
-final var javaFxVersion = "15.0.1"
-final var fxmodules = listOf("base", "controls", "fxml", "media", "graphics")
-final var platforms = listOf("win", "linux", "mac")
+val javaFxVersion = "15.0.1"
+val fxmodules = listOf("base", "controls", "fxml", "media", "graphics", "swing")
+val platforms = listOf("win", "linux", "mac")
 
 plugins {
     java
     application
     eclipse
     id("org.openjfx.javafxplugin") version "0.0.9" // https://github.com/openjfx/javafx-gradle-plugin
+
+    /*
+     * Adds tasks to export a runnable jar.
+     * In order to create it, launch the "shadowJar" task.
+     * The runnable jar will be found in build/libs/projectname-all.jar
+     */
+    id("com.github.johnrengelman.shadow") version "6.1.0"
 }
 
 repositories {
@@ -23,7 +28,7 @@ java {
 
 javafx {
     version = javaFxVersion
-    modules("javafx.controls", "javafx.fxml", "javafx.media", "javafx.swing")
+    modules("javafx.base", "javafx.controls", "javafx.fxml", "javafx.media", "javafx.graphics", "javafx.swing")
 }
 
 dependencies {
@@ -59,8 +64,21 @@ dependencies {
 
 application {
     mainClass.set("hotlinecesena.controller.core.Launcher")
+    
+    /*
+     * mainClassName was deprecated by Gradle, but it is still required by John Engelman's Shadow plugin.
+     * A pull request with a fix was already merged, but it hasn't been released yet;
+     * see https://github.com/johnrengelman/shadow/issues/609 and https://github.com/johnrengelman/shadow/pull/612
+     */
+    @Suppress("DEPRECATION")
+    mainClassName = mainClass.get()
 }
 
-tasks.test {
+tasks.withType<JavaCompile> {
+    options.encoding = "UTF-8"
+}
+
+tasks.withType<Test> {
+    // Enables JUnit 5 Jupiter module
     useJUnitPlatform()
 }
