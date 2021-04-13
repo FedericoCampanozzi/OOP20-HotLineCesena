@@ -59,9 +59,8 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * @throws NullPointerException if the supplied direction is null.
      */
     @Override
-    public void move(@Nonnull final Point2D direction) {
-        Objects.requireNonNull(direction);
-        if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+    protected void executeMovement(@Nonnull final Point2D direction) {
+        if (this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
             final Stream<Enemy> enemies = this.getGameMaster().getEnemy().getEnemies()

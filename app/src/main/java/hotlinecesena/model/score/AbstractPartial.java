@@ -1,10 +1,13 @@
 package hotlinecesena.model.score;
 
-public abstract class AbstractPartial implements PartialScore {
+import hotlinecesena.model.dataccesslayer.DataAccessLayer;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.model.events.Subscriber;
+
+public abstract class AbstractPartial implements PartialScore, Subscriber {
 
     private final String name;
     private final int pointsPerUnit;
-    //    private final DAL world = DALImpl.getInstance();
 
     protected AbstractPartial(final String name, final int points) {
         this.name = name;
@@ -17,7 +20,7 @@ public abstract class AbstractPartial implements PartialScore {
     }
 
     /**
-     * Template method.
+     * Template method that depends on formula().
      */
     @Override
     public final int getPartialPoints() {
@@ -26,7 +29,7 @@ public abstract class AbstractPartial implements PartialScore {
 
     protected abstract int formula();
 
-    //    protected DAL getWorld() {
-    //        return this.world;
-    //    }
+    protected final DataAccessLayer getGameMaster() {
+        return JSONDataAccessLayer.getInstance();
+    }
 }

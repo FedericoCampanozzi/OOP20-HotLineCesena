@@ -1,15 +1,14 @@
 package hotlinecesena;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,40 +62,42 @@ class ActorModelTest {
     @Test
     void actorRotate() {
         actor.setAngle(90.0);
-        assertThat(actor.getAngle(), comparesEqualTo(90.0));
+        assertThat(actor.getAngle(), is(90.0));
     }
 
     @Test
-    void actorAttack() {
+    void actorAttack() throws InterruptedException {
         assertThat(actor.getInventory().getWeapon(), not(Optional.empty()));
         final Weapon w = actor.getInventory().getWeapon().get();
         assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
         assertFalse(actor.getInventory().isReloading());
-        try {
-            Thread.sleep((long) w.getRateOfFire());
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        }
+        Thread.sleep((long) w.getRateOfFire());
         actor.attack();
         assertEquals(ActorStatus.ATTACKING, actor.getActorStatus());
     }
 
     @Test
-    void actorReload() {
-        final double reloadTime = actor.getInventory().getWeapon().get().getReloadTime();
+    void actorReload() throws InterruptedException {
+        assertThat(actor.getInventory().getWeapon(), not(Optional.empty()));
+        final Weapon w = actor.getInventory().getWeapon().get();
+        final double reloadTime = w.getReloadTime();
+        assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
+        assertFalse(actor.getInventory().isReloading());
+        Thread.sleep((long) actor.getInventory().getWeapon().get().getReloadTime());
         actor.attack();
         actor.reload();
+        actor.getInventory().update(reloadTime / 2.0);
         assertTrue(actor.getInventory().isReloading());
         actor.getInventory().update(reloadTime);
         assertFalse(actor.getInventory().isReloading());
     }
 
     @Test
-    void actorCannotInitiateReloadingWhileAlreadyReloading() {
+    void actorCannotInitiateReloadingWhileAlreadyReloading() throws InterruptedException {
         final double reloadTime = actor.getInventory().getWeapon().get().getReloadTime();
+        Thread.sleep((long) actor.getInventory().getWeapon().get().getRateOfFire());
         actor.attack();
         actor.reload();
-        assertTrue(actor.getInventory().isReloading());
         actor.getInventory().update(reloadTime / 2.0);
         assertTrue(actor.getInventory().isReloading()); //Still reloading
         actor.reload();
@@ -108,10 +109,10 @@ class ActorModelTest {
     void actorTakeDamage() {
         final double damage = 50.0;
         actor.takeDamage(damage);
-        assertThat(actor.getCurrentHealth(), comparesEqualTo(MAX_HP - damage));
+        assertThat(actor.getCurrentHealth(), is(MAX_HP - damage));
         final double unrealDamage = 2000.0;
         actor.takeDamage(unrealDamage);
-        assertThat(actor.getCurrentHealth(), comparesEqualTo(0.0));
+        assertThat(actor.getCurrentHealth(), is(0.0));
     }
 
     @Test
@@ -125,7 +126,7 @@ class ActorModelTest {
     void actorDoesNotRotateWhenDead() {
         actor.takeDamage(MAX_HP);
         actor.setAngle(0.0);
-        assertThat(actor.getAngle(), not(comparesEqualTo(0.0)));
+        assertThat(actor.getAngle(), is(not(0.0)));
     }
 
     @Test
@@ -133,7 +134,7 @@ class ActorModelTest {
         actor.takeDamage(MAX_HP);
         final double unrealHp = 50000.0;
         actor.heal(unrealHp);
-        assertThat(actor.getCurrentHealth(), comparesEqualTo(0.0));
+        assertThat(actor.getCurrentHealth(), is(0.0));
     }
 
     private final class TestActor extends AbstractActor {
@@ -143,10 +144,13 @@ class ActorModelTest {
             super(position, angle, width, height, speed, maxHealth, inventory);
         }
 
+        /*
+         * Identical to PlayerImpl's implementation, minus the
+         * collision checks.
+         */
         @Override
-        public void move(final Point2D direction) {
-            Objects.requireNonNull(direction);
-            if (!direction.equals(Point2D.ZERO) && this.isAlive()) {
+        protected void executeMovement(final Point2D direction) {
+            if (this.isAlive()) {
                 final Point2D oldPos = this.getPosition();
                 final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
                 this.setPosition(newPos);
