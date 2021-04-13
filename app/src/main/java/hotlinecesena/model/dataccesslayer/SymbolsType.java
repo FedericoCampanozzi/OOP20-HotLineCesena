@@ -11,7 +11,8 @@ public enum SymbolsType {
 	OBSTACOLES('O', Color.RED),
 	WEAPONS('*', Color.BLUE),
 	WALL('W', Color.GRAY),
-	ITEM('I', Color.YELLOW);
+	ITEM('I', Color.YELLOW),
+	KEY_ITEM('K', Color.PINK);
 	
 	private final char c;
 	private final Color color;

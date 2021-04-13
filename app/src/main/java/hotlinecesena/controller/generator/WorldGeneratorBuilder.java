@@ -15,7 +15,9 @@ public interface WorldGeneratorBuilder {
 	WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax);
 	
 	WorldGeneratorBuilder generatePlayer();
-
+	
+	WorldGeneratorBuilder generateKeyObject();
+	
 	WorldGeneratorBuilder generateEnemy(int minRoom, int maxRoom);
 
 	WorldGeneratorBuilder generateObstacoles(int minRoom, int maxRoom);

@@ -21,6 +21,5 @@ public class GameController extends Application {
         primaryStage.setTitle("HotLine Cesena");
         primaryStage.setResizable(false);
         primaryStage.show();
-        new AudioEventController();
 	}
 }

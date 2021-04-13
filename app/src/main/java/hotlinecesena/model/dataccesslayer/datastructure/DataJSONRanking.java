@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -54,10 +53,10 @@ public class DataJSONRanking extends AbstractData {
 		public void setTime(int time) {
 			this.time = time;
 		}
-		public int getEnemy_killed() {
+		public int getEnemyKilled() {
 			return enemyKilled;
 		}
-		public void setEnemy_killed(int enemyKilled) {
+		public void setEnemyKilled(int enemyKilled) {
 			this.enemyKilled = enemyKilled;
 		}
 	}

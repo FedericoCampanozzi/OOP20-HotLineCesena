@@ -8,10 +8,13 @@ import static java.util.stream.Collectors.*;
 
 public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBuilder {
 	
-	protected final static int MAX_POSSIBILITY = 10_000;
-	protected final static int MAP_PADDING = 10;
+	protected static final int MIN_ROOMS = 4;
+	protected static final int MAX_POSSIBILITY = 10_000;
+	protected static final int MAP_PADDING = 10;
 	protected Random rnd = new Random();
 	protected int xMin, xMax, yMin, yMax;
+	protected int pRoomIndex;
+	protected int objRoomIndex;
 	
 	// Low level description
 	protected Map<Pair<Integer, Integer>, SymbolsType> map = new HashMap<>();
@@ -37,57 +40,71 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 
 	@Override
 	public WorldGeneratorBuilder generatePlayer() {
-		haveInitMapAndBaseRoom();
-		Room r = this.rooms.get(rnd.nextInt(this.rooms.size()));
+		haveInitMapAndBaseRoom();		
+		this.pRoomIndex = rnd.nextInt(this.rooms.size());
+		Room r = this.rooms.get(this.pRoomIndex);
 		r.getMap().put(r.getCenter(), SymbolsType.PLAYER);
 		this.map.put(r.getCenter(), SymbolsType.PLAYER);
 		return this;
 	}
 	
 	@Override
+	public WorldGeneratorBuilder generateKeyObject() {
+		haveInitMapAndBaseRoom();
+		if(this.rooms.size() <= MIN_ROOMS) {
+			return this;
+		}
+		this.objRoomIndex = rnd.nextInt(this.rooms.size());
+		while(this.objRoomIndex == this.pRoomIndex) {
+			this.objRoomIndex = rnd.nextInt(this.rooms.size());
+		}
+		Room r = this.rooms.get(this.objRoomIndex);
+		r.getMap().put(r.getCenter(), SymbolsType.KEY_ITEM);
+		this.map.put(r.getCenter(), SymbolsType.KEY_ITEM);
+		return this;
+	}
+	
+	@Override
 	public WorldGeneratorBuilder generateEnemy(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
-		generateTotalRandomness(SymbolsType.ENEMY, minInRoom, maxInRoom);
-		return this;
+		return generateTotalRandomnessMany(SymbolsType.ENEMY, minInRoom, maxInRoom);
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateObstacoles(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
-		generateTotalRandomness(SymbolsType.OBSTACOLES, minInRoom, maxInRoom);
-		return this;
+		return generateTotalRandomnessMany(SymbolsType.OBSTACOLES, minInRoom, maxInRoom);
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateItem(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
-		generateTotalRandomness(SymbolsType.ITEM, minInRoom, maxInRoom);
-		return this;
+		return generateTotalRandomnessMany(SymbolsType.ITEM, minInRoom, maxInRoom);
 	}
 	
 	@Override
 	public WorldGeneratorBuilder generateWeapons(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
-		generateTotalRandomness(SymbolsType.WEAPONS, minInRoom, maxInRoom);
-		return this;
+		return generateTotalRandomnessMany(SymbolsType.WEAPONS, minInRoom, maxInRoom);
 	}
 	
-	private WorldGeneratorBuilder generateTotalRandomness(SymbolsType type, int minInRoom, int maxInRoom) {
-		for(Room r : this.rooms) {
-			
-			int roomObj = Utilities.RandomBetween(rnd, minInRoom, maxInRoom);
-			final List<Pair<Integer,Integer>> positions = r.getMap().entrySet().stream().map(itm->itm.getKey()).collect(toList());
-			
-			for(int i=0; i < roomObj; i++) {
-				Pair<Integer,Integer> pii = positions.get(rnd.nextInt(positions.size()));
-				pii = Utilities.sumPair(pii, r.getCenter());
-				if(this.map.get(pii).equals(SymbolsType.WALKABLE)) {
-					this.map.put(pii, type);
-					r.getMap().put(Utilities.subPair(pii, r.getCenter()), type);
+	private WorldGeneratorBuilder generateTotalRandomnessMany(SymbolsType type, int minInRoom, int maxInRoom) {
+		for (int rIndex = 0; rIndex < this.rooms.size(); rIndex++) {
+			if (rIndex != this.pRoomIndex) {
+				Room r = this.rooms.get(rIndex);
+				int roomObj = Utilities.RandomBetween(rnd, minInRoom, maxInRoom);
+				final List<Pair<Integer, Integer>> positions = r.getMap().entrySet().stream().map(itm -> itm.getKey())
+						.collect(toList());
+				for (int i = 0; i < roomObj; i++) {
+					Pair<Integer, Integer> pii = positions.get(rnd.nextInt(positions.size()));
+					pii = Utilities.sumPair(pii, r.getCenter());
+					if (this.map.get(pii).equals(SymbolsType.WALKABLE)) {
+						this.map.put(pii, type);
+						r.getMap().put(Utilities.subPair(pii, r.getCenter()), type);
+					}
 				}
 			}
 		}
-		
 		return this;
 	}
 	
@@ -102,7 +119,6 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		//fill null positions
 		for (int i = xMin; i <= xMax; i++) {
 			for (int j = yMin; j <= yMax; j++) {
-
 				if (!this.map.containsKey(new Pair<>(i, j))) {
 					this.map.put(new Pair<>(i, j), SymbolsType.VOID);
 				}
@@ -166,7 +182,6 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		
 		return this;
 	}
-	
 	
 	protected boolean checkAdjacent4(int i, int j, SymbolsType type) {
 		return get(i + 1, j, type) || get(i - 1, j, type) || get(i, j + 1, type) || get(i, j - 1, type);
