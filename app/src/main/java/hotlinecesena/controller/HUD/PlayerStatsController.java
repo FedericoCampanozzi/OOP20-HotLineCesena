@@ -9,7 +9,6 @@ import hotlinecesena.controller.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
@@ -49,7 +48,6 @@ public class PlayerStatsController implements Initializable, Updatable{
 	
 	private WorldView worldView;
 	private int currentMission = 0;
-	private Weapon currentWeapon;
 
 	public PlayerStatsController(WorldView view, MissionController missionController) {
 		this.worldView = view;
@@ -77,7 +75,14 @@ public class PlayerStatsController implements Initializable, Updatable{
 			}
 			
 			// Update of ammo counter
+			
 			player.getInventory().getWeapon().ifPresent(weapon -> {
+				bulletLabel.setText(
+		                weapon.getCurrentAmmo()
+		                + "/"
+		                + player.getInventory().getQuantityOf(weapon.getCompatibleAmmunition())
+		                );
+				bulletLabel.setText("0/0");
                 switch (weapon.getWeaponType()) {
                 case RIFLE:
                     weaponImageView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.RIFLE));

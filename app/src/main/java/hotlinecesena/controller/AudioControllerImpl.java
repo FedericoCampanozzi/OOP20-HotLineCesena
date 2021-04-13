@@ -19,7 +19,7 @@ public final class AudioControllerImpl implements AudioController {
 
     private static final int POINT_O_PERCENT = 1000;
     private static final int PERCENT = 100;
-    private static final int BACKGROUND_VOLUME = 10;
+    private static final int BACKGROUND_VOLUME = 30;
 
     private final SoundLoader loader;
     private AudioClip clip;
@@ -36,8 +36,6 @@ public final class AudioControllerImpl implements AudioController {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
-
-        this.volume = (this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT;
     }
 
     /**
@@ -59,6 +57,7 @@ public final class AudioControllerImpl implements AudioController {
         if (this.audio == null && playMusic) {
             this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
             this.audio.play();
+            this.updateMusicVolume(this.volume);
         } else if (this.audio != null && !playMusic) {
             this.audio.stop();
             this.audio = null;
@@ -104,8 +103,8 @@ public final class AudioControllerImpl implements AudioController {
     public void playMusic() {
         if (this.playMusic) {
             this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
-            this.audio.setVolume(this.volume  / BACKGROUND_VOLUME);
             this.audio.setAutoPlay(true);
+            this.updateMusicVolume(this.volume);
         }
     }
 
