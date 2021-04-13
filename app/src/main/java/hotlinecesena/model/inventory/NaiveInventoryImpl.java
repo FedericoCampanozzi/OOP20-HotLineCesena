@@ -154,7 +154,7 @@ public final class NaiveInventoryImpl implements Inventory {
                         w.reload(reloadBuffer.getRight());
                         collectibles.put(
                                 w.getCompatibleAmmunition(),
-                                currentAmmoOwned);
+                                0);
                     }
                 });
                 reloadBuffer = null;
