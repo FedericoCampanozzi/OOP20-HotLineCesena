@@ -30,7 +30,7 @@ public interface AudioController {
     void playAudioClip(AudioType type, Entity caller);
 
     /**
-     * Plays the music playing in the background
+     * Plays the music playing in the background.
      */
     void playMusic();
 

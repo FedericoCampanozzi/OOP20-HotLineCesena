@@ -144,8 +144,10 @@ public final class Pathfinder {
      * @return a list of points that need to be traversed
      * to reach the desired end
      */
-    private static List<Point2D> getPath(Node current) {
+    private static List<Point2D> getPath(final Node last) {
+        Node current = last;
         final List<Point2D> path = new ArrayList<>();
+
         while (!current.parent.isEmpty()) {
             path.add(current.getPosition());
             current = current.parent.get();

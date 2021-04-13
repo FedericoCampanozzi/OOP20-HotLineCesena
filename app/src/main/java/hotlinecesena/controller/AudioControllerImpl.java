@@ -53,7 +53,7 @@ public final class AudioControllerImpl implements AudioController {
 
     /**
      * Starts or stops the music based on option
-     * menu
+     * menu.
      */
     private void startAndStop() {
         if (this.audio == null && playMusic) {
@@ -84,7 +84,7 @@ public final class AudioControllerImpl implements AudioController {
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
         this.startAndStop();
-        
+
         if (this.playMusic) {
             this.updateMusicVolume(this.volume);
         }

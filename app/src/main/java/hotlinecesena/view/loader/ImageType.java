@@ -124,6 +124,10 @@ public enum ImageType {
      */
     SHOTGUN("shotgun.png"),
 
+    /**
+     * Relative path to the scope image file.
+     * Used to replace the cursor icon
+     */
     SCOPE("scope.png"),
 
     /**

@@ -53,7 +53,7 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
     }
 
     @Override
-    public void move(final Point2D direction) {
+    public void executeMovement(final Point2D direction) {
         if (!this.getActorStatus().equals(ActorStatus.DEAD)) {
             final Point2D current = this.getPosition();
             final Point2D next = current.add(direction.multiply(!this.pursuit
