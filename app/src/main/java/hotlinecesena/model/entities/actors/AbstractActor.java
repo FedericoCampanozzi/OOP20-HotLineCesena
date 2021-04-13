@@ -59,7 +59,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
             inventory.getWeapon().ifPresent(w -> {
                 final int previousAmmo = w.getCurrentAmmo();
                 if (previousAmmo == 0) {
-                    inventory.reloadWeapon();
+                    this.reload();
                 } else {
                     w.usage().accept(this);
                     if (w.getCurrentAmmo() < previousAmmo) {
