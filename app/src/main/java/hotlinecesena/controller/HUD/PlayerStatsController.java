@@ -72,6 +72,9 @@ public class PlayerStatsController implements Initializable, Updatable{
 			if (lifeBar.getProgress() <= 0.2) {
 				lifeBar.setStyle("-fx-accent: red;");
 			}
+			else {
+				lifeBar.setStyle("-fx-accent: green;");
+			}
 			
 			// Update of ammo counter
 			player.getInventory().getWeapon().ifPresentOrElse(weapon -> bulletLabel.setText(
