@@ -5,4 +5,6 @@ public interface PartialScore {
     String getName();
 
     int getPartialPoints();
+
+    int getFactor();
 }

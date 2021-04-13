@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import hotlinecesena.model.events.Subscriber;
+import javafx.util.Pair;
 
 public final class ScoreImpl implements Score, Subscriber {
 
@@ -15,9 +16,11 @@ public final class ScoreImpl implements Score, Subscriber {
     }
 
     @Override
-    public Map<String, Integer> getPartialScores() {
+    public Map<String, Pair<Integer, Integer>> getPartialScores() {
         return partials.stream()
-                .collect(Collectors.toMap(PartialScore::getName, PartialScore::getPartialPoints));
+                .collect(Collectors.toMap(
+                        PartialScore::getName,
+                        p -> new Pair<>(p.getPartialPoints(), p.getFactor())));
     }
 
     @Override
