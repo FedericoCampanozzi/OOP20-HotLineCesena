@@ -23,7 +23,10 @@ public class DataEnemy extends AbstractData {
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		EnemyFactoryImpl eFact = new EnemyFactoryImpl();
 		Set<Point2D> walkable = world.getWorldMap().entrySet().stream()
-				.filter(itm -> itm.getValue().equals(SymbolsType.WALKABLE))
+				.filter(itm -> 
+						!itm.getValue().equals(SymbolsType.WALL) && 
+						!itm.getValue().equals(SymbolsType.OBSTACOLES) &&
+						!itm.getValue().equals(SymbolsType.VOID))
 				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
 		Set<Point2D> wall = world.getWorldMap().entrySet().stream()
