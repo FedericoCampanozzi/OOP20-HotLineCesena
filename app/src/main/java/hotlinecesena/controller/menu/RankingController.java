@@ -86,6 +86,7 @@ public class RankingController implements Initializable{
 	      indexCell.textProperty().bind(rowBinding);
 	      return indexCell;
 	    });
+		
 		name.setCellValueFactory(new PropertyValueFactory<>("name"));
 		points.setCellValueFactory(new PropertyValueFactory<>("points"));
 		time.setCellValueFactory(new PropertyValueFactory<>("time"));
@@ -107,11 +108,13 @@ public class RankingController implements Initializable{
 		textInputDialog.showAndWait();
 		TextField input = textInputDialog.getEditor();
 		if (input.getText() != null && input.getText().toString().length() != 0) {
-			matchStats.setName(input.getText());
-			matchStats.setPoints(random.nextInt());
-			matchStats.setEnemyKilled(JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount());
-			matchStats.setTime(convertTime(random.nextInt()));
-			matchStats.setCunning(random.nextInt());
+			matchStats = new Row(
+					input.getText(),
+					10,
+					2000000,
+					30,
+					40
+					);
 		}
 		recordList.add(matchStats);
 		updateList();
@@ -129,11 +132,4 @@ public class RankingController implements Initializable{
 		recordObservableList = FXCollections.observableList(recordList);
 		tableView.refresh();
 	}
-	
-	public String convertTime(int time) {
-        long second = (time / 1000) % 60;
-        long minute = (time / (1000 * 60)) % 60;
-        long hour = (time / (1000 * 60 * 60)) % 24;
-        return String.format("%02d:%02d:%02d", hour, minute, second);
-    }
 }
