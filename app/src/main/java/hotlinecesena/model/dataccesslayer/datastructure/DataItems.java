@@ -21,7 +21,7 @@ public class DataItems extends AbstractData {
 				.filter(itm -> itm.getValue().equals(SymbolsType.ITEM))
 				.collect(toMap(
 						itm -> Utilities.convertPairToPoint2D(itm.getKey()), 
-						itm -> ItemsType.values()[rnd.nextInt(ItemsType.values().length)] 
+						itm -> ItemsType.values()[rnd.nextInt(ItemsType.values().length - 1)] 
 				));
 	}
 	
