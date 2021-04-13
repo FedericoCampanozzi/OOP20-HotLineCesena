@@ -50,9 +50,9 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         player.register(this);
         sprite.updatePosition(player.getPosition());
         sprite.updateRotation(player.getAngle());
-        player.getInventory().getWeapon().ifPresent(weapon -> {
-            sprite.updateImage(this.getImageByWeapon(weapon.getWeaponType()));
-        });
+        player.getInventory().getWeapon().ifPresentOrElse(
+                weapon -> sprite.updateImage(this.getImageByWeapon(weapon.getWeaponType())),
+                () -> sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER)));
     }
 
     private @Nonnull Image getImageByWeapon(final WeaponType weapon) {
@@ -78,7 +78,9 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         return deltaTime -> {
             player.update(deltaTime);
             final Collection<Command> commands = interpreter.interpret(
-                    listener.deliverInputs(), sprite.getPositionRelativeToScene(), deltaTime
+                    listener.deliverInputs(),
+                    sprite.getPositionRelativeToScene(),
+                    deltaTime
                     );
             if (!commands.isEmpty()) {
                 commands.forEach(c -> c.execute(player));
