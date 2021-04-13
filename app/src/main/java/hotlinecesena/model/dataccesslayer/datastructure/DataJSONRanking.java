@@ -2,6 +2,7 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,9 +22,17 @@ public class DataJSONRanking extends AbstractData {
 		private int points;
 		@JsonProperty("time")
 		private int time;
-		@JsonProperty("enemy_killed")
-		private int enemy_killed;
+		@JsonProperty("enemyKilled")
+		private int enemyKilled;
+		@JsonProperty("cunning")
+		private double cunning;
 		
+		public double getCunning() {
+			return cunning;
+		}
+		public void setCunning(double cunning) {
+			this.cunning = cunning;
+		}
 		public String getName() {
 			return name;
 		}
@@ -46,20 +55,18 @@ public class DataJSONRanking extends AbstractData {
 			this.time = time;
 		}
 		public int getEnemy_killed() {
-			return enemy_killed;
+			return enemyKilled;
 		}
-		public void setEnemy_killed(int enemy_killed) {
-			this.enemy_killed = enemy_killed;
+		public void setEnemy_killed(int enemyKilled) {
+			this.enemyKilled = enemyKilled;
 		}
 	}
-	
-	@JsonProperty("description")
-	private Map<String,String> description;
 	
 	@JsonProperty("records")
 	private List<Row> records;
 	
 	public List<Row> getRecords() {
+		this.records.sort(Comparator.comparing(Row::getPoints).reversed());
 		return records;
 	}
 
@@ -67,10 +74,6 @@ public class DataJSONRanking extends AbstractData {
 		this.records = records;
 	}
 
-	public Map<String, String> getDescription() {
-		return description;
-	}
-	
 	@Override
 	public void write() throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

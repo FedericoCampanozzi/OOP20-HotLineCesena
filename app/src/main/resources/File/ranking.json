@@ -1,19 +1,15 @@
 {
-  "description" : {
-    "name" : "nome della persona vincitrice",
-    "points" : "punti ottenuti",
-    "time" : "tempo di gioco espresso in secondi",
-    "enemy_killed" : "tempo di gioco espresso in secondi"
-  },
   "records" : [ {
     "name" : "federico",
     "points" : 1500,
     "time" : 51141412,
-    "enemy_killed" : 3
+    "enemyKilled" : 3,
+    "cunning" : 2.0
   }, {
     "name" : "andrea",
     "points" : 1000,
     "time" : 4566546,
-    "enemy_killed" : 8
+    "enemyKilled" : 8,
+    "cunning" : 2.0
   } ]
 }
