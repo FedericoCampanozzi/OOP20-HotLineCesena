@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
@@ -37,34 +38,27 @@ public final class NaiveInventoryImpl implements Inventory {
      * @param collectibles the starting quantity of collectibles. Can be an empty {@link Map}.
      * @throws NullPointerException if the given {@code collectibles} is null.
      */
-    public NaiveInventoryImpl(final Weapon weapon, @Nonnull final Map<Item, Integer> collectibles) {
+    public NaiveInventoryImpl(@Nullable final Weapon weapon, @Nonnull final Map<Item, Integer> collectibles) {
         this.weapon = Optional.ofNullable(weapon);
         this.collectibles.putAll(Objects.requireNonNull(collectibles));
     }
 
     /**
+     * @implSpec If the given {@code item} is an instance of
+     * {@link Weapon}, the {@code quantity} parameter will
+     * be ignored.
      * @throws NullPointerException if the given item is null.
      */
     @Override
     public void add(@Nonnull final Item item, final int quantity) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
-            this.addWeapon((Weapon) item);
+            weapon = Optional.of((Weapon) item);
         } else {
             final int ownedQuantity = collectibles.getOrDefault(item, 0);
             final int newQuantity = quantity + ownedQuantity;
             collectibles.put(item, newQuantity > item.getMaxStacks() ? item.getMaxStacks() : newQuantity);
         }
-    }
-
-    private void addWeapon(final Weapon weapon) {
-        this.weapon.ifPresent(this::drop);
-        this.weapon = Optional.of(weapon);
-    }
-
-    private void drop(final Item item) {
-        //TODO Not implemented.
-        weapon = Optional.empty();
     }
 
     /**
@@ -74,7 +68,8 @@ public final class NaiveInventoryImpl implements Inventory {
     public int getQuantityOf(@Nonnull final Item item) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
-            return weapon.isPresent() ? 1 : 0;
+            final Weapon w = (Weapon) item;
+            return weapon.isPresent() && weapon.get().getWeaponType() == w.getWeaponType() ? 1 : 0;
         } else {
             return collectibles.getOrDefault(item, 0);
         }
@@ -86,14 +81,14 @@ public final class NaiveInventoryImpl implements Inventory {
     }
 
     /**
-     * Not implemented.
+     * @implNote Not implemented.
      */
     @Override
     public void switchToNextWeapon() {
     }
 
     /**
-     * Not implemented.
+     * @implNote Not implemented.
      */
     @Override
     public void switchToPreviousWeapon() {
@@ -134,7 +129,7 @@ public final class NaiveInventoryImpl implements Inventory {
         if (this.isReloading()) {
             reloadTimeRemaining -= timeElapsed;
             if (reloadTimeRemaining <= 0.0) {
-                final Weapon w = weapon.get();
+                final Weapon w = weapon.get(); // Safe to retrieve
                 final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
                 if (ammoForReloading > ammoNeeded) {
                     w.reload(ammoNeeded);
