@@ -8,6 +8,9 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
@@ -23,7 +26,7 @@ public final class NaiveInventoryImpl implements Inventory {
     private Optional<Weapon> weapon = Optional.empty();
     private final Map<Item, Integer> collectibles = new HashMap<>();
     private double reloadTimeRemaining = 0.0;
-    private int ammoForReloading;
+    private Pair<Weapon, Integer> reloadBuffer;
 
     /**
      * Instantiates a {@code NaiveInventoryImpl} with no collectible items and no weapon.
@@ -104,7 +107,11 @@ public final class NaiveInventoryImpl implements Inventory {
             if (!this.isReloading() && weapon.getCurrentAmmo() < weapon.getMagazineSize()) {
                 final int ammoOwned = collectibles.getOrDefault(weapon.getCompatibleAmmunition(), 0);
                 if (ammoOwned > 0) {
-                    ammoForReloading = ammoOwned;
+                    /*
+                     * As a precaution, save the current weapon instance to
+                     * later check if it has changed or disappeared.
+                     */
+                    reloadBuffer = new ImmutablePair<>(weapon, ammoOwned);
                     reloadTimeRemaining = weapon.getReloadTime();
                 }
             }
@@ -129,16 +136,23 @@ public final class NaiveInventoryImpl implements Inventory {
         if (this.isReloading()) {
             reloadTimeRemaining -= timeElapsed;
             if (reloadTimeRemaining <= 0.0) {
-                final Weapon w = weapon.get(); // Safe to retrieve
-                final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
-                if (ammoForReloading > ammoNeeded) {
-                    w.reload(ammoNeeded);
-                    collectibles.put(w.getCompatibleAmmunition(), ammoForReloading - ammoNeeded);
-                } else {
-                    w.reload(ammoForReloading);
-                    collectibles.put(w.getCompatibleAmmunition(), 0);
-                }
-                ammoForReloading = 0;
+                /*
+                 * If the weapon hasn't changed or disappeared for some
+                 * obscure reason, finish reloading it.
+                 * Otherwise, reset everything.
+                 */
+                weapon.filter(w -> w == reloadBuffer.getKey())
+                .ifPresent(w -> {
+                    final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
+                    if (reloadBuffer.getRight() > ammoNeeded) {
+                        w.reload(ammoNeeded);
+                        collectibles.put(w.getCompatibleAmmunition(), reloadBuffer.getRight() - ammoNeeded);
+                    } else {
+                        w.reload(reloadBuffer.getRight());
+                        collectibles.put(w.getCompatibleAmmunition(), 0);
+                    }
+                });
+                reloadBuffer = null;
             }
         }
     }
