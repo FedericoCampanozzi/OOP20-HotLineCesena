@@ -16,10 +16,10 @@ public final class ScoreImpl implements Score, Subscriber {
     }
 
     @Override
-    public Map<String, Pair<Integer, Integer>> getPartialScores() {
+    public Map<PartialType, Pair<Integer, Double>> getPartialScores() {
         return partials.stream()
                 .collect(Collectors.toMap(
-                        PartialScore::getName,
+                        PartialScore::getType,
                         p -> new Pair<>(p.getPartialPoints(), p.getFactor())));
     }
 
