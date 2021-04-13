@@ -33,8 +33,10 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private Point2D currentMouseCoords = Point2D.ZERO;
 
     /**
-     *
-     * @param bindings bindings of inputs to player actions.
+     * Instantiates a new {@code InputInterpreterImpl} that will
+     * make use of the given input bindings.
+     * @param bindings a Map which associates keyboard keys and/or
+     * mouse buttons to {@link PlayerAction}s.
      * @throws NullPointerException if {@code bindings} is null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, PlayerAction> bindings) {
@@ -52,20 +54,26 @@ public final class InputInterpreterImpl implements InputInterpreter {
         final List<Command> commandsToDeliver = new ArrayList<>();
         final Set<PlayerAction> actions = this.convertBindings(inputs.getKey());
 
-        // Compute new movement direction
+        /*
+         * Compute new movement direction
+         */
         final Point2D newMovementDir = this.processMovementDirection(actions);
         if (!newMovementDir.equals(Point2D.ZERO)) {
             commandsToDeliver.add(p -> p.move(newMovementDir.multiply(deltaTime)));
         }
 
-        // Compute new angle
+        /*
+         * Compute new angle (or don't, if mouse coordinates haven't changed).
+         */
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
         if (!currentMouseCoords.equals(newMouseCoords)) {
             commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
             currentMouseCoords = newMouseCoords;
         }
 
-        // Compute all other actions
+        /*
+         * Compute all other remaining actions
+         */
         commandsToDeliver.addAll(this.computeRemainingCommands(actions));
 
         return commandsToDeliver;
@@ -84,7 +92,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
     }
 
     /**
-     * Computes the new movement direction while also normalizing it, if necessary.
+     * Computes the new movement direction while also normalizing it.
      * @param actions
      * @return
      */
@@ -98,8 +106,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
     }
 
     /**
-     * Tweaks coordinates depending on the cursor's position relative
-     * to the player's sprite position on screen.
+     * Tweaks mouse coordinates depending on the player's sprite
+     * position on screen.
      * Ignores mouse movement when too close to the sprite.
      * @param mouseCoords
      * @param spritePosition
