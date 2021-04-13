@@ -10,10 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-/*
-import javafx.util.Pair;
-import static java.util.stream.Collectors.*;
-*/
+
 public class DataJSONSettings  extends AbstractData  {
 
     @JsonProperty("monitorX")
@@ -78,16 +75,7 @@ public class DataJSONSettings  extends AbstractData  {
     public int getDefaultLanguage() {
 		return defaultLanguage;
 	}
-
-	/*
-    public List<Pair<Integer, Integer>> getResolutions(){
-		List<Pair<Integer, Integer>> list = new ArrayList<>();
-		for (int i = 0; i < resX.size(); i++) {
-			list.add(new Pair<>(resX.get(i), resY.get(i)));
-		}
-		return list;
-    }
-    */
+    
     public int getMinRoomWeapons() {
 		return minRoomWeapons;
 	}

@@ -20,11 +20,26 @@ public class DataJSONRanking extends AbstractData {
 		@JsonProperty("points")
 		private int points;
 		@JsonProperty("time")
-		private int time;
+		private String time;
 		@JsonProperty("enemyKilled")
 		private int enemyKilled;
 		@JsonProperty("cunning")
 		private double cunning;
+		
+		public Row() {
+			
+		}
+
+		public Row(String name, int points, int time, int enemyKilled, double cunning) {
+			this.name = name;
+			this.points = points;
+			long second = (time / 1000) % 60;
+			long minute = (time / (1000 * 60)) % 60;
+			long hour = (time / (1000 * 60 * 60)) % 24;
+			this.time =  String.format("%02d:%02d:%02d", hour, minute, second);
+			this.enemyKilled = enemyKilled;
+			this.cunning = cunning;
+		}
 		
 		public double getCunning() {
 			return cunning;
@@ -45,12 +60,9 @@ public class DataJSONRanking extends AbstractData {
 			this.points = points;
 		}
 		public String getTime() {
-			long second = (time / 1000) % 60;
-			long minute = (time / (1000 * 60)) % 60;
-			long hour = (time / (1000 * 60 * 60)) % 24;
-			return String.format("%02d:%02d:%02d", hour, minute, second);
+			return this.time;
 		}
-		public void setTime(int time) {
+		public void setTime(String time) {
 			this.time = time;
 		}
 		public int getEnemyKilled() {
