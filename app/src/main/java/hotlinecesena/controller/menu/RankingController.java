@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking.Row;
-import hotlinecesena.model.score.Score;
+import hotlinecesena.model.score.PartialType;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
@@ -31,6 +31,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
 public class RankingController implements Initializable{
 	
@@ -59,13 +60,14 @@ public class RankingController implements Initializable{
 	private List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
 	private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
 	private Row matchStats = new Row();
-	private Random random = new Random();
-	//private int totalScore;
+	private Map<PartialType, Pair<Integer, Double>> partialScore;
+	private int totalScore;
 	
-	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl) {
+	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl, Map<PartialType, Pair<Integer, Double>> partialScore, int totalScore) {
 		this.stage = stage;
 		this.audioControllerImpl = audioControllerImpl;
-		//totalScore = score.getTotalScore();
+		this.partialScore = partialScore;
+		this.totalScore = totalScore;
 	}
 	
 	@Override
@@ -110,10 +112,10 @@ public class RankingController implements Initializable{
 		if (input.getText() != null && input.getText().toString().length() != 0) {
 			matchStats = new Row(
 					input.getText(),
-					10,
-					2000000,
-					30,
-					40
+					totalScore,
+					(int) Math.round(partialScore.get(PartialType.TIME).getValue()),
+					(int) Math.round(partialScore.get(PartialType.KILLS).getValue()),
+					(int) Math.round(partialScore.get(PartialType.CUNNING).getValue() * 100.0)
 					);
 		}
 		recordList.add(matchStats);

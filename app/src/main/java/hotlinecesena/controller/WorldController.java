@@ -2,8 +2,6 @@ package hotlinecesena.controller;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.Set;
-
 import hotlinecesena.controller.HUD.PlayerStatsController;
 import hotlinecesena.controller.entities.ProjectileController;
 import hotlinecesena.controller.entities.enemy.EnemyController;
@@ -13,6 +11,9 @@ import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.score.PartialScoreFactoryImpl;
+import hotlinecesena.model.score.Score;
+import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.utilities.SceneSwapper;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
@@ -38,7 +39,7 @@ public class WorldController{
     private final InputListener listener;
     private final AudioControllerImpl audioControllerImpl;
     private final SceneSwapper sceneSwapper = new SceneSwapper();
-    //private final Score score;
+    private final Score score;
 
     public WorldController(final Stage primaryStage, AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;
@@ -47,7 +48,7 @@ public class WorldController{
         new AudioEventController();
         view = new WorldView(this.primaryStage);
         view.start();
-
+        
         missionController = new MissionController();
         gameLoopController.addMethodToUpdate(d -> missionController.update(d));
 
@@ -79,7 +80,7 @@ public class WorldController{
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
         
-        //score = new ScoreImpl(new PartialScoreFactoryImpl());
+        score = new ScoreImpl(new PartialScoreFactoryImpl());
         
         gameLoopController.addMethodToUpdate(d -> {
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
@@ -89,7 +90,7 @@ public class WorldController{
                 	primaryStage.setWidth(800);
                 	primaryStage.setHeight(600);
                 	primaryStage.centerOnScreen();
-					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl), "RankingView.fxml", primaryStage);
+					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl, score.getPartialScores(), score.getTotalScore()), "RankingView.fxml", primaryStage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
