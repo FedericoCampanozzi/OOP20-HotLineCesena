@@ -77,6 +77,12 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
+    /**
+     * Convenience method to check for collisions on a given stream of entities.
+     * @param newPos
+     * @param stream
+     * @return
+     */
     private boolean hasCollided(final Point2D newPos, final Stream<? extends Entity> stream) {
         return stream.anyMatch(e -> this.isCollidingWith(newPos, e));
     }
