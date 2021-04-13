@@ -69,6 +69,7 @@ public class RankingController implements Initializable{
 	}
 	
 	public void backButtonClick() throws IOException {
+		JSONDataAccessLayer.newInstance();
 		sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
 	}
 	
