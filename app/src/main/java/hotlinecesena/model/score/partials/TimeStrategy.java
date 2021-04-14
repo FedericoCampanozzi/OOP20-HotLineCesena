@@ -3,9 +3,17 @@ package hotlinecesena.model.score.partials;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
 
+/**
+ * Implements the "Time bonus" algorithm: it rewards players who
+ * manage to win a game within a certain time limit.
+ * If the player loses, the algorithm will award no points.
+ */
 public final class TimeStrategy implements PartialStrategy {
 
     private final int basePoints;
+    /**
+     * Based on the generated map's dimensions.
+     */
     private final long timeCeiling;
     private final long start = System.currentTimeMillis();
     private long totalTime;
