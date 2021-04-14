@@ -1,5 +1,6 @@
 package hotlinecesena.controller;
 
+import java.util.Collection;
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.view.loader.AudioType;
 
@@ -27,7 +28,7 @@ public interface AudioController {
      * be reproduced
      * @see Entity
      */
-    void playAudioClip(AudioType type, Entity caller);
+    void playAudioClip(AudioType type, Collection<Class<?>> caller);
 
     /**
      * Plays the music playing in the background.
