@@ -1,5 +1,7 @@
 package hotlinecesena.controller;
 
+import java.util.Collection;
+
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
@@ -18,8 +20,8 @@ import javafx.scene.media.MediaPlayer;
 public final class AudioControllerImpl implements AudioController {
 
     private static final int POINT_O_PERCENT = 1000;
-    private static final int PERCENT = 100;
-    private static final int BACKGROUND_VOLUME = 75;
+    private static final double PERCENT = 100;
+    private static final double BACKGROUND_VOLUME = 10;
 
     private final SoundLoader loader;
     private AudioClip clip;
@@ -69,12 +71,16 @@ public final class AudioControllerImpl implements AudioController {
     /**
      * Calculates the volume based on the
      * {@code Entity}.
-     * @param caller the entity invoking this method
+     * @param caller the collection of interfaces that an
+     * entity could implement
      * @return the value for the volume
      * @see Entity
      */
-    private double volumeSettings(final Entity caller) {
-        return caller instanceof Enemy 
+    private double volumeSettings(final Collection<Class<?>> caller) {
+        System.out.println(this.volume);
+        System.out.println(this.volume - BACKGROUND_VOLUME / PERCENT);
+        System.out.println(this.volume - (BACKGROUND_VOLUME / PERCENT));
+        return caller.contains(Enemy.class)
                 ? this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
@@ -94,7 +100,7 @@ public final class AudioControllerImpl implements AudioController {
     }
 
     @Override
-    public void playAudioClip(final AudioType type, final Entity caller) {
+    public void playAudioClip(final AudioType type, final Collection<Class<?>> caller) {
         if (this.playEffects) {
             this.clip = this.loader.getAudioClip(type);
             if (!this.clip.isPlaying()) {
