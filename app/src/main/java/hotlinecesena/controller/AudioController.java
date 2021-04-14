@@ -1,7 +1,6 @@
 package hotlinecesena.controller;
 
 import java.util.Collection;
-import hotlinecesena.model.entities.Entity;
 import hotlinecesena.view.loader.AudioType;
 
 /**
@@ -26,7 +25,6 @@ public interface AudioController {
      * @param type the path of the file that wants to
      * @param caller the entity invoking this method
      * be reproduced
-     * @see Entity
      */
     void playAudioClip(AudioType type, Collection<Class<?>> caller);
 

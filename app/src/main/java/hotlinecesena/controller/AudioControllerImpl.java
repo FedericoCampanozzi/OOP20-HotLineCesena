@@ -3,7 +3,6 @@ package hotlinecesena.controller;
 import java.util.Collection;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.view.loader.AudioType;
 import hotlinecesena.view.loader.ProxyAudio;
@@ -38,7 +37,7 @@ public final class AudioControllerImpl implements AudioController {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
-        
+
         this.volume = ((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT);
     }
 
