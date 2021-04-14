@@ -21,10 +21,10 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
      * Value to be used if the player manages to finish
      * the game without shooting a single bullet.
      */
-    private static final double BIG_BRAIN = 0.5;
+    private static final float BIG_BRAIN = 0.5f;
     private final int basePoints;
-    private int attacksPerformed = 0;
-    private int hits = 0;
+    private float attacksPerformed = 0.0f;
+    private float hits = 0.0f;
 
     /**
      * Instantiates a new CunningStrategy.
@@ -38,12 +38,16 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
 
     @Override
     public int applyFormula() {
-        return (int) (basePoints * hits / (attacksPerformed == 0 ? BIG_BRAIN : attacksPerformed));
+        return (int) (basePoints * this.internalFormula());
     }
 
     @Override
     public int getRelevantFactor() {
-        return (int) (Math.round(this.applyFormula() * 100.0));
+        return (int) (Math.round(this.internalFormula() * 100.0));
+    }
+
+    private float internalFormula() {
+        return hits / (attacksPerformed == 0 ? BIG_BRAIN : attacksPerformed);
     }
 
     /*
