@@ -6,13 +6,14 @@ public enum SymbolsType {
 	VOID('_', Color.BLACK),
 	DOOR('D', Color.CYAN),
 	WALKABLE('.', Color.WHITE),
-	ENEMY('E', Color.LIGHT_GRAY),
-	PLAYER('P', Color.ORANGE),
-	OBSTACOLES('O', Color.RED),
+	ENEMY('E', Color.RED),
+	PLAYER('P', Color.GREEN),
+	OBSTACOLES('O', Color.ORANGE),
 	WEAPONS('*', Color.BLUE),
 	WALL('W', Color.GRAY),
 	ITEM('I', Color.YELLOW),
-	KEY_ITEM('K', Color.PINK);
+	KEY_ITEM('K', Color.PINK),
+	REMOVE('-', new Color(102, 153, 255));
 	
 	private final char c;
 	private final Color color;

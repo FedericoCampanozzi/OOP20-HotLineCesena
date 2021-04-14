@@ -14,7 +14,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	protected Random rnd = new Random();
 	protected int xMin, xMax, yMin, yMax;
 	protected int pRoomIndex;
-	protected int objRoomIndex;
+	protected Optional<Integer> objRoomIndex;
 	
 	// Low level description
 	protected Map<Pair<Integer, Integer>, SymbolsType> map = new HashMap<>();
@@ -54,11 +54,11 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		if(this.rooms.size() <= MIN_ROOMS) {
 			return this;
 		}
-		this.objRoomIndex = rnd.nextInt(this.rooms.size());
-		while(this.objRoomIndex == this.pRoomIndex) {
-			this.objRoomIndex = rnd.nextInt(this.rooms.size());
+		this.objRoomIndex = Optional.of(rnd.nextInt(this.rooms.size()));
+		while(this.objRoomIndex.get() == this.pRoomIndex) {
+			this.objRoomIndex = Optional.of(rnd.nextInt(this.rooms.size()));
 		}
-		Room r = this.rooms.get(this.objRoomIndex);
+		Room r = this.rooms.get(this.objRoomIndex.get());
 		r.getMap().put(r.getCenter(), SymbolsType.KEY_ITEM);
 		this.map.put(r.getCenter(), SymbolsType.KEY_ITEM);
 		return this;
@@ -98,7 +98,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 				for (int i = 0; i < roomObj; i++) {
 					Pair<Integer, Integer> pii = positions.get(rnd.nextInt(positions.size()));
 					pii = Utilities.sumPair(pii, r.getCenter());
-					if (this.map.get(pii).equals(SymbolsType.WALKABLE)) {
+					if (this.map.containsKey(pii) && this.map.get(pii).equals(SymbolsType.WALKABLE)) {
 						this.map.put(pii, type);
 						r.getMap().put(Utilities.subPair(pii, r.getCenter()), type);
 					}
@@ -139,39 +139,100 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 				}
 				
 				// j+
-				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR &&
-						get(i, j + 1, SymbolsType.DOOR) &&
-						get(i, j + 2, SymbolsType.WALKABLE) ) {
+				if (get(i, j, SymbolsType.DOOR) && get(i, j + 1, SymbolsType.DOOR)
+						&& get(i, j + 2, SymbolsType.WALKABLE)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
+
+					if (get(i - 2, j, SymbolsType.WALL) && get(i - 2, j + 1, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i - 1, j + 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i - 1, j), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i - 1, j + 1), SymbolsType.REMOVE);
+					}
+
+					if (get(i + 2, j, SymbolsType.WALL) && get(i + 2, j + 1, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i + 1, j), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.REMOVE);
+					}
 				}
-				
-				// j-
-				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						get(i, j - 1, SymbolsType.DOOR) &&
-						get(i, j - 2, SymbolsType.WALKABLE) ) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-					this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
-				}
-				
+
 				// i+
-				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						get(i + 1, j, SymbolsType.DOOR)&&
-						get(i + 2, j, SymbolsType.WALKABLE) ) {
+				if (get(i, j, SymbolsType.DOOR) && get(i + 1, j, SymbolsType.DOOR)
+						&& get(i + 2, j, SymbolsType.WALKABLE)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
+
+					if (get(i, j - 2, SymbolsType.WALL) && get(i + 1, j - 2, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i, j - 1), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
+					}
+
+					if (get(i, j + 2, SymbolsType.WALL) && get(i + 1, j + 2, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i, j + 1), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.REMOVE);
+					}
 				}
-				
+
+				// j-
+				if (get(i, j, SymbolsType.DOOR) && get(i, j - 1, SymbolsType.DOOR)
+						&& get(i, j - 2, SymbolsType.WALKABLE)) {
+					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
+					this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
+
+					if (get(i - 2, j, SymbolsType.WALL) && get(i - 2, j - 1, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i - 1, j), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.REMOVE);
+					}
+
+					if (get(i + 2, j, SymbolsType.WALL) && get(i + 2, j - 1, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i + 1, j), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
+					}
+				}
+
 				// i-
-				if (	this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && 
-						get(i - 1, j, SymbolsType.DOOR) &&
-						get(i - 2, j, SymbolsType.WALKABLE) ) {
+				if (get(i, j, SymbolsType.DOOR) && get(i - 1, j, SymbolsType.DOOR)
+						&& get(i - 2, j, SymbolsType.WALKABLE)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 					this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
+
+					if (get(i, j - 2, SymbolsType.WALL) && get(i - 1, j - 2, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i, j - 1), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.REMOVE);
+					}
+
+					if (get(i, j + 2, SymbolsType.WALL) && get(i - 1, j + 2, SymbolsType.WALL)) {
+						this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
+						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
+					} else {
+						//this.map.put(new Pair<>(i, j + 1), SymbolsType.REMOVE);
+						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
+					}
+
 				}
 			}
 		}
-
+		
 		for (int i = xMin; i <= xMax; i++) {
 			for (int j = yMin; j <= yMax; j++) {
 				if (get(i, j, SymbolsType.DOOR)) {
@@ -248,5 +309,10 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	public int getMaxY() {
 		haveInitMapAndBaseRoom();
 		return this.yMax;
+	}
+	
+	@Override
+	public boolean isKeyObjectPresent() {
+		return this.objRoomIndex.isPresent();
 	}
 }
