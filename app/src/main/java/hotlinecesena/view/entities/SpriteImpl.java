@@ -1,6 +1,7 @@
 package hotlinecesena.view.entities;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
@@ -17,8 +18,8 @@ public final class SpriteImpl implements Sprite {
 
     private final ImageView imageView;
     private Point2D imageOffset;
-    private final Rotate rotate;
-    private final Translate trans;
+    private Rotate rotate;
+    private Translate trans;
 
     /**
      * Instantiates a new {@code SpriteImpl} with a given {@link ImageView}.
@@ -27,9 +28,37 @@ public final class SpriteImpl implements Sprite {
     public SpriteImpl(final ImageView view) {
         imageView = view;
         imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
-        rotate = new Rotate();
-        trans = (Translate) view.getTransforms().get(0);
+        this.findPreexistingTranslate(view).ifPresentOrElse(t -> trans = t, () -> trans = new Translate());
+        this.findPreexistingRotate(view).ifPresentOrElse(r -> rotate = r, () -> rotate = new Rotate());
         imageView.getTransforms().addAll(rotate, trans);
+    }
+
+    /**
+     * If the given ImageView already possesses a {@link Translate}, use that
+     * instead of creating a new one.
+     * @param view
+     * @return
+     */
+    private Optional<Translate> findPreexistingTranslate(final ImageView view) {
+        return view.getTransforms()
+                .stream()
+                .filter(Translate.class::isInstance)
+                .map(Translate.class::cast)
+                .findFirst();
+    }
+
+    /**
+     * If the given ImageView already possesses a {@link Rotate}, use that
+     * instead of creating a new one.
+     * @param view
+     * @return
+     */
+    private Optional<Rotate> findPreexistingRotate(final ImageView view) {
+        return view.getTransforms()
+                .stream()
+                .filter(Rotate.class::isInstance)
+                .map(Rotate.class::cast)
+                .findFirst();
     }
 
     /**
