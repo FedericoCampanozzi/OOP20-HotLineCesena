@@ -1,27 +1,39 @@
-package hotlinecesena.model.score;
+package hotlinecesena.model.score.partials;
 
 import com.google.common.eventbus.Subscribe;
 
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.events.DeathEvent;
+import hotlinecesena.model.events.Subscriber;
 
-public final class KillCountPartial extends AbstractPartial {
+public final class KillCountStrategy implements PartialStrategy, Subscriber {
 
+    private final int basePoints;
     private int killCount = 0;
 
-    protected KillCountPartial() {
-        super(PartialType.KILLS);
-        this.getGameMaster().getEnemy().getEnemies().forEach(e -> e.register(this));
+    /**
+     * Instantiates a new KillCountStrategy.
+     * @param basePoints starting points for this algorithm.
+     */
+    public KillCountStrategy(final int basePoints) {
+        this.basePoints = basePoints;
+        JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> e.register(this));
     }
 
     @Override
-    protected double formula() {
+    public int applyFormula() {
+        return basePoints * killCount;
+    }
+
+    @Override
+    public int getRelevantFactor() {
         return killCount;
     }
 
     @Subscribe
     private void handleDeathEvent(final DeathEvent<Enemy> e) {
-        if (e.getSource() instanceof Enemy) {
+        if (e.getSourceInterfaces().contains(Enemy.class)) {
             killCount++;
         }
     }

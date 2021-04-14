@@ -1,8 +1,8 @@
-package hotlinecesena.model.score;
+package hotlinecesena.model.score.partials;
 
 import java.util.Set;
 
-public interface PartialScoreFactory {
+public interface PartialStrategyFactory {
 
-    Set<PartialScore> createAll();
+    Set<PartialStrategy> createAll();
 }
