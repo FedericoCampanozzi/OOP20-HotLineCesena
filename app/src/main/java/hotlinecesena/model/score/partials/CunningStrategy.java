@@ -43,7 +43,7 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
 
     @Override
     public int getRelevantFactor() {
-        return (int) (Math.round(this.internalFormula() * 100.0));
+        return (Math.round(this.internalFormula() * 100.0f));
     }
 
     private float internalFormula() {
