@@ -3,20 +3,19 @@ package hotlinecesena.model.events;
 import hotlinecesena.model.entities.MovableEntity;
 
 /**
- *
  * Notifies that an entity has rotated.
- * @param <M> an interface that extends {@link MovableEntity}.
  */
-public final class RotationEvent<M extends MovableEntity> extends AbstractEvent<M> {
+public final class RotationEvent extends AbstractEvent {
 
     private final double newAngle;
 
     /**
      * Instantiates a new {@code RotationEvent}.
+     * @param <M> an interface that extends {@link MovableEntity}.
      * @param source the MovableEntity that triggered this event.
      * @param newAngle the new angle faced by the MovableEntity.
      */
-    public RotationEvent(final M source, final double newAngle) {
+    public <M extends MovableEntity> RotationEvent(final M source, final double newAngle) {
         super(source);
         this.newAngle = newAngle;
     }

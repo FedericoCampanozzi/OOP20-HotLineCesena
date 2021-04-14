@@ -78,7 +78,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     public final void setAngle(final double angle) {
         if (this.angle != angle && this.canInitiateRotation()) {
             this.angle = angle;
-            this.publish(new RotationEvent<>(this, angle));
+            this.publish(new RotationEvent(this, angle));
         }
     }
 

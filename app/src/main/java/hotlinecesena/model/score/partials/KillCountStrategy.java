@@ -3,7 +3,6 @@ package hotlinecesena.model.score.partials;
 import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.Subscriber;
 
@@ -36,7 +35,7 @@ public final class KillCountStrategy implements PartialStrategy, Subscriber {
     }
 
     @Subscribe
-    private void handleDeathEvent(final DeathEvent<Enemy> e) {
+    private void handleDeathEvent(final DeathEvent e) {
         killCount++;
     }
 }

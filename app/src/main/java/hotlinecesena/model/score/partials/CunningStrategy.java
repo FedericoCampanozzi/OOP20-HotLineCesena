@@ -54,7 +54,7 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
      * Counts all bullets shot by the player.
      */
     @Subscribe
-    private void handleAttackEvent(final AttackPerformedEvent<Player> e) {
+    private void handleAttackEvent(final AttackPerformedEvent e) {
         if (e.getSourceInterfaces().contains(Player.class)) {
             attacksPerformed++;
         }
@@ -64,7 +64,7 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
      * Counts all instances of enemies receiving damage.
      */
     @Subscribe
-    private void handleDamageReceivedEvent(final DamageReceivedEvent<Enemy> e) {
+    private void handleDamageReceivedEvent(final DamageReceivedEvent e) {
         if (e.getSourceInterfaces().contains(Enemy.class)) {
             hits++;
         }
