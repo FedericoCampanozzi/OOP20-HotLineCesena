@@ -83,10 +83,11 @@ class ActorModelTest {
         final double reloadTime = w.getReloadTime();
         assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
         assertFalse(actor.getInventory().isReloading());
-        Thread.sleep((long) actor.getInventory().getWeapon().get().getReloadTime());
+        Thread.sleep((long) w.getRateOfFire());
+        actor.attack();
+        Thread.sleep((long) w.getRateOfFire());
         actor.attack();
         actor.reload();
-        actor.getInventory().update(reloadTime / 2.0);
         assertTrue(actor.getInventory().isReloading());
         actor.getInventory().update(reloadTime);
         assertFalse(actor.getInventory().isReloading());
