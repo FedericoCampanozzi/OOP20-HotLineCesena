@@ -2,15 +2,15 @@ package hotlinecesena.model.entities.items;
 
 public enum WeaponType {
 
-    SHOTGUN(50, 6, AmmunitionType.SHOTGUN_AMMO, 1, 7, 80, 5, 1000.0),
+    SHOTGUN(50, 6, CollectibleType.SHOTGUN_AMMO, 1, 7, 80, 5, 1000.0),
 
-    RIFLE(25, 8, AmmunitionType.RIFLE_AMMO, 1, 30, 50, 4, 100.0),
+    RIFLE(25, 8, CollectibleType.RIFLE_AMMO, 1, 30, 50, 4, 100.0),
 
-    PISTOL(15, 6, AmmunitionType.PISTOL_AMMO, 1, 10, 30, 3, 500.0);
+    PISTOL(15, 6, CollectibleType.PISTOL_AMMO, 1, 10, 30, 3, 500.0);
 
     private double damage;
     private double projectileSpeed;
-    private AmmunitionType compatibleAmmo;
+    private CollectibleType compatibleAmmo;
     private int maxStacks;
     private int magazineSize;
     private double noise;
@@ -18,7 +18,7 @@ public enum WeaponType {
     private double rateOfFire;
 
     WeaponType(final double damage, final double projectileSpeed,
-            final AmmunitionType compatibleAmmo, final int maxStacks, final int magazineSize,
+            final CollectibleType compatibleAmmo, final int maxStacks, final int magazineSize,
             final double noise, final double reloadTime, final double rateOfFire) {
         this.damage = damage;
         this.projectileSpeed = projectileSpeed;
@@ -38,7 +38,7 @@ public enum WeaponType {
         return projectileSpeed;
     }
 
-    public AmmunitionType getCompatibleAmmo() {
+    public CollectibleType getCompatibleAmmo() {
         return compatibleAmmo;
     }
 
