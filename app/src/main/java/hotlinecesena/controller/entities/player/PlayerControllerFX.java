@@ -1,6 +1,7 @@
 package hotlinecesena.controller.entities.player;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
@@ -37,12 +38,12 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     private final InputListener listener;
     private final ImageLoader loader = new ProxyImage();
 
-    public PlayerControllerFX(final Player player, final Sprite sprite, final InputInterpreter interpreter,
-            final InputListener listener) {
-        this.player = player;
-        this.sprite = sprite;
-        this.interpreter = interpreter;
-        this.listener = listener;
+    public PlayerControllerFX(@Nonnull final Player player, @Nonnull final Sprite sprite,
+            @Nonnull final InputInterpreter interpreter, @Nonnull final InputListener listener) {
+        this.player = Objects.requireNonNull(player);
+        this.sprite = Objects.requireNonNull(sprite);
+        this.interpreter = Objects.requireNonNull(interpreter);
+        this.listener = Objects.requireNonNull(listener);
         this.setup();
     }
 
@@ -88,21 +89,34 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         };
     }
 
+    /*
+     * Update the sprite's position when the player moves.
+     */
     @Subscribe
     private void handleMovementEvent(final MovementEvent<Player> e) {
-        sprite.updatePosition(e.getSource().getPosition());
+        sprite.updatePosition(e.getPosition());
     }
 
+    /*
+     * Update the sprite's angle when the player rotates.
+     */
     @Subscribe
     private void handleRotationEvent(final RotationEvent<Player> e) {
-        sprite.updateRotation(e.getSource().getAngle());
+        sprite.updateRotation(e.getNewAngle());
     }
 
+    /*
+     * Update the sprite's image when the player picks up
+     * a new weapon.
+     */
     @Subscribe
     private void handleWeaponPickUpEvent(final WeaponPickUpEvent<Player> e) {
         sprite.updateImage(this.getImageByWeapon(e.getItemType()));
     }
 
+    /*
+     * Update the sprite's image on death.
+     */
     @Subscribe
     private void handleDeathEvent(final DeathEvent<Player> e) {
         sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
