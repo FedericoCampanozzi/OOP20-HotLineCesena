@@ -23,5 +23,4 @@ public class WeaponPickUpEvent<A extends Actor> extends AbstractPickUpEvent<A, W
     public WeaponPickUpEvent(final A source, final WeaponType weaponType, final Point2D position) {
         super(source, weaponType, position);
     }
-
 }
