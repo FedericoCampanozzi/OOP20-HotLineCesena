@@ -13,7 +13,9 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking.Row;
-import hotlinecesena.model.score.PartialType;
+import hotlinecesena.model.score.partials.CunningStrategy;
+import hotlinecesena.model.score.partials.KillCountStrategy;
+import hotlinecesena.model.score.partials.TimeStrategy;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
@@ -34,104 +36,104 @@ import javafx.stage.Stage;
 import javafx.util.Pair;
 
 public class RankingController implements Initializable{
-	
-	@FXML
-	private Button backButton;
-	@FXML
-	private Button addScoreButton;
-	@FXML
-	private TableView<Row> tableView;
-	@FXML
-	private TableColumn<Row, Integer> rank;
-	@FXML
-	private TableColumn<Row, String> name;
-	@FXML
-	private TableColumn<Row, Integer> points;
-	@FXML
-	private TableColumn<Row, String> time;
-	@FXML
-	private TableColumn<Row, Integer> enemyKilled;
-	@FXML
-	private TableColumn<Row, Integer> cunning;
-	
-	private SceneSwapper sceneSwapper = new SceneSwapper();
-	private AudioControllerImpl audioControllerImpl;
-	private Stage stage;
-	private List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
-	private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
-	private Row matchStats = new Row();
-	private Map<PartialType, Pair<Integer, Double>> partialScore;
-	private int totalScore;
-	
-	public RankingController(Stage stage, AudioControllerImpl audioControllerImpl, Map<PartialType, Pair<Integer, Double>> partialScore, int totalScore) {
-		this.stage = stage;
-		this.audioControllerImpl = audioControllerImpl;
-		this.partialScore = partialScore;
-		this.totalScore = totalScore;
-	}
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		rank.setCellFactory(col -> {
-	      TableCell<Row, Integer> indexCell = new TableCell<>();
-	      ReadOnlyObjectProperty<TableRow<Row>> rowProperty = indexCell.tableRowProperty();
-	      ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
-	        TableRow<Row> row = rowProperty.get();
-	        if (row != null) {
-	          int rowIndex = row.getIndex();
-	          if (rowIndex < row.getTableView().getItems().size()) {
-	            return Integer.toString(rowIndex + 1);
-	          }
-	        }
-	        return null;
-	      }, rowProperty);
-	      indexCell.textProperty().bind(rowBinding);
-	      return indexCell;
-	    });
-		
-		name.setCellValueFactory(new PropertyValueFactory<>("name"));
-		points.setCellValueFactory(new PropertyValueFactory<>("points"));
-		time.setCellValueFactory(new PropertyValueFactory<>("time"));
-		enemyKilled.setCellValueFactory(new PropertyValueFactory<>("enemyKilled"));
-		cunning.setCellValueFactory(new PropertyValueFactory<>("cunning"));
-		
-		tableView.setItems(recordObservableList);
-	}
-	
-	public void backButtonClick() throws IOException {
-		JSONDataAccessLayer.newInstance();
-		sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
-	}
-	
-	public void addScoreClick() throws JsonGenerationException, JsonMappingException, IOException {
-		TextInputDialog textInputDialog = new TextInputDialog();
-		textInputDialog.setTitle("Text Input Dialog");
-		textInputDialog.getDialogPane().setContentText("Insert your name:");
-		textInputDialog.showAndWait();
-		TextField input = textInputDialog.getEditor();
-		if (input.getText() != null && input.getText().toString().length() != 0) {
-			matchStats = new Row(
-					input.getText(),
-					totalScore,
-					(int) Math.round(partialScore.get(PartialType.TIME).getValue()),
-					(int) Math.round(partialScore.get(PartialType.KILLS).getValue()),
-					(int) Math.round(partialScore.get(PartialType.CUNNING).getValue() * 100.0)
-					);
-		}
-		recordList.add(matchStats);
-		updateList();
-		JSONDataAccessLayer.getInstance().getRanking().write();
-		addScoreButton.setDisable(true);
-		addScoreButton.setVisible(false);
-	}
-	
-	private void sortRecords() {
-		recordList.sort(Comparator.comparing(Row::getPoints).reversed());
-	}
-	
-	private void updateList() {
-		sortRecords();
-		recordObservableList = FXCollections.observableList(recordList);
-		tableView.refresh();
-	}
+
+    @FXML
+    private Button backButton;
+    @FXML
+    private Button addScoreButton;
+    @FXML
+    private TableView<Row> tableView;
+    @FXML
+    private TableColumn<Row, Integer> rank;
+    @FXML
+    private TableColumn<Row, String> name;
+    @FXML
+    private TableColumn<Row, Integer> points;
+    @FXML
+    private TableColumn<Row, String> time;
+    @FXML
+    private TableColumn<Row, Integer> enemyKilled;
+    @FXML
+    private TableColumn<Row, Integer> cunning;
+
+    private final SceneSwapper sceneSwapper = new SceneSwapper();
+    private final AudioControllerImpl audioControllerImpl;
+    private final Stage stage;
+    private final List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
+    private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
+    private Row matchStats = new Row();
+    private final Map<String, Pair<Integer, Integer>> partialScore;
+    private final int totalScore;
+
+    public RankingController(final Stage stage, final AudioControllerImpl audioControllerImpl, final Map<String, Pair<Integer, Integer>> partialScore, final int totalScore) {
+        this.stage = stage;
+        this.audioControllerImpl = audioControllerImpl;
+        this.partialScore = partialScore;
+        this.totalScore = totalScore;
+    }
+
+    @Override
+    public void initialize(final URL location, final ResourceBundle resources) {
+        rank.setCellFactory(col -> {
+            final TableCell<Row, Integer> indexCell = new TableCell<>();
+            final ReadOnlyObjectProperty<TableRow<Row>> rowProperty = indexCell.tableRowProperty();
+            final ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
+                final TableRow<Row> row = rowProperty.get();
+                if (row != null) {
+                    final int rowIndex = row.getIndex();
+                    if (rowIndex < row.getTableView().getItems().size()) {
+                        return Integer.toString(rowIndex + 1);
+                    }
+                }
+                return null;
+            }, rowProperty);
+            indexCell.textProperty().bind(rowBinding);
+            return indexCell;
+        });
+
+        name.setCellValueFactory(new PropertyValueFactory<>("name"));
+        points.setCellValueFactory(new PropertyValueFactory<>("points"));
+        time.setCellValueFactory(new PropertyValueFactory<>("time"));
+        enemyKilled.setCellValueFactory(new PropertyValueFactory<>("enemyKilled"));
+        cunning.setCellValueFactory(new PropertyValueFactory<>("cunning"));
+
+        tableView.setItems(recordObservableList);
+    }
+
+    public void backButtonClick() throws IOException {
+        JSONDataAccessLayer.newInstance();
+        sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
+    }
+
+    public void addScoreClick() throws JsonGenerationException, JsonMappingException, IOException {
+        final TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setTitle("Text Input Dialog");
+        textInputDialog.getDialogPane().setContentText("Insert your name:");
+        textInputDialog.showAndWait();
+        final TextField input = textInputDialog.getEditor();
+        if (input.getText() != null && input.getText().toString().length() != 0) {
+            matchStats = new Row(
+                    input.getText(),
+                    totalScore,
+                    partialScore.get(TimeStrategy.class.getSimpleName()).getValue(),
+                    partialScore.get(KillCountStrategy.class.getSimpleName()).getValue(),
+                    partialScore.get(CunningStrategy.class.getSimpleName()).getValue()
+                    );
+        }
+        recordList.add(matchStats);
+        this.updateList();
+        JSONDataAccessLayer.getInstance().getRanking().write();
+        addScoreButton.setDisable(true);
+        addScoreButton.setVisible(false);
+    }
+
+    private void sortRecords() {
+        recordList.sort(Comparator.comparing(Row::getPoints).reversed());
+    }
+
+    private void updateList() {
+        this.sortRecords();
+        recordObservableList = FXCollections.observableList(recordList);
+        tableView.refresh();
+    }
 }
