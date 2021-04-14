@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
-import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.enemy.EnemyImpl;
@@ -27,7 +26,12 @@ class EnemyModelTest {
         // ENEMY SHOULD HAVE A CLEAR LINE OF SIGHT
         assertTrue(idle.getAI().isShooting(target));
         
-        Set<Point2D> wall = new HashSet<>() {{ add(new Point2D(1,1)); }};
+        Set<Point2D> wall = new HashSet<>() {/**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+        { add(new Point2D(1,1)); }};
         idle = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.IDLE, null, wall);
         
         // WALL IS BLOCKING THE ENEMY VIEW
@@ -48,7 +52,12 @@ class EnemyModelTest {
     
     @Test
     void enemyPatrolling() {
-        final Set<Point2D> walkable = new HashSet<>() {{ add(new Point2D(0,0)); add(new Point2D(1,0)); add(new Point2D(1,1)); add(new Point2D(0,1));}};
+        final Set<Point2D> walkable = new HashSet<>() {/**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+        { add(new Point2D(0,0)); add(new Point2D(1,0)); add(new Point2D(1,1)); add(new Point2D(0,1));}};
         final Enemy patrol = new EnemyImpl(new Point2D(0,0), new NaiveInventoryImpl(), 0, EnemyType.PATROLLING, walkable, null);
         
         assertEquals(DirectionList.EAST.get(), patrol.getAI().getNextMove(null, false, walkable));
