@@ -2,6 +2,7 @@ package hotlinecesena.controller;
 
 import java.io.IOException;
 import java.util.Optional;
+
 import hotlinecesena.controller.HUD.PlayerStatsController;
 import hotlinecesena.controller.entities.ProjectileController;
 import hotlinecesena.controller.entities.enemy.EnemyController;
@@ -11,9 +12,9 @@ import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
-import hotlinecesena.model.score.PartialScoreFactoryImpl;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
+import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
 import hotlinecesena.utilities.SceneSwapper;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
@@ -41,14 +42,14 @@ public class WorldController{
     private final SceneSwapper sceneSwapper = new SceneSwapper();
     private final Score score;
 
-    public WorldController(final Stage primaryStage, AudioControllerImpl audioControllerImpl) throws IOException{
+    public WorldController(final Stage primaryStage, final AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;
         this.audioControllerImpl = audioControllerImpl;
         this.audioControllerImpl.playMusic();
         new AudioEventController();
         view = new WorldView(this.primaryStage);
         view.start();
-        
+
         missionController = new MissionController();
         gameLoopController.addMethodToUpdate(d -> missionController.update(d));
 
@@ -79,40 +80,40 @@ public class WorldController{
 
         projectileController = new ProjectileController(view);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
-        
-        score = new ScoreImpl(new PartialScoreFactoryImpl());
-        
+
+        score = new ScoreImpl(new PartialStrategyFactoryImpl());
+
         gameLoopController.addMethodToUpdate(d -> {
             if(missionController.missionPending().isEmpty() || JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
                 try {
-                	audioControllerImpl.stopMusic();
-                	gameLoopController.stop();
-                	primaryStage.setWidth(800);
-                	primaryStage.setHeight(600);
-                	primaryStage.centerOnScreen();
-					sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl, score.getPartialScores(), score.getTotalScore()), "RankingView.fxml", primaryStage);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
+                    audioControllerImpl.stopMusic();
+                    gameLoopController.stop();
+                    primaryStage.setWidth(800);
+                    primaryStage.setHeight(600);
+                    primaryStage.centerOnScreen();
+                    sceneSwapper.swapScene(new RankingController(primaryStage, audioControllerImpl, score.getPartialScores(), score.getTotalScore()), "RankingView.fxml", primaryStage);
+                } catch (final IOException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
         });
-        
+
         gameLoopController.addMethodToUpdate(d -> {
-        	view.getBorderPane().setOnKeyReleased(e -> {
-        		if (e.getCode() == KeyCode.ESCAPE) {
-            		try {
-            			audioControllerImpl.stopMusic();
-                		gameLoopController.stop();
-                    	Stage stage = new Stage();
-                    	stage.show();
-        				sceneSwapper.swapScene(new PauseController(stage, Optional.of(primaryStage), audioControllerImpl, gameLoopController), "PauseView.fxml", stage);
-        			} catch (IOException e1) {
-        				// TODO Auto-generated catch block
-        				e1.printStackTrace();
-        			}
-    			}
-        	});
+            view.getBorderPane().setOnKeyReleased(e -> {
+                if (e.getCode() == KeyCode.ESCAPE) {
+                    try {
+                        audioControllerImpl.stopMusic();
+                        gameLoopController.stop();
+                        final Stage stage = new Stage();
+                        stage.show();
+                        sceneSwapper.swapScene(new PauseController(stage, Optional.of(primaryStage), audioControllerImpl, gameLoopController), "PauseView.fxml", stage);
+                    } catch (final IOException e1) {
+                        // TODO Auto-generated catch block
+                        e1.printStackTrace();
+                    }
+                }
+            });
         });
 
         gameLoopController.loop();
