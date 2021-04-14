@@ -21,7 +21,7 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
      * Value to be used if the player manages to finish
      * the game without shooting a single bullet.
      */
-    private static final float BIG_BRAIN = 0.5f;
+    private static final float BIG_BRAIN = 0.75f;
     private final int basePoints;
     private float attacksPerformed = 0.0f;
     private float hits = 0.0f;
