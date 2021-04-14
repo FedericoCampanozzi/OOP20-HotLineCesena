@@ -105,8 +105,6 @@ public class WorldController{
             			audioControllerImpl.stopMusic();
                 		gameLoopController.stop();
                     	Stage stage = new Stage();
-                    	stage.setWidth(800);
-                    	stage.setHeight(600);
                     	stage.show();
         				sceneSwapper.swapScene(new PauseController(stage, Optional.of(primaryStage), audioControllerImpl, gameLoopController), "PauseView.fxml", stage);
         			} catch (IOException e1) {

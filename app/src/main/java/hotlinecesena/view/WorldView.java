@@ -57,6 +57,7 @@ public class WorldView implements Subscriber {
     public final void start() {
         this.player.register(this);
         primaryStage.setTitle(TITLE);
+        updateResolution(1600, 900);
         borderPane = new BorderPane();
         final Scene scene = new Scene(borderPane);
         scene.setCursor(new ImageCursor(this.proxyImage.getImage(SceneType.MENU, ImageType.SCOPE)));
@@ -159,19 +160,10 @@ public class WorldView implements Subscriber {
             enemiesSprite.add(new SpriteImpl(i));
         });
         
-        primaryStage.setResizable(false);
-        primaryStage.setWidth(1600);
-        primaryStage.setHeight(900);
+        primaryStage.setResizable(true);
         primaryStage.centerOnScreen();
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
-        
-        System.out.println(JSONDataAccessLayer.getInstance().getDataItems().getItems());
-        System.out.println(itemsPos.keySet());
-        System.out.println("X" + JSONDataAccessLayer.getInstance().getWorld().getMaxX());
-        System.out.println("x" + JSONDataAccessLayer.getInstance().getWorld().getMinX());
-        System.out.println("Y" + JSONDataAccessLayer.getInstance().getWorld().getMaxY());
-        System.out.println("y" + JSONDataAccessLayer.getInstance().getWorld().getMinY());
     }
 
     public GridPane getGridPane() {
@@ -200,6 +192,11 @@ public class WorldView implements Subscriber {
 
 	public Stage getStage() {
 		return primaryStage;
+	}
+	
+	public void updateResolution(final int width, final int height) {
+		primaryStage.setWidth(width);
+		primaryStage.setHeight(height);
 	}
 
 	public List<Sprite> getEnemiesSprite() {

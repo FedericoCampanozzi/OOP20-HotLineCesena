@@ -32,8 +32,6 @@ public class LoadingController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		
-		
 		final Task<Void> task = new Task<Void>() {
             final int N_ITERATIONS = 10;
 
@@ -41,25 +39,18 @@ public class LoadingController implements Initializable{
             protected Void call() throws Exception {
                 for (int i = 0; i < N_ITERATIONS; i++) {
                     updateProgress(i + 1, N_ITERATIONS);
-                    // sleep is used to simulate doing some work which takes some time....
                     Thread.sleep(1000);
                 }
-
                 return null;
             }
         };
-
-        progressBar.progressProperty().bind(
-                task.progressProperty()
-        );
-        // color the bar green when the work is complete.
+        progressBar.progressProperty().bind(task.progressProperty());
         progressBar.progressProperty().addListener(observable -> {
             if (progressBar.getProgress() >= 1 - EPSILON) {
-                progressBar.setStyle("-fx-accent: forestgreen;");
+                progressBar.setStyle("-fx-accent: green;");
                 try {
 					sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 

@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,8 @@ public class StartMenuController implements Initializable{
 	private Button optionsButton;
 	@FXML
 	private Button exitButton;
+	@FXML
+	private VBox vBox;
 	
 	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private Stage stage;
@@ -41,7 +44,12 @@ public class StartMenuController implements Initializable{
 	}
 	
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(stage, Optional.empty(), audioControllerImpl, Optional.empty()), "OptionsView.fxml", stage);
+		sceneSwapper.swapScene(new OptionsController(
+				stage,
+				Optional.empty(),
+				audioControllerImpl,
+				Optional.empty()),
+				"OptionsView.fxml", stage);
 	}
 	
 	public void exitClick(final ActionEvent event) throws IOException {
