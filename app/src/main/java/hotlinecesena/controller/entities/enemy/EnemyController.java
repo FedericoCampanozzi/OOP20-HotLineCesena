@@ -137,7 +137,6 @@ public final class EnemyController implements Updatable, Subscriber {
     private void onDeathEvent(final DeathEvent<Enemy> e) {
         this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
         this.sprite.updateRotation(0);
-        e.getSource().unregister(this);
         this.timeAfterDeath = System.currentTimeMillis();
     }
 }
