@@ -70,7 +70,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
 
             if (!(this.hasCollided(newPos, enemies) || this.hasCollided(newPos, obstacles))) {
                 this.setPosition(newPos);
-                this.publish(new MovementEvent<>(this, newPos));
+                this.publish(new MovementEvent(this, newPos));
                 this.setActorStatus(ActorStatus.MOVING);
             }
         }
@@ -110,7 +110,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
                     itemPos, ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS)) {
                 item.usage().accept(this);
                 toBeRemoved.add(itemPos);
-                this.publish(new ItemPickUpEvent<>(this, item, itemPos));
+                this.publish(new ItemPickUpEvent(this, item, itemPos));
             }
         });
         toBeRemoved.forEach(itemsOnMap::remove);
@@ -136,7 +136,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
                 if (this.getInventory().getQuantityOf(w) != 1) {
                     this.getInventory().add(w, 1);
                     weaponsOnMap.remove(pos);
-                    this.publish(new WeaponPickUpEvent<>(this, w.getWeaponType(), pos));
+                    this.publish(new WeaponPickUpEvent(this, w.getWeaponType(), pos));
                 }
             });
         }

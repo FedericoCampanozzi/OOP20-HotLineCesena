@@ -6,18 +6,18 @@ import javafx.geometry.Point2D;
 /**
  *
  * Notifies that an entity has moved.
- * @param <M> an interface that extends {@link MovableEntity}.
  */
-public final class MovementEvent<M extends MovableEntity> extends AbstractEvent<M> {
+public final class MovementEvent extends AbstractEvent {
 
     private final Point2D newPos;
 
     /**
      * Instantiates a new {@code MovementEvent}.
+     * @param <M> an interface that extends {@link MovableEntity}.
      * @param source the MovableEntity that triggered this event.
      * @param newPos new position of the MovableEntity.
      */
-    public MovementEvent(final M source, final Point2D newPos) {
+    public <M extends MovableEntity> MovementEvent(final M source, final Point2D newPos) {
         super(source);
         this.newPos = newPos;
     }
