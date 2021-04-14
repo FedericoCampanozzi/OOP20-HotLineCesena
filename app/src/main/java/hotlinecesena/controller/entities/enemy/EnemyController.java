@@ -114,7 +114,7 @@ public final class EnemyController implements Updatable, Subscriber {
      * @param e the entity that produce the event
      */
     @Subscribe
-    private void updateSpriteOnMoveEvent(final MovementEvent<Enemy> e) {
+    private void updateSpriteOnMoveEvent(final MovementEvent e) {
         this.sprite.updatePosition(e.getPosition());
     }
 
@@ -124,7 +124,7 @@ public final class EnemyController implements Updatable, Subscriber {
      * @param e the entity that produce the event
      */
     @Subscribe
-    private void updateSpriteOnRotationEvent(final RotationEvent<Enemy> e) {
+    private void updateSpriteOnRotationEvent(final RotationEvent e) {
         this.sprite.updateRotation(e.getNewAngle());
     }
 
@@ -134,7 +134,7 @@ public final class EnemyController implements Updatable, Subscriber {
      * @param e the entity that produce the event
      */
     @Subscribe
-    private void onDeathEvent(final DeathEvent<Enemy> e) {
+    private void onDeathEvent(final DeathEvent e) {
         this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
         this.sprite.updateRotation(0);
         this.timeAfterDeath = System.currentTimeMillis();
