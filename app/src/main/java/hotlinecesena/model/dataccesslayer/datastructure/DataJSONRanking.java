@@ -24,19 +24,19 @@ public class DataJSONRanking extends AbstractData {
 		@JsonProperty("enemyKilled")
 		private int enemyKilled;
 		@JsonProperty("cunning")
-		private double cunning;
+		private int cunning;
 		
 		public Row() {
 			
 		}
 
-		public Row(String name, int points, int time, int enemyKilled, double cunning) {
+		public Row(String name, int points, int time, int enemyKilled, int cunning) {
 			this.name = name;
 			this.points = points;
-			long second = (time / 1000) % 60;
-			long minute = (time / (1000 * 60)) % 60;
-			long hour = (time / (1000 * 60 * 60)) % 24;
-			this.time =  String.format("%02d:%02d:%02d", hour, minute, second);
+			long seconds = (time / 1000) % 60;
+			long minutes = (time / (1000 * 60)) % 60;
+			long hours = (time / (1000 * 60 * 60)) % 24;
+			this.time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
 			this.enemyKilled = enemyKilled;
 			this.cunning = cunning;
 		}
@@ -44,32 +44,21 @@ public class DataJSONRanking extends AbstractData {
 		public double getCunning() {
 			return cunning;
 		}
-		public void setCunning(double cunning) {
-			this.cunning = cunning;
-		}
+		
 		public String getName() {
 			return name;
 		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		
 		public int getPoints() {
 			return points;
 		}
-		public void setPoints(int points) {
-			this.points = points;
-		}
+		
 		public String getTime() {
 			return this.time;
 		}
-		public void setTime(String time) {
-			this.time = time;
-		}
+		
 		public int getEnemyKilled() {
 			return enemyKilled;
-		}
-		public void setEnemyKilled(int enemyKilled) {
-			this.enemyKilled = enemyKilled;
 		}
 	}
 	

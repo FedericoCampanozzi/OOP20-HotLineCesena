@@ -1,15 +1,9 @@
 {
   "records" : [ {
-    "name" : "federico",
-    "points" : 1500,
-    "time" : 51141412,
-    "enemyKilled" : 3,
-    "cunning" : 2.0
-  }, {
-    "name" : "andrea",
-    "points" : 1000,
-    "time" : 4566546,
-    "enemyKilled" : 8,
-    "cunning" : 2.0
+    "name" : "Prova",
+    "points" : 735,
+    "time" : "00:00:09",
+    "enemyKilled" : 1,
+    "cunning" : 100.0
   } ]
 }

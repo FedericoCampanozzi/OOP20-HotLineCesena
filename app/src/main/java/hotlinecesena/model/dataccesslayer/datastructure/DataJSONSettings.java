@@ -71,8 +71,20 @@ public class DataJSONSettings  extends AbstractData  {
     private List<Integer> resY;
     @JsonProperty("defaultLanguage")
     private int defaultLanguage;
+    @JsonProperty("defaultWidth")
+    private int defaultWidth;
+    @JsonProperty("defaultHeight")
+    private int defaultHeight;
     
-    public int getDefaultLanguage() {
+    public int getDefaultWidth() {
+		return defaultWidth;
+	}
+
+	public int getDefaultHeight() {
+		return defaultHeight;
+	}
+
+	public int getDefaultLanguage() {
 		return defaultLanguage;
 	}
     
