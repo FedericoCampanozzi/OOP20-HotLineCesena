@@ -6,12 +6,12 @@ import hotlinecesena.model.entities.actors.Actor;
 
 public enum ItemsType implements Item {
 	MEDIKIT(actor -> actor.heal(50), 5),
-	// 3 add, una per ogni tipo di munizone
 	AMMO_BAG(actor -> {
-		actor.getInventory().add(AmmunitionType.SHOTGUN_AMMO, AmmunitionType.SHOTGUN_AMMO.getMaxStacks() / 3);
-		actor.getInventory().add(AmmunitionType.RIFLE_AMMO, AmmunitionType.RIFLE_AMMO.getMaxStacks() / 3);
-		actor.getInventory().add(AmmunitionType.PISTOL_AMMO, AmmunitionType.PISTOL_AMMO.getMaxStacks() / 3);
-		}, 5);
+		actor.getInventory().add(CollectibleType.SHOTGUN_AMMO, CollectibleType.SHOTGUN_AMMO.getMaxStacks() / 3);
+		actor.getInventory().add(CollectibleType.RIFLE_AMMO, CollectibleType.RIFLE_AMMO.getMaxStacks() / 3);
+		actor.getInventory().add(CollectibleType.PISTOL_AMMO, CollectibleType.PISTOL_AMMO.getMaxStacks() / 3);
+		}, 5),
+	BRIEFCASE(actor -> actor.getInventory().add(CollectibleType.MONEY, CollectibleType.MONEY.getMaxStacks() / 100), 10);
 	
 	private Consumer<Actor> usageFunc;
 	private int maxStacks;

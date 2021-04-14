@@ -4,14 +4,15 @@ import java.util.function.Consumer;
 
 import hotlinecesena.model.entities.actors.Actor;
 
-public enum AmmunitionType implements Item {
+public enum CollectibleType implements Item {
+	MONEY(1000),
 	SHOTGUN_AMMO(21),
 	RIFLE_AMMO(90),
 	PISTOL_AMMO(30);
 	
 	private int maxStacks;
 
-	AmmunitionType(int maxStacks) {
+	CollectibleType(int maxStacks) {
 		this.maxStacks = maxStacks;
 	}
 
