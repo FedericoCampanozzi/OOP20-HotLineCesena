@@ -57,11 +57,11 @@ public interface Actor extends MovableEntity {
     Inventory getInventory();
 
     /**
-     * Returns this actor's current {@link ActorStatus} value.
+     * Returns this actor's current {@link Status} value.
      *
      * @return this actor's current status.
      */
-    ActorStatus getActorStatus();
+    Status getActorStatus();
 
     /**
      * Updates, if required by specific implementations, certain Actor

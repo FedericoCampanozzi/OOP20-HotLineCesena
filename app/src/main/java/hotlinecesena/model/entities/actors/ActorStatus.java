@@ -3,7 +3,7 @@ package hotlinecesena.model.entities.actors;
 /**
  *
  */
-public enum ActorStatus {
+public enum ActorStatus implements Status {
 
     /**
      * Actor is receiving no inputs.

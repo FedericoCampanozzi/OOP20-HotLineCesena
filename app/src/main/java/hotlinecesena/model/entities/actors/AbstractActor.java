@@ -22,7 +22,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
 
     private final double maxHealth;
     private double currentHealth;
-    private ActorStatus status = ActorStatus.IDLE;
+    private Status status = ActorStatus.IDLE;
     private final Inventory inventory;
 
     /**
@@ -136,7 +136,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     @Override
-    public final ActorStatus getActorStatus() {
+    public final Status getActorStatus() {
         return status;
     }
 
