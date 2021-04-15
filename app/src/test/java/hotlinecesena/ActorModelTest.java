@@ -34,11 +34,11 @@ import javafx.geometry.Point2D;
 @TestInstance(Lifecycle.PER_METHOD)
 class ActorModelTest {
 
-    private static final double SPEED = 1;
+    private static final double SPEED = 1.0;
     private static final int ANGLE = 270;
-    private static final double WIDTH = 1;
-    private static final double HEIGHT = 1;
-    private static final double MAX_HP = 100;
+    private static final double WIDTH = 1.0;
+    private static final double HEIGHT = 1.0;
+    private static final double MAX_HP = 100.0;
     private Actor actor;
 
     private void setup() {

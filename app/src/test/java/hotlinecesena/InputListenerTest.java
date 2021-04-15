@@ -34,8 +34,8 @@ import javafx.stage.Stage;
 @TestInstance(Lifecycle.PER_METHOD)
 class InputListenerTest {
 
-    private static final int HEIGHT = 600;
-    private static final int WIDTH = 800;
+    private static final double HEIGHT = 600.0;
+    private static final double WIDTH = 800.0;
     private FxRobot robot;
     private Scene testScene;
     private InputListener listener;
