@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -16,36 +17,34 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 
-import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
-import hotlinecesena.model.entities.items.CollectibleType;
+import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.entities.items.Weapon;
-import hotlinecesena.model.entities.items.WeaponImpl;
-import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.inventory.Inventory;
-import hotlinecesena.model.inventory.NaiveInventoryImpl;
+import hotlinecesena.model.inventory.NaiveInventoryFactory;
 import javafx.geometry.Point2D;
 
 /**
- * Runs a series of tests on methods common to all Actors.
+ * Runs a series of tests on methods common to all {@link Actor}.
+ * <br>
+ * {@link PlayerImpl} was chosen as a complete Actor implementation.
  */
 @TestInstance(Lifecycle.PER_METHOD)
 class ActorModelTest {
 
-    private static final double SPEED = 500;
+    private static final double SPEED = 1;
     private static final int ANGLE = 270;
-    private static final double WIDTH = 100;
-    private static final double HEIGHT = 300;
+    private static final double WIDTH = 1;
+    private static final double HEIGHT = 1;
     private static final double MAX_HP = 100;
     private Actor actor;
 
     private void setup() {
-        final Inventory inv = new NaiveInventoryImpl(
-                new WeaponImpl(WeaponType.PISTOL),
-                Map.of(CollectibleType.PISTOL_AMMO, 30));
-        actor = new TestActor(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv);
+        final Inventory inv = new NaiveInventoryFactory().createWithPistolOnly();
+        actor = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv, Map.of(), List.of(), List.of(),
+                Map.of(), Map.of());
     }
 
     @BeforeEach
@@ -136,27 +135,5 @@ class ActorModelTest {
         final double unrealHp = 50000.0;
         actor.heal(unrealHp);
         assertThat(actor.getCurrentHealth(), is(0.0));
-    }
-
-    private final class TestActor extends AbstractActor {
-
-        private TestActor(final Point2D position, final double angle, final double width, final double height,
-                final double speed, final double maxHealth, final Inventory inventory) {
-            super(position, angle, width, height, speed, maxHealth, inventory);
-        }
-
-        /*
-         * Identical to PlayerImpl's implementation, minus the
-         * collision checks.
-         */
-        @Override
-        protected void executeMovement(final Point2D direction) {
-            if (this.isAlive()) {
-                final Point2D oldPos = this.getPosition();
-                final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-                this.setPosition(newPos);
-                this.setActorStatus(ActorStatus.MOVING);
-            }
-        }
     }
 }
