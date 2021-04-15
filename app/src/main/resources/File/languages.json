@@ -1,4 +1,5 @@
 {
+  "language":["idFxml","it","en","de","ru"],
   "decodifications" : [
 	{
 		"idFxml" : "lbl_win",

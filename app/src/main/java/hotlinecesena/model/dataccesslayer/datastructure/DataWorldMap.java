@@ -3,22 +3,21 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
+import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
-
 import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
 import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import javafx.util.Pair;
 
 public class DataWorldMap extends AbstractData {
 
 	private Map<Pair<Integer, Integer>, SymbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	private boolean keyObj;
-
+	
 	public DataWorldMap(DataJSONSettings settings) throws IOException {
 		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
 				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(

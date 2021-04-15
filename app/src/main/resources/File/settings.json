@@ -32,5 +32,6 @@
   "resY" : [ 600, 768, 720, 1080 ],
   "defaultLanguage" : 0,
   "defaultWidth" : 800,
-  "defaultHeight" : 600
+  "defaultHeight" : 600,
+  "guiPixelSize" : 15
 }

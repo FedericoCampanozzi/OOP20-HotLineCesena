@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.utilities.Utilities;
 
 public class DataJSONRanking extends AbstractData {
 	
@@ -33,10 +34,7 @@ public class DataJSONRanking extends AbstractData {
 		public Row(String name, int points, int time, int enemyKilled, int cunning) {
 			this.name = name;
 			this.points = points;
-			long seconds = (time / 1000) % 60;
-			long minutes = (time / (1000 * 60)) % 60;
-			long hours = (time / (1000 * 60 * 60)) % 24;
-			this.time = String.format("%02d:%02d:%02d", hours, minutes, seconds);
+			this.time = Utilities.convertSecondsToTimeString(time, "%02d:%02d:%02d");
 			this.enemyKilled = enemyKilled;
 			this.cunning = cunning;
 		}

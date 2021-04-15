@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import static java.util.stream.Collectors.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -14,8 +15,8 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 
 public class DataJSONLanguages extends AbstractData {
 
-	@JsonProperty("languagesMapped")
-	private List<decode> languagesMapped;
+	@JsonProperty("language")
+	private List<String> language;
 	@JsonProperty("decodifications")
 	private List<decode> decodifications;
 	
@@ -44,6 +45,15 @@ public class DataJSONLanguages extends AbstractData {
 		public void setLanguagesTranslation(List<String> languagesTranslation) {
 			this.languagesTranslation = languagesTranslation;
 		}
+	}
+	
+	public Map<String, String> getLanguageMap(String lName){
+		final int index = this.language.indexOf(lName);
+		return this.decodifications.stream()
+				.collect(toMap(
+						e -> e.getLanguagesTranslation().get(0),
+						e -> e.getLanguagesTranslation().get(index)
+					));
 	}
 	
 	public List<decode> getDecodifications() {

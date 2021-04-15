@@ -5,5 +5,11 @@
     "time" : "00:00:09",
     "enemyKilled" : 1,
     "cunning" : 100.0
+  }, {
+    "name" : "lll",
+    "points" : 175,
+    "time" : "00:00:09",
+    "enemyKilled" : 0,
+    "cunning" : 0.0
   } ]
 }

@@ -75,7 +75,13 @@ public class DataJSONSettings  extends AbstractData  {
     private int defaultWidth;
     @JsonProperty("defaultHeight")
     private int defaultHeight;
+    @JsonProperty("guiPixelSize")
+    private int guiPixelSize;
     
+    public int getPixelSize() {
+		return guiPixelSize;
+	}
+
     public int getDefaultWidth() {
 		return defaultWidth;
 	}
