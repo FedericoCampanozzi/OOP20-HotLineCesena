@@ -4,7 +4,7 @@ public interface Weapon extends Item {
 
     void reload(int bullets);
 
-    Item getCompatibleAmmunition();
+    CollectibleType getCompatibleAmmunition();
 
     double getReloadTime();
 

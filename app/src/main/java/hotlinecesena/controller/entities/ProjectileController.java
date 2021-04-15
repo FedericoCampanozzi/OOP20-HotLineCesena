@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -11,7 +12,7 @@ import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.items.Projectile;
-import hotlinecesena.model.entities.items.Projectile.ProjectileStatus;
+import hotlinecesena.model.entities.items.ProjectileImpl.ProjectileStatus;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
@@ -21,6 +22,7 @@ import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
 import javafx.geometry.Point2D;
 import javafx.scene.image.ImageView;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
 public final class ProjectileController implements Updatable {
@@ -45,16 +47,16 @@ public final class ProjectileController implements Updatable {
             final List<Projectile> projectilesInModel = this.getDAL().getBullets().getProjectile();
             final Set<Projectile> removeSet = new HashSet<>();
 
-            if (spritePool.size() < projectilesInModel.size()) {
-                this.expandPool(DEFAULT_POOL_SIZE);
-            }
-            if (projectileMap.size() < projectilesInModel.size()) {
-                for (final Projectile current : projectilesInModel) {
-                    if (!projectileMap.containsKey(current)) {
-                        final Sprite unusedSprite = this.findUnusedSprite();
-                        unusedSprite.updateRotation(current.getAngle());
-                        projectileMap.put(current, unusedSprite);
+            for (final Projectile current : projectilesInModel) {
+                if (!projectileMap.containsKey(current)) {
+                    Optional<Sprite> unusedSprite = this.findUnusedSprite();
+                    while (unusedSprite.isEmpty()) {
+                        this.expandPool(DEFAULT_POOL_SIZE);
+                        unusedSprite = this.findUnusedSprite();
                     }
+                    unusedSprite.get().updatePosition(current.getPosition());
+                    unusedSprite.get().updateRotation(current.getAngle());
+                    projectileMap.put(current, unusedSprite.get());
                 }
             }
             projectileMap.forEach((proj, sprite) -> {
@@ -76,6 +78,7 @@ public final class ProjectileController implements Updatable {
     private Sprite createSprite() {
         final ImageView top = new ImageView(loader.getImage(SceneType.GAME, ImageType.BULLET));
         top.getTransforms().add(new Translate());
+        top.getTransforms().add(new Rotate());
         top.setFitWidth(SPRITE_SCALE);
         top.setFitHeight(SPRITE_SCALE);
         worldView.getGridPane().add(top, 0, 0);
@@ -92,12 +95,11 @@ public final class ProjectileController implements Updatable {
         }
     }
 
-    private Sprite findUnusedSprite() {
+    private Optional<Sprite> findUnusedSprite() {
         final Point2D offsetTranslate = OUT_OF_BOUNDS.multiply(0.5);
         return spritePool.stream()
                 .filter(s -> s.getTranslatePosition().equals(offsetTranslate))
-                .findFirst()
-                .get();
+                .findFirst();
     }
 
     private DataAccessLayer getDAL() {

@@ -2,13 +2,11 @@ package hotlinecesena.model.entities.items;
 
 import java.util.function.Consumer;
 
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.Actor;
-import javafx.geometry.Point2D;
 
 public class WeaponImpl implements Weapon {
 
-    private static final double PROJECTILE_SIZE = 0.1;
+    private static final double PROJECTILE_SIZE = 0.2;
     private int currentAmmo;
     private final WeaponType weaponType;
     private double lastTime = System.currentTimeMillis();
@@ -23,25 +21,13 @@ public class WeaponImpl implements Weapon {
         return actor -> {
             final double currentTime = System.currentTimeMillis();
             if (currentAmmo > 0 && currentTime - lastTime >= this.getRateOfFire()) {
-                final Projectile proj = new Projectile(
-                        this.computeStartingPoint(actor),
-                        actor.getAngle(),
-                        PROJECTILE_SIZE,
-                        PROJECTILE_SIZE,
-                        weaponType.getProjectileSpeed(),
-                        weaponType.getDamage());
+                weaponType.getStrategy().shoot(
+                        weaponType, actor.getPosition(), actor.getAngle(), actor.getWidth(),
+                        actor.getHeight(), PROJECTILE_SIZE);
                 currentAmmo -= 1;
                 lastTime = currentTime;
-                JSONDataAccessLayer.getInstance().getBullets().getProjectile().add(proj);
             }
         };
-    }
-
-    private Point2D computeStartingPoint(final Actor actor) {
-        final double centerX = actor.getPosition().getX() + actor.getWidth() / 2;
-        final double centerY = actor.getPosition().getY() + actor.getHeight() / 2;
-        return new Point2D(centerX + actor.getWidth() * Math.cos(Math.toRadians(actor.getAngle())),
-                centerY + actor.getHeight() * Math.sin(Math.toRadians(actor.getAngle())));
     }
 
     @Override
@@ -63,7 +49,7 @@ public class WeaponImpl implements Weapon {
     }
 
     @Override
-    public Item getCompatibleAmmunition() {
+    public CollectibleType getCompatibleAmmunition() {
         return weaponType.getCompatibleAmmo();
     }
 
