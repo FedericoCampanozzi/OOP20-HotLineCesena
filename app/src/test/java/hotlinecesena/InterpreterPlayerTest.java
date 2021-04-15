@@ -25,8 +25,8 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.testfx.framework.junit5.Start;
 
-import hotlinecesena.controller.input.InputInterpreter;
-import hotlinecesena.controller.input.InputInterpreterImpl;
+import hotlinecesena.controller.entities.player.InputInterpreter;
+import hotlinecesena.controller.entities.player.InputInterpreterImpl;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;

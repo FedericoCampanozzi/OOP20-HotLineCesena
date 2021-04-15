@@ -13,8 +13,6 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import hotlinecesena.controller.input.InputInterpreter;
-import hotlinecesena.controller.input.InputInterpreterImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;

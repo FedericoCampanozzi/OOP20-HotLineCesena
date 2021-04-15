@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 
 import com.google.common.eventbus.Subscribe;
 
-import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.items.WeaponType;
@@ -90,7 +89,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     /*
-     * Update the sprite's position when the player moves.
+     * Updates the sprite's position when the player moves.
      */
     @Subscribe
     private void handleMovementEvent(final MovementEvent e) {
@@ -98,7 +97,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     /*
-     * Update the sprite's angle when the player rotates.
+     * Updates the sprite's angle when the player rotates.
      */
     @Subscribe
     private void handleRotationEvent(final RotationEvent e) {
@@ -106,7 +105,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     /*
-     * Update the sprite's image when the player picks up
+     * Updates the sprite's image when the player picks up
      * a new weapon.
      */
     @Subscribe
@@ -115,7 +114,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     }
 
     /*
-     * Update the sprite's image on death.
+     * Updates the sprite's image on death.
      */
     @Subscribe
     private void handleDeathEvent(final DeathEvent e) {
