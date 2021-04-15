@@ -2,11 +2,12 @@ package hotlinecesena.model.score.partials;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.entities.actors.player.Player;
 
 /**
  * Implements the "Time bonus" algorithm: it rewards players who
  * manage to win a game within a certain time limit.
- * If the player loses, the algorithm will award no points.
+ * If the player loses, no points will be awarded.
  */
 public final class TimeStrategy implements PartialStrategy {
 
@@ -16,7 +17,7 @@ public final class TimeStrategy implements PartialStrategy {
      */
     private final long timeCeiling;
     private final long start = System.currentTimeMillis();
-    private long totalTime;
+    private long totalTimeMilliseconds;
 
     /**
      * Instantiates a new TimeStrategy.
@@ -33,13 +34,12 @@ public final class TimeStrategy implements PartialStrategy {
 
     @Override
     public int applyFormula() {
-        totalTime = System.currentTimeMillis() - start;
-        final long totalSeconds = totalTime / 1000;
-        return (int) (basePoints * (
-                timeCeiling <= totalSeconds
-                && JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus() != ActorStatus.DEAD ? 0
-                        : timeCeiling - totalSeconds
-                ));
+        totalTimeMilliseconds = System.currentTimeMillis() - start;
+        final Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
+        final long totalSeconds = totalTimeMilliseconds / 1000;
+        final long remainingSeconds = totalSeconds >= timeCeiling || player.getActorStatus() == ActorStatus.DEAD ? 0
+                : timeCeiling - totalSeconds;
+        return (int) (basePoints * remainingSeconds);
     }
 
     /**
@@ -47,6 +47,6 @@ public final class TimeStrategy implements PartialStrategy {
      */
     @Override
     public int getRelevantFactor() {
-        return (int) totalTime;
+        return (int) totalTimeMilliseconds;
     }
 }
