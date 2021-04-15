@@ -2,7 +2,7 @@ package hotlinecesena.model.inventory;
 
 import java.util.Map;
 
-import hotlinecesena.model.entities.items.CollectibleType;
+import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
 /**
@@ -27,9 +27,9 @@ public interface InventoryFactory {
     /**
      * Creates an inventory with custom contents.
      * @param weapon the weapon to be added.
-     * @param collectibles the collectibles to be added
+     * @param items the items to be added
      * @return an inventory with the aforementioned custom
      * contents.
      */
-    Inventory createCustom(Weapon weapon, Map<CollectibleType, Integer> collectibles);
+    Inventory createCustom(Weapon weapon, Map<Item, Integer> items);
 }

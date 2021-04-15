@@ -5,6 +5,7 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.items.CollectibleType;
+import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
@@ -29,7 +30,7 @@ public final class NaiveInventoryFactory implements InventoryFactory {
     }
 
     @Override
-    public Inventory createCustom(@Nonnull final Weapon weapon, @Nonnull final Map<CollectibleType, Integer> collectibles) {
-        return new NaiveInventoryImpl(weapon, collectibles);
+    public Inventory createCustom(@Nonnull final Weapon weapon, @Nonnull final Map<Item, Integer> items) {
+        return new NaiveInventoryImpl(weapon, items);
     }
 }

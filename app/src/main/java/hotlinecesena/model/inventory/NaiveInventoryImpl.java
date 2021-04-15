@@ -2,6 +2,7 @@ package hotlinecesena.model.inventory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,14 +14,18 @@ import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
 /**
+ * <p>
  * Very simple inventory capable of containing one {@link Weapon} and
- * a virtually unlimited number of {@link CollectibleType} items, that
- * is, items that cannot be actively used.
+ * a virtually unlimited number of {@link CollectibleType} items.
+ * </p>
+ * Trying to add items which are not instance of {@code Weapon} or
+ * {@code CollectibleType} will result in an {@link IllegalArgumentException}.
  */
 public final class NaiveInventoryImpl implements Inventory {
 
+    private static final String ERROR_MSG = "This inventory only supports Weapon and CollectibleType items";
     private Optional<Weapon> weapon = Optional.empty();
-    private final Map<CollectibleType, Integer> collectibles = new HashMap<>();
+    private final Map<Item, Integer> collectibles = new HashMap<>();
     private double reloadTimeRemaining = 0.0;
     private Weapon reloadBuffer;
 
@@ -34,31 +39,41 @@ public final class NaiveInventoryImpl implements Inventory {
      * Instantiates a {@code NaiveInventoryImpl} with a weapon and an arbitrary quantity
      * of collectible items.
      * @param weapon the starting weapon to be equipped in this inventory. Can be {@code null}.
-     * @param collectibles the starting quantity of collectibles. Can be an empty {@link Map}.
-     * @throws NullPointerException if the given {@code collectibles} is null.
+     * @param items the starting quantity of collectibles. Can be an empty {@link Map}.
+     * @throws NullPointerException if the given {@code items} is null.
+     * @throws IllegalArgumentException if the given {@code items} contains objects
+     * which are not instance of {@link CollectibleType}.
      */
-    public NaiveInventoryImpl(@Nullable final Weapon weapon,
-            @Nonnull final Map<CollectibleType, Integer> collectibles) {
+    public NaiveInventoryImpl(@Nullable final Weapon weapon, @Nonnull final Map<Item, Integer> items) {
         this.weapon = Optional.ofNullable(weapon);
-        this.collectibles.putAll(Objects.requireNonNull(collectibles));
+        Objects.requireNonNull(items);
+        if (items.entrySet().stream()
+                .map(Entry::getKey)
+                .anyMatch(item -> !(item instanceof CollectibleType))) {
+            throw new IllegalArgumentException(ERROR_MSG);
+        }
+        collectibles.putAll(items);
     }
 
     /**
      * @throws NullPointerException if the given item is null.
+     * @throws IllegalArgumentException if the given item is not a
+     * {@link Weapon} or a {@link CollectibleType}.
      */
     @Override
-    public void add(@Nonnull final CollectibleType collectible, final int quantity) {
-        Objects.requireNonNull(collectible);
-        final int ownedQuantity = collectibles.getOrDefault(collectible, 0);
-        final int newQuantity = quantity + ownedQuantity;
-        collectibles.put(
-                collectible,
-                newQuantity > collectible.getMaxStacks() ? collectible.getMaxStacks() : newQuantity);
-    }
-
-    @Override
-    public void addWeapon(@Nonnull final Weapon weapon) {
-        this.weapon = Optional.of(weapon);
+    public void add(@Nonnull final Item item, final int quantity) {
+        Objects.requireNonNull(item);
+        if (item instanceof Weapon) {
+            weapon = Optional.of((Weapon) item);
+        } else if (item instanceof CollectibleType) {
+            final int ownedQuantity = collectibles.getOrDefault(item, 0);
+            final int newQuantity = quantity + ownedQuantity;
+            collectibles.put(
+                    item,
+                    newQuantity > item.getMaxStacks() ? item.getMaxStacks() : newQuantity);
+        } else {
+            throw new IllegalArgumentException(ERROR_MSG);
+        }
     }
 
     /**

@@ -148,7 +148,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
                  * If the player already owns the same kind of weapon, ignore it.
                  */
                 if (this.getInventory().getQuantityOf(w) != 1) {
-                    this.getInventory().addWeapon(w);
+                    this.getInventory().add(w, 1);
                     weaponsOnMap.remove(pos);
                     this.publish(new WeaponPickUpEvent(this, w.getWeaponType(), pos));
                 }
