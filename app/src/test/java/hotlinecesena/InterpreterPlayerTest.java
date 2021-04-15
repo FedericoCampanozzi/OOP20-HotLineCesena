@@ -15,6 +15,7 @@ import static org.hamcrest.Matchers.in;
 import static org.hamcrest.Matchers.is;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
@@ -54,8 +55,8 @@ class InterpreterPlayerTest {
 
     private static final Point2D SPRITE_POS = Point2D.ZERO;
     private static final int ANGLE = 270;
-    private static final int WIDTH = 100;
-    private static final int HEIGHT = 300;
+    private static final int WIDTH = 1;
+    private static final int HEIGHT = 1;
     private static final double SPEED = 1;
     private static final double MAX_HP = 100;
 
@@ -77,7 +78,8 @@ class InterpreterPlayerTest {
 
     @Start
     public void start(final Stage stage) {
-        player = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of());
+        player = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of(),
+                List.of(), List.of(), Map.of(), Map.of());
         robot = new FxRobot();
         testScene = new Scene(new Pane(), S_WIDTH, S_HEIGHT);
         testScene.setFill(Color.BLACK);
