@@ -5,25 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 import javafx.util.Pair;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.actors.enemy.EnemyType;
 import java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
 public class MissionController {
 	
 	private final Map<String, Pair<Supplier<Boolean>,Boolean>> quests = new HashMap<>();
-	
-	public MissionController() {
-		this.addQuest("uccidi 4 nemici comuni", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().stream()
-                .filter(itm -> itm.getEnemyType().equals(EnemyType.IDLE))
-                .collect(toSet()).size() == 4);
-		this.addQuest("uccidi 3 boss", () -> JSONDataAccessLayer.getInstance().getEnemy().getEnemies().stream()
-                .filter(itm -> itm.getEnemyType().equals(EnemyType.BOSS))
-                .collect(toSet()).size() == 3);
-		this.addQuest("uccidi 3 nemici in generale", () -> JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount() == 3);
-		this.addQuest("uccidi tutti i nemici", () -> JSONDataAccessLayer.getInstance().getEnemy().getDeathEnemyCount() == JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size());
-	}
 	
 	public void update(double d) {
         for(Entry<String, Pair<Supplier<Boolean>,Boolean>> m : this.quests.entrySet()){
