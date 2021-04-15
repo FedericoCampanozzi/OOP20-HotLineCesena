@@ -1,5 +1,6 @@
 package hotlinecesena.model.entities.actors.player;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,6 +15,7 @@ import hotlinecesena.model.dataccesslayer.datastructure.DataPhysicsCollision.Obs
 import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.entities.actors.Status;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.model.entities.items.Weapon;
@@ -34,6 +36,10 @@ public final class PlayerImpl extends AbstractActor implements Player {
     private static final double ITEM_USAGE_RADIUS = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
+    private final Collection<Obstacle> obstacles;
+    private final Collection<Enemy> enemies;
+    private final Map<Point2D, ItemsType> itemsOnMap;
+    private final Map<Point2D, Weapon> weaponsOnMap;
 
     /**
      * Instantiates a new {@code Player}.
@@ -45,13 +51,25 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * @param maxHealth maximum health points.
      * @param inventory the {@link Inventory} used by this actor to access owned items and weapons.
      * @param noise a {@link Map} associating noise levels to certain or all {@link ActorStatus}es.
-     * @throws NullPointerException if the given {@code position}, {@code inventory} or {@code noise} are null.
+     * @param obstacles obstacles on the game map.
+     * @param enemies enemies on the game map.
+     * @param items items on the game map.
+     * @param weapons weapons on the game map.
+     * @throws NullPointerException if the given {@code position}, {@code inventory},
+     * {@code noise}, {@code obstacles}, {@code enemies}, {@code items} or {@code weapons}
+     * are null.
      */
     public PlayerImpl(@Nonnull final Point2D position, final double angle, final double width,
             final double height, final double speed, final double maxHealth,
-            @Nonnull final Inventory inventory, @Nonnull final Map<ActorStatus, Double> noise) {
+            @Nonnull final Inventory inventory, @Nonnull final Map<ActorStatus, Double> noise,
+            @Nonnull final Collection<Obstacle> obstacles, @Nonnull final Collection<Enemy> enemies,
+            @Nonnull final Map<Point2D, ItemsType> items, final Map<Point2D, Weapon> weapons) {
         super(position, angle, width, height, speed, maxHealth, inventory);
         noiseLevels = Objects.requireNonNull(noise);
+        this.obstacles = Objects.requireNonNull(obstacles);
+        this.enemies = Objects.requireNonNull(enemies);
+        itemsOnMap = Objects.requireNonNull(items);
+        weaponsOnMap = Objects.requireNonNull(weapons);
     }
 
     /**
@@ -63,12 +81,10 @@ public final class PlayerImpl extends AbstractActor implements Player {
         if (this.isAlive()) {
             final Point2D oldPos = this.getPosition();
             final Point2D newPos = oldPos.add(direction.multiply(this.getSpeed()));
-            final Stream<Enemy> enemies = this.getGameMaster().getEnemy().getEnemies()
+            final Stream<Enemy> enemyStream = enemies
                     .stream()
                     .filter(e -> e.getActorStatus() != ActorStatus.DEAD);
-            final Stream<Obstacle> obstacles = this.getGameMaster().getPhysics().getObstacles().stream();
-
-            if (!(this.hasCollided(newPos, enemies) || this.hasCollided(newPos, obstacles))) {
+            if (!(this.hasCollided(newPos, enemyStream) || this.hasCollided(newPos, obstacles.stream()))) {
                 this.setPosition(newPos);
                 this.publish(new MovementEvent(this, newPos));
                 this.setActorStatus(ActorStatus.MOVING);
@@ -88,7 +104,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
 
     @Override
     public double getNoiseRadius() {
-        final ActorStatus status = this.getActorStatus();
+        final Status status = this.getActorStatus();
         return status == ActorStatus.ATTACKING ? this.getInventory().getWeapon().get().getNoise()
                 : noiseLevels.getOrDefault(status, DEFAULT_NOISE_LEVEL);
     }
@@ -103,7 +119,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * Uses nearby items, if there are any.
      */
     private void useItem() {
-        final Map<Point2D, ItemsType> itemsOnMap = this.getGameMaster().getDataItems().getItems();
         final Set<Point2D> toBeRemoved = new HashSet<>();
         itemsOnMap.forEach((itemPos, item) -> {
             if (MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
@@ -121,7 +136,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
      */
     private void pickUpWeapon() {
         if (!this.getInventory().isReloading()) {
-            final Map<Point2D, Weapon> weaponsOnMap = this.getGameMaster().getWeapons().getWeapons();
             final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
                     .stream()
                     .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
@@ -134,7 +148,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
                  * If the player already owns the same kind of weapon, ignore it.
                  */
                 if (this.getInventory().getQuantityOf(w) != 1) {
-                    this.getInventory().add(w, 1);
+                    this.getInventory().addWeapon(w);
                     weaponsOnMap.remove(pos);
                     this.publish(new WeaponPickUpEvent(this, w.getWeaponType(), pos));
                 }
