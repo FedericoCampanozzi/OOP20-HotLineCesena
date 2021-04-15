@@ -12,12 +12,19 @@ public class DataPlayer  extends AbstractData {
 
 	private Player ply;
 	
-	public DataPlayer(DataWorldMap world){
+	public DataPlayer(DataWorldMap world, DataEnemy enemy, DataPhysicsCollision physics, DataItems item, DataWeapons weapons) {
 		Pair<Integer,Integer> pos = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.PLAYER))
 				.map((itm)-> itm.getKey())
 				.collect(toList()).get(0);
-		ply = new PlayerFactoryImpl().createPlayer(Utilities.convertPairToPoint2D(pos),0);
+		ply = new PlayerFactoryImpl().createPlayer(
+				Utilities.convertPairToPoint2D(pos),
+				0,
+				physics.getObstacles(),
+				enemy.getEnemies(),
+				item.getItems(),
+				weapons.getWeapons()
+				);
 	}
 
 	public Player getPly() {

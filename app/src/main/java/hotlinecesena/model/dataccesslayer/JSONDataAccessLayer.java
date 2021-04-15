@@ -90,12 +90,12 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 			this.languages = mapper.readValue(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "languages.json"), DataJSONLanguages.class);
 			this.world = new DataWorldMap(this.settings);
 			this.guiPath = new DataGUIPath();
-			this.player = new DataPlayer(this.world);
 			this.enemy = new DataEnemy(this.world);
 			this.items = new DataItems(this.world);
 			this.bullets = new DataBullet();
 			this.physics = new DataPhysicsCollision(this.world, this.settings);
 			this.weapons = new DataWeapons(this.world);
+			this.player = new DataPlayer(this.world, this.enemy, this.physics, this.items, this.weapons);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
