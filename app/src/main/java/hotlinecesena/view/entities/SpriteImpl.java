@@ -3,6 +3,8 @@ package hotlinecesena.view.entities;
 import java.util.Objects;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import javafx.geometry.Point2D;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -24,9 +26,10 @@ public final class SpriteImpl implements Sprite {
     /**
      * Instantiates a new {@code SpriteImpl} with a given {@link ImageView}.
      * @param view the {@code ImageView} to be used.
+     * @throws NullPointerException if the given ImageView is null.
      */
-    public SpriteImpl(final ImageView view) {
-        imageView = view;
+    public SpriteImpl(@Nonnull final ImageView view) {
+        imageView = Objects.requireNonNull(view);
         imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
         this.findPreexistingTranslate(view).ifPresentOrElse(t -> trans = t, () -> trans = new Translate());
         this.findPreexistingRotate(view).ifPresentOrElse(r -> rotate = r, () -> rotate = new Rotate());
@@ -36,8 +39,6 @@ public final class SpriteImpl implements Sprite {
     /**
      * If the given ImageView already possesses a {@link Translate}, use that
      * instead of creating a new one.
-     * @param view
-     * @return
      */
     private Optional<Translate> findPreexistingTranslate(final ImageView view) {
         return view.getTransforms()
@@ -50,8 +51,6 @@ public final class SpriteImpl implements Sprite {
     /**
      * If the given ImageView already possesses a {@link Rotate}, use that
      * instead of creating a new one.
-     * @param view
-     * @return
      */
     private Optional<Rotate> findPreexistingRotate(final ImageView view) {
         return view.getTransforms()
@@ -65,7 +64,7 @@ public final class SpriteImpl implements Sprite {
      * @throws NullPointerException if the given position is null.
      */
     @Override
-    public void updatePosition(final Point2D entityPos) {
+    public void updatePosition(@Nonnull final Point2D entityPos) {
         Objects.requireNonNull(entityPos);
         rotate.setPivotX(entityPos.getX() / 2 + imageOffset.getX());
         rotate.setPivotY(entityPos.getY() / 2 + imageOffset.getY());
