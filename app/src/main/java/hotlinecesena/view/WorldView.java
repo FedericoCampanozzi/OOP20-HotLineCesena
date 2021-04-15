@@ -204,13 +204,13 @@ public class WorldView implements Subscriber {
 	}
 	
 	@Subscribe
-	private void onItemPickUP(final ItemPickUpEvent<Player> e) {
+	private void onItemPickUP(final ItemPickUpEvent e) {
 	    this.getItemsPos().get(new Pair<>((int) e.getItemPosition().getX(), (int) e.getItemPosition().getY()))
 	    .setImage(this.proxyImage.getImage(SceneType.GAME, ImageType.BLANK));
 	}
 	
 	@Subscribe
-	private void onWeaponPickUP(final WeaponPickUpEvent<Player> e) {
+	private void onWeaponPickUP(final WeaponPickUpEvent e) {
 	    this.getItemsPos().get(new Pair<>((int) e.getItemPosition().getX(), (int) e.getItemPosition().getY()))
             .setImage(this.proxyImage.getImage(SceneType.GAME, ImageType.BLANK)); 
 	}
