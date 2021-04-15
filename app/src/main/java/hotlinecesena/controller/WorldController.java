@@ -10,13 +10,15 @@ import hotlinecesena.controller.entities.player.PlayerController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.menu.RankingController;
+import hotlinecesena.controller.mission.MissionController;
+import hotlinecesena.controller.mission.MissionFactory;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
 import hotlinecesena.utilities.SceneSwapper;
-import hotlinecesena.view.MiniMapView;
+import hotlinecesena.controller.HUD.MiniMapController;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;
@@ -43,7 +45,7 @@ public class WorldController{
     private final AudioControllerImpl audioControllerImpl;
     private final SceneSwapper sceneSwapper = new SceneSwapper();
     private final Score score;
-    private final MiniMapView miniMap = new MiniMapView();
+    private final MiniMapController miniMap = new MiniMapController();
     
     public WorldController(final Stage primaryStage, final AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;

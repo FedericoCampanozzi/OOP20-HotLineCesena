@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Consumer;
 
-import hotlinecesena.controller.MissionController;
+import hotlinecesena.controller.mission.MissionController;
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
