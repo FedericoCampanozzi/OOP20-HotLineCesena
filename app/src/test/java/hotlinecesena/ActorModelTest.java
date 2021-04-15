@@ -77,12 +77,8 @@ class ActorModelTest {
 
     @Test
     void actorReload() throws InterruptedException {
-        assertThat(actor.getInventory().getWeapon(), not(Optional.empty()));
         final Weapon w = actor.getInventory().getWeapon().get();
         final double reloadTime = w.getReloadTime();
-        assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
-        assertFalse(actor.getInventory().isReloading());
-        Thread.sleep((long) w.getRateOfFire());
         actor.attack();
         Thread.sleep((long) w.getRateOfFire());
         actor.attack();
@@ -94,15 +90,17 @@ class ActorModelTest {
 
     @Test
     void actorCannotInitiateReloadingWhileAlreadyReloading() throws InterruptedException {
-        final double reloadTime = actor.getInventory().getWeapon().get().getReloadTime();
-        Thread.sleep((long) actor.getInventory().getWeapon().get().getRateOfFire());
+        final Weapon w = actor.getInventory().getWeapon().get();
+        final double reloadTime = w.getReloadTime();
+        actor.attack();
+        Thread.sleep((long) w.getRateOfFire());
         actor.attack();
         actor.reload();
         actor.getInventory().update(reloadTime / 2.0);
         assertTrue(actor.getInventory().isReloading()); //Still reloading
         actor.reload();
         actor.getInventory().update(reloadTime / 2.0);
-        assertFalse(actor.getInventory().isReloading());
+        assertFalse(actor.getInventory().isReloading()); //Reload timer should not reset
     }
 
     @Test
