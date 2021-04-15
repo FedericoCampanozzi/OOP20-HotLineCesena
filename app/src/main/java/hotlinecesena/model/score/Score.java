@@ -19,7 +19,7 @@ public interface Score {
 
     /**
      * Returns the total score achieved at the end of the
-     * current game.
+     * current game as sum of all partial scores.
      * @return the total score achieved at the end of the
      * current game.
      */

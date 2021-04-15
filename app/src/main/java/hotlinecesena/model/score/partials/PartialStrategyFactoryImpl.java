@@ -2,6 +2,9 @@ package hotlinecesena.model.score.partials;
 
 import java.util.Set;
 
+/**
+ * {@link PartialStrategyFactory} implementation.
+ */
 public final class PartialStrategyFactoryImpl implements PartialStrategyFactory {
 
     private PartialStrategy createCunning() {
