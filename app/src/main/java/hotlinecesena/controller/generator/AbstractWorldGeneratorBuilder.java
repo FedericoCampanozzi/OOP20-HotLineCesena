@@ -92,7 +92,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		for (int rIndex = 0; rIndex < this.rooms.size(); rIndex++) {
 			if (rIndex != this.pRoomIndex) {
 				Room r = this.rooms.get(rIndex);
-				int roomObj = Utilities.RandomBetween(rnd, minInRoom, maxInRoom);
+				int roomObj = Utilities.randomBetween(rnd, minInRoom, maxInRoom);
 				final List<Pair<Integer, Integer>> positions = r.getMap().entrySet().stream().map(itm -> itm.getKey())
 						.collect(toList());
 				for (int i = 0; i < roomObj; i++) {

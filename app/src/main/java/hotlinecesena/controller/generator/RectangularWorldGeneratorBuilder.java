@@ -19,7 +19,7 @@ public class RectangularWorldGeneratorBuilder extends AbstractWorldGeneratorBuil
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
+		int nRooms = Utilities.randomBetween(rnd, nRoomsMin, nRoomsMax);
 		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 

@@ -3,31 +3,38 @@ package hotlinecesena.model.dataccesslayer;
 import java.awt.Color;
 
 public enum SymbolsType {
-	VOID('_', Color.BLACK),
-	DOOR('D', Color.CYAN),
-	WALKABLE('.', Color.WHITE),
-	ENEMY('E', Color.RED),
-	PLAYER('P', Color.GREEN),
-	OBSTACOLES('O', Color.ORANGE),
-	WEAPONS('*', Color.BLUE),
-	WALL('W', Color.GRAY),
-	ITEM('I', Color.YELLOW),
-	KEY_ITEM('K', Color.PINK),
-	REMOVE('-', new Color(102, 153, 255));
+	
+	VOID		('_', new Color(  0,   0,   0), new Color(102, 255, 102)),
+	DOOR		('D', new Color(204,  51,   0), new Color(  0,   0,   0)),
+	WALKABLE	('.', new Color(255, 255, 255), new Color(153, 102,  51)),
+	ENEMY		('E', new Color(128,   0,   0), new Color(  0,   0,   0)),
+	PLAYER		('P', new Color(153,   0,  77), new Color(102, 153, 255)),
+	OBSTACOLES	('O', new Color( 92,  92, 061), new Color(  0,   0,   0)),
+	WEAPONS		('*', new Color(179, 179,   0), new Color(  0,   0,   0)),
+	WALL		('W', new Color(128,  64,   0), new Color(102,  68,   0)),
+	ITEM		('I', new Color(102,   0, 102), new Color(  0,   0,   0)),
+	KEY_ITEM	('K', new Color(153,  51, 153), new Color(  0,   0,   0)),
+	REMOVE		('-', new Color(153, 255, 204), new Color(  0,   0,   0));
 	
 	private final char c;
-	private final Color color;
+	private final Color testColor;
+	private final Color miniMapColor;
 	
-	private SymbolsType(char c, Color color) {
+	private SymbolsType(char c, Color t, Color m) {
 		this.c = c;
-		this.color = color;
+		this.testColor = t;
+		this.miniMapColor = m;
 	}
 	
 	public char getDecotification() {
 		return this.c;
 	}
 	
-	public Color getColor() {
-		return this.color;
+	public Color getTestColor() {
+		return this.testColor;
+	}
+	
+	public Color getMiniMapColor() {
+		return this.miniMapColor;
 	}
 }

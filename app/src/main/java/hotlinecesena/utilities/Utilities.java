@@ -65,11 +65,45 @@ public class Utilities {
 	/**
 	 * Convert integer positions in a spatial point
 	 * @param p the integer position
-	 * @param tileSize the size of tile
 	 * @return the point
 	 */
 	public static Point2D convertPairToPoint2D(Pair<Integer,Integer> p) {
 		return new Point2D((double)p.getKey(), (double)p.getValue());
+	}
+	
+	/**
+	 * Convert spatial point in a integer position 
+	 * @param p spatial point
+	 * @return the integer point
+	 */
+	public static Pair<Integer,Integer> convertPoint2DToPair(Point2D p) {
+		return new Pair<Integer,Integer>((int)p.getX(), (int)p.getY());
+	}
+	
+	/**
+	 * Convert color from java.awt.Color to javafx.scene.paint.Color
+	 * @param color
+	 * @return
+	 */
+	public static javafx.scene.paint.Color convertColor(java.awt.Color color) {
+		return new javafx.scene.paint.Color(
+				color.getRed() / 255.0d,
+				color.getGreen() / 255.0d,
+				color.getBlue() / 255.0d,
+				color.getAlpha() / 255.0d  );
+	}
+	
+	/**
+	 * Convert seconds to string time
+	 * @param format the output format
+	 * @param seconds time
+	 * @return the format string
+	 */
+	public static String convertSecondsToTimeString(long seconds, String format) {
+		long s = (seconds / 1000) % 60;
+		long m = (seconds / (1000 * 60)) % 60;
+		long h = (seconds / (1000 * 60 * 60)) % 24;
+		return String.format(format, h, m, s);
 	}
 	
 	/**
@@ -79,7 +113,7 @@ public class Utilities {
 	 * @param upperBound the maximums value possible
 	 * @return
 	 */
-	public static int RandomBetween(Random rnd, int lowerBound, int upperBound) {
+	public static int randomBetween(Random rnd, int lowerBound, int upperBound) {
 		if(upperBound  < lowerBound) {
 			throw new IllegalArgumentException();
 		}
