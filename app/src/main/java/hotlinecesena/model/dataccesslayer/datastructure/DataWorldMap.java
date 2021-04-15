@@ -17,7 +17,8 @@ public class DataWorldMap extends AbstractData {
 
 	private Map<Pair<Integer, Integer>, SymbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
-	
+	private boolean keyObj;
+
 	public DataWorldMap(DataJSONSettings settings) throws IOException {
 		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
 				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
@@ -28,6 +29,7 @@ public class DataWorldMap extends AbstractData {
 				))
 				.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 				.generatePlayer()
+				.generateKeyObject()
 				.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
 				.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
 				.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
@@ -40,7 +42,7 @@ public class DataWorldMap extends AbstractData {
 		this.xMax = sgwb.getMaxX();
 		this.yMin = sgwb.getMinY();
 		this.yMax = sgwb.getMaxY();
-		
+		this.keyObj = sgwb.isKeyObjectPresent();
 		write();
 	}
 	
@@ -53,10 +55,9 @@ public class DataWorldMap extends AbstractData {
 			for (int j = this.getMinY(); j <= this.getMaxY(); j++) {
 				debug += this.getWorldMap().get(new Pair<>(i, j)).getDecotification();
 			}
-
 			debug += "\n";
 		}
-
+		
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
@@ -78,5 +79,9 @@ public class DataWorldMap extends AbstractData {
 
 	public int getMaxY() {
 		return this.yMax;
+	}
+	
+	public boolean isKeyObjectPresent() {
+		return this.keyObj;
 	}
 }

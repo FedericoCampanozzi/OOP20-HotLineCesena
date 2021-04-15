@@ -6,7 +6,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.actors.ActorStatus;
-import hotlinecesena.model.entities.items.AmmunitionType;
+import hotlinecesena.model.entities.items.CollectibleType;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.inventory.Inventory;
@@ -25,8 +25,8 @@ public final class PlayerFactoryImpl implements PlayerFactory {
     private static final double SPEED = 5;
     private static final double MAX_HEALTH = 100;
     private final Inventory inv = new NaiveInventoryImpl(
-            new WeaponImpl(WeaponType.RIFLE),
-            Map.of(AmmunitionType.RIFLE_AMMO, 90));
+            new WeaponImpl(WeaponType.PISTOL),
+            Map.of(CollectibleType.PISTOL_AMMO, 30));
     private final Map<ActorStatus, Double> noise = Map.of(
             ActorStatus.IDLE, 0.0,
             ActorStatus.MOVING, 8.0,

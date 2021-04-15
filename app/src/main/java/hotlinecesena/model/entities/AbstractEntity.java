@@ -80,7 +80,7 @@ public abstract class AbstractEntity implements Entity {
      * @param event the event to be published
      * @throws NullPointerException if the given event is null.
      */
-    protected final void publish(@Nonnull final Event<? extends Entity> event) {
+    protected final void publish(@Nonnull final Event event) {
         bus.post(Objects.requireNonNull(event));
     }
 

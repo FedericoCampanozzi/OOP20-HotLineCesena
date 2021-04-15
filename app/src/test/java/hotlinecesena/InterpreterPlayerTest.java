@@ -81,11 +81,11 @@ class InterpreterPlayerTest {
         robot = new FxRobot();
         testScene = new Scene(new Pane(), S_WIDTH, S_HEIGHT);
         testScene.setFill(Color.BLACK);
-        listener = new InputListenerFX();
-        listener.addEventHandlers(testScene);
         interpreter = new InputInterpreterImpl(bindings);
         stage.setScene(testScene);
         stage.requestFocus();
+        listener = new InputListenerFX();
+        listener.addEventHandlers(testScene);
         stage.show();
     }
 

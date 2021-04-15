@@ -3,7 +3,6 @@ package hotlinecesena.controller;
 import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.ItemPickUpEvent;
@@ -42,7 +41,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Entity} that has triggered this event.
      */
     @Subscribe
-    private void onMoveEvent(final MovementEvent<Actor> e) {
+    private void onMoveEvent(final MovementEvent e) {
         this.audio.playAudioClip(AudioType.WALK, e.getSourceInterfaces());
     }
 
@@ -52,7 +51,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Entity} that has triggered this event.
      */
     @Subscribe
-    private void onDeathEvent(final DeathEvent<Actor> e) {
+    private void onDeathEvent(final DeathEvent e) {
         this.audio.playAudioClip(AudioType.DEATH, e.getSourceInterfaces());
     }
 
@@ -63,7 +62,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Entity} that has triggered this event.
      */
     @Subscribe
-    private void onAttackEvent(final AttackPerformedEvent<Actor> e) {
+    private void onAttackEvent(final AttackPerformedEvent e) {
         this.audio = new AudioControllerImpl();
         switch (e.getItemType()) {
             case PISTOL:
@@ -87,7 +86,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Entity} that has triggered this event.
      */
     @Subscribe
-    private void onReloadEvent(final ReloadEvent<Actor> e) {
+    private void onReloadEvent(final ReloadEvent e) {
         switch (e.getItemType()) {
             case PISTOL:
                 this.audio.playAudioClip(AudioType.RELOAD_PISTOL, e.getSourceInterfaces());
@@ -109,7 +108,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Actor} that has triggered this event.
      */
     @Subscribe
-    private void onWeaponPickUpEvent(final WeaponPickUpEvent<Actor> e) {
+    private void onWeaponPickUpEvent(final WeaponPickUpEvent e) {
         this.audio.playAudioClip(AudioType.PICKUP_WEAPON, e.getSourceInterfaces());
     }
 
@@ -120,7 +119,7 @@ public class AudioEventController implements Subscriber {
      * @param e the {@code Actor} that has triggered this event.
      */
     @Subscribe
-    private void onItemPickUpEvent(final ItemPickUpEvent<Actor> e) {
+    private void onItemPickUpEvent(final ItemPickUpEvent e) {
         switch (e.getItemType()) {
             case AMMO_BAG:
                 this.audio.playAudioClip(AudioType.PICKUP_ITEM, e.getSourceInterfaces());

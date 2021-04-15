@@ -93,7 +93,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
      * Update the sprite's position when the player moves.
      */
     @Subscribe
-    private void handleMovementEvent(final MovementEvent<Player> e) {
+    private void handleMovementEvent(final MovementEvent e) {
         sprite.updatePosition(e.getPosition());
     }
 
@@ -101,7 +101,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
      * Update the sprite's angle when the player rotates.
      */
     @Subscribe
-    private void handleRotationEvent(final RotationEvent<Player> e) {
+    private void handleRotationEvent(final RotationEvent e) {
         sprite.updateRotation(e.getNewAngle());
     }
 
@@ -110,7 +110,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
      * a new weapon.
      */
     @Subscribe
-    private void handleWeaponPickUpEvent(final WeaponPickUpEvent<Player> e) {
+    private void handleWeaponPickUpEvent(final WeaponPickUpEvent e) {
         sprite.updateImage(this.getImageByWeapon(e.getItemType()));
     }
 
@@ -118,7 +118,7 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
      * Update the sprite's image on death.
      */
     @Subscribe
-    private void handleDeathEvent(final DeathEvent<Player> e) {
+    private void handleDeathEvent(final DeathEvent e) {
         sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
         sprite.updateRotation(0);
     }

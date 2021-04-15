@@ -6,11 +6,13 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.Stage;
 import javafx.util.Pair;
 
 /**
@@ -40,17 +42,21 @@ public final class InputListenerFX implements InputListener {
     @Override
     public void addEventHandlers(@Nonnull final Scene scene) {
         Objects.requireNonNull(scene);
-        // Setting keyboard events
+
+        // Set keyboard handlers
         scene.setOnKeyReleased(this.getOnKeyReleasedHandler());
         scene.setOnKeyPressed(this.getOnKeyPressedHandler());
 
-        // Setting mouse button events
+        // Set mouse button handlers
         scene.setOnMouseReleased(this.getOnMouseReleasedHandler());
         scene.setOnMousePressed(this.getOnMousePressedHandler());
 
-        // Setting mouse movement events
+        // Set mouse movement handlers
         scene.setOnMouseMoved(this.captureMouseCoordinates());
         scene.setOnMouseDragged(this.captureMouseCoordinates());
+
+        // Add focus change listener to the stage
+        ((Stage) scene.getWindow()).focusedProperty().addListener(this.forgetAllInputs());
     }
 
     /**
@@ -59,17 +65,21 @@ public final class InputListenerFX implements InputListener {
     @Override
     public void removeEventHandlersFrom(@Nonnull final Scene scene) {
         Objects.requireNonNull(scene);
-        // Removing keyboard events
+
+        // Remove keyboard handlers
         scene.removeEventHandler(KeyEvent.KEY_RELEASED, this.getOnKeyReleasedHandler());
         scene.removeEventHandler(KeyEvent.KEY_PRESSED, this.getOnKeyPressedHandler());
 
-        // Removing mouse button events
+        // Remove mouse button handlers
         scene.removeEventHandler(MouseEvent.MOUSE_RELEASED, this.getOnMouseReleasedHandler());
         scene.removeEventHandler(MouseEvent.MOUSE_PRESSED, this.getOnMousePressedHandler());
 
-        // Removing mouse movement events
+        // Remove mouse movement handlers
         scene.removeEventHandler(MouseEvent.MOUSE_MOVED, this.captureMouseCoordinates());
         scene.removeEventHandler(MouseEvent.MOUSE_DRAGGED, this.captureMouseCoordinates());
+
+        // Remove focus change listener from the stage
+        ((Stage) scene.getWindow()).focusedProperty().removeListener(this.forgetAllInputs());
     }
 
     /**
@@ -105,6 +115,14 @@ public final class InputListenerFX implements InputListener {
      */
     private EventHandler<MouseEvent> captureMouseCoordinates() {
         return e -> currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
+    }
+
+    /**
+     * Makes this InputListener forget all registered inputs if
+     * the {@link Stage} loses focus.
+     */
+    private ChangeListener<? super Boolean> forgetAllInputs() {
+        return (obs, oldV, newV) -> inputs.clear();
     }
 
     private <T extends Enum<T>> void captureInput(final T code) {

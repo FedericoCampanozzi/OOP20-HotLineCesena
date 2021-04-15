@@ -26,7 +26,7 @@ public interface WorldGeneratorBuilder {
 	
 	WorldGeneratorBuilder generateWeapons(int minRoom, int maxRoom);
 
-	public WorldGeneratorBuilder finishes();
+	WorldGeneratorBuilder finishes();
 
 	WorldGeneratorBuilder build();
 
@@ -39,4 +39,6 @@ public interface WorldGeneratorBuilder {
 	int getMinY();
 
 	int getMaxY();
+	
+	boolean isKeyObjectPresent();
 }

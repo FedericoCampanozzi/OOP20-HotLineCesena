@@ -61,7 +61,7 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
             this.setPosition(next);
             this.enemyAI.setEnemyPos(next);
             if (!current.equals(next)) {
-                this.publish(new MovementEvent<>(this, next));
+                this.publish(new MovementEvent(this, next));
             }
         }
     }

@@ -64,7 +64,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
                     w.usage().accept(this);
                     if (w.getCurrentAmmo() < previousAmmo) {
                         status = ActorStatus.ATTACKING;
-                        this.publish(new AttackPerformedEvent<>(this, w.getWeaponType()));
+                        this.publish(new AttackPerformedEvent(this, w.getWeaponType()));
                     }
                 }
             });
@@ -76,7 +76,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         if (this.isAlive() && !inventory.isReloading()) {
             inventory.reloadWeapon();
             if (inventory.isReloading()) {
-                this.publish(new ReloadEvent<>(this, inventory.getWeapon().get().getWeaponType()));
+                this.publish(new ReloadEvent(this, inventory.getWeapon().get().getWeaponType()));
             }
         }
     }
@@ -91,11 +91,11 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
         if (this.isAlive()) {
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
-            this.publish(new DamageReceivedEvent<>(this, damage));
+            this.publish(new DamageReceivedEvent(this, damage));
         }
         if (currentHealth == 0) {
             status = ActorStatus.DEAD;
-            this.publish(new DeathEvent<>(this));
+            this.publish(new DeathEvent(this));
         }
     }
 

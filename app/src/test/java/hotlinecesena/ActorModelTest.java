@@ -20,7 +20,7 @@ import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.Actor;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.DirectionList;
-import hotlinecesena.model.entities.items.AmmunitionType;
+import hotlinecesena.model.entities.items.CollectibleType;
 import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
@@ -44,7 +44,7 @@ class ActorModelTest {
     private void setup() {
         final Inventory inv = new NaiveInventoryImpl(
                 new WeaponImpl(WeaponType.PISTOL),
-                Map.of(AmmunitionType.PISTOL_AMMO, 30));
+                Map.of(CollectibleType.PISTOL_AMMO, 30));
         actor = new TestActor(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, inv);
     }
 
@@ -83,10 +83,11 @@ class ActorModelTest {
         final double reloadTime = w.getReloadTime();
         assertThat(actor.getInventory().getQuantityOf(w.getCompatibleAmmunition()), not(0));
         assertFalse(actor.getInventory().isReloading());
-        Thread.sleep((long) actor.getInventory().getWeapon().get().getReloadTime());
+        Thread.sleep((long) w.getRateOfFire());
+        actor.attack();
+        Thread.sleep((long) w.getRateOfFire());
         actor.attack();
         actor.reload();
-        actor.getInventory().update(reloadTime / 2.0);
         assertTrue(actor.getInventory().isReloading());
         actor.getInventory().update(reloadTime);
         assertFalse(actor.getInventory().isReloading());
