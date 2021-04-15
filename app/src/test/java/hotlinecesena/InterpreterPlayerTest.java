@@ -17,54 +17,43 @@ import static org.hamcrest.Matchers.is;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.testfx.api.FxRobot;
-import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.util.WaitForAsyncUtils;
 
 import hotlinecesena.controller.input.InputInterpreter;
 import hotlinecesena.controller.input.InputInterpreterImpl;
+import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.inventory.NaiveInventoryImpl;
 import hotlinecesena.utilities.MathUtils;
-import hotlinecesena.view.input.InputListener;
-import hotlinecesena.view.input.InputListenerFX;
 import javafx.geometry.Point2D;
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.stage.Stage;
+import javafx.util.Pair;
 
-@ExtendWith(ApplicationExtension.class)
 @TestInstance(Lifecycle.PER_METHOD)
 class InterpreterPlayerTest {
-
-    private static final int S_WIDTH = 800;
-    private static final int S_HEIGHT = 600;
 
     private static final Point2D SPRITE_POS = Point2D.ZERO;
     private static final int ANGLE = 270;
     private static final int WIDTH = 1;
     private static final int HEIGHT = 1;
-    private static final double SPEED = 1;
-    private static final double MAX_HP = 100;
+    private static final double SPEED = 1.0;
+    private static final double MAX_HP = 100.0;
 
-    private static final double DELTA_TIME = 1;
+    private static final double SCENE_WIDTH = 800.0;
+    private static final double SCENE_HEIGHT = 600.0;
+
+    private static final double DELTA_TIME = 1.0;
     private Player player;
-    private FxRobot robot;
-    private Scene testScene;
-    private InputListener listener;
     private InputInterpreter interpreter;
     private final Map<Enum<?>, PlayerAction> bindings = Map.of(
             KeyCode.W,             MOVE_NORTH,
@@ -77,77 +66,62 @@ class InterpreterPlayerTest {
             );
 
     @Start
-    public void start(final Stage stage) {
+    private void setup() {
         player = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of(),
                 List.of(), List.of(), Map.of(), Map.of());
-        robot = new FxRobot();
-        testScene = new Scene(new Pane(), S_WIDTH, S_HEIGHT);
-        testScene.setFill(Color.BLACK);
         interpreter = new InputInterpreterImpl(bindings);
-        stage.setScene(testScene);
-        stage.requestFocus();
-        listener = new InputListenerFX();
-        listener.addEventHandlers(testScene);
-        stage.show();
     }
 
-    @AfterEach
-    void reset() throws Exception {
-        robot.release(KeyCode.W, KeyCode.S, KeyCode.D, KeyCode.A, KeyCode.R, KeyCode.E, KeyCode.J);
-        robot.release(MouseButton.PRIMARY, MouseButton.SECONDARY);
-        robot.moveTo(testScene);
-        WaitForAsyncUtils.waitForFxEvents();
+    @BeforeEach
+    void reset() {
+        this.setup();
     }
 
     @Test
     void deliverNothingWhenReceivingNoInputs() {
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(), Point2D.ZERO);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(commands, empty());
     }
 
     @Test
     void deliverNothingWhenReceivingUnboundInputs() {
-        robot.press(KeyCode.J);
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(KeyCode.J), Point2D.ZERO);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(commands, empty());
     }
 
     @Test
     void deliverAttack() {
-        robot.moveTo(testScene).press(MouseButton.PRIMARY); //It won't register without moveTo
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(MouseButton.PRIMARY), Point2D.ZERO);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(PlayerAction.ATTACK.getCommand().get(), is(in(commands)));
     }
 
     @Test
     void deliverUse() {
-        robot.moveTo(testScene).press(KeyCode.E);
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(KeyCode.E), Point2D.ZERO);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(PlayerAction.USE.getCommand().get(), is(in(commands)));
     }
 
     @Test
     void deliverMovement() {
-        robot.press(KeyCode.W);
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(KeyCode.W), Point2D.ZERO);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(commands, hasSize(1));
+        commands.forEach(c -> c.execute(player));
+        assertThat(player.getPosition(), is(DirectionList.NORTH.get().multiply(SPEED).multiply(DELTA_TIME)));
     }
 
     @Test
     void deliverRotation() {
-        final Point2D mouseCoords = new Point2D(testScene.getWidth() / 2, testScene.getHeight());
+        final Point2D mouseCoords = new Point2D(SCENE_WIDTH / 2, SCENE_HEIGHT);
         final double angle = MathUtils.mouseToDegrees(mouseCoords);
-        robot.moveBy(0, testScene.getHeight() / 2);
-        WaitForAsyncUtils.waitForFxEvents();
-        final Collection<Command> commands = interpreter.interpret(listener.deliverInputs(), SPRITE_POS, DELTA_TIME);
+        final Pair<Set<Enum<?>>, Point2D> inputs = new Pair<>(Set.of(), mouseCoords);
+        final Collection<Command> commands = interpreter.interpret(inputs, SPRITE_POS, DELTA_TIME);
         assertThat(commands, hasSize(1));
         commands.forEach(c -> c.execute(player));
-        assertThat(Math.floor(player.getAngle()), equalTo(Math.floor(angle)));
-        // Without truncating: player.getAngle() == 56.3; angle == 56.2 --> TEST FAILS
+        assertThat(player.getAngle(), is(equalTo(angle)));
     }
 }
