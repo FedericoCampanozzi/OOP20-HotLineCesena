@@ -1,4 +1,4 @@
-package hotlinecesena.view;
+package hotlinecesena.controller.HUD;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
@@ -10,14 +10,14 @@ import hotlinecesena.model.dataccesslayer.datastructure.DataJSONSettings;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 import hotlinecesena.utilities.Utilities;
 
-public class MiniMapView {
+public class MiniMapController {
 
 	private WritableImage writtableMiniMap;
 	private Pair<Integer, Integer> oldPlyPos;
 	private DataJSONSettings settings = JSONDataAccessLayer.getInstance().getSettings();
 	private DataWorldMap map = JSONDataAccessLayer.getInstance().getWorld();
 	
-	public MiniMapView() {
+	public MiniMapController() {
 		
 		int width =  settings.getPixelSize() * (map.getMaxX() - map.getMinX() + 1);
 		int height = settings.getPixelSize() * (map.getMaxY() - map.getMinY() + 1);

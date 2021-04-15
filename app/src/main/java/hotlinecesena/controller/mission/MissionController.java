@@ -1,4 +1,4 @@
-package hotlinecesena.controller;
+package hotlinecesena.controller.mission;
 
 import java.util.HashMap;
 import java.util.List;
