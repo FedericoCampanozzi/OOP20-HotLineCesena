@@ -3,6 +3,7 @@ package hotlinecesena.model.inventory;
 import java.util.Optional;
 
 import hotlinecesena.model.entities.actors.Actor;
+import hotlinecesena.model.entities.items.CollectibleType;
 import hotlinecesena.model.entities.items.Item;
 import hotlinecesena.model.entities.items.Weapon;
 
@@ -14,16 +15,22 @@ import hotlinecesena.model.entities.items.Weapon;
 public interface Inventory {
 
     /**
-     * Adds a given quantity of an {@link Item} to this inventory.
-     * @param item the {@code Item} to be added.
+     * Adds a given quantity of an {@link CollectibleType} to this inventory.
+     * @param collectible the {@code CollectibleType} to be added.
      * @param quantity quantity of the item to be added.
      */
-    void add(Item item, int quantity);
+    void add(CollectibleType collectible, int quantity);
+
+    /**
+     * Adds a {@link Weapon} to this inventory.
+     * @param weapon the {@code Weapon} to be added.
+     */
+    void addWeapon(Weapon weapon);
 
     /**
      * Returns the quantity of a given {@link Item} present in this inventory.
      * @param item the item to look for in the inventory
-     * @return the quantity of the given item, or {@code 0} if it's not present.
+     * @return the quantity of the given item that this inventory is holding.
      */
     int getQuantityOf(Item item);
 
@@ -39,8 +46,14 @@ public interface Inventory {
      */
     void reloadWeapon();
 
+    /**
+     * Makes the actor equip the next weapon.
+     */
     void switchToNextWeapon();
 
+    /**
+     * Makes the actor equip the previous weapon.
+     */
     void switchToPreviousWeapon();
 
     /**
