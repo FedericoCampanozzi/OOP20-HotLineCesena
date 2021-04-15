@@ -1,4 +1,4 @@
-package hotlinecesena.controller.input;
+package hotlinecesena.controller.entities.player;
 
 import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toUnmodifiableList;
@@ -37,14 +37,17 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * make use of the given input bindings.
      * @param bindings a Map which associates keyboard keys and/or
      * mouse buttons to {@link PlayerAction}s.
-     * @throws NullPointerException if {@code bindings} is null.
+     * @throws NullPointerException if the given {@code bindings} is null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, PlayerAction> bindings) {
         this.bindings = Objects.requireNonNull(bindings);
     }
 
     /**
-     * @throws NullPointerException if {@code inputs} or {@code spritePosition} are null.
+     * @implSpec {@code spritePosition} is used to prevent unwanted
+     * rotations when the cursor is too close to the player.
+     * @throws NullPointerException if the given {@code inputs} or
+     * {@code spritePosition} are null.
      */
     @Override
     public Collection<Command> interpret(@Nonnull final Pair<Set<Enum<?>>, Point2D> inputs,
@@ -81,8 +84,6 @@ public final class InputInterpreterImpl implements InputInterpreter {
 
     /**
      * Converts all bindings into PlayerActions.
-     * @param inputs
-     * @return
      */
     private Set<PlayerAction> convertBindings(final Set<Enum<?>> inputs) {
         return inputs.stream()
@@ -93,8 +94,6 @@ public final class InputInterpreterImpl implements InputInterpreter {
 
     /**
      * Computes the new movement direction while also normalizing it.
-     * @param actions
-     * @return
      */
     private Point2D processMovementDirection(final Set<PlayerAction> actions) {
         return actions.stream()
@@ -109,9 +108,6 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * Tweaks mouse coordinates depending on the player's sprite
      * position on screen.
      * Ignores mouse movement when too close to the sprite.
-     * @param mouseCoords
-     * @param spritePosition
-     * @return
      */
     private Point2D processMouseCoordinates(final Point2D mouseCoords, final Point2D spritePosition) {
         if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
@@ -123,8 +119,6 @@ public final class InputInterpreterImpl implements InputInterpreter {
 
     /**
      * Converts all remaining PlayerActions into Commands.
-     * @param actions
-     * @return
      */
     private List<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
         return actions.stream()

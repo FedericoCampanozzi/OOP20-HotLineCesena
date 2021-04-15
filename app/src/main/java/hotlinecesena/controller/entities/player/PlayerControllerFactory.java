@@ -11,11 +11,12 @@ import hotlinecesena.view.input.InputListener;
 public interface PlayerControllerFactory {
 
     /**
-     * Instantiates a new {@code PlayerController} with the given {@link Sprite}.
-     * @param sprite the player sprite.
+     * Instantiates a new {@code PlayerController} with the given {@link Sprite}
+     * and {@link InputListener}.
+     * @param sprite the player's sprite.
      * @param listener a reference to the {@link InputListener} used by the View.
      * @return a new {@code PlayerController} with the given {@code Sprite}
-     * and {@code WorldView}.
+     * and {@code InputListener}.
      */
     PlayerController createPlayerController(Sprite sprite, InputListener listener);
 }
