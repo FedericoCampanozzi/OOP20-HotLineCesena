@@ -10,7 +10,7 @@ public abstract class AbstractItemEvent<I extends Enum<I>> extends AbstractEvent
 
     private final I itemType;
 
-    public <A extends Actor> AbstractItemEvent(final A source, final I itemType) {
+    protected <A extends Actor> AbstractItemEvent(final A source, final I itemType) {
         super(source);
         this.itemType = itemType;
     }

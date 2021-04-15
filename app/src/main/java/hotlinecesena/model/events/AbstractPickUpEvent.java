@@ -11,7 +11,7 @@ public abstract class AbstractPickUpEvent<I extends Enum<I>> extends AbstractIte
 
     private final Point2D position;
 
-    public <A extends Actor> AbstractPickUpEvent(final A source, final I itemType, final Point2D position) {
+    protected <A extends Actor> AbstractPickUpEvent(final A source, final I itemType, final Point2D position) {
         super(source, itemType);
         this.position = position;
     }
