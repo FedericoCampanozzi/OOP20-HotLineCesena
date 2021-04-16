@@ -3,11 +3,10 @@ package hotlinecesena.controller.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-
+import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
-import javafx.util.Pair;
 
 public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
@@ -38,7 +37,6 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				}
 			}
 		}
-
 		return this;
 	}
 	

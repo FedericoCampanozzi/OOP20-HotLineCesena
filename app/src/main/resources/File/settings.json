@@ -24,7 +24,7 @@
   "monitorY" : 900,
   "isFullScreen" : true,
   "volume" : 22,
-  "niceseeds" : [ 5234389043669163582 ],
+  "niceseeds" : [ 5234389043669163582, -3528913006357085371, 167578696558874802, 2849459102795947992, 5574521906889131291, 2820546231051856975, 2307484305045907576],
   "isMusicActive" : true,
   "isEffectActive" : true,
   "obstaclesEdge" : 0.75,
@@ -33,5 +33,6 @@
   "defaultLanguage" : 0,
   "defaultWidth" : 800,
   "defaultHeight" : 600,
-  "guiPixelSize" : 15
+  "topHudHeight" : 400,
+  "botHudHeight" : 400
 }

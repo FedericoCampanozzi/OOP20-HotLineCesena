@@ -9,7 +9,6 @@ import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.enemy.EnemyFactoryImpl;
 import hotlinecesena.model.entities.actors.enemy.EnemyType;
@@ -44,11 +43,5 @@ public class DataEnemy extends AbstractData {
 	
 	public List<Enemy> getEnemies() {
 		return enemies;
-	}
-	
-	public int getDeathEnemyCount() {
-		return this.enemies.stream()
-                .filter(itm -> itm.getActorStatus().equals(ActorStatus.DEAD))
-                .collect(toSet()).size();
 	}
 }

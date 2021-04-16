@@ -75,11 +75,17 @@ public class DataJSONSettings  extends AbstractData  {
     private int defaultWidth;
     @JsonProperty("defaultHeight")
     private int defaultHeight;
-    @JsonProperty("guiPixelSize")
-    private int guiPixelSize;
+    @JsonProperty("topHudHeight")
+    private int topHudHeight;
+    @JsonProperty("botHudHeight")
+    private int botHudHeight;
     
-    public int getPixelSize() {
-		return guiPixelSize;
+    public int getBotHudHeight() {
+		return botHudHeight;
+	}
+    
+    public int getTopHudHeight() {
+		return topHudHeight;
 	}
 
     public int getDefaultWidth() {

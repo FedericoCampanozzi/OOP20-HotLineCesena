@@ -18,7 +18,7 @@ import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
 import hotlinecesena.utilities.SceneSwapper;
-import hotlinecesena.controller.HUD.MiniMapController;
+import hotlinecesena.view.MiniMapView;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;
@@ -27,7 +27,6 @@ import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
@@ -45,7 +44,7 @@ public class WorldController{
     private final AudioControllerImpl audioControllerImpl;
     private final SceneSwapper sceneSwapper = new SceneSwapper();
     private final Score score;
-    private final MiniMapController miniMap = new MiniMapController();
+    private final MiniMapView miniMapView;
     
     public WorldController(final Stage primaryStage, final AudioControllerImpl audioControllerImpl) throws IOException{
         this.primaryStage = primaryStage;
@@ -120,10 +119,8 @@ public class WorldController{
             });
         });
         
-        gameLoopController.addMethodToUpdate(d -> {
-        	//Create minimap GUI
-        	//ImageView img = miniMap.getImageVIewUpdated();
-        });
+        miniMapView = new MiniMapView(view.getBorderPane());
+        gameLoopController.addMethodToUpdate(miniMapView.getUpdateMethod());
         
         gameLoopController.loop();
     }

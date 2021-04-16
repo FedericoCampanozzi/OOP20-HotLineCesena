@@ -108,11 +108,12 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 		return singleton;
 	}
 	
-	public static void generateDebugSeed() {
+	public static void generateNewSeed() {
 		SEED = new Random().nextLong();
 	}
 	
 	public static void newInstance() {
+		generateNewSeed();
 		singleton = new JSONDataAccessLayer();
 	}
 }

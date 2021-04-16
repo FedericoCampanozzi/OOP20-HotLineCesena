@@ -1,6 +1,7 @@
 package hotlinecesena.controller.generator;
 
 import java.util.*;
+import java.util.function.BiConsumer;
 import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
@@ -8,7 +9,7 @@ import static java.util.stream.Collectors.*;
 
 public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBuilder {
 	
-	protected static final int MIN_ROOMS = 4;
+	protected static final int ACCETABLE_MAP = 5;
 	protected static final int MAX_POSSIBILITY = 10_000;
 	protected static final int MAP_PADDING = 10;
 	protected Random rnd = new Random();
@@ -51,7 +52,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	@Override
 	public WorldGeneratorBuilder generateKeyObject() {
 		haveInitMapAndBaseRoom();
-		if(this.rooms.size() <= MIN_ROOMS) {
+		if(this.rooms.size() <= ACCETABLE_MAP) {
 			return this;
 		}
 		this.objRoomIndex = Optional.of(rnd.nextInt(this.rooms.size()));
@@ -117,131 +118,81 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.yMin = yMin - MAP_PADDING;
 		
 		//fill null positions
-		for (int i = xMin; i <= xMax; i++) {
-			for (int j = yMin; j <= yMax; j++) {
-				if (!this.map.containsKey(new Pair<>(i, j))) {
-					this.map.put(new Pair<>(i, j), SymbolsType.VOID);
-				}
+		this.applyCorrection((i,j) -> {
+			if (!this.map.containsKey(new Pair<>(i, j))) {
+				this.map.put(new Pair<>(i, j), SymbolsType.VOID);
 			}
-		}
+		});
 		
-		//adjust DOOR and OBSTACOLES spawn
-		for (int i = xMin; i <= xMax; i++) {
-			for (int j = yMin; j <= yMax; j++) {
-
-				if (this.map.get(new Pair<>(i, j)) == SymbolsType.DOOR && checkAdjacent4(i, j, SymbolsType.VOID)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALL);
-				}
-
-				if (this.map.get(new Pair<>(i, j)) == SymbolsType.OBSTACOLES
-						&& checkAdjacent8(i, j, SymbolsType.WALL)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-				}
-				
-				// j+
-				if (get(i, j, SymbolsType.DOOR) && get(i, j + 1, SymbolsType.DOOR)
-						&& get(i, j + 2, SymbolsType.WALKABLE)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-					this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
-
-					if (get(i - 2, j, SymbolsType.WALL) && get(i - 2, j + 1, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i - 1, j + 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i - 1, j), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i - 1, j + 1), SymbolsType.REMOVE);
-					}
-
-					if (get(i + 2, j, SymbolsType.WALL) && get(i + 2, j + 1, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i + 1, j), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.REMOVE);
-					}
-				}
-
-				// i+
-				if (get(i, j, SymbolsType.DOOR) && get(i + 1, j, SymbolsType.DOOR)
-						&& get(i + 2, j, SymbolsType.WALKABLE)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-					this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
-
-					if (get(i, j - 2, SymbolsType.WALL) && get(i + 1, j - 2, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i, j - 1), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
-					}
-
-					if (get(i, j + 2, SymbolsType.WALL) && get(i + 1, j + 2, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i, j + 1), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i + 1, j + 1), SymbolsType.REMOVE);
-					}
-				}
-
-				// j-
-				if (get(i, j, SymbolsType.DOOR) && get(i, j - 1, SymbolsType.DOOR)
-						&& get(i, j - 2, SymbolsType.WALKABLE)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-					this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
-
-					if (get(i - 2, j, SymbolsType.WALL) && get(i - 2, j - 1, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i - 1, j), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.REMOVE);
-					}
-
-					if (get(i + 2, j, SymbolsType.WALL) && get(i + 2, j - 1, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i + 1, j), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i + 1, j), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
-					}
-				}
-
-				// i-
-				if (get(i, j, SymbolsType.DOOR) && get(i - 1, j, SymbolsType.DOOR)
-						&& get(i - 2, j, SymbolsType.WALKABLE)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
-					this.map.put(new Pair<>(i - 1, j), SymbolsType.WALKABLE);
-
-					if (get(i, j - 2, SymbolsType.WALL) && get(i - 1, j - 2, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i, j - 1), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i, j - 1), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i - 1, j - 1), SymbolsType.REMOVE);
-					}
-
-					if (get(i, j + 2, SymbolsType.WALL) && get(i - 1, j + 2, SymbolsType.WALL)) {
-						this.map.put(new Pair<>(i, j + 1), SymbolsType.WALKABLE);
-						this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.WALKABLE);
-					} else {
-						//this.map.put(new Pair<>(i, j + 1), SymbolsType.REMOVE);
-						//this.map.put(new Pair<>(i + 1, j - 1), SymbolsType.REMOVE);
-					}
-
-				}
+		//check door that have near a void space
+		this.applyCorrection((i, j) -> {
+			if (this.get(i, j, SymbolsType.DOOR) && checkAdjacent4(i, j, SymbolsType.VOID)) {
+				this.map.put(new Pair<>(i, j), SymbolsType.WALL);
 			}
-		}
+		});
+
+		//check walkable corridor
+		this.applyCorrection((i, j) -> {
+			if ((this.get(i, j, SymbolsType.ENEMY)
+					|| this.get(i, j, SymbolsType.OBSTACOLES)) && checkAdjacent8(i, j, SymbolsType.WALL)) {
+				this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
+			}
+		});
 		
-		for (int i = xMin; i <= xMax; i++) {
-			for (int j = yMin; j <= yMax; j++) {
-				if (get(i, j, SymbolsType.DOOR)) {
-					this.map.put(new Pair<>(i, j), SymbolsType.WALL);
-				}
+		//open corridor
+		this.applyCorrection((i, j) -> {
+			// j+
+			this.checkSemiAxis(i, j, 0, 1, -1, 0);
+			// j-
+			this.checkSemiAxis(i, j, 0, -1, 1, 0);
+			// i+
+			this.checkSemiAxis(i, j, 1, 0, 0, -1);
+			// i-
+			this.checkSemiAxis(i, j, -1, 0, 0, 1);
+		});
+		
+		
+		//Delete remaining doors
+		this.applyCorrection((i,j) -> {
+			if (get(i, j, SymbolsType.DOOR)) {
+				this.map.put(new Pair<>(i, j), SymbolsType.WALL);
 			}
-		}
+		});
+
+		//check walkable that have near a void space
+		this.applyCorrection((i, j) -> {
+			if (this.get(i, j, SymbolsType.WALKABLE) && checkAdjacent8(i, j, SymbolsType.VOID)) {
+				this.map.put(new Pair<>(i, j), SymbolsType.WALL);
+			}
+		});
 		
 		return this;
+	}
+	
+	protected void checkSemiAxis(int i, int j, int dI, int dJ, int dInvI, int dInvJ) {
+		if(get(i, j, SymbolsType.DOOR) && get(i + dI, j + dJ, SymbolsType.DOOR) && get(i + 2 * dI, j + 2 * dJ, SymbolsType.WALKABLE)) {
+			if (dI == 1 || dI == -1) {
+				this.map.put(new Pair<>(i, j + dInvJ), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i + dI + dInvI, j + dInvJ), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i, j - dInvJ), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i - dInvI + dI, j - dInvJ), SymbolsType.WALKABLE);
+			} else {
+				this.map.put(new Pair<>(i + dInvI, j), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i + dInvI, j + dInvJ + dJ), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i - dInvI, j), SymbolsType.WALKABLE);
+				this.map.put(new Pair<>(i - dInvI, j - dInvJ + dJ), SymbolsType.WALKABLE);
+			}
+			this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
+			this.map.put(new Pair<>(i + dI, j + dJ), SymbolsType.WALKABLE);
+		}
+	}
+	
+	protected void applyCorrection(BiConsumer<Integer, Integer> correction) {
+		for (int i = xMin; i <= xMax; i++) {
+			for (int j = yMin; j <= yMax; j++) {
+				correction.accept(i, j);
+			}
+		}
 	}
 	
 	protected boolean checkAdjacent4(int i, int j, SymbolsType type) {

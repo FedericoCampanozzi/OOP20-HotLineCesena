@@ -70,6 +70,13 @@ public enum ImageType {
     MEDKIT("medkit.png"),
 
     /**
+     * Relative path to the money bag image file.
+     * Used as environment element that can be
+     * interact to complete a quest
+     */
+    MONEY_BAG("moneyBag.png"),
+
+    /**
      * Relative path to the ammo box image file.
      * Used as environment element that can be
      * interact with and that will give ammo

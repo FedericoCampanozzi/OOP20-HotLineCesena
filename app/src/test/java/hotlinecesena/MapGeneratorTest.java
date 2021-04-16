@@ -35,7 +35,7 @@ public class MapGeneratorTest {
 		}
 		
 		for (int i = 0; i < N_IMAGE; i++) {
-			JSONDataAccessLayer.generateDebugSeed();
+			JSONDataAccessLayer.generateNewSeed();
 			generateQuadratic(i);
 			generateRectangular(i);
 			generateEsagonal(i);

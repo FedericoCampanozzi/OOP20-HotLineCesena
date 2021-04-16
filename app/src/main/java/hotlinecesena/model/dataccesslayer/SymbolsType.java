@@ -4,11 +4,11 @@ import java.awt.Color;
 
 public enum SymbolsType {
 	
-	VOID		('_', new Color(  0,   0,   0), new Color(102, 255, 102)),
+	VOID		('_', new Color(  0,   0,   0), new Color(  0, 153,   0)),
 	DOOR		('D', new Color(204,  51,   0), new Color(  0,   0,   0)),
-	WALKABLE	('.', new Color(255, 255, 255), new Color(153, 102,  51)),
-	ENEMY		('E', new Color(128,   0,   0), new Color(  0,   0,   0)),
-	PLAYER		('P', new Color(153,   0,  77), new Color(102, 153, 255)),
+	WALKABLE	('.', new Color(255, 255, 255), new Color(255, 166,  77)),
+	ENEMY		('E', new Color(243,   0,   0), new Color(  0,   0,   0)),
+	PLAYER		('P', new Color(153,   0,  77), new Color( 82,   0, 204)),
 	OBSTACOLES	('O', new Color( 92,  92, 061), new Color(  0,   0,   0)),
 	WEAPONS		('*', new Color(179, 179,   0), new Color(  0,   0,   0)),
 	WALL		('W', new Color(128,  64,   0), new Color(102,  68,   0)),
