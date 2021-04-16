@@ -3,8 +3,7 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
-
-import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.util.Pair;
@@ -50,40 +49,41 @@ public class DataWorldMap extends AbstractData {
 		this.yMin = sgwb.getMinY();
 		this.yMax = sgwb.getMaxY();
 		this.keyObj = sgwb.isKeyObjectPresent();
-		
-		int width =  settings.getPixelSize() * (getMaxX() - getMinX() + 1);
-		int height = settings.getPixelSize() * (getMaxY() - getMinY() + 1);
-		
+
+		int width = (getMaxX() - getMinX() + 1);
+		int height = (getMaxY() - getMinY() + 1);
+
 		writtableMiniMap = new WritableImage(width, height);
 		PixelWriter pw = writtableMiniMap.getPixelWriter();
-		
-		this.worldMap.entrySet().stream()
-			.forEach(itm->{
-				java.awt.Color color;
-				if(	itm.getValue().equals(SymbolsType.VOID) || 
-					itm.getValue().equals(SymbolsType.WALKABLE) ||
-					itm.getValue().equals(SymbolsType.PLAYER) || 
-					itm.getValue().equals(SymbolsType.WALL)){
+
+		this.worldMap.entrySet().stream().forEach(itm -> {
+			java.awt.Color color;
+			int i = itm.getKey().getKey() - getMinX();
+			int j = itm.getKey().getValue() - getMinY();
+			
+			if (i == 0 || i == width || j == 0 || j == height) {
+				color = java.awt.Color.BLACK;
+			} else {
+				if (itm.getValue().equals(SymbolsType.VOID) || itm.getValue().equals(SymbolsType.WALKABLE)
+						|| itm.getValue().equals(SymbolsType.PLAYER) || itm.getValue().equals(SymbolsType.WALL)) {
 					color = itm.getValue().getMiniMapColor();
 				} else {
 					color = SymbolsType.WALKABLE.getMiniMapColor();
 				}
-				
-				pw.setColor(itm.getKey().getKey()- getMinX(), itm.getKey().getValue()- getMinY(), Utilities.convertColor(color));
+			}
+			
+			pw.setColor(i, j, Utilities.convertColor(color));
 		});
-		
-		//oldPlyPos = Utilities.convertPoint2DToPair(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
-		oldPlyPos = new Pair<>(0,0);
-		
+		oldPlyPos = new Pair<>(0, 0);
 		write();
 	}
 	
-	public ImageView getImageVIewUpdated() {
+	public Image getImageVIewUpdated() {
 		PixelWriter pw = writtableMiniMap.getPixelWriter();
 		pw.setColor(oldPlyPos.getKey()- getMinX(), oldPlyPos.getValue()- getMinY(), Utilities.convertColor(SymbolsType.WALKABLE.getMiniMapColor()));
 		oldPlyPos = Utilities.convertPoint2DToPair(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
 		pw.setColor(oldPlyPos.getKey()- getMinX(), oldPlyPos.getValue()- getMinY(), Utilities.convertColor(SymbolsType.PLAYER.getMiniMapColor()));
-		return new ImageView(writtableMiniMap);
+		return writtableMiniMap;
 	}
 	
 	@Override
