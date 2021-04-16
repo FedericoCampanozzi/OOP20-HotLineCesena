@@ -52,7 +52,7 @@ public final class NaiveInventoryImpl implements Inventory {
                 .anyMatch(item -> !(item instanceof CollectibleType))) {
             throw new IllegalArgumentException(ERROR_MSG);
         }
-        collectibles.putAll(items);
+        items.forEach(this::add);
     }
 
     /**
