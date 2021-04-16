@@ -9,7 +9,6 @@ import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.ReloadEvent;
-import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -18,7 +17,7 @@ import javafx.geometry.Point2D;
  * Base class to extend when creating new Actor specializations.
  *
  */
-public abstract class AbstractActor extends AbstractMovableEntity implements Actor, Subscriber {
+public abstract class AbstractActor extends AbstractMovableEntity implements Actor {
 
     private final double maxHealth;
     private double currentHealth;
