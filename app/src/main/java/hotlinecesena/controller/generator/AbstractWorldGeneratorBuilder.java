@@ -133,8 +133,8 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 
 		//check walkable corridor
 		this.applyCorrection((i, j) -> {
-			if (this.get(i, j, SymbolsType.ENEMY)
-					|| this.get(i, j, SymbolsType.OBSTACOLES) && checkAdjacent8(i, j, SymbolsType.WALL)) {
+			if ((this.get(i, j, SymbolsType.ENEMY)
+					|| this.get(i, j, SymbolsType.OBSTACOLES)) && checkAdjacent8(i, j, SymbolsType.WALL)) {
 				this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);
 			}
 		});
