@@ -3,6 +3,8 @@ package hotlinecesena.controller;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.google.common.eventbus.Subscribe;
+
 import hotlinecesena.controller.HUD.PlayerStatsController;
 import hotlinecesena.controller.entities.ProjectileController;
 import hotlinecesena.controller.entities.enemy.EnemyController;
@@ -10,10 +12,18 @@ import hotlinecesena.controller.entities.player.PlayerController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.menu.RankingController;
+import hotlinecesena.controller.mission.MissionBuilder;
 import hotlinecesena.controller.mission.MissionController;
-import hotlinecesena.controller.mission.MissionFactory;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
+import hotlinecesena.model.entities.actors.enemy.Enemy;
+import hotlinecesena.model.entities.actors.player.Player;
+import hotlinecesena.model.entities.items.ItemsType;
+import hotlinecesena.model.events.AttackPerformedEvent;
+import hotlinecesena.model.events.DeathEvent;
+import hotlinecesena.model.events.ItemPickUpEvent;
+import hotlinecesena.model.events.Subscriber;
+import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
@@ -30,7 +40,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
-public class WorldController{
+public class WorldController implements Subscriber {
 
     private final WorldView view;
     private final CameraView camera;
@@ -46,14 +56,95 @@ public class WorldController{
     private final Score score;
     private final MiniMapView miniMapView;
     
+    
+
+    
+    private double playerTimeLife = 0;
+    private int totalAmmoBag = 0;
+    private int totalMedikit = 0;
+    private int totalWeaponsChanged = 0;
+    private int totalAmmoShootedByPlayer = 0;
+    private boolean pickBriefCase = false;
+    private int enemyKilled;
+    
+    public int getPlayerLifeTime() {
+		return (int)(this.playerTimeLife / 1000.0d);
+	}
+    
+    public int getEnemyKilledByPlayer() {
+		return enemyKilled;
+	}
+    
+    public int getTotalAmmoBag() {
+		return totalAmmoBag;
+	}
+
+	public int getTotalMedikit() {
+		return totalMedikit;
+	}
+
+	public int getTotalWeaponsChanged() {
+		return totalWeaponsChanged;
+	}
+
+	public int getTotalAmmoShootedByPlayer() {
+		return totalAmmoShootedByPlayer;
+	}
+
+	public boolean isPickBriefCase() {
+		return pickBriefCase;
+	}
+
+	@Subscribe
+    private void addItemType(ItemPickUpEvent event) {
+    	if(event.getItemType().equals(ItemsType.AMMO_BAG)) {
+    		this.totalAmmoBag ++;
+    	} else if(event.getItemType().equals(ItemsType.MEDIKIT)) {
+    		this.totalMedikit ++;
+    	} else if(event.getItemType().equals(ItemsType.BRIEFCASE)) {
+    		this.pickBriefCase = true;
+    	}
+    }
+    
+    @Subscribe
+    private void addChangedWeapons(WeaponPickUpEvent event) {
+    	this.totalWeaponsChanged ++;
+    }
+    
+    @Subscribe
+    private void addAmmoShoot(AttackPerformedEvent event) {
+    	if(event.getSourceInterfaces().contains(Player.class)) {
+    		this.totalAmmoShootedByPlayer ++;
+    	}
+    }
+    
+    @Subscribe
+    private void addAmmoShoot(DeathEvent event) {
+    	if(event.getSourceInterfaces().contains(Enemy.class)) {
+    		this.enemyKilled ++;    		
+    	}
+    }
+    
     public WorldController(final Stage primaryStage, final AudioControllerImpl audioControllerImpl) throws IOException{
-        this.primaryStage = primaryStage;
+        
+    	JSONDataAccessLayer.getInstance().getPlayer().getPly().register(this);
+    	JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(itm -> itm.register(this));
+    	
+    	
+    	this.primaryStage = primaryStage;
         this.audioControllerImpl = audioControllerImpl;
         this.audioControllerImpl.playMusic();
         new AudioEventController();
         view = new WorldView(this.primaryStage);
         view.start();
-        missionController = MissionFactory.defaultMissions(1, 1, 50, 60, 300);
+        missionController = new MissionBuilder(this)
+        		.addAmmoMission(2, 6)
+        		.addMedikitMission(3, 6)
+        		.addChangeWeaponsMission(1, 3)
+        		.addKeyObjectMission()
+        		.addKillMission(1, 7)
+        		.addSurviveMission(60, 240)
+        		.build();
         gameLoopController.addMethodToUpdate(d -> missionController.update(d));
 
         playerStatsController = new PlayerStatsController(view, missionController);
@@ -100,6 +191,12 @@ public class WorldController{
                     e1.printStackTrace();
                 }
             }
+            
+            
+            
+            playerTimeLife += d;
+            
+            
         });
 
         gameLoopController.addMethodToUpdate(d -> {
