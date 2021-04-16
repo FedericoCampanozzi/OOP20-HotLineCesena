@@ -10,8 +10,8 @@ import javafx.util.Pair;
 
 /**
  * <p>
- * Converts keyboard and mouse inputs received from the View into a set of commands
- * the {@link Player} can understand.
+ * Converts keyboard and mouse inputs received from the View into a collection
+ * of commands the {@link Player} can understand.
  * <br>
  * Its implementations must be View-agnostic, meaning they must work with virtually
  * any graphics library without needing any modifications.
