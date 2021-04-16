@@ -17,7 +17,7 @@ import javafx.scene.transform.Translate;
  */
 public final class CameraViewImpl implements CameraView {
 
-    private static final double HUD_HEIGHT = 99; //TODO Gotta retrieve this from DAL
+    private static final double HUD_HEIGHT = 402; //TODO Gotta retrieve this from DAL
     private static final double ACCEL = 30.0;
     private static final double SHARPNESS = 0.2;
     private Pane pane;
