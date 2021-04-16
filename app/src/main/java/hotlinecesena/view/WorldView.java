@@ -104,6 +104,10 @@ public class WorldView implements Subscriber {
                     tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.BOX));
                     this.obstaclesPos.put(p, tile);
                     break;
+                case KEY_ITEM:
+                	tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.MONEY_BAG));
+                    this.itemsPos.put(p, tile);
+                	break;
                 case WEAPONS:
                 	if (JSONDataAccessLayer.getInstance().getWeapons().getWeapons().get(Utilities.convertPairToPoint2D(p)).getWeaponType() == (WeaponType.PISTOL)) {
                 		tile.setImage(proxyImage.getImage(SceneType.MENU, ImageType.PISTOL));
@@ -160,7 +164,7 @@ public class WorldView implements Subscriber {
             enemiesSprite.add(new SpriteImpl(i));
         });
         
-        primaryStage.setResizable(true);
+        primaryStage.setResizable(false);
         primaryStage.centerOnScreen();
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
