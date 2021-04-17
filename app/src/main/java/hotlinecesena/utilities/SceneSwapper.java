@@ -14,8 +14,8 @@ import javafx.stage.Stage;
 
 public class SceneSwapper {
 	
-	private static final int WIDTH = 1200;
-	private static final int HEIGHT = 800;
+	private static final int WIDTH = JSONDataAccessLayer.getInstance().getSettings().getDefaultWidth();
+	private static final int HEIGHT = JSONDataAccessLayer.getInstance().getSettings().getDefaultHeight();
 	
 	private ProxyImage proxyImage = new ProxyImage();
 	
