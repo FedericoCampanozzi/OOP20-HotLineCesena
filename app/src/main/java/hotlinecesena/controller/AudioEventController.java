@@ -127,6 +127,9 @@ public class AudioEventController implements Subscriber {
             case MEDIKIT:
                 this.audio.playAudioClip(AudioType.PICKUP_MEDKIT, e.getSourceInterfaces());
                 break;
+            case BRIEFCASE:
+                this.audio.playAudioClip(AudioType.PICKUP_MONEY, e.getSourceInterfaces());
+                break;
             default:
                 throw new IllegalArgumentException("No such item");
         }
