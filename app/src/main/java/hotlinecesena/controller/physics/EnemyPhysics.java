@@ -76,12 +76,15 @@ public final class EnemyPhysics {
 
         int x = (int) current.getX();
         int y = (int) current.getY();
-        int distanceX = (int) (current.getX() - target.getX());
-        int distanceY = (int) (current.getY() - target.getY());
 
-        distanceY = distanceY == 0 ? 1 : distanceY;
+        int distanceX = x - (int) target.getX();
+        int distanceY = y - (int) target.getY();
 
-        while ((distanceX > 0 ? x > target.getX() : x < target.getX()) 
+        if (distanceX == 0 && distanceY == 0) {
+            return false;
+        }
+
+        while ((distanceX > 0 ? x > target.getX() : x < target.getX())
                 || (distanceY > 0 ? y > target.getY() : y < target.getY())) {
 
             if (walls.contains(new Point2D(x, y))) {
@@ -94,7 +97,6 @@ public final class EnemyPhysics {
             if (distanceY != 0) {
                 y = distanceY > 0 ? y - 1 : y + 1;
             }
-
         }
         return false;
     }

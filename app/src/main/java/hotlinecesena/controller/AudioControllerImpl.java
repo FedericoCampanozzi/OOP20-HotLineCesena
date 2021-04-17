@@ -44,7 +44,6 @@ public final class AudioControllerImpl implements AudioController {
     /**
      * Updates the volume of the audio that is
      * already playing in the background.
-     * @param value the new volume setting
      */
     private void updateMusicVolume() {
         if (this.audio != null) {
@@ -69,16 +68,13 @@ public final class AudioControllerImpl implements AudioController {
 
     /**
      * Calculates the volume based on the
-     * {@code Entity}.
+     * {@code Actor}.
      * @param caller the collection of interfaces that an
-     * entity could implement
+     * {@code Actor} could implement
      * @return the value for the volume
-     * @see Entity
+     * @see Actor
      */
     private double volumeSettings(final Collection<Class<?>> caller) {
-        System.out.println(this.volume);
-        System.out.println(this.volume - BACKGROUND_VOLUME / PERCENT);
-        System.out.println(this.volume - (BACKGROUND_VOLUME / PERCENT));
         return caller.contains(Enemy.class)
                 ? this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }

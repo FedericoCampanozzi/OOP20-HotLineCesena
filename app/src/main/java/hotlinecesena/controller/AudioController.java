@@ -1,12 +1,15 @@
 package hotlinecesena.controller;
 
 import java.util.Collection;
+
 import hotlinecesena.view.loader.AudioType;
 
 /**
- * Models a controller that will control
- * audio files by playing the asked file
- * and by adding the correct volume setting.
+ * Models an object that controls the
+ * audio settings for {@code AudioClip}s
+ * and {@code MediaPlayer}, making it
+ * easier for other to reproduce this
+ * types of files.
  */
 public interface AudioController {
 
@@ -23,8 +26,8 @@ public interface AudioController {
      * Plays the {@code AudioClip} of the audio file specified
      * by its relative path.
      * @param type the path of the file that wants to
-     * @param caller the entity invoking this method
-     * be reproduced
+     * @param caller the {@code Actor} invoking this method
+     * @see Actor
      */
     void playAudioClip(AudioType type, Collection<Class<?>> caller);
 

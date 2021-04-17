@@ -101,6 +101,15 @@ public enum AudioType {
     PICKUP_MEDKIT("medkit.wav"),
 
     /**
+     * Relative path to the pickup audio file
+     * To be reproduce every time the player picks
+     * up the money bag.
+     * @see Player
+     * @see Item
+     */
+    PICKUP_MONEY("money.wav"),
+
+    /**
      * Relative path to the background music for the game.
      */
     BACKGROUND("music.mp3");

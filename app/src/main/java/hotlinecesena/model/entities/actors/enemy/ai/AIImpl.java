@@ -17,7 +17,7 @@ import javafx.geometry.Point2D;
 public final class AIImpl implements AI {
 
     private static final int FIELD_OF_VIEW = 90;
-    private static final int VISION_RADIUS = 7;
+    private static final int VISION_RADIUS = 5;
     private static final int HALF = 2;
     private static final double LOOK_NORTH = -90;
     private static final double LOOK_SOUTH = 90;
@@ -141,17 +141,9 @@ public final class AIImpl implements AI {
         double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
         double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
 
-        if (negative45DegreesAngle <= -LOOK_WEST) {
-            return -this.rotationToTarget(target) >= negative45DegreesAngle
-                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
-        } else if (positive45DegreesAngle >= LOOK_WEST) {
-            return this.rotationToTarget(target) >= -positive45DegreesAngle
-                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
-        } else {
-            return this.rotationToTarget(target) >= negative45DegreesAngle
-                    && this.rotationToTarget(target) <= positive45DegreesAngle
-                    && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
-        }
+        return this.rotationToTarget(target) >= negative45DegreesAngle
+                && this.rotationToTarget(target) <= positive45DegreesAngle
+                && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
     }
 
     @Override
