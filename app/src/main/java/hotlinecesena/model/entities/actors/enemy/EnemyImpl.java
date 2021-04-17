@@ -1,6 +1,9 @@
 package hotlinecesena.model.entities.actors.enemy;
 
+import java.util.Objects;
 import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.actors.AbstractActor;
 import hotlinecesena.model.entities.actors.ActorStatus;
@@ -16,11 +19,9 @@ import javafx.geometry.Point2D;
 public final class EnemyImpl extends AbstractActor implements Enemy {
 
     private static final int ENEMY_MAX_HEALTH = 1;
-    private static final double ENEMY_INITIAL_ANGLE = 0;
     private static final double ENEMY_NORMAL_SPEED = 1;
-    private static final double ENEMY_PURSUIT_SPEED = 1;
-    private static final double ENEMY_WIDTH = 64;
-    private static final double ENEMY_HEIGHT = 64;
+    private static final double ENEMY_WIDTH = 1;
+    private static final double ENEMY_HEIGHT = 1;
 
     private final EnemyType enemyType;
     private final AI enemyAI;
@@ -41,23 +42,22 @@ public final class EnemyImpl extends AbstractActor implements Enemy {
      * @see WorldGeneratorBuilder
      */
     public EnemyImpl(final Point2D pos, final Inventory inv, final double rotation,
-            final EnemyType type, final  Set<Point2D> walkable, final Set<Point2D> walls) {
+            final EnemyType type, @Nonnull final  Set<Point2D> walkable, final Set<Point2D> walls) {
 
         super(pos, rotation, ENEMY_NORMAL_SPEED, ENEMY_MAX_HEALTH,
                 ENEMY_WIDTH, ENEMY_HEIGHT, inv);
         this.enemyType = type;
-        this.walkableSet = walkable;
+        this.walkableSet = Objects.requireNonNull(walkable);
         this.wallSet = walls;
         this.enemyAI = new AIImpl(this.getPosition(), this.enemyType,
-                ENEMY_INITIAL_ANGLE, this.wallSet);
+                rotation, this.wallSet);
     }
 
     @Override
     public void executeMovement(final Point2D direction) {
         if (!this.getActorStatus().equals(ActorStatus.DEAD)) {
             final Point2D current = this.getPosition();
-            final Point2D next = current.add(direction.multiply(!this.pursuit
-                    ? ENEMY_NORMAL_SPEED : ENEMY_PURSUIT_SPEED));
+            final Point2D next = current.add(direction.multiply(ENEMY_NORMAL_SPEED));
             this.setPosition(next);
             this.enemyAI.setEnemyPos(next);
             if (!current.equals(next)) {
