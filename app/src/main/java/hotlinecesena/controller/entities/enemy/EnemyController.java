@@ -20,7 +20,7 @@ import hotlinecesena.view.loader.SceneType;
 /**
  * Controls the actions that each enemy
  * will perform during the game loop and
- * updates their respective image.
+ * updates their respective images.
  * @see Enemy
  */
 public final class EnemyController implements Updatable, Subscriber {
@@ -44,8 +44,8 @@ public final class EnemyController implements Updatable, Subscriber {
     /**
      * Class constructor.
      * @param enemy the animated enemy
-     * @param sprite the collection of all the enemies images
-     * @param player the target of our enemies
+     * @param sprite the associated image of the enemy
+     * @param player the target of our enemy
      * @see Player
      * @see Sprite
      */
@@ -67,6 +67,9 @@ public final class EnemyController implements Updatable, Subscriber {
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             final long current = System.currentTimeMillis();
+
+            this.enemy.update(deltaTime);
+
                 if (!this.enemy.getActorStatus().equals(ActorStatus.DEAD)
                         && !this.player.getActorStatus().equals(ActorStatus.DEAD)
                         && current - lastTime > UPDATED_INTERVAL
@@ -85,8 +88,6 @@ public final class EnemyController implements Updatable, Subscriber {
 
                     //To better fit the short demo enemies will always chase the enemy
                     this.enemy.setIsInPursuit(true);
-
-                    this.enemy.update(deltaTime);
 
                     if (this.enemy.getAI().isShooting(this.player.getPosition())) {
                         this.enemy.attack();
@@ -109,7 +110,7 @@ public final class EnemyController implements Updatable, Subscriber {
     }
 
     /**
-     * Event triggered every time an enemy moves
+     * Event triggered every time the enemy moves
      * and updates its image.
      * @param e the entity that produce the event
      */
@@ -119,7 +120,7 @@ public final class EnemyController implements Updatable, Subscriber {
     }
 
     /**
-     * Event triggered every time an enemy rotates
+     * Event triggered every time the enemy rotates
      * and updates its image.
      * @param e the entity that produce the event
      */
@@ -129,7 +130,7 @@ public final class EnemyController implements Updatable, Subscriber {
     }
 
     /**
-     * Event triggered once an enemy dies and
+     * Event triggered once the enemy dies and
      * updates its image.
      * @param e the entity that produce the event
      */
