@@ -21,6 +21,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Slider;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -29,25 +31,17 @@ public class OptionsController implements Initializable {
 	@FXML
 	private Slider volSlider;
 	@FXML
-	private Label percVolLabel;
-	@FXML
 	private RadioButton musicRadioButton;
 	@FXML
 	private RadioButton soundsRadioButton;
 	@FXML
 	private RadioButton fullScreenRadioButton;
 	@FXML
-	private ComboBox<Label> resolutionComboBox;
-	@FXML
-	private Button upButton;
-	@FXML
-	private Button leftButton;
-	@FXML
-	private Button downButton;
-	@FXML
-	private Button rightButton;
-	@FXML
 	private Button backButton;
+	@FXML
+	private VBox audioVBox;
+	@FXML
+	private VBox graphicVBox;
 	
 	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private Map<Pair<Integer, Integer>, Label> resolutions = new LinkedHashMap<>();
@@ -65,6 +59,10 @@ public class OptionsController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		audioVBox.getChildren().forEach(c -> VBox.setVgrow(c, Priority.ALWAYS));
+		graphicVBox.getChildren().forEach(c -> VBox.setVgrow(c, Priority.ALWAYS));
+		
 		
 		// Initialize audio settings
 		musicRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isMusicActive());
@@ -108,7 +106,6 @@ public class OptionsController implements Initializable {
 	}
 	
 	private void updateVolume(int value) throws JsonGenerationException, JsonMappingException, IOException {
-		percVolLabel.setText(Integer.toString(value) + "%");
 		JSONDataAccessLayer.getInstance().getSettings().setVolume(value);
 		JSONDataAccessLayer.getInstance().getSettings().write();
 		audioControllerImpl.updateSettings();

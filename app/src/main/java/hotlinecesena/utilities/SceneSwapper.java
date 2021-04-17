@@ -27,7 +27,9 @@ public class SceneSwapper {
 		pane = loader.load();
 		stage.setWidth(WIDTH);
 		stage.setHeight(HEIGHT);
-		stage.setResizable(false);
+		stage.setMinHeight(HEIGHT);
+		stage.setMinWidth(WIDTH);
+		stage.setResizable(true);
 		stage.setTitle("HotLine Cesena");
 		stage.centerOnScreen();
 		stage.setScene(new Scene(pane));

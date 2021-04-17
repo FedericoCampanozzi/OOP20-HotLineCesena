@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
@@ -37,6 +38,8 @@ public class StartMenuController implements Initializable{
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		vBox.getChildren().forEach(c -> VBox.setVgrow(c, Priority.ALWAYS));
+		vBox.prefWidthProperty().bind(stage.widthProperty().multiply(3).divide(5));
 	}
 	
 	public void newGameClick(final ActionEvent event) throws IOException {
@@ -49,7 +52,8 @@ public class StartMenuController implements Initializable{
 				Optional.empty(),
 				audioControllerImpl,
 				Optional.empty()),
-				"OptionsView.fxml", stage);
+				"OptionsView.fxml",
+				stage);
 	}
 	
 	public void exitClick(final ActionEvent event) throws IOException {
