@@ -147,12 +147,16 @@ public final class PlayerImpl extends AbstractActor implements Player {
             weaponFound.ifPresent(entry -> {
                 final Weapon newWeap = entry.getValue();
                 final Point2D pos = entry.getKey();
-                weaponsOnMap.remove(pos);
+                /*
+                 * Drop the player's weapon on the map before picking up
+                 * the newly found one.
+                 */
                 this.getInventory().getWeapon().ifPresentOrElse(ownedWeapon -> {
                     weaponsOnMap.put(pos, ownedWeapon);
                     this.publish(new WeaponPickUpEvent(this, newWeap.getWeaponType(),
                             ownedWeapon.getWeaponType(), pos));
                 }, () -> {
+                    weaponsOnMap.remove(pos);
                     this.publish(new WeaponPickUpEvent(this, newWeap.getWeaponType(), null, pos));
                 });
                 this.getInventory().add(newWeap, 1);
