@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 
 import com.google.common.eventbus.Subscribe;
 
-import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.DeathEvent;
@@ -46,6 +45,10 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
         this.setup();
     }
 
+    /**
+     * Subscribe this controller to the Player and perform
+     * initial Sprite updates.
+     */
     private void setup() {
         player.register(this);
         sprite.updatePosition(player.getPosition());
