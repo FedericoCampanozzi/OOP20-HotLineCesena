@@ -1,4 +1,6 @@
-package hotlinecesena.model.entities.actors.player;
+package hotlinecesena.controller.entities.player;
+
+import hotlinecesena.model.entities.actors.player.Player;
 
 /**
  *

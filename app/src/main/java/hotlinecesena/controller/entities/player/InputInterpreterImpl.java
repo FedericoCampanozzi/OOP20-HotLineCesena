@@ -15,8 +15,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.actors.Direction;
-import hotlinecesena.model.entities.actors.player.Command;
-import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
