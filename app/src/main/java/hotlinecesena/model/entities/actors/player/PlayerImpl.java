@@ -33,6 +33,7 @@ import javafx.geometry.Point2D;
  */
 public final class PlayerImpl extends AbstractActor implements Player {
 
+    private static final long WEAPON_PICKUP_INTERVAL = (long) (1E+9 / 3);
     private static final double ITEM_USAGE_RADIUS = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
@@ -40,6 +41,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     private final Collection<Enemy> enemies;
     private final Map<Point2D, ItemsType> itemsOnMap;
     private final Map<Point2D, Weapon> weaponsOnMap;
+    private long lastTime = System.nanoTime();
 
     /**
      * Instantiates a new {@code Player}.
@@ -135,23 +137,26 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * Picks up a nearby weapon, if present.
      */
     private void pickUpWeapon() {
-        if (!this.getInventory().isReloading()) {
+        final long currentTime = System.nanoTime();
+        if (!this.getInventory().isReloading() && currentTime - lastTime >= WEAPON_PICKUP_INTERVAL) {
             final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
                     .stream()
                     .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
                             e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
                     .findFirst();
             weaponFound.ifPresent(entry -> {
-                final Weapon w = entry.getValue();
+                final Weapon newWeap = entry.getValue();
                 final Point2D pos = entry.getKey();
-                /*
-                 * If the player already owns the same kind of weapon, ignore it.
-                 */
-                if (this.getInventory().getQuantityOf(w) != 1) {
-                    this.getInventory().add(w, 1);
-                    weaponsOnMap.remove(pos);
-                    this.publish(new WeaponPickUpEvent(this, w.getWeaponType(), pos));
-                }
+                weaponsOnMap.remove(pos);
+                this.getInventory().getWeapon().ifPresentOrElse(ownedWeapon -> {
+                    weaponsOnMap.put(pos, ownedWeapon);
+                    this.publish(new WeaponPickUpEvent(this, newWeap.getWeaponType(),
+                            ownedWeapon.getWeaponType(), pos));
+                }, () -> {
+                    this.publish(new WeaponPickUpEvent(this, newWeap.getWeaponType(), null, pos));
+                });
+                this.getInventory().add(newWeap, 1);
+                lastTime = currentTime;
             });
         }
     }
