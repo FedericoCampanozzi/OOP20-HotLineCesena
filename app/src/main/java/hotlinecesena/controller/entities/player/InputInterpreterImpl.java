@@ -109,8 +109,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
      */
     private Point2D processMouseCoordinates(final Point2D mouseCoords, final Point2D spritePosition) {
         if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
-            return new Point2D(mouseCoords.getX() - spritePosition.getX(),
-                    mouseCoords.getY() - spritePosition.getY());
+            return mouseCoords.subtract(spritePosition);
         }
         return currentMouseCoords;
     }
