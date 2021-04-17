@@ -11,9 +11,10 @@ import hotlinecesena.model.entities.actors.player.Player;
 public interface Command {
 
     /**
-     * Allows to invoke one or more Player methods.
+     * Allows to invoke one or more {@link Player} methods.
      *
-     * @param player
+     * @param player the {@code Player} instance this
+     * command will be given to.
      */
     void execute(Player player);
 }
