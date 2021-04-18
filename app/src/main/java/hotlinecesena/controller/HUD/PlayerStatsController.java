@@ -13,6 +13,7 @@ import hotlinecesena.view.WorldView;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
@@ -22,6 +23,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
 public class PlayerStatsController implements Initializable, Updatable{
@@ -40,11 +43,16 @@ public class PlayerStatsController implements Initializable, Updatable{
 	private HBox weaponHBox;
 	@FXML
 	private ImageView weaponImageView;
+	@FXML
+	private Polygon previousMission;
+	@FXML
+	private Polygon nextMission;
 	
 	private ProxyImage proxyImage = new ProxyImage();
 	private List<Pair<String, Boolean>> missions;
 	private Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
 	private MissionController missionController;
+	private FadeTransition fade = new FadeTransition(Duration.millis(200));
 	
 	private WorldView worldView;
 	private int currentMission = 0;
@@ -59,6 +67,10 @@ public class PlayerStatsController implements Initializable, Updatable{
 	public void initialize(URL location, ResourceBundle resources) {
 		borderPane.prefWidthProperty().bind(worldView.getBorderPane().widthProperty());
 		missionCheckBox.setText(missions.get(currentMission).getKey());
+		fade.setFromValue(1.0);
+		fade.setToValue(0.0);
+		fade.setCycleCount(2);
+		fade.setAutoReverse(true);
 	}
 
 	@Override
@@ -108,6 +120,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 						currentMission = 0;
 					}
 			    	missionCheckBox.setText(missions.get(currentMission).getKey());
+			    	fade.setNode(nextMission);
+			    	fade.play();
 			    }
 			    if (e.getCode() == KeyCode.N) {
 			    	currentMission--;
@@ -115,6 +129,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 						currentMission = missions.size() - 1;
 					}
 			    	missionCheckBox.setText(missions.get(currentMission).getKey());
+			    	fade.setNode(previousMission);
+			    	fade.play();
 			    }
 			});
 		};

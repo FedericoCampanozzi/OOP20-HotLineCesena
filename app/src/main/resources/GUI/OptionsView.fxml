@@ -58,7 +58,7 @@
                                     <Font name="Arial Black" size="24.0" />
                                  </font>
                               </Label>
-                              <Slider fx:id="volSlider" onKeyPressed="#volSliderValueChanged" onMouseClicked="#volSliderValueChanged" onMouseDragged="#volSliderValueChanged" showTickMarks="true" value="50.0">
+                              <Slider fx:id="volSlider" onKeyPressed="#volSliderValueChanged" onMouseClicked="#volSliderValueChanged" onMouseDragged="#volSliderValueChanged" showTickLabels="true" showTickMarks="true" value="50.0">
                                  <padding>
                                     <Insets left="20.0" right="20.0" />
                                  </padding>
