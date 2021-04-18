@@ -19,7 +19,8 @@ import javafx.scene.transform.Translate;
  */
 public final class CameraViewImpl implements CameraView {
 
-    private static final double HUD_HEIGHT = JSONDataAccessLayer.getInstance().getSettings().getBotHudHeight();
+    private static final double HUD_SIZE = JSONDataAccessLayer.getInstance().getSettings().getBotHudHeight()
+            + JSONDataAccessLayer.getInstance().getSettings().getTopHudHeight();
     private static final double ACCEL = 30.0;
     private static final double SHARPNESS = 0.2;
     private static final double MOUSE_LEEWAY = 0.002;
@@ -83,7 +84,7 @@ public final class CameraViewImpl implements CameraView {
                     currentPos,
                     sprite.getPositionRelativeToParent()
                     .subtract(pane.getScene().getWidth() / 2,
-                            (pane.getScene().getHeight() - HUD_HEIGHT) / 2)
+                            (pane.getScene().getHeight() - HUD_SIZE) / 2)
                     //Move camera away from the sprite based on the cursor's position
                     .add(spriteMouseDistance.multiply(MOUSE_LEEWAY)),
                     blend);
