@@ -3,7 +3,6 @@ package hotlinecesena.view.loader;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-import java.io.File;
 
 import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
@@ -17,7 +16,7 @@ import javafx.scene.media.MediaPlayer;
  */
 public final class ProxyAudio implements SoundLoader {
 
-    private static final String SEP = File.separator;
+    private static final String SEP = "/";
 
     private final ProxyAudioLoader audioLoader;
     private final Map<String, AudioClip> loadedAudioClips;

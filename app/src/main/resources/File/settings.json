@@ -17,22 +17,25 @@
   "maxObstaclesForRoom" : 8,
   "minRoomWeapons" : 2,
   "maxRoomWeapons" : 4,
+  
   "effectActive" : true,
   "musicActive" : true,
-  "fullScreen" : true,
   "monitorX" : 1600,
   "monitorY" : 900,
-  "isFullScreen" : true,
+  "fullScreen" : true,
   "volume" : 22,
   "niceseeds" : [ 5234389043669163582, -3528913006357085371, 167578696558874802, 2849459102795947992, 5574521906889131291, 2820546231051856975, 2307484305045907576],
   "isMusicActive" : true,
   "isEffectActive" : true,
-  "obstaclesEdge" : 0.75,
-  "resX" : [ 800, 1024, 1280, 1920 ],
-  "resY" : [ 600, 768, 720, 1080 ],
+  "resolutions" : {
+	"1920": "1080",
+	"1280": "1200"
+  },
   "defaultLanguage" : 0,
   "defaultWidth" : 800,
   "defaultHeight" : 600,
   "topHudHeight" : 400,
-  "botHudHeight" : 400
+  "botHudHeight" : 100,
+  
+  "obstaclesEdge" : 0.75
 }

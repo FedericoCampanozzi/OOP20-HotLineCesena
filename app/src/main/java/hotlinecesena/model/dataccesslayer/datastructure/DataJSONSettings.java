@@ -3,6 +3,9 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
+
+import javafx.util.Pair;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -10,23 +13,27 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import static java.util.stream.Collectors.*;
 
 public class DataJSONSettings  extends AbstractData  {
 
+	//GUI SETTINGS
     @JsonProperty("monitorX")
 	private int monitorX;
     @JsonProperty("monitorY")
     private int monitorY;
-    @JsonProperty("isFullScreen")
-    private boolean isFullScreen;
+    @JsonProperty("fullScreen")
+    private boolean fullScreen;
     @JsonProperty("volume")
     private int volume;
-    @JsonProperty("niceseeds")
-    private List<Long> niceseeds;
     @JsonProperty("isMusicActive")
     private boolean isMusicActive;
     @JsonProperty("isEffectActive")
     private boolean isEffectActive;
+    //
+    
+    @JsonProperty("niceseeds")
+    private List<Long> niceseeds;
     @JsonProperty("minEnemyForRoom")
     private int minEnemyForRoom;
     @JsonProperty("maxEnemyForRoom")
@@ -65,10 +72,8 @@ public class DataJSONSettings  extends AbstractData  {
     private int minRoomWeapons;
     @JsonProperty("maxRoomWeapons")
     private int maxRoomWeapons;
-    @JsonProperty("resX")
-    private List<Integer> resX;
-    @JsonProperty("resY")
-    private List<Integer> resY;
+    
+
     @JsonProperty("defaultLanguage")
     private int defaultLanguage;
     @JsonProperty("defaultWidth")
@@ -79,6 +84,12 @@ public class DataJSONSettings  extends AbstractData  {
     private int topHudHeight;
     @JsonProperty("botHudHeight")
     private int botHudHeight;
+    @JsonProperty("resolutions")
+    private Map<String, String> resolutions;
+    
+    public Map<String, String> getResolutions(){
+    	return this.resolutions;
+    }
     
     public int getBotHudHeight() {
 		return botHudHeight;
@@ -212,12 +223,12 @@ public class DataJSONSettings  extends AbstractData  {
 		this.monitorY = monitorY;
 	}
 
-	public boolean isFullScreen() {
-		return isFullScreen;
+	public boolean getFullScreen() {
+		return this.fullScreen;
 	}
 
-	public void setFullScreen(boolean isFullScreen) {
-		this.isFullScreen = isFullScreen;
+	public void setFullScreen(boolean fullScreen) {
+		this.fullScreen = fullScreen;
 	}
 
 	public int getVolume() {
