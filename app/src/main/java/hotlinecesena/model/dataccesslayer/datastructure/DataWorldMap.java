@@ -61,7 +61,7 @@ public class DataWorldMap extends AbstractData {
 			int i = itm.getKey().getKey() - getMinX();
 			int j = itm.getKey().getValue() - getMinY();
 			
-			if (i == 0 || i == width || j == 0 || j == height) {
+			if (i == 0 || i == width-1 || j == 0 || j == height-1) {
 				color = java.awt.Color.BLACK;
 			} else {
 				if (itm.getValue().equals(SymbolsType.VOID) || itm.getValue().equals(SymbolsType.WALKABLE)

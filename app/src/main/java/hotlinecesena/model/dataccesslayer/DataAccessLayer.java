@@ -2,7 +2,6 @@ package hotlinecesena.model.dataccesslayer;
 
 import hotlinecesena.model.dataccesslayer.datastructure.DataBullet;
 import hotlinecesena.model.dataccesslayer.datastructure.DataEnemy;
-import hotlinecesena.model.dataccesslayer.datastructure.DataGUIPath;
 import hotlinecesena.model.dataccesslayer.datastructure.DataItems;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONLanguages;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking;
@@ -33,7 +32,4 @@ public interface DataAccessLayer {
 	DataPlayer getPlayer();
 
 	DataEnemy getEnemy();
-
-	DataGUIPath getGuiPath();
-
 }
