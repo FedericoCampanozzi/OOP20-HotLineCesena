@@ -84,7 +84,7 @@ public final class NaiveInventoryImpl implements Inventory {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
             final Weapon w = (Weapon) item;
-            return weapon.isPresent() && weapon.get().getWeaponType() == w.getWeaponType() ? 1 : 0;
+            return weapon.isPresent() && weapon.orElseThrow().getWeaponType() == w.getWeaponType() ? 1 : 0;
         } else {
             return collectibles.getOrDefault(item, 0);
         }

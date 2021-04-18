@@ -25,7 +25,7 @@ import javafx.stage.Stage;
 
 @ExtendWith(ApplicationExtension.class)
 @TestInstance(Lifecycle.PER_METHOD)
-public class CameraTest {
+public final class CameraTest {
 
     private static final double DOUBLE_EPSILON = 0.01;
     private static final double WIDTH = 800;
@@ -53,7 +53,7 @@ public class CameraTest {
 
     @Test
     void throwIfPaneIsNotSet() {
-        assertThrows(IllegalStateException.class, () -> { camera.getUpdateMethod().accept(DELTA_TIME); });
+        assertThrows(IllegalStateException.class, () -> camera.getUpdateMethod().accept(DELTA_TIME));
     }
 
     @Test
@@ -62,6 +62,7 @@ public class CameraTest {
         sprite.updatePosition(new Point2D(1, 1));
         camera.getUpdateMethod().accept(DELTA_TIME);
 
+        // Compute predicted camera position
         final double blend = MathUtils.blend(SHARPNESS, ACCEL, DELTA_TIME);
         final Point2D targetPos = sprite.getPositionRelativeToParent()
                 .subtract(testPane.getScene().getWidth() / 2,

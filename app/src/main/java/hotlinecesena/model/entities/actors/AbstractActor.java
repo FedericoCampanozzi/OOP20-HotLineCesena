@@ -56,11 +56,15 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public final void attack() {
         if (this.isAlive()) {
             inventory.getWeapon().ifPresent(w -> {
-                final int previousAmmo = w.getCurrentAmmo();
-                if (previousAmmo == 0) {
+                if (w.getCurrentAmmo() == 0) {
                     this.reload();
                 } else {
+                    final int previousAmmo = w.getCurrentAmmo();
                     w.usage().accept(this);
+                    /*
+                     * Limit the number of events published by checking
+                     * if the weapon did actually shoot.
+                     */
                     if (w.getCurrentAmmo() < previousAmmo) {
                         status = ActorStatus.ATTACKING;
                         this.publish(new AttackPerformedEvent(this, w.getWeaponType()));
@@ -74,8 +78,13 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public final void reload() {
         if (this.isAlive() && !inventory.isReloading()) {
             inventory.reloadWeapon();
+            /*
+             * Inventory may not initiate reloading if the weapon's
+             * magazine is already full or if no spare ammo is available.
+             */
             if (inventory.isReloading()) {
-                this.publish(new ReloadEvent(this, inventory.getWeapon().get().getWeaponType()));
+                // If reloading has begun, it's safe to retrieve the weapon.
+                this.publish(new ReloadEvent(this, inventory.getWeapon().orElseThrow().getWeaponType()));
             }
         }
     }
