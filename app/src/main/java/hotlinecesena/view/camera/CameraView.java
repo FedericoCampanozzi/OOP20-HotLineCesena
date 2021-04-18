@@ -2,6 +2,7 @@ package hotlinecesena.view.camera;
 
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.view.entities.Sprite;
+import javafx.geometry.Point2D;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -28,4 +29,10 @@ public interface CameraView extends Updatable {
      * Detaches the {@link Translate} from this camera's current JavaFX {@link Pane}.
      */
     void removeCameraFromPane();
+
+    /**
+     * Returns this camera's {@link Translate} coordinates.
+     * @return this camera's {@code Translate} coordinates.
+     */
+    Point2D getPosition();
 }

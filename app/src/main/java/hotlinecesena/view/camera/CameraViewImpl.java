@@ -10,6 +10,7 @@ import hotlinecesena.utilities.MathUtils;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
 import javafx.geometry.Point2D;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Translate;
 
@@ -32,11 +33,13 @@ public final class CameraViewImpl implements CameraView {
     /**
      * Instantiates a new Camera and binds it to a given {@link Sprite}.
      * @param sprite the {@code Sprite} to which this camera will be bound to.
-     * @throws NullPointerException if the given sprite is null.
+     * @param listener the {@link InputListener} used to retrieve mouse coordinates.
+     * Must be already configured to receive inputs from a {@link Scene}.
+     * @throws NullPointerException if the given sprite or listener are null.
      */
     public CameraViewImpl(@Nonnull final Sprite sprite, @Nonnull final InputListener listener) {
         this.bindToSprite(sprite);
-        this.listener = listener;
+        this.listener = Objects.requireNonNull(listener);
     }
 
     /**
@@ -63,31 +66,33 @@ public final class CameraViewImpl implements CameraView {
         }
     }
 
+    @Override
+    public Point2D getPosition() {
+        return new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
+    }
+
     /**
      * @implSpec Updates the {@link Translate} position based on the movements of
      * the attached {@link Sprite} and the distance between Sprite and cursor.
-     * @throws IllegalStateException if this camera is not attached to a pane
-     * or is not bound to a sprite.
+     * @throws IllegalStateException if this camera is not attached to a pane.
      */
     @Override
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
-            if (pane == null || sprite == null) {
+            if (pane == null) {
                 throw new IllegalStateException("Camera not properly initialized.");
             }
             final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
-            final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
             // Difference between mouse coordinates and sprite coordinates
             final Point2D spriteMouseDistance = listener.deliverInputs().getValue().subtract(
                     sprite.getPositionRelativeToScene());
-            final Point2D newPos = MathUtils.lerp(
-                    currentPos,
-                    sprite.getPositionRelativeToParent()
+            final Point2D targetPos = sprite.getPositionRelativeToParent()
                     .subtract(pane.getScene().getWidth() / 2,
                             (pane.getScene().getHeight() - HUD_SIZE) / 2)
                     //Move camera away from the sprite based on the cursor's position
-                    .add(spriteMouseDistance.multiply(MOUSE_LEEWAY)),
-                    blend);
+                    .add(spriteMouseDistance.multiply(MOUSE_LEEWAY));
+
+            final Point2D newPos = MathUtils.lerp(this.getPosition(), targetPos, blend);
             paneTranslate.setX(-newPos.getX());
             paneTranslate.setY(-newPos.getY());
         };
