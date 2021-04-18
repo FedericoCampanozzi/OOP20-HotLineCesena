@@ -15,11 +15,7 @@ public class GameController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		primaryStage.show();
 		new SceneSwapper().swapScene(new LoadingController(primaryStage), "LoadingView.fxml", primaryStage);
-		primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-		primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-        primaryStage.setTitle("HotLine Cesena");
-        primaryStage.setResizable(false);
-        primaryStage.show();
 	}
 }
