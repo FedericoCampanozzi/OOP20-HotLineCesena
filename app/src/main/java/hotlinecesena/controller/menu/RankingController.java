@@ -17,6 +17,9 @@ import hotlinecesena.model.score.partials.CunningStrategy;
 import hotlinecesena.model.score.partials.KillCountStrategy;
 import hotlinecesena.model.score.partials.TimeStrategy;
 import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -32,6 +35,8 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -55,6 +60,10 @@ public class RankingController implements Initializable{
     private TableColumn<Row, Integer> enemyKilled;
     @FXML
     private TableColumn<Row, Integer> cunning;
+    @FXML
+    private ImageView resView;
+    @FXML
+    private VBox vBox;
 
     private final SceneSwapper sceneSwapper = new SceneSwapper();
     private final AudioControllerImpl audioControllerImpl;
@@ -64,16 +73,28 @@ public class RankingController implements Initializable{
     private Row matchStats = new Row();
     private final Map<String, Pair<Integer, Integer>> partialScore;
     private final int totalScore;
+    private final ProxyImage proxyImage = new ProxyImage();
+    private final Boolean win;
 
-    public RankingController(final Stage stage, final AudioControllerImpl audioControllerImpl, final Map<String, Pair<Integer, Integer>> partialScore, final int totalScore) {
+    public RankingController(final Stage stage, final AudioControllerImpl audioControllerImpl, final Map<String, Pair<Integer, Integer>> partialScore, final int totalScore, Boolean win) {
         this.stage = stage;
         this.audioControllerImpl = audioControllerImpl;
         this.partialScore = partialScore;
         this.totalScore = totalScore;
+        this.win = win;
     }
 
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
+    	if (win) {
+    		resView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.VICTORY));
+		}
+    	else {
+    		resView.setImage(proxyImage.getImage(SceneType.MENU, ImageType.YOU_DIED));
+		}
+    	resView.setPreserveRatio(true);
+    	resView.fitWidthProperty().bind(stage.getScene().widthProperty());
+    	
         rank.setCellFactory(col -> {
             final TableCell<Row, Integer> indexCell = new TableCell<>();
             final ReadOnlyObjectProperty<TableRow<Row>> rowProperty = indexCell.tableRowProperty();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.BorderPane?>
@@ -8,9 +9,9 @@
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url(/Images/GUI/menu.png); -fx-background-size: 100% 100%;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <right>
-      <VBox fx:id="vBox" alignment="CENTER" prefWidth="500.0" BorderPane.alignment="CENTER">
+      <VBox fx:id="vBox" alignment="CENTER" BorderPane.alignment="CENTER">
          <children>
-            <BorderPane prefHeight="150.0">
+            <BorderPane>
                <center>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Start Menu" textAlignment="CENTER" textFill="WHITE" BorderPane.alignment="CENTER">
                      <font>
@@ -19,7 +20,7 @@
                   </Label>
                </center>
             </BorderPane>
-            <BorderPane prefHeight="150.0">
+            <BorderPane>
                <center>
                   <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#newGameClick" text="New Game" BorderPane.alignment="CENTER">
                      <font>
@@ -28,7 +29,7 @@
                   </Button>
                </center>
             </BorderPane>
-            <BorderPane prefHeight="150.0">
+            <BorderPane>
                <center>
                   <Button fx:id="optionsButton" mnemonicParsing="false" onAction="#optionsClick" text="Options" BorderPane.alignment="CENTER">
                      <font>
@@ -37,7 +38,7 @@
                   </Button>
                </center>
             </BorderPane>
-            <BorderPane prefHeight="150.0">
+            <BorderPane>
                <center>
                   <Button fx:id="exitButton" mnemonicParsing="false" onAction="#exitClick" text="Exit" BorderPane.alignment="CENTER">
                      <font>
@@ -47,6 +48,9 @@
                </center>
             </BorderPane>
          </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" right="20.0" top="20.0" />
+         </BorderPane.margin>
       </VBox>
    </right>
 </BorderPane>

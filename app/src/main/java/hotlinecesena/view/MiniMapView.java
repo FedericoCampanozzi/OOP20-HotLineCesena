@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderPane;
 public class MiniMapView implements Updatable{
 	
 	private static final int DIM = 300;
-	private static final int CROP_SCALE = 5;
 	
 	private ImageView imageView = new ImageView();
 	
@@ -20,10 +19,7 @@ public class MiniMapView implements Updatable{
 		borderPane.prefWidthProperty().bind(primaryPane.widthProperty());
 		borderPane.setPrefHeight(DIM);
 		Rectangle2D croppedPortion = new Rectangle2D(
-				DIM / (CROP_SCALE * 10),
-				DIM / (CROP_SCALE * 10),
-				DIM / CROP_SCALE,
-				DIM /CROP_SCALE);
+				0,0,0,0);
 		primaryPane.setTop(borderPane);
 		borderPane.setRight(imageView);
 		imageView.setFitHeight(DIM);
