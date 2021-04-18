@@ -34,6 +34,7 @@ public class PauseController implements Initializable{
 		this.worldStage = worldStage;
 		this.audioControllerImpl = audioControllerImpl;
 		this.gameLoopController = gameLoopController;
+		this.pauseStage.setOnCloseRequest(e -> resumeButton.fire());
 	}
 	
 	@Override
@@ -41,6 +42,10 @@ public class PauseController implements Initializable{
 	}
 	
 	public void resumeClick(final ActionEvent event) throws IOException {
+		worldStage.get().setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+		worldStage.get().setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+		worldStage.get().centerOnScreen();
+		worldStage.get().setFullScreen(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 		audioControllerImpl.playMusic();
 		gameLoopController.restart();
 		pauseStage.close();

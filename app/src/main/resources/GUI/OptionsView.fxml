@@ -2,18 +2,25 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #352063;" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #352063;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
-      <BorderPane BorderPane.alignment="CENTER">
+      <BorderPane>
          <right>
             <Button fx:id="backButton" mnemonicParsing="false" onAction="#backClick" text="Back" textAlignment="CENTER" BorderPane.alignment="CENTER">
                <font>
@@ -22,14 +29,14 @@
             </Button>
          </right>
          <BorderPane.margin>
-            <Insets bottom="20.0" right="20.0" />
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </BorderPane.margin>
       </BorderPane>
    </bottom>
    <top>
       <BorderPane>
          <center>
-            <Label alignment="CENTER" text="Options" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Label alignment="CENTER" text="Options" textFill="WHITE">
                <font>
                   <Font name="Arial Black" size="48.0" />
                </font>
@@ -38,64 +45,64 @@
       </BorderPane>
    </top>
    <center>
-      <TabPane prefHeight="279.0" prefWidth="600.0" style="-fx-background-color: transparent;" tabClosingPolicy="UNAVAILABLE">
+      <TabPane prefHeight="279.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
-          <Tab id="audioTab" closable="false" text="Audio">
+          <Tab closable="false" text="Audio">
                <content>
-                  <VBox fx:id="audioVBox" alignment="CENTER" prefHeight="261.0" prefWidth="598.0">
+                  <VBox alignment="CENTER" prefHeight="261.0" prefWidth="598.0" spacing="15.0">
                      <children>
-                        <BorderPane>
-                           <center>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" text="Volume" textFill="WHITE">
-                                       <font>
-                                          <Font name="Arial Black" size="24.0" />
-                                       </font>
-                                    </Label>
-                                    <Slider fx:id="volSlider" minorTickCount="4" onKeyPressed="#volSliderValueChanged" onMouseClicked="#volSliderValueChanged" onMouseDragged="#volSliderValueChanged" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="50.0">
-                                       <padding>
-                                          <Insets left="20.0" right="20.0" />
-                                       </padding>
-                                    </Slider>
-                                 </children>
-                              </VBox>
-                           </center>
-                        </BorderPane>
-                        <BorderPane>
-                           <center>
-                              <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <RadioButton fx:id="musicRadioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#musicRDClick" selected="true" text="Enable music" textFill="WHITE">
-                                       <font>
-                                          <Font name="Arial Black" size="20.0" />
-                                       </font>
-                                    </RadioButton>
-                                    <RadioButton fx:id="soundsRadioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#soundsRDClick" selected="true" text="Enable sounds" textFill="WHITE">
-                                       <font>
-                                          <Font name="Arial Black" size="20.0" />
-                                       </font>
-                                    </RadioButton>
-                                 </children>
-                              </VBox>
-                           </center>
-                        </BorderPane>
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                           <children>
+                              <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="600.0" text="Volume" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Black" size="24.0" />
+                                 </font>
+                              </Label>
+                              <Slider fx:id="volSlider" onKeyPressed="#volSliderValueChanged" onMouseClicked="#volSliderValueChanged" onMouseDragged="#volSliderValueChanged" showTickMarks="true" value="50.0">
+                                 <padding>
+                                    <Insets left="20.0" right="20.0" />
+                                 </padding>
+                              </Slider>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </VBox.margin>
+                        </VBox>
+                        <Separator prefWidth="200.0" />
+                        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+                           <children>
+                              <RadioButton fx:id="musicRadioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#musicRDClick" selected="true" text="Enable music" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Black" size="24.0" />
+                                 </font>
+                              </RadioButton>
+                              <RadioButton fx:id="soundsRadioButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#soundsRDClick" selected="true" text="Enable sounds" textFill="WHITE">
+                                 <font>
+                                    <Font name="Arial Black" size="24.0" />
+                                 </font>
+                              </RadioButton>
+                           </children>
+                           <VBox.margin>
+                              <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                           </VBox.margin>
+                        </VBox>
                      </children>
                      <padding>
-                        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                        <Insets bottom="20.0" top="20.0" />
                      </padding>
                   </VBox>
                </content>
           </Tab>
-          <Tab id="graphicTab" closable="false" text="Graphic">
+          <Tab closable="false" text="Graphic">
                <content>
-                  <VBox fx:id="graphicVBox" alignment="CENTER" prefHeight="250.0" prefWidth="600.0" spacing="20.0">
+                  <VBox alignment="CENTER" prefHeight="250.0" prefWidth="600.0" spacing="20.0">
                      <children>
                         <RadioButton fx:id="fullScreenRadioButton" mnemonicParsing="false" onAction="#fullScreenRadioButtonChangedState" text="Full screen" textFill="WHITE">
                            <font>
-                              <Font name="Arial Black" size="20.0" />
+                              <Font name="Arial Black" size="24.0" />
                            </font>
                         </RadioButton>
+                        <ComboBox fx:id="resolutionComboBox" onAction="#resolutionChoosed" promptText="Game screen resolution" />
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -103,7 +110,239 @@
                   </VBox>
                </content>
           </Tab>
-            <Tab id="controlsTab" closable="false" text="Controls" />
+            <Tab closable="false" text="Controls">
+               <content>
+                  <AnchorPane>
+                     <children>
+                        <GridPane alignment="CENTER" gridLinesVisible="true" layoutX="0.5" layoutY="0.5" AnchorPane.bottomAnchor="0.5" AnchorPane.leftAnchor="0.5" AnchorPane.rightAnchor="0.5" AnchorPane.topAnchor="0.5">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="338.0" />
+                            <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="462.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="80.0" vgrow="ALWAYS" />
+                            <RowConstraints minHeight="10.0" prefHeight="337.0" vgrow="ALWAYS" />
+                          </rowConstraints>
+                           <children>
+                              <GridPane alignment="CENTER" gridLinesVisible="true" GridPane.rowIndex="1">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <BorderPane>
+                                       <center>
+                                          <Label text="Up" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="W" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="1">
+                                       <center>
+                                          <Label text="Left" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="2">
+                                       <center>
+                                          <Label text="Down" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="3">
+                                       <center>
+                                          <Label text="Right" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="A" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="S" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="D" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </GridPane>
+                              <GridPane alignment="CENTER" gridLinesVisible="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <BorderPane>
+                                       <center>
+                                          <Label text="Fire" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="Mouse_1" BorderPane.alignment="CENTER">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="1">
+                                       <center>
+                                          <Label text="Recharge" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="2">
+                                       <center>
+                                          <Label text="Pick up" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="R">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="E">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.rowIndex="3">
+                                       <center>
+                                          <Label alignment="CENTER" contentDisplay="CENTER" text="Scroll missions" textFill="WHITE" wrapText="true">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                       <children>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="M">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="N">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </children>
+                                    </HBox>
+                                    <BorderPane GridPane.rowIndex="4">
+                                       <center>
+                                          <Label text="Pause" textFill="WHITE">
+                                             <font>
+                                                <Font name="Arial Black" size="24.0" />
+                                             </font>
+                                          </Label>
+                                       </center>
+                                    </BorderPane>
+                                    <BorderPane GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                       <center>
+                                          <Button disable="true" mnemonicParsing="false" style="-fx-opacity: 1;" text="P">
+                                             <font>
+                                                <Font size="14.0" />
+                                             </font>
+                                          </Button>
+                                       </center>
+                                    </BorderPane>
+                                 </children>
+                              </GridPane>
+                              <BorderPane>
+                                 <center>
+                                    <Label alignment="CENTER" contentDisplay="CENTER" text="Movements" textFill="WHITE">
+                                       <font>
+                                          <Font name="Arial Black" size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </center>
+                              </BorderPane>
+                              <BorderPane GridPane.columnIndex="1">
+                                 <center>
+                                    <Label text="Actions" textFill="WHITE">
+                                       <font>
+                                          <Font name="Arial Black" size="36.0" />
+                                       </font>
+                                    </Label>
+                                 </center>
+                              </BorderPane>
+                           </children>
+                        </GridPane>
+                     </children>
+                  </AnchorPane>
+               </content></Tab>
         </tabs>
       </TabPane>
    </center>

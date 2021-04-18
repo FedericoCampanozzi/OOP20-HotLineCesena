@@ -35,8 +35,6 @@ import javafx.util.Pair;
 
 public class WorldView implements Subscriber {
 
-    private static final int SCREEN_HEIGHT = 900;
-    private static final int SCREEN_WIDTH = 1600;
     private static final String TITLE = "Hotline Cesena";
     private static final int SCALE = 100;
 
@@ -61,7 +59,10 @@ public class WorldView implements Subscriber {
     public final void start() {
         player.register(this);
         primaryStage.setTitle(TITLE);
-        this.updateResolution(SCREEN_WIDTH, SCREEN_HEIGHT);
+        primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+        primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+        primaryStage.centerOnScreen();
+        primaryStage.setResizable(false);
         borderPane = new BorderPane();
         final Scene scene = new Scene(borderPane);
         scene.setCursor(new ImageCursor(proxyImage.getImage(SceneType.MENU, ImageType.SCOPE)));
@@ -134,9 +135,7 @@ public class WorldView implements Subscriber {
         enemiesPos.forEach((p, i) -> {
             enemiesSprite.add(new SpriteImpl(i));
         });
-
-        primaryStage.setResizable(false);
-        primaryStage.centerOnScreen();
+        
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
     }
