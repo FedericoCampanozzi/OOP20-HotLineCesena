@@ -17,7 +17,6 @@
   "maxObstaclesForRoom" : 8,
   "minRoomWeapons" : 2,
   "maxRoomWeapons" : 4,
-  
   "effectActive" : true,
   "musicActive" : true,
   "monitorX" : 1600,
@@ -29,13 +28,12 @@
   "isEffectActive" : true,
   "resolutions" : {
 	"1920": "1080",
-	"1280": "1200"
+	"1280": "720"
   },
   "defaultLanguage" : 0,
   "defaultWidth" : 800,
   "defaultHeight" : 600,
-  "topHudHeight" : 400,
+  "topHudHeight" : 302,
   "botHudHeight" : 100,
-  
   "obstaclesEdge" : 0.75
 }
