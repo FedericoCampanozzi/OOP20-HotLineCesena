@@ -108,7 +108,7 @@ public class WorldController implements Subscriber {
         gameLoopController.addMethodToUpdate(d -> {
         	try {
 	            if(missionController.missionPending().isEmpty()) {
-	            	endGame(null);
+	            	endGame(true);
 	            }
 	            else if (JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
 					endGame(false);
