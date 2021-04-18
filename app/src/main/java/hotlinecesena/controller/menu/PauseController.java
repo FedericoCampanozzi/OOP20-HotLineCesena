@@ -42,10 +42,14 @@ public class PauseController implements Initializable{
 	}
 	
 	public void resumeClick(final ActionEvent event) throws IOException {
-		worldStage.get().setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-		worldStage.get().setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-		worldStage.get().centerOnScreen();
-		worldStage.get().setFullScreen(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
+		if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen() == true) {
+			worldStage.get().setFullScreen(true);
+		}
+		else {
+			worldStage.get().setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+			worldStage.get().setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+			worldStage.get().centerOnScreen();
+		}
 		audioControllerImpl.playMusic();
 		gameLoopController.restart();
 		pauseStage.close();

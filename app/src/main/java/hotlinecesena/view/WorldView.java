@@ -27,6 +27,7 @@ import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.transform.Translate;
@@ -59,9 +60,15 @@ public class WorldView implements Subscriber {
     public final void start() {
         player.register(this);
         primaryStage.setTitle(TITLE);
-        primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-        primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-        primaryStage.centerOnScreen();
+        if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen() == true) {
+			primaryStage.setFullScreen(true);
+		}
+		else {
+			primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+			primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+			primaryStage.centerOnScreen();
+		}
+        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setResizable(false);
         borderPane = new BorderPane();
         final Scene scene = new Scene(borderPane);
