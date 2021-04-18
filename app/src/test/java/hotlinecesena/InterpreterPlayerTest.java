@@ -1,12 +1,12 @@
 package hotlinecesena;
 
-import static hotlinecesena.model.entities.actors.player.PlayerAction.ATTACK;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_EAST;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.USE;
+import static hotlinecesena.controller.entities.player.PlayerAction.ATTACK;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_EAST;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_NORTH;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_SOUTH;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_WEST;
+import static hotlinecesena.controller.entities.player.PlayerAction.RELOAD;
+import static hotlinecesena.controller.entities.player.PlayerAction.USE;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.equalTo;
@@ -25,12 +25,12 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
 import org.testfx.framework.junit5.Start;
 
+import hotlinecesena.controller.entities.player.Command;
 import hotlinecesena.controller.entities.player.InputInterpreter;
 import hotlinecesena.controller.entities.player.InputInterpreterImpl;
+import hotlinecesena.controller.entities.player.PlayerAction;
 import hotlinecesena.model.entities.actors.DirectionList;
-import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.model.entities.actors.player.PlayerImpl;
 import hotlinecesena.model.inventory.NaiveInventoryImpl;
 import hotlinecesena.utilities.MathUtils;

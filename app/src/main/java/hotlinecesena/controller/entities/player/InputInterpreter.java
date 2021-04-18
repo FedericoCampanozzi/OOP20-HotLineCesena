@@ -3,7 +3,6 @@ package hotlinecesena.controller.entities.player;
 import java.util.Collection;
 import java.util.Set;
 
-import hotlinecesena.model.entities.actors.player.Command;
 import hotlinecesena.model.entities.actors.player.Player;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;

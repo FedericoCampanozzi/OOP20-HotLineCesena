@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.GameLoopController;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -53,6 +54,7 @@ public class PauseController implements Initializable{
 		if (worldStage.isPresent()) {
 			worldStage.get().close();
 		}
+		JSONDataAccessLayer.newInstance();
 		sceneSwapper.swapScene(new StartMenuController(pauseStage, audioControllerImpl), "StartMenuView.fxml", pauseStage);
 	}
 }

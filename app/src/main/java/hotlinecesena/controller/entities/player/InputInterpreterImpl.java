@@ -15,8 +15,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.entities.actors.Direction;
-import hotlinecesena.model.entities.actors.player.Command;
-import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 import javafx.util.Pair;
@@ -111,8 +109,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
      */
     private Point2D processMouseCoordinates(final Point2D mouseCoords, final Point2D spritePosition) {
         if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
-            return new Point2D(mouseCoords.getX() - spritePosition.getX(),
-                    mouseCoords.getY() - spritePosition.getY());
+            return mouseCoords.subtract(spritePosition);
         }
         return currentMouseCoords;
     }

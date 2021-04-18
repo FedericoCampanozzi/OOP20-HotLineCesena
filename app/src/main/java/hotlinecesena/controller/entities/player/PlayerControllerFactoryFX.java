@@ -1,12 +1,12 @@
 package hotlinecesena.controller.entities.player;
 
-import static hotlinecesena.model.entities.actors.player.PlayerAction.ATTACK;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_EAST;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_NORTH;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_SOUTH;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.MOVE_WEST;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.RELOAD;
-import static hotlinecesena.model.entities.actors.player.PlayerAction.USE;
+import static hotlinecesena.controller.entities.player.PlayerAction.ATTACK;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_EAST;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_NORTH;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_SOUTH;
+import static hotlinecesena.controller.entities.player.PlayerAction.MOVE_WEST;
+import static hotlinecesena.controller.entities.player.PlayerAction.RELOAD;
+import static hotlinecesena.controller.entities.player.PlayerAction.USE;
 
 import java.util.Map;
 import java.util.Objects;
@@ -15,7 +15,6 @@ import javax.annotation.Nonnull;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.model.entities.actors.player.PlayerAction;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
 import javafx.scene.input.KeyCode;
