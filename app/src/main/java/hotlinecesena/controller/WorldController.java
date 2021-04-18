@@ -150,7 +150,7 @@ public class WorldController implements Subscriber {
                 .createPlayerController(playerSprite, listener);
         gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
 
-        camera = new CameraViewImpl(playerSprite);
+        camera = new CameraViewImpl(playerSprite, listener);
         camera.setPane(view.getGridPane());
         gameLoopController.addMethodToUpdate(camera.getUpdateMethod());
     }
