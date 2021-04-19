@@ -16,18 +16,18 @@ import javafx.util.Pair;
  * Its implementations must be View-agnostic, meaning they must work with virtually
  * any graphics library without needing any modifications.
  * </p>
- * Despite the name, it's an application of the Strategy pattern, not Interpreter.
+ * Despite the name, it's not an application of the Interpreter pattern.
  *
  */
 public interface InputInterpreter {
 
     /**
      * Interprets inputs received from the View and converts them to
-     * {@link Command}s for the {@link PlayerController} to execute.
+     * {@link Command}s for a {@link Player} controller to execute.
      * @param inputs raw inputs captured by the View.
      * @param spritePosition position of the player's sprite on the screen.
      * @param deltaTime time elapsed since the last frame.
-     * @return a set of {@code Command}s an external {@code PlayerController}
+     * @return a set of {@code Command}s an external player controller
      * may execute.
      */
     Collection<Command> interpret(Pair<Set<Enum<?>>, Point2D> inputs, Point2D spritePosition, double deltaTime);
