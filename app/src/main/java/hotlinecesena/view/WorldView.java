@@ -30,6 +30,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -40,7 +41,8 @@ public class WorldView implements Subscriber {
     private static final int SCALE = 100;
 
     private final Stage primaryStage;
-    private BorderPane borderPane;
+    private StackPane stackPane = new StackPane();
+    private BorderPane borderPane = new BorderPane();
     private final GridPane gridPane = new GridPane();
     private final ImageLoader proxyImage = new ProxyImage();
     private final DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
@@ -60,18 +62,10 @@ public class WorldView implements Subscriber {
     public final void start() {
         player.register(this);
         primaryStage.setTitle(TITLE);
-        if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen() == true) {
-			primaryStage.setFullScreen(true);
-		}
-		else {
-			primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-			primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-			primaryStage.centerOnScreen();
-		}
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setResizable(false);
-        borderPane = new BorderPane();
-        final Scene scene = new Scene(borderPane);
+        stackPane.getChildren().add(borderPane);
+        final Scene scene = new Scene(stackPane);
         scene.setCursor(new ImageCursor(proxyImage.getImage(SceneType.MENU, ImageType.SCOPE)));
         primaryStage.setScene(scene);
         borderPane.setCenter(gridPane);
@@ -145,6 +139,16 @@ public class WorldView implements Subscriber {
         
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
+        
+        if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
+			primaryStage.setFullScreen(true);
+		}
+		else {
+			primaryStage.setFullScreen(false);
+			primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+			primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+			primaryStage.centerOnScreen();
+		}
     }
 
     private void addTileToMap(final ImageView tile, final Pair<Integer, Integer> point) {
@@ -208,6 +212,10 @@ public class WorldView implements Subscriber {
 
     public Pair<Pair<Integer, Integer>, ImageView> getPlayersPos() {
         return playersPos;
+    }
+    
+    public StackPane getStackPane() {
+    	return stackPane;
     }
 
     public BorderPane getBorderPane() {

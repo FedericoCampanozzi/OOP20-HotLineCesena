@@ -42,10 +42,11 @@ public class PauseController implements Initializable{
 	}
 	
 	public void resumeClick(final ActionEvent event) throws IOException {
-		if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen() == true) {
+		if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
 			worldStage.get().setFullScreen(true);
 		}
 		else {
+			worldStage.get().setFullScreen(false);
 			worldStage.get().setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
 			worldStage.get().setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
 			worldStage.get().centerOnScreen();

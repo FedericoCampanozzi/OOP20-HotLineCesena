@@ -5,7 +5,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -32,11 +31,6 @@ public class LoadingController implements Initializable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		// ********************************************************************
-		JSONDataAccessLayer.getInstance().getSettings().setFullScreen(false);
-		// ********************************************************************
-		
 		final Task<Void> task = new Task<Void>() {
             final int N_ITERATIONS = 10;
 

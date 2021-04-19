@@ -36,9 +36,19 @@ import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.animation.FadeTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class WorldController implements Subscriber {
 
@@ -114,7 +124,6 @@ public class WorldController implements Subscriber {
 					endGame(false);
 				}
         	} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
             playerTimeLife += d;
@@ -124,15 +133,44 @@ public class WorldController implements Subscriber {
     private void endGame(Boolean win) throws IOException {
         audioController.stopMusic();
         gameLoopController.stop();
-        primaryStage.centerOnScreen();
-        sceneSwapper.swapScene(new RankingController(
-                primaryStage,
-                audioController,
-                score.getPartialScores(),
-                score.getTotalScore(), 
-                win),
-                "RankingView.fxml",
-                primaryStage);
+        BorderPane imageBorderPane = new BorderPane();
+        Image image;
+        ImageView imageView;
+        ProxyImage proxyImage = new ProxyImage();
+        if (win) {
+			image = proxyImage.getImage(SceneType.MENU, ImageType.VICTORY);
+		}
+        else {
+        	image = proxyImage.getImage(SceneType.MENU, ImageType.YOU_DIED);
+		}
+        imageView = new ImageView(image);
+        imageView.setPreserveRatio(true);
+        imageView.fitWidthProperty().bind(this.primaryStage.widthProperty());
+        imageBorderPane.setCenter(imageView);
+        FadeTransition fade = new FadeTransition(Duration.seconds(5));
+        fade.setFromValue(0.0);
+		fade.setToValue(1.0);
+		fade.setCycleCount(1);
+		fade.setNode(imageBorderPane);
+		this.view.getStackPane().getChildren().add(imageBorderPane);
+		fade.play();
+		fade.setOnFinished(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					sceneSwapper.swapScene(new RankingController(
+					        primaryStage,
+					        audioController,
+					        score.getPartialScores(),
+					        score.getTotalScore(), 
+					        win),
+					        "RankingView.fxml",
+					        primaryStage);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
     }
     
     private void initScoreModel() {
