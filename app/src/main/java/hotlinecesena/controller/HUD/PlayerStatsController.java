@@ -16,6 +16,7 @@ import hotlinecesena.view.loader.SceneType;
 import javafx.animation.FadeTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -47,6 +48,8 @@ public class PlayerStatsController implements Initializable, Updatable{
 	private Polygon previousMission;
 	@FXML
 	private Polygon nextMission;
+	@FXML
+	private ImageView miniMapImageView;
 	
 	private ProxyImage proxyImage = new ProxyImage();
 	private List<Pair<String, Boolean>> missions;
@@ -65,12 +68,18 @@ public class PlayerStatsController implements Initializable, Updatable{
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		borderPane.prefWidthProperty().bind(worldView.getBorderPane().widthProperty());
+		borderPane.prefWidthProperty().bind(worldView.getStackPane().widthProperty());
+		borderPane.prefHeightProperty().bind(worldView.getStackPane().heightProperty());
 		missionCheckBox.setText(missions.get(currentMission).getKey());
+		
 		fade.setFromValue(1.0);
 		fade.setToValue(0.0);
 		fade.setCycleCount(2);
 		fade.setAutoReverse(true);
+		
+		Rectangle2D croppedPortion = new Rectangle2D(
+				0,0,0,0);
+		miniMapImageView.setViewport(croppedPortion);
 	}
 
 	@Override
@@ -133,6 +142,9 @@ public class PlayerStatsController implements Initializable, Updatable{
 			    	fade.play();
 			    }
 			});
+			
+			// Update of MiniMap
+			miniMapImageView.setImage(JSONDataAccessLayer.getInstance().getWorld().getImageVIewUpdated());
 		};
 	}
 }

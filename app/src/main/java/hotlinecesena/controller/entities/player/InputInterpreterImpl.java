@@ -1,19 +1,21 @@
 package hotlinecesena.controller.entities.player;
 
-import static java.util.stream.Collectors.toCollection;
 import static java.util.stream.Collectors.toUnmodifiableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
+import hotlinecesena.controller.entities.player.command.Command;
+import hotlinecesena.controller.entities.player.command.MoveCommand;
+import hotlinecesena.controller.entities.player.command.RotateCommand;
 import hotlinecesena.model.entities.actors.Direction;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
@@ -27,18 +29,27 @@ import javafx.util.Pair;
 public final class InputInterpreterImpl implements InputInterpreter {
 
     private static final float DEADZONE = 50.0f;
-    private final Map<Enum<?>, PlayerAction> bindings;
     private Point2D currentMouseCoords = Point2D.ZERO;
+    private final Map<Enum<?>, String> bindings;
+    private final Map<String, Direction> movementActions;
+    private final Map<String, Command> otherActions;
 
     /**
      * Instantiates a new {@code InputInterpreterImpl} that will
      * make use of the given input bindings.
-     * @param bindings a Map which associates keyboard keys and/or
-     * mouse buttons to {@link PlayerAction}s.
-     * @throws NullPointerException if the given {@code bindings} is null.
+     * @param bindings a Map associating keyboard keys and/or
+     * mouse buttons to strings representing player actions.
+     * @param movementActions Map associating strings to player movements.
+     * @param otherActions Map associating strings to player actions
+     * excluding movements.
+     * @throws NullPointerException if the given bindings, movementActions
+     * or otherActions are null.
      */
-    public InputInterpreterImpl(@Nonnull final Map<Enum<?>, PlayerAction> bindings) {
+    public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
+            @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions) {
         this.bindings = Objects.requireNonNull(bindings);
+        this.movementActions = movementActions;
+        this.otherActions = otherActions;
     }
 
     /**
@@ -53,14 +64,14 @@ public final class InputInterpreterImpl implements InputInterpreter {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
         final List<Command> commandsToDeliver = new ArrayList<>();
-        final Set<PlayerAction> actions = this.convertBindings(inputs.getKey());
+        final Set<String> actions = this.convertBindings(inputs.getKey());
 
         /*
          * Compute new movement direction
          */
         final Point2D newMovementDir = this.processMovementDirection(actions);
         if (!newMovementDir.equals(Point2D.ZERO)) {
-            commandsToDeliver.add(p -> p.move(newMovementDir.multiply(deltaTime)));
+            commandsToDeliver.add(new MoveCommand(newMovementDir.multiply(deltaTime)));
         }
 
         /*
@@ -68,7 +79,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
          */
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
         if (!currentMouseCoords.equals(newMouseCoords)) {
-            commandsToDeliver.add(p -> p.setAngle(MathUtils.mouseToDegrees(newMouseCoords)));
+            commandsToDeliver.add(new RotateCommand(MathUtils.mouseToDegrees(newMouseCoords)));
             currentMouseCoords = newMouseCoords;
         }
 
@@ -83,20 +94,21 @@ public final class InputInterpreterImpl implements InputInterpreter {
     /**
      * Converts all bindings into PlayerActions.
      */
-    private Set<PlayerAction> convertBindings(final Set<Enum<?>> inputs) {
+    private Set<String> convertBindings(final Set<Enum<?>> inputs) {
         return inputs.stream()
                 .filter(bindings::containsKey)
                 .map(bindings::get)
-                .collect(toCollection(() -> EnumSet.noneOf(PlayerAction.class)));
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     /**
      * Computes the new movement direction while also normalizing it.
      */
-    private Point2D processMovementDirection(final Set<PlayerAction> actions) {
-        return actions.stream()
-                .map(PlayerAction::getDirection)
-                .flatMap(Optional::stream)
+    private Point2D processMovementDirection(final Set<String> actions) {
+        return movementActions.entrySet()
+                .stream()
+                .filter(e -> actions.contains(e.getKey()))
+                .map(Entry::getValue)
                 .map(Direction::get)
                 .reduce(Point2D.ZERO, Point2D::add)
                 .normalize();
@@ -115,12 +127,13 @@ public final class InputInterpreterImpl implements InputInterpreter {
     }
 
     /**
-     * Converts all remaining PlayerActions into Commands.
+     * Converts all remaining actions to Commands.
      */
-    private List<Command> computeRemainingCommands(final Set<PlayerAction> actions) {
-        return actions.stream()
-                .map(PlayerAction::getCommand)
-                .flatMap(Optional::stream)
+    private List<Command> computeRemainingCommands(final Set<String> actions) {
+        return otherActions.entrySet()
+                .stream()
+                .filter(e -> actions.contains(e.getKey()))
+                .map(Entry::getValue)
                 .collect(toUnmodifiableList());
     }
 }
