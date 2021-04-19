@@ -25,7 +25,7 @@ import javafx.scene.image.Image;
 
 /**
  *
- * {@link PlayerController} implementation.
+ * {@link EntityController} implementation for {@link Player} management.
  *
  */
 public final class PlayerController implements EntityController, Subscriber {
