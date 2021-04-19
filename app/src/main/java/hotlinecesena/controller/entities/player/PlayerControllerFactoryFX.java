@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 
 import hotlinecesena.controller.entities.EntityController;
 import hotlinecesena.controller.entities.player.command.Command;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.Direction;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.player.Player;
@@ -52,13 +51,16 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     }
 
     /**
-     * @throws NullPointerException if the given sprite is null.
+     * @throws NullPointerException if the given player, sprite or listener are null.
      */
     @Override
-    public EntityController createPlayerController(@Nonnull final Sprite sprite, @Nonnull final InputListener listener) {
-        Objects.requireNonNull(sprite);
-        final Player playerModel = JSONDataAccessLayer.getInstance().getPlayer().getPly();
-        final InputInterpreter interpreter = new InputInterpreterImpl(bindings, movementActions, otherActions);
-        return new PlayerControllerFX(playerModel, sprite, interpreter, listener);
+    public EntityController create(@Nonnull final Player player, @Nonnull final Sprite sprite,
+            @Nonnull final InputListener listener) {
+        return new PlayerController(
+                Objects.requireNonNull(player),
+                Objects.requireNonNull(sprite),
+                new InputInterpreterImpl(bindings, movementActions, otherActions),
+                Objects.requireNonNull(listener)
+                );
     }
 }

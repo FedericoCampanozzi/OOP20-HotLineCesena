@@ -28,7 +28,7 @@ import javafx.scene.image.Image;
  * {@link PlayerController} implementation.
  *
  */
-public final class PlayerControllerFX implements EntityController, Subscriber {
+public final class PlayerController implements EntityController, Subscriber {
 
     private final Player player;
     private final InputInterpreter interpreter;
@@ -36,7 +36,7 @@ public final class PlayerControllerFX implements EntityController, Subscriber {
     private final InputListener listener;
     private final ImageLoader loader = new ProxyImage();
 
-    public PlayerControllerFX(@Nonnull final Player player, @Nonnull final Sprite sprite,
+    public PlayerController(@Nonnull final Player player, @Nonnull final Sprite sprite,
             @Nonnull final InputInterpreter interpreter, @Nonnull final InputListener listener) {
         this.player = Objects.requireNonNull(player);
         this.sprite = Objects.requireNonNull(sprite);
