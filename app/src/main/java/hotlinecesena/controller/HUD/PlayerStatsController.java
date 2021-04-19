@@ -122,7 +122,7 @@ public class PlayerStatsController implements Initializable, Updatable{
 			missions = missionController.getMissions();
 			missionCheckBox.setSelected(missions.get(currentMission).getValue());
 			
-			worldView.getBorderPane().setOnKeyPressed(e -> {
+			worldView.getStackPane().setOnKeyPressed(e -> {
 			    if (e.getCode() == KeyCode.M) {
 			    	currentMission++;
 			    	if (currentMission == missions.size()) {
