@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import com.google.common.eventbus.Subscribe;
 
+import hotlinecesena.controller.entities.EntityController;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.DeathEvent;
@@ -27,7 +28,7 @@ import javafx.scene.image.Image;
  * {@link PlayerController} implementation.
  *
  */
-public final class PlayerControllerFX implements PlayerController, Subscriber {
+public final class PlayerControllerFX implements EntityController, Subscriber {
 
     private final Player player;
     private final InputInterpreter interpreter;
@@ -85,6 +86,11 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
                     deltaTime)
             .forEach(c -> c.execute(player));
         };
+    }
+
+    @Override
+    public Sprite getSprite() {
+        return sprite;
     }
 
     /*
