@@ -162,8 +162,7 @@ public class WorldController implements Subscriber {
 					        primaryStage,
 					        audioController,
 					        score.getPartialScores(),
-					        score.getTotalScore(), 
-					        win),
+					        score.getTotalScore()),
 					        "RankingView.fxml",
 					        primaryStage);
 				} catch (IOException e) {
