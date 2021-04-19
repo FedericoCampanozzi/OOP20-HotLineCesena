@@ -48,8 +48,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
             @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions) {
         this.bindings = Objects.requireNonNull(bindings);
-        this.movementActions = movementActions;
-        this.otherActions = otherActions;
+        this.movementActions = Objects.requireNonNull(movementActions);
+        this.otherActions = Objects.requireNonNull(otherActions);
     }
 
     /**
