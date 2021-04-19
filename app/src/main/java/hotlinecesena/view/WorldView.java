@@ -23,6 +23,7 @@ import hotlinecesena.view.loader.ImageLoader;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
+import javafx.geometry.Point2D;
 import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -37,12 +38,11 @@ import javafx.util.Pair;
 
 public class WorldView implements Subscriber {
 
-    private static final String TITLE = "Hotline Cesena";
     private static final int SCALE = 100;
 
     private final Stage primaryStage;
-    private StackPane stackPane = new StackPane();
-    private BorderPane borderPane = new BorderPane();
+    private final StackPane stackPane = new StackPane();
+    private final BorderPane borderPane = new BorderPane();
     private final GridPane gridPane = new GridPane();
     private final ImageLoader proxyImage = new ProxyImage();
     private final DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
@@ -50,10 +50,10 @@ public class WorldView implements Subscriber {
     private final Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
     private final List<Sprite> enemiesSprite = new ArrayList<>();
 
-    private final Map<Pair<Integer, Integer>, ImageView> enemiesPos = new LinkedHashMap<>();
-    private final Map<Pair<Integer, Integer>, ImageView> itemsPos = new LinkedHashMap<>();
-    private final Map<Pair<Integer, Integer>, ImageView> obstaclesPos = new LinkedHashMap<>();
-    private Pair<Pair<Integer, Integer>, ImageView> playersPos;
+    private final Map<Point2D, ImageView> enemiesPos = new LinkedHashMap<>();
+    private final Map<Point2D, ImageView> itemsPos = new LinkedHashMap<>();
+    private final Map<Point2D, ImageView> obstaclesPos = new LinkedHashMap<>();
+    private Pair<Point2D, ImageView> playersPos;
 
     public WorldView(final Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -61,7 +61,6 @@ public class WorldView implements Subscriber {
 
     public final void start() {
         player.register(this);
-        primaryStage.setTitle(TITLE);
         primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setResizable(false);
         stackPane.getChildren().add(borderPane);
@@ -72,6 +71,7 @@ public class WorldView implements Subscriber {
 
         worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
+            final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
             case WALL:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.WALL));
@@ -83,82 +83,84 @@ public class WorldView implements Subscriber {
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.FLOOR));
                 break;
             }
-            this.addTileToMap(tile, p);
+            this.addTileToMap(tile, point);
         });
 
         worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
+            final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
             case ITEM:
                 tile.setImage(this.pickItemImage(
-                        JSONDataAccessLayer.getInstance().getDataItems().getItems().get(Utilities.convertPairToPoint2D(p)))
+                        JSONDataAccessLayer.getInstance().getDataItems().getItems().get(point))
                         );
-                itemsPos.put(p, tile);
+                itemsPos.put(point, tile);
                 break;
             case KEY_ITEM:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.MONEY_BAG));
-                itemsPos.put(p, tile);
+                itemsPos.put(point, tile);
                 break;
             case WEAPONS:
                 tile.setImage(this.pickWeaponImage(
-                        JSONDataAccessLayer.getInstance().getWeapons().getWeapons().get(Utilities.convertPairToPoint2D(p))
+                        JSONDataAccessLayer.getInstance().getWeapons().getWeapons().get(point)
                         .getWeaponType())
                         );
-                itemsPos.put(p, tile);
+                itemsPos.put(point, tile);
                 break;
             case OBSTACOLES:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.BOX));
-                obstaclesPos.put(p, tile);
+                obstaclesPos.put(point, tile);
                 break;
             default:
                 break;
             }
-            this.addTileToMap(tile, p);
+            this.addTileToMap(tile, point);
         });
 
         worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
+            final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
             case PLAYER:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE));
-                playersPos = new Pair<>(new Pair<>(p.getKey(), p.getValue()), tile);
+                playersPos = new Pair<>(point, tile);
                 break;
             case ENEMY:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.ENEMY_1));
-                enemiesPos.put(p, tile);
+                enemiesPos.put(point, tile);
                 break;
             default:
                 break;
             }
-            this.addTileToMap(tile, p);
+            this.addTileToMap(tile, point);
         });
 
         enemiesPos.forEach((p, i) -> {
             enemiesSprite.add(new SpriteImpl(i));
         });
-        
+
         borderPane.getCenter().setScaleX(SCALE);
         borderPane.getCenter().setScaleY(SCALE);
-        
+
         if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
-			primaryStage.setFullScreen(true);
-		}
-		else {
-			primaryStage.setFullScreen(false);
-			primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-			primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-			primaryStage.centerOnScreen();
-		}
+            primaryStage.setFullScreen(true);
+        }
+        else {
+            primaryStage.setFullScreen(false);
+            primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+            primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+            primaryStage.centerOnScreen();
+        }
     }
 
-    private void addTileToMap(final ImageView tile, final Pair<Integer, Integer> point) {
+    private void addTileToMap(final ImageView tile, final Point2D point) {
         final Translate trans = new Translate();
         tile.getTransforms().add(trans);
         tile.setFitHeight(1);
         tile.setFitWidth(1);
         gridPane.add(tile, 0, 0);
-        trans.setX(point.getKey());
-        trans.setY(point.getValue());
+        trans.setX(point.getX());
+        trans.setY(point.getY());
     }
 
     private Image pickItemImage(final ItemsType type) {
@@ -198,24 +200,24 @@ public class WorldView implements Subscriber {
         return gridPane;
     }
 
-    public Map<Pair<Integer, Integer>, ImageView> getEnemiesPos() {
+    public Map<Point2D, ImageView> getEnemiesPos() {
         return enemiesPos;
     }
 
-    public Map<Pair<Integer, Integer>, ImageView> getItemsPos() {
+    public Map<Point2D, ImageView> getItemsPos() {
         return itemsPos;
     }
 
-    public Map<Pair<Integer, Integer>, ImageView> getObstaclesPos() {
+    public Map<Point2D, ImageView> getObstaclesPos() {
         return obstaclesPos;
     }
 
-    public Pair<Pair<Integer, Integer>, ImageView> getPlayersPos() {
+    public Pair<Point2D, ImageView> getPlayersPos() {
         return playersPos;
     }
-    
+
     public StackPane getStackPane() {
-    	return stackPane;
+        return stackPane;
     }
 
     public BorderPane getBorderPane() {
@@ -237,7 +239,7 @@ public class WorldView implements Subscriber {
 
     @Subscribe
     private void onItemPickUP(final ItemPickUpEvent e) {
-        this.getItemsPos().get(new Pair<>((int) e.getItemPosition().getX(), (int) e.getItemPosition().getY()))
+        this.getItemsPos().get(e.getItemPosition())
         .setImage(proxyImage.getImage(SceneType.GAME, ImageType.BLANK));
     }
 
@@ -247,7 +249,7 @@ public class WorldView implements Subscriber {
         if (e.getOldWeapon().isPresent()) {
             image = this.pickWeaponImage(e.getOldWeapon().get());
         }
-        this.getItemsPos().get(new Pair<>((int) e.getItemPosition().getX(), (int) e.getItemPosition().getY()))
+        this.getItemsPos().get(e.getItemPosition())
         .setImage(image);
     }
 }

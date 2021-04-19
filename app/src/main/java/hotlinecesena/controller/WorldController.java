@@ -28,7 +28,6 @@ import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
 import hotlinecesena.utilities.SceneSwapper;
-import hotlinecesena.view.MiniMapView;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;
@@ -46,6 +45,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -64,7 +64,6 @@ public class WorldController implements Subscriber {
     private AudioControllerImpl audioController;
     private final SceneSwapper sceneSwapper = new SceneSwapper();
     private Score score;
-    private MiniMapView miniMapView;
 
     private double playerTimeLife = 0;
     private int totalAmmoBag = 0;
@@ -207,13 +206,12 @@ public class WorldController implements Subscriber {
 
     private void initHudController() throws IOException {
         playerStatsController = new PlayerStatsController(view, missionController);
+        AnchorPane hudPane = new AnchorPane();
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("GUI/PlayerStatsView.fxml"));
         loader.setController(playerStatsController);
-        view.getBorderPane().setBottom(loader.load());
+        hudPane.getChildren().add(loader.load());
+        view.getStackPane().getChildren().add(hudPane);
         gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
-
-        miniMapView = new MiniMapView(view.getBorderPane());
-        gameLoopController.addMethodToUpdate(miniMapView.getUpdateMethod());
     }
 
     private void initMissionController() {

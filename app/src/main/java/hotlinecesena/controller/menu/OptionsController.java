@@ -72,6 +72,7 @@ public class OptionsController implements Initializable {
 		fullScreenRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 		resMap.forEach((x, y) -> resolutions.add(new Pair<Integer, Integer>(Integer.parseInt(x), Integer.parseInt(y))));
 		resolutionComboBox.setItems(FXCollections.observableArrayList(resolutions));
+		resolutionComboBox.setDisable(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 	}	
 	
 	public void backClick(final ActionEvent event) throws IOException {
@@ -96,9 +97,11 @@ public class OptionsController implements Initializable {
 	
 	public void fullScreenRadioButtonChangedState() {
 		if (fullScreenRadioButton.isSelected()) {
+			resolutionComboBox.setDisable(true);
 			JSONDataAccessLayer.getInstance().getSettings().setFullScreen(true);
 		}
 		else {
+			resolutionComboBox.setDisable(false);
 			JSONDataAccessLayer.getInstance().getSettings().setFullScreen(false);
 		}
 	}
