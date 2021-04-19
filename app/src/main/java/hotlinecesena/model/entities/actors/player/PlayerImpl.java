@@ -34,7 +34,6 @@ import javafx.geometry.Point2D;
 public final class PlayerImpl extends AbstractActor implements Player {
 
     private static final long WEAPON_PICKUP_INTERVAL = (long) (1E+9 / 3);
-    private static final double ITEM_USAGE_RADIUS = 1.0;
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
     private final Collection<Obstacle> obstacles;
@@ -42,6 +41,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
     private final Map<Point2D, ItemsType> itemsOnMap;
     private final Map<Point2D, Weapon> weaponsOnMap;
     private long lastTime = System.nanoTime();
+    private final double itemUsageRadius = this.getWidth() * 0.75;
 
     /**
      * Instantiates a new {@code Player}.
@@ -124,7 +124,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
         final Set<Point2D> toBeRemoved = new HashSet<>();
         itemsOnMap.forEach((itemPos, item) -> {
             if (MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
-                    itemPos, ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS)) {
+                    itemPos, itemUsageRadius, itemUsageRadius)) {
                 item.usage().accept(this);
                 toBeRemoved.add(itemPos);
                 this.publish(new ItemPickUpEvent(this, item, itemPos));
@@ -142,7 +142,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
             final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
                     .stream()
                     .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
-                            e.getKey(), ITEM_USAGE_RADIUS, ITEM_USAGE_RADIUS))
+                            e.getKey(), itemUsageRadius, itemUsageRadius))
                     .findFirst();
             weaponFound.ifPresent(entry -> {
                 final Weapon newWeap = entry.getValue();
