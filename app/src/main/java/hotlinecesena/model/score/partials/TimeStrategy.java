@@ -29,7 +29,7 @@ public final class TimeStrategy implements PartialStrategy {
                 - JSONDataAccessLayer.getInstance().getWorld().getMinX() + 1;
         final long mapHeight = JSONDataAccessLayer.getInstance().getWorld().getMaxY()
                 - JSONDataAccessLayer.getInstance().getWorld().getMinY() + 1;
-        timeCeiling = (mapWidth + mapHeight) / 3;
+        timeCeiling = (mapWidth + mapHeight) / 2;
     }
 
     @Override
