@@ -1,7 +1,6 @@
 package hotlinecesena;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,7 +9,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
 
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.controller.camera.Camera;
+import hotlinecesena.controller.camera.CameraImpl;
 import hotlinecesena.utilities.MathUtils;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;
@@ -31,13 +31,12 @@ public final class CameraTest {
     private static final double WIDTH = 800;
     private static final double HEIGHT = 600;
     private static final double DELTA_TIME = 5.0;
-    private static final double HUD_SIZE = JSONDataAccessLayer.getInstance().getSettings().getBotHudHeight()
-            + JSONDataAccessLayer.getInstance().getSettings().getTopHudHeight();
     private static final double ACCEL = 30.0;
     private static final double SHARPNESS = 0.2;
     private Pane testPane;
     private Scene testScene;
-    private CameraView camera;
+    private Camera camera;
+    private CameraView cameraView;
     private Sprite sprite;
 
     @Start
@@ -46,27 +45,21 @@ public final class CameraTest {
         final ImageView imageView = new ImageView();
         testPane.getChildren().add(imageView);
         sprite = new SpriteImpl(imageView);
-        camera = new CameraViewImpl(sprite, new InputListenerFX());
+        cameraView = new CameraViewImpl(testPane);
+        camera = new CameraImpl(cameraView, sprite, new InputListenerFX());
         testScene = new Scene(testPane, WIDTH, HEIGHT);
         stage.setScene(testScene);
     }
 
     @Test
-    void throwIfPaneIsNotSet() {
-        assertThrows(IllegalStateException.class, () -> camera.getUpdateMethod().accept(DELTA_TIME));
-    }
-
-    @Test
     void followSpriteMovements() {
-        camera.setPane(testPane);
         sprite.updatePosition(new Point2D(1, 1));
         camera.getUpdateMethod().accept(DELTA_TIME);
 
         // Compute predicted camera position
         final double blend = MathUtils.blend(SHARPNESS, ACCEL, DELTA_TIME);
         final Point2D targetPos = sprite.getPositionRelativeToParent()
-                .subtract(testPane.getScene().getWidth() / 2,
-                        (testPane.getScene().getHeight() - HUD_SIZE) / 2);
+                .subtract(testPane.getScene().getWidth() / 2, testPane.getScene().getHeight() / 2);
         final Point2D newPos = MathUtils.lerp(camera.getPosition(), targetPos, blend);
 
         assertEquals(newPos.getX(), camera.getPosition().getX(), DOUBLE_EPSILON);
