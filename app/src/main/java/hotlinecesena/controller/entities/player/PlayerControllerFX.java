@@ -1,6 +1,5 @@
 package hotlinecesena.controller.entities.player;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -80,14 +79,11 @@ public final class PlayerControllerFX implements PlayerController, Subscriber {
     public Consumer<Double> getUpdateMethod() {
         return deltaTime -> {
             player.update(deltaTime);
-            final Collection<Command> commands = interpreter.interpret(
+            interpreter.interpret(
                     listener.deliverInputs(),
                     sprite.getPositionRelativeToScene(),
-                    deltaTime
-                    );
-            if (!commands.isEmpty()) {
-                commands.forEach(c -> c.execute(player));
-            }
+                    deltaTime)
+            .forEach(c -> c.execute(player));
         };
     }
 
