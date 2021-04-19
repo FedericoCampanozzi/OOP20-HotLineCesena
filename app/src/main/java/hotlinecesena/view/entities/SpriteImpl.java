@@ -30,7 +30,7 @@ public final class SpriteImpl implements Sprite {
      */
     public SpriteImpl(@Nonnull final ImageView view) {
         imageView = Objects.requireNonNull(view);
-        imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
+        imageOffset = new Point2D(imageView.getFitWidth() / 2.0, imageView.getFitHeight() / 2.0);
         this.findPreexistingTranslate(view).ifPresentOrElse(t -> trans = t, () -> trans = new Translate());
         this.findPreexistingRotate(view).ifPresentOrElse(r -> rotate = r, () -> rotate = new Rotate());
         imageView.getTransforms().addAll(rotate, trans);
@@ -66,10 +66,10 @@ public final class SpriteImpl implements Sprite {
     @Override
     public void updatePosition(@Nonnull final Point2D entityPos) {
         Objects.requireNonNull(entityPos);
-        rotate.setPivotX(entityPos.getX() / 2 + imageOffset.getX());
-        rotate.setPivotY(entityPos.getY() / 2 + imageOffset.getY());
-        trans.setX(entityPos.getX() / 2);
-        trans.setY(entityPos.getY() / 2);
+        rotate.setPivotX(entityPos.getX() / 2.0 + imageOffset.getX());
+        rotate.setPivotY(entityPos.getY() / 2.0 + imageOffset.getY());
+        trans.setX(entityPos.getX() / 2.0);
+        trans.setY(entityPos.getY() / 2.0);
     }
 
     @Override
@@ -80,7 +80,7 @@ public final class SpriteImpl implements Sprite {
     @Override
     public void updateImage(final Image image) {
         imageView.setImage(image);
-        imageOffset = new Point2D(imageView.getFitWidth() / 2, imageView.getFitHeight() / 2);
+        imageOffset = new Point2D(imageView.getFitWidth() / 2.0, imageView.getFitHeight() / 2.0);
     }
 
     @Override

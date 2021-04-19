@@ -61,10 +61,11 @@ public final class CameraImpl implements Camera {
         return deltaTime -> {
             final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
             // Difference between mouse coordinates and sprite coordinates
-            final Point2D spriteMouseDistance = listener.deliverInputs().getValue().subtract(
-                    entitySprite.getPositionRelativeToScene());
+            final Point2D spriteMouseDistance = listener.deliverInputs()
+                    .getValue()
+                    .subtract(entitySprite.getPositionRelativeToScene());
             final Point2D targetPos = entitySprite.getPositionRelativeToParent()
-                    .subtract(cameraView.getRegion().getWidth() / 2, cameraView.getRegion().getHeight() / 2)
+                    .subtract(cameraView.getRegion().getWidth() / 2.0, cameraView.getRegion().getHeight() / 2.0)
                     .add(spriteMouseDistance.multiply(MOUSE_LEEWAY)); //Move camera away based on mouse coordinates.
 
             final Point2D newPos = MathUtils.lerp(cameraView.getPosition(), targetPos, blend);

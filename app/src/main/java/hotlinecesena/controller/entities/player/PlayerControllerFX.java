@@ -124,6 +124,6 @@ public final class PlayerControllerFX implements EntityController, Subscriber {
     @Subscribe
     private void handleDeathEvent(final DeathEvent e) {
         sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
-        sprite.updateRotation(0);
+        sprite.updateRotation(0.0);
     }
 }
