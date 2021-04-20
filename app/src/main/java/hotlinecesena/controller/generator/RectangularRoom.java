@@ -36,7 +36,9 @@ public class RectangularRoom extends AbstractRoom {
 		this.d = nDoor;
 		generate();
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void generate() {
 		final int width2 = (this.w - 1) / 2;
@@ -71,7 +73,9 @@ public class RectangularRoom extends AbstractRoom {
 			}
 		}
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Room deepCopy() {
 		return new RectangularRoom(this.map, this.center, this.w, this.h);

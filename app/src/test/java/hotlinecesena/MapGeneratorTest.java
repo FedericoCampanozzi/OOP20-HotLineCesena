@@ -71,7 +71,7 @@ public class MapGeneratorTest {
 	private void generateRectangular(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectungolarRoomList(
 							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 							settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),

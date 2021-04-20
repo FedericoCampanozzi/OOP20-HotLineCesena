@@ -32,7 +32,7 @@ public class DataWorldMap extends AbstractData {
 	
 	public DataWorldMap(DataJSONSettings settings) throws IOException {
 		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectungolarRoomList(
 						settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 						settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
 						settings.getMinRoomDoor(), settings.getMaxRoomDoor(),

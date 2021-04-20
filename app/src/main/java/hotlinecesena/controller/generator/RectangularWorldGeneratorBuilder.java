@@ -13,7 +13,9 @@ public class RectangularWorldGeneratorBuilder extends AbstractWorldGeneratorBuil
 	public RectangularWorldGeneratorBuilder() {
 		super();
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();

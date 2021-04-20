@@ -14,6 +14,9 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 		super();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();
@@ -97,6 +100,9 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 		return allDoors.get(rnd.nextInt(allDoors.size()));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder finishes() {
 		this.haveInitMapAndBaseRoom();

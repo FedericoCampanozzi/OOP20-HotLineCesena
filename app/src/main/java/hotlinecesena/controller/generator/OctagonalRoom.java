@@ -7,6 +7,11 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * This class provide to represent an octagonal room
+ * @author Federico
+ *
+ */
 public class OctagonalRoom extends AbstractRoom {
 	final private  int width;
 	private  int edge;

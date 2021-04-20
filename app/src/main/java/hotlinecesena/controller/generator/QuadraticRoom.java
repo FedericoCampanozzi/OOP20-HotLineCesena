@@ -30,7 +30,9 @@ public class QuadraticRoom extends AbstractRoom {
 		this.d = nDoor;
 		generate();
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void generate() {
 		
@@ -64,7 +66,9 @@ public class QuadraticRoom extends AbstractRoom {
 			}
 		}
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Room deepCopy() {
 		return new QuadraticRoom(this.map, this.center, this.w);
