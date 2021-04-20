@@ -20,20 +20,35 @@ public class MissionController {
         }
     }
 	
+	/**
+	 * add a new quest of current set of missions
+	 * @param guiName
+	 * @param complete
+	 */
 	public void addQuest(String guiName, Supplier<Boolean> complete) {
 		this.quests.put(guiName, new Pair<>(complete, false));
 	}
 	
+	/**
+	 * notify that a mission is end
+	 * @param name
+	 */
 	public void completeQuest(String name) {
 		this.quests.put(name, new Pair<>(this.quests.get(name).getKey(),true));
 	}
-	
+
+	/**
+	 * @return the list of mission and if it is completed or not
+	 */	
 	public List<Pair<String,Boolean>> getMissions(){
 		return quests.entrySet().stream()
 				.map(itm -> new Pair<>(itm.getKey(), itm.getValue().getValue()))
 				.collect(toList());
 	}
-	
+
+	/**
+	 * @return the list of names of remaining mission
+	 */
 	public List<String> missionPending(){
 		return quests.entrySet().stream()
 				.filter((itm) -> !itm.getValue().getValue())
@@ -41,6 +56,9 @@ public class MissionController {
 				.collect(toList());
 	}
 	
+	/**
+	 * @return the list of names of completed mission
+	 */
 	public List<String> missionComplete(){
 		return quests.entrySet().stream()
 				.filter((itm) -> itm.getValue().getValue())
