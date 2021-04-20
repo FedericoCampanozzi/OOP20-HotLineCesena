@@ -51,6 +51,8 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     }
 
     /**
+     * @implSpec Also instantiates an {@link InputInterpreterImpl} with a default
+     * set of input bindings.
      * @throws NullPointerException if the given player, sprite or listener are null.
      */
     @Override

@@ -4,24 +4,25 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import com.google.common.eventbus.EventBus;
-
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.events.Event;
+import hotlinecesena.model.events.Publisher;
+import hotlinecesena.model.events.PublisherComponent;
 import hotlinecesena.model.events.Subscriber;
 import javafx.geometry.Point2D;
 
 /**
  *
- * Template for generic entities.
+ * Template for generic entities. Delegates event publishing
+ * to an external {@link Publisher}.
  */
 public abstract class AbstractEntity implements Entity {
 
     private Point2D position;
     private final double width;
     private final double height;
-    private final EventBus bus;
+    private final Publisher publisher;
 
     /**
      *
@@ -34,7 +35,7 @@ public abstract class AbstractEntity implements Entity {
         this.position = Objects.requireNonNull(position);
         this.width = width;
         this.height = height;
-        bus = new EventBus();
+        publisher = new PublisherComponent();
     }
 
     @Override
@@ -64,39 +65,26 @@ public abstract class AbstractEntity implements Entity {
         return height;
     }
 
+    @Override
+    public final void publish(@Nonnull final Event event) {
+        publisher.publish(event);
+    }
+
+    @Override
+    public final void register(@Nonnull final Subscriber subscriber) {
+        publisher.register(subscriber);
+    }
+
+    @Override
+    public final void unregister(@Nonnull final Subscriber subscriber) {
+        publisher.unregister(subscriber);
+    }
+
     /**
      * Convenience method to be used internally.
      * @return the instance of the {@link JSONDataAccessLayer}.
      */
     protected final DataAccessLayer getGameMaster() {
         return JSONDataAccessLayer.getInstance();
-    }
-
-    /**
-     * Publishes an {@link Event} on this entity's {@link EventBus}.
-     * <br>
-     * Events may not be posted by external objects.
-     *
-     * @param event the event to be published
-     * @throws NullPointerException if the given event is null.
-     */
-    protected final void publish(@Nonnull final Event event) {
-        bus.post(Objects.requireNonNull(event));
-    }
-
-    /**
-     * @throws NullPointerException if the supplied subscriber is null.
-     */
-    @Override
-    public final void register(@Nonnull final Subscriber subscriber) {
-        bus.register(Objects.requireNonNull(subscriber));
-    }
-
-    /**
-     * @throws NullPointerException if the supplied subscriber is null.
-     */
-    @Override
-    public final void unregister(@Nonnull final Subscriber subscriber) {
-        bus.unregister(Objects.requireNonNull(subscriber));
     }
 }

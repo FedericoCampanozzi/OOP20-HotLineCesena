@@ -11,7 +11,7 @@ public final class MoveCommand implements Command {
     private final Point2D direction;
 
     /**
-     * Instantiates a new {code MoveCommand}.
+     * Instantiates a new {@code MoveCommand}.
      * @param direction the direction the player will
      * move in.
      */
