@@ -11,15 +11,30 @@ import org.apache.commons.io.IOUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hotlinecesena.model.dataccesslayer.datastructure.*;
 
+/**
+ * End implementation of DataAccessLayer.
+ * this class is a composite class of all datastructure classes
+ * @author Federico
+ *
+ */
 public class JSONDataAccessLayer implements DataAccessLayer {
-
-	public static String SYS_SEP = File.separator;//get default separator for current operative system
-	public static String JAR_SEP = "/";//get default separator for jar
-	public static final String FILE_FOLDER_PATH = System.getProperty("user.home") + SYS_SEP + ".HotlineCesena"
-			+ SYS_SEP + "File" + SYS_SEP;
+	/**
+	 * Default separator for current operative system
+	 */
+	public static String SYS_SEP = File.separator;
+	/**
+	 * Default separator for jar
+	 */
+	public static String JAR_SEP = "/";
+	/**
+	 * Our path where file are saved
+	 */
+	public static final String FILE_FOLDER_PATH = System.getProperty("user.home") + SYS_SEP + ".HotlineCesena" + SYS_SEP + "File" + SYS_SEP;
+	/**
+	 * Current seed, that need to be shared in all parts of program
+	 */
 	public static long SEED = 0;
 	private static DataAccessLayer singleton = null;
-
 	private DataJSONSettings settings;
 	private DataJSONRanking ranking;
 	private DataJSONLanguages languages;
@@ -31,51 +46,82 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 	private DataBullet bullets;
 	private DataWeapons weapons;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataWeapons getWeapons() {
 		return weapons;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataBullet getBullets() {
 		return bullets;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataItems getDataItems() {
 		return items;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataPhysicsCollision getPhysics() {
 		return physics;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataJSONSettings getSettings() {
 		return settings;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataJSONRanking getRanking() {
 		return ranking;
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataJSONLanguages getLanguages() {
 		return languages;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataWorldMap getWorld() {
 		return world;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataPlayer getPlayer() {
 		return player;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public DataEnemy getEnemy() {
 		return enemy;
@@ -137,6 +183,9 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 		}
 	}
 
+	/**
+	 * @return the current instance of JSONDataAccessLayer
+	 */
 	public static DataAccessLayer getInstance() {
 		if (singleton == null) {
 			singleton = new JSONDataAccessLayer();
@@ -144,12 +193,20 @@ public class JSONDataAccessLayer implements DataAccessLayer {
 		return singleton;
 	}
 
+	/**
+	 * change current seed, this method is
+	 * utility method
+	 */
 	public static void generateNewSeed() {
 		SEED = new Random().nextLong();
 	}
 
+	/**
+	 * Reload instance, that means regenerate a new map and
+	 * his data associated
+	 */
 	public static void newInstance() {
-		generateNewSeed();
+		SEED = new Random().nextLong();
 		singleton = new JSONDataAccessLayer();
 	}
 }

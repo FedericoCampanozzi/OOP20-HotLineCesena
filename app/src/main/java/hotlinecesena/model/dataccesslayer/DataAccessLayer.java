@@ -11,25 +11,52 @@ import hotlinecesena.model.dataccesslayer.datastructure.DataPlayer;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWeapons;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 
+/**
+ * this interface represent what kind of data need to saved
+ * for continue application run correctly
+ * @author Federico
+ *
+ */
 public interface DataAccessLayer {
 
+	/**
+	 * @return a weapons data class
+	 */
 	DataWeapons getWeapons();
-
+	/**
+	 * @return a bullet data class
+	 */
 	DataBullet getBullets();
-
+	/**
+	 * @return a weapons data class
+	 */
 	DataItems getDataItems();
-
+	/**
+	 * @return a physics collision data class
+	 */
 	DataPhysicsCollision getPhysics();
-
+	/**
+	 * @return a settings data class
+	 */
 	DataJSONSettings getSettings();
-
+	/**
+	 * @return a ranking data class
+	 */
 	DataJSONRanking getRanking();
-
+	/**
+	 * @return a language data class
+	 */
 	DataJSONLanguages getLanguages();
-
+	/**
+	 * @return a world data class
+	 */
 	DataWorldMap getWorld();
-
+	/**
+	 * @return a player data class
+	 */
 	DataPlayer getPlayer();
-
+	/**
+	 * @return a enemy data class
+	 */
 	DataEnemy getEnemy();
 }

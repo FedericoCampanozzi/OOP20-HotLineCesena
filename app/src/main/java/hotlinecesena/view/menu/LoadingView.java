@@ -5,8 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
+import hotlinecesena.controller.SceneSwapper;
 import hotlinecesena.controller.menu.StartMenuController;
-import hotlinecesena.view.SceneSwapper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

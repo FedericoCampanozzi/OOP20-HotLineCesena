@@ -15,8 +15,15 @@ import hotlinecesena.model.entities.actors.enemy.EnemyType;
 import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*;
 
+/**
+ * Class that provides for the memorization of enemies
+ * @author Federico
+ *
+ */
 public class DataEnemy extends AbstractData {
+	
 	private final List<Enemy> enemies = new ArrayList<>();
+	
 	public DataEnemy(DataWorldMap world) {
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);

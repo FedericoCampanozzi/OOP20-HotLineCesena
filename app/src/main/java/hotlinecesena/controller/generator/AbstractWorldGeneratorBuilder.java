@@ -23,22 +23,30 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	// High level description
 	protected List<Room> baseRooms = new ArrayList<>();
 	protected List<Room> rooms = new ArrayList<>();
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder addSingleBaseRoom(Room r) {
 		this.baseRooms.add(r);
 		return this;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder addSomeBaseRoom(List<Room> list) {
 		this.baseRooms.addAll(0, list);
 		return this;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public abstract WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax);
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generatePlayer() {
 		haveInitMapAndBaseRoom();		
@@ -48,7 +56,9 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.map.put(r.getCenter(), SymbolsType.PLAYER);
 		return this;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateKeyObject() {
 		haveInitMapAndBaseRoom();
@@ -64,25 +74,33 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.map.put(r.getCenter(), SymbolsType.KEY_ITEM);
 		return this;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateEnemy(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
 		return generateTotalRandomnessMany(SymbolsType.ENEMY, minInRoom, maxInRoom);
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateObstacoles(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
 		return generateTotalRandomnessMany(SymbolsType.OBSTACOLES, minInRoom, maxInRoom);
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateItem(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
 		return generateTotalRandomnessMany(SymbolsType.ITEM, minInRoom, maxInRoom);
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateWeapons(int minInRoom, int maxInRoom) {
 		haveInitMapAndBaseRoom();
@@ -108,7 +126,9 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		}
 		return this;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder finishes() {
 		haveInitMapAndBaseRoom();
@@ -226,7 +246,9 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 			throw new IllegalStateException();
 		}
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder build() {
 		haveInitMapAndBaseRoom();

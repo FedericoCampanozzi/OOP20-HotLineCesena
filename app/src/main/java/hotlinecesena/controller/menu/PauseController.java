@@ -4,21 +4,25 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.function.Consumer;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.GameLoopController;
+import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.Updatable;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.view.SceneSwapper;
+import hotlinecesena.view.input.InputListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 /**
  * Pause menu scene, controls {@code PauseView.fxml}.
  */
-public class PauseController implements Initializable{
+public class PauseController implements Initializable, Updatable{
 	
 	@FXML
 	Button resumeButton;
@@ -32,6 +36,7 @@ public class PauseController implements Initializable{
 	private final GameLoopController gameLoopController;
 	private final Stage worldStage;
 	private final Stage pauseStage;
+	private final InputListener listener;
 	
 	/**
 	 * Class constructor.
@@ -43,12 +48,19 @@ public class PauseController implements Initializable{
 	 * 				The audio controller of the entire application.
 	 * @param gameLoopController
 	 * 				The loop controller of the game.
+	 * @param listener 
 	 */
-	public PauseController(Stage pauseStage, Stage worldStage, AudioControllerImpl audioControllerImpl, GameLoopController gameLoopController) {
+	public PauseController(
+			Stage pauseStage,
+			Stage worldStage,
+			AudioControllerImpl audioControllerImpl,
+			GameLoopController gameLoopController,
+			InputListener listener) {
 		this.pauseStage = pauseStage;
 		this.worldStage = worldStage;
 		this.audioControllerImpl = audioControllerImpl;
 		this.gameLoopController = gameLoopController;
+		this.listener = listener;
 	}
 	
 	/**
@@ -114,5 +126,22 @@ public class PauseController implements Initializable{
 	 */
 	public Stage getWorldStage() {
 		return worldStage;
+	}
+
+	@Override
+	public Consumer<Double> getUpdateMethod() {
+		return deltaTime -> {
+			if (listener.deliverInputs().getKey().contains(KeyCode.P)) {
+                try {
+                    audioControllerImpl.stopMusic();
+                    gameLoopController.stop();
+                    sceneSwapper.setUpStage(pauseStage);
+                    pauseStage.show();
+                    sceneSwapper.swapScene(this, "PauseView.fxml", pauseStage);
+                } catch (final IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+		};
 	}
 }

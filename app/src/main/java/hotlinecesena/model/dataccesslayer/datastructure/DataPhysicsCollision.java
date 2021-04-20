@@ -1,16 +1,18 @@
 package hotlinecesena.model.dataccesslayer.datastructure;
 
-import static java.util.stream.Collectors.toList;
-
 import java.io.IOException;
 import java.util.List;
-
+import javafx.geometry.Point2D;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.AbstractEntity;
 import hotlinecesena.utilities.Utilities;
-import javafx.geometry.Point2D;
+import static java.util.stream.Collectors.toList;
 
+/**
+ * A class that memorized a physics collision
+ * @author Federico
+ */
 public class DataPhysicsCollision extends AbstractData {
 
     private final List<Obstacle> obstacles;

@@ -12,6 +12,11 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 
+/**
+ * Class that provides to memorization all game settings
+ * @author Federico
+ *
+ */
 public class DataJSONSettings  extends AbstractData  {
 	//GUI SETTINGS
     @JsonProperty("monitorX")
@@ -77,19 +82,18 @@ public class DataJSONSettings  extends AbstractData  {
     @JsonProperty("obstaclesEdge")
     private float obstaclesEdge;
     
-    
     public void setDefaultWidth(int defaultWidth) {
 		this.defaultWidth = defaultWidth;
 	}
 
+    public void setDefaultHeight(int defaultHeight) {
+    	this.defaultHeight = defaultHeight;
+    }
+
 	public void setDefaultLanguage(int defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
-
-	public void setDefaultHeight(int defaultHeight) {
-		this.defaultHeight = defaultHeight;
-	}
-
+	
 	public Map<String, String> getResolutions(){
     	return this.resolutions;
     }

@@ -6,6 +6,11 @@ import java.util.Map;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import javafx.util.Pair;
 
+/**
+ * A common implementation of rooms
+ * @author Federico
+ *
+ */
 public abstract class AbstractRoom implements Room {
 	
 	protected Map<Pair<Integer, Integer>, SymbolsType> map = new HashMap<>();
@@ -15,22 +20,34 @@ public abstract class AbstractRoom implements Room {
 		
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	public abstract void generate();
+	/**
+	 * {@inheritDoc}
+	 */
 	public abstract Room deepCopy();
 	
 	public AbstractRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center) {
 		this.map = map;
 		this.center = center;
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	public Pair<Integer, Integer> getCenter() {
 		return center;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	public void setCenter(Pair<Integer, Integer> center) {
 		this.center = center;
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	public Map<Pair<Integer, Integer>, SymbolsType> getMap() {
 		return map;
 	}

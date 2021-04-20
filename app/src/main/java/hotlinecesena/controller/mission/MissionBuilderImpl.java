@@ -22,6 +22,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		this.wController = wController;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addKillMission(int minEnemy, int maxEnemy) {
 		int possible = JSONDataAccessLayer.getInstance().getEnemy().getEnemies().size();
@@ -36,6 +39,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addAmmoMission(int minAmmoBox, int maxAmmoBox) {
 		int possible = JSONDataAccessLayer.getInstance().getDataItems().getItems().entrySet().stream()
@@ -52,6 +58,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addMedikitMission(int minMedikit, int maxMedikit) {
 		int possible = JSONDataAccessLayer.getInstance().getDataItems().getItems().entrySet().stream()
@@ -67,6 +76,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addShootMission(int minAmmoShoot, int maxAmmoShoot) {
 		int ammo = Utilities.randomBetween(rnd, minAmmoShoot, maxAmmoShoot);
@@ -74,12 +86,18 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addKeyObjectMission() {
 		mController.addQuest("Cerca e Raccogli il denaro nascosto", () -> wController.isPickBriefCase());
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addChangeWeaponsMission(int minWeaponsChanged, int maxWeaponsChanged) {
 		int possible = JSONDataAccessLayer.getInstance().getWorld().getWorldMap().entrySet().stream()
@@ -96,6 +114,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionBuilder addSurviveMission(int minSeconds, int maxSeconds) {
 		int seconds = Utilities.randomBetween(rnd, minSeconds, maxSeconds);
@@ -104,6 +125,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 		return this;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public MissionController build() {
 		return mController;

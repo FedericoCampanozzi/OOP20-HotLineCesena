@@ -2,6 +2,11 @@ package hotlinecesena.model.dataccesslayer;
 
 import java.awt.Color;
 
+/**
+ * An Enumerator that each symbols define a character and two
+ * color one is the minimap coloR, and the second is a debug color
+ * @author Federico
+ */
 public enum SymbolsType {
 	
 	VOID		('_', new Color(  0,   0,   0), new Color(  0, 153,   0)),
@@ -26,14 +31,23 @@ public enum SymbolsType {
 		this.miniMapColor = m;
 	}
 	
+	/**
+	 * @return the symbol
+	 */
 	public char getDecotification() {
 		return this.c;
 	}
 	
+	/**
+	 * @return the test color 
+	 */
 	public Color getTestColor() {
 		return this.testColor;
 	}
 	
+	/**
+	 * @return the minimap color
+	 */
 	public Color getMiniMapColor() {
 		return this.miniMapColor;
 	}

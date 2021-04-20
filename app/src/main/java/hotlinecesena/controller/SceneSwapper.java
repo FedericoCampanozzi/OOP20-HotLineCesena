@@ -1,4 +1,4 @@
-package hotlinecesena.view;
+package hotlinecesena.controller;
 
 import java.io.IOException;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;

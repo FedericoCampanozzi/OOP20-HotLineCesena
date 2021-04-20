@@ -12,6 +12,10 @@ import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*; 
 
+/**
+ * A class that provide to memorized each weapons positions
+ * @author Federico
+ */
 public class DataWeapons {
 
 	private final Map<Point2D, Weapon> weapons;

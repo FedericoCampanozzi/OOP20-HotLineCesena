@@ -9,6 +9,16 @@ import hotlinecesena.utilities.Utilities;
 
 public final class BaseRoomsGeneratorFactory {
 
+	/**
+	 * get a list of quadratic room
+	 * @param wMin
+	 * @param wMax
+	 * @param dMin
+	 * @param dMax
+	 * @param nBaseRoomsMin
+	 * @param nBaseRoomsMax
+	 * @return
+	 */
 	public List<Room> generateQuadraticRoomList(
 			final int wMin, final int wMax,
 			final int dMin, final int dMax,
@@ -27,7 +37,19 @@ public final class BaseRoomsGeneratorFactory {
 		return baseRooms;
 	}
 
-	public List<Room> generateRectangolarRoomList(
+	/**
+	 * get a list of rectangular room
+	 * @param wMin
+	 * @param wMax
+	 * @param hMin
+	 * @param hMax
+	 * @param dMin
+	 * @param dMax
+	 * @param nBaseRoomsMin
+	 * @param nBaseRoomsMax
+	 * @return
+	 */
+	public List<Room> generateRectungolarRoomList(
 			final int wMin, final int wMax,
 			final int hMin, final int hMax,
 			final int dMin, final int dMax,
@@ -46,7 +68,16 @@ public final class BaseRoomsGeneratorFactory {
 		
 		return baseRooms;
 	}
-	
+	/**
+	 * get a list of octagonal room
+	 * @param edgeMin
+	 * @param edgeMax
+	 * @param dMin
+	 * @param dMax
+	 * @param nBaseRoomsMin
+	 * @param nBaseRoomsMax
+	 * @return
+	 */
 	public List<Room> generateOctagonalRoomList(
 			final int edgeMin, final int edgeMax,
 			final int dMin, final int dMax,

@@ -100,7 +100,7 @@ public class RankingView implements Initializable{
     }
 
     /**
-     * {@link hotlinecesena.controller.menu.RankingController#backButtonClick()}.
+     * {@link hotlinecesena.controller.menu.EndgameController#backButtonClick()}.
      * @throws IOException
      */
     @FXML
@@ -110,7 +110,7 @@ public class RankingView implements Initializable{
 
     /**
      * When the {@code addScore} button is pressed, create a new Row, containing the current match stats.
-     * {@link hotlinecesena.controller.menu.RankingController#getNameFromUser()}.
+     * {@link hotlinecesena.controller.menu.EndgameController#getNameFromUser()}.
      * @throws JsonGenerationException
      * @throws JsonMappingException
      * @throws IOException

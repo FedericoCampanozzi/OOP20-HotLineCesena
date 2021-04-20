@@ -13,8 +13,18 @@ import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * 
+ * @author Federico
+ *
+ */
 public class DataJSONRanking extends AbstractData {
 	
+	/**
+	 * A class represent a single record of result
+	 * @author Federico
+	 *
+	 */
 	public static class Row {
 		@JsonProperty("name")
 		private String name;
