@@ -33,7 +33,5 @@
   "defaultLanguage" : 0,
   "defaultWidth" : 800,
   "defaultHeight" : 600,
-  "topHudHeight" : 302,
-  "botHudHeight" : 100,
   "obstaclesEdge" : 0.75
 }
