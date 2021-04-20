@@ -16,12 +16,17 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * A class that store the main information of gameword, so the 
+ * map and the min/max cords
+ * @author Federico
+ *
+ */
 public class DataWorldMap extends AbstractData {
 
 	private Map<Pair<Integer, Integer>, SymbolsType> worldMap;
 	private int xMin, xMax, yMin, yMax;
 	private boolean keyObj;
-	
 	private WritableImage writtableMiniMap;
 	private Pair<Integer, Integer> oldPlyPos;
 	
@@ -78,6 +83,10 @@ public class DataWorldMap extends AbstractData {
 		write();
 	}
 	
+	/**
+	 * the current updated miniMap
+	 * @return the minimap as a image
+	 */
 	public Image getImageVIewUpdated() {
 		PixelWriter pw = writtableMiniMap.getPixelWriter();
 		pw.setColor(oldPlyPos.getKey()- getMinX(), oldPlyPos.getValue()- getMinY(), Utilities.convertColor(SymbolsType.WALKABLE.getMiniMapColor()));
@@ -101,6 +110,9 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
+	/**
+	 * @return the world map
+	 */
 	public Map<Pair<Integer, Integer>, SymbolsType> getWorldMap(){
 		return this.worldMap;
 	}

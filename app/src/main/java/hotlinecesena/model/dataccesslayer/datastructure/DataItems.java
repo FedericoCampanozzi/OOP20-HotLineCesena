@@ -10,6 +10,11 @@ import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*;
 
+/**
+ * Class that provides to map for each positions his item
+ * @author Federico
+ *
+ */
 public class DataItems extends AbstractData {
 
 	private final Map<Point2D, ItemsType> items;

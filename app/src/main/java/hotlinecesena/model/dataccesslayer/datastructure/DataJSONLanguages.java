@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import static java.util.stream.Collectors.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -12,7 +11,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import static java.util.stream.Collectors.*;
 
+/**
+ * Class that provides to memorization of each languages his transactions
+ * @author Federico
+ *
+ */
 public class DataJSONLanguages extends AbstractData {
 
 	@JsonProperty("language")
@@ -20,6 +25,12 @@ public class DataJSONLanguages extends AbstractData {
 	@JsonProperty("decodifications")
 	private List<decode> decodifications;
 	
+	/**
+	 * Class that represent how translate a single 
+	 * GUI object (label, button, message etc..)
+	 * @author Federico
+	 *
+	 */
 	public static class decode {
 		@JsonProperty("idFxml")
 		private String idFxml;
@@ -47,6 +58,11 @@ public class DataJSONLanguages extends AbstractData {
 		}
 	}
 	
+	/**
+	 * Get a map that for each id_fxml map his translations
+	 * @param lName
+	 * @return
+	 */
 	public Map<String, String> getLanguageMap(String lName){
 		final int index = this.language.indexOf(lName);
 		return this.decodifications.stream()

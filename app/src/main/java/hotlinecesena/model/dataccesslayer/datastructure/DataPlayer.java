@@ -8,7 +8,12 @@ import hotlinecesena.model.entities.actors.player.PlayerFactoryImpl;
 import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*; 
 
-public class DataPlayer  extends AbstractData {
+/**
+ * 
+ * @author Federico
+ *
+ */
+public class DataPlayer extends AbstractData {
 
 	private Player ply;
 	
