@@ -15,7 +15,6 @@ import hotlinecesena.controller.mission.MissionBuilderImpl;
 import hotlinecesena.controller.mission.MissionController;
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.items.ItemsType;
@@ -34,27 +33,14 @@ import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.input.InputListener;
 import hotlinecesena.view.input.InputListenerFX;
-import hotlinecesena.view.loader.ImageType;
-import hotlinecesena.view.loader.ProxyImage;
-import hotlinecesena.view.loader.SceneType;
-import hotlinecesena.view.menu.RankingView;
-import javafx.animation.FadeTransition;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * Controller of {@code WorldView}.
  */
 public class WorldController implements Subscriber {
 
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
 	private final GameLoopController gameLoopController = new GameLoopController();
 	private final Stage primaryStage;
 	
@@ -96,7 +82,7 @@ public class WorldController implements Subscriber {
         this.initPlayerAndCameraController();
         this.initProjectileController();
         this.initScoreModel();
-        this.initRankingController();
+        this.initEndgameController();
         this.initPauseController();
 
         gameLoopController.loop();
@@ -107,92 +93,29 @@ public class WorldController implements Subscriber {
      * Check whether user presses the pause key.
      */
     private void initPauseController() {
-        gameLoopController.addMethodToUpdate(d -> {
-            if (listener.deliverInputs().getKey().contains(KeyCode.P)) {
-                try {
-                    audioController.stopMusic();
-                    gameLoopController.stop();
-                    final Stage stage = new Stage();
-                    stage.show();
-                    sceneSwapper.setUpStage(stage);
-                    sceneSwapper.swapScene(
-                            new PauseController(stage, primaryStage, audioController, gameLoopController),
-                            "PauseView.fxml",
-                            stage);
-                } catch (final IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        });
+    	final Stage pauseStage = new Stage();
+    	PauseController pauseController = new PauseController(
+    			pauseStage,
+    			primaryStage,
+    			audioController,
+    			gameLoopController,
+    			listener);
+        gameLoopController.addMethodToUpdate(pauseController.getUpdateMethod());
     }
 
     /**
      * Initialize the {@code RankingController}.
      * Check the match status: if all missions are completed, than its a victory. Else if the player is dead, it's a defeat.
      */
-    private void initRankingController() {
-        gameLoopController.addMethodToUpdate(d -> {
-            try {
-                if(missionController.missionPending().isEmpty()) {
-                    this.endGame(true);
-                }
-                else if (JSONDataAccessLayer.getInstance().getPlayer().getPly().getActorStatus().equals(ActorStatus.DEAD)) {
-                    this.endGame(false);
-                }
-            } catch (final IOException e) {
-                e.printStackTrace();
-            }
-            playerTimeLife += d;
-        });
-    }
-
-    /**
-     * Show the outcome of the match for a few seconds, then go to the {@code RankingView}.
-     * @param win
-     * @throws IOException
-     */
-    private void endGame(final Boolean win) throws IOException {
-        audioController.stopMusic();
-        gameLoopController.stop();
-        final BorderPane imageBorderPane = new BorderPane();
-        Image image;
-        ImageView imageView = new ImageView();
-        final ProxyImage proxyImage = new ProxyImage();
-        if (win) {
-            image = proxyImage.getImage(SceneType.MENU, ImageType.VICTORY);
-        }
-        else {
-            image = proxyImage.getImage(SceneType.MENU, ImageType.YOU_DIED);
-        }
-        imageView.setOpacity(0.0);
-        imageView.setImage(image);
-        imageView.setPreserveRatio(true);
-        imageView.fitWidthProperty().bind(primaryStage.widthProperty());
-        imageBorderPane.setCenter(imageView);
-        final FadeTransition fade = new FadeTransition(Duration.seconds(5));
-        fade.setFromValue(0.0);
-        fade.setToValue(1.0);
-        fade.setCycleCount(1);
-        fade.setNode(imageView);
-        worldView.getStackPane().getChildren().add(imageBorderPane);
-        fade.play();
-        fade.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(final ActionEvent event) {
-                try {
-                    sceneSwapper.swapScene(new RankingView(
-                            primaryStage,
-                            audioController,
-                            score.getPartialScores(),
-                            score.getTotalScore()),
-                            "RankingView.fxml",
-                            primaryStage);
-                    sceneSwapper.setUpStage(primaryStage);
-                } catch (final IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    private void initEndgameController() {
+        gameLoopController.addMethodToUpdate(new EndgameController(
+        		missionController,
+        		audioController,
+        		gameLoopController,
+        		primaryStage,
+        		worldView.getStackPane(),
+        		score)
+        		.getUpdateMethod());
     }
 
     /**
