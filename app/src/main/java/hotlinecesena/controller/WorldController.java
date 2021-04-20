@@ -13,6 +13,7 @@ import hotlinecesena.controller.hud.PlayerStatsController;
 import hotlinecesena.controller.menu.PauseController;
 import hotlinecesena.controller.mission.MissionBuilderImpl;
 import hotlinecesena.controller.mission.MissionController;
+import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.ActorStatus;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
@@ -274,7 +275,13 @@ public class WorldController implements Subscriber {
      * Initialize the {@code WorldView}.
      */
     private void initWorldView() {
-    	worldView = new WorldView(primaryStage);
+    	DataAccessLayer dataAccessLayer =  JSONDataAccessLayer.getInstance();
+    	worldView = new WorldView(
+    			primaryStage,
+    			dataAccessLayer.getWorld(),
+    			dataAccessLayer.getPlayer(),
+    			dataAccessLayer.getDataItems(),
+    			dataAccessLayer.getWeapons());
     	worldView.start();
     }
 
