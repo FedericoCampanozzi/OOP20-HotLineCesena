@@ -1,4 +1,4 @@
-package hotlinecesena.view.HUD;
+package hotlinecesena.view.hud;
 
 import java.net.URL;
 import java.util.List;

@@ -1,11 +1,11 @@
-package hotlinecesena.controller.HUD;
+package hotlinecesena.controller.hud;
 
 import java.util.function.Consumer;
 
 import hotlinecesena.controller.Updatable;
 import hotlinecesena.controller.mission.MissionController;
 import hotlinecesena.view.WorldView;
-import hotlinecesena.view.HUD.PlayerStatsView;
+import hotlinecesena.view.hud.PlayerStatsView;
 import javafx.scene.input.KeyCode;
 
 /**

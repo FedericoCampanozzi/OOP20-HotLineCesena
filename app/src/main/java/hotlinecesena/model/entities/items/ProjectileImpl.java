@@ -13,8 +13,14 @@ import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
+/**
+ * Implementation of a projectile.
+ */
 public final class ProjectileImpl extends AbstractMovableEntity implements Projectile {
 
+	/**
+	 * Possible status of the projectile.
+	 */
     public enum ProjectileStatus implements Status {
         MOVING,
         STOP;
@@ -23,11 +29,30 @@ public final class ProjectileImpl extends AbstractMovableEntity implements Proje
     private Status projectileStatus = ProjectileStatus.MOVING;
     private final double damage;
 
+    /**
+     * Class constructor.
+     * @param position
+     * 				The starting position of the projectile.
+     * @param angle
+     * 				The starting angle of the projectile.
+     * @param width
+     * 				The width of the projectile.
+     * @param height
+     * 				The height of the projectile.
+     * @param speed
+     * 				The speed of the projectile.
+     * @param damage
+     * 				The damage of the projectile.
+     */
     public ProjectileImpl(final Point2D position, final double angle, final double width, final double height, final double speed, final double damage) {
         super(position, angle, width, height, speed);
         this.damage = damage;
     }
 
+    /**
+     * Checks if the projectile has hit an obstacle or an entity.
+     * If not, update the position of the projectile.
+     */
     @Override
     protected void executeMovement(@Nonnull final Point2D pointDeltaTime) {
         Objects.requireNonNull(pointDeltaTime);
@@ -56,16 +81,27 @@ public final class ProjectileImpl extends AbstractMovableEntity implements Proje
         }
     }
 
+    /**
+     * The projectile can't rotate.
+     */
     @Override
     protected boolean canInitiateRotation() {
         return false;
     }
 
+    /**
+     * @param angle
+     * @return the direction of the projectile based on its angle.
+     */
     private Point2D directionFromAngle(final double angle) {
         final double radians = Math.toRadians(angle);
         return new Point2D(Math.cos(radians), Math.sin(radians));
     }
 
+    /**
+     * @param newPos
+     * @return the enemy hit (Optional).
+     */
     private Optional<Enemy> hasHitEnemy(final Point2D newPos) {
         return this.getGameMaster().getEnemy().getEnemies()
                 .stream()
@@ -76,6 +112,10 @@ public final class ProjectileImpl extends AbstractMovableEntity implements Proje
                 .findAny();
     }
 
+    /**
+     * @param newPos
+     * @return true if has hit an obstacle.
+     */
     private boolean hasHitObstacle(final Point2D newPos) {
         return this.getGameMaster().getPhysics().getObstacles()
                 .stream()
@@ -84,6 +124,10 @@ public final class ProjectileImpl extends AbstractMovableEntity implements Proje
                         o.getPosition(), o.getWidth(), o.getHeight()));
     }
 
+    /**
+     * @param newPos
+     * @return true if has hit the player.
+     */
     private Optional<Player> hasHitPlayer(final Point2D newPos) {
         final Player player = this.getGameMaster().getPlayer().getPly();
         if (MathUtils.isCollision(
@@ -95,6 +139,9 @@ public final class ProjectileImpl extends AbstractMovableEntity implements Proje
         return Optional.empty();
     }
 
+    /**
+     * @return the projectile status.
+     */
     @Override
     public Status getProjectileStatus() {
         return projectileStatus;

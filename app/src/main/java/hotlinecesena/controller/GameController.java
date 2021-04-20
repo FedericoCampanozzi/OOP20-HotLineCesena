@@ -4,7 +4,7 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 import hotlinecesena.view.menu.LoadingView;
 
 public class GameController extends Application {

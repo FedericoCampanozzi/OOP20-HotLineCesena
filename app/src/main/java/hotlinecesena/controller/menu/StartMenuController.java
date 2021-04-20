@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.WorldController;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 
 /**
  * Start menu scene, controls {@code StartMenuView.fxml}.

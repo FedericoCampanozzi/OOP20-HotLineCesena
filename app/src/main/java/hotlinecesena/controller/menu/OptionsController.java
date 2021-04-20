@@ -12,7 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

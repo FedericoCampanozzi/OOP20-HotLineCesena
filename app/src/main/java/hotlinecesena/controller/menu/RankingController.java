@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;

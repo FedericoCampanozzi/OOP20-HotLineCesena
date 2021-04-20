@@ -8,7 +8,7 @@ import java.util.ResourceBundle;
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.GameLoopController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

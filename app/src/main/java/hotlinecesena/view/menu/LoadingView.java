@@ -6,7 +6,7 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.menu.StartMenuController;
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.view.SceneSwapper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

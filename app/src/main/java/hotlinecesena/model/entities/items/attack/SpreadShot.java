@@ -7,10 +7,16 @@ import hotlinecesena.model.entities.items.ProjectileImpl;
 import hotlinecesena.model.entities.items.WeaponType;
 import javafx.geometry.Point2D;
 
+/**
+ * Implements a shot made of multiple projectiles.
+ */
 public class SpreadShot implements AttackStrategy {
 
     private static final int PROJ_NUMBER = 5;
 
+    /**
+     * Create {@code PROJ_NUMBER} new projectiles.
+     */
     @Override
     public void shoot(final WeaponType type, final Point2D actorPosition, final double actorAngle, final double actorWidth, final double actorHeight, final double projectileSize) {
         final ThreadLocalRandom current = ThreadLocalRandom.current();
