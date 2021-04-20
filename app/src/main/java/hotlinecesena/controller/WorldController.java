@@ -27,7 +27,6 @@ import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
 import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
-import hotlinecesena.view.SceneSwapper;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.camera.CameraView;
 import hotlinecesena.view.camera.CameraViewImpl;

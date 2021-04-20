@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javafx.stage.Stage;
 import javafx.application.Application;
-import hotlinecesena.view.SceneSwapper;
+import hotlinecesena.controller.SceneSwapper;
 import hotlinecesena.view.menu.LoadingView;
 
 public class Launcher extends Application {
