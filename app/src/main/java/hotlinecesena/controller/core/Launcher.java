@@ -2,13 +2,12 @@ package hotlinecesena.controller.core;
 
 import java.io.IOException;
 
-import hotlinecesena.controller.GameController;
+import javafx.stage.Stage;
+import javafx.application.Application;
+import hotlinecesena.view.SceneSwapper;
+import hotlinecesena.view.menu.LoadingView;
 
-public class Launcher {
-
-	private Launcher() {
-	}
-	
+public class Launcher extends Application {
 	/**
      * Main method of application.
      * 
@@ -16,6 +15,15 @@ public class Launcher {
 	 * @throws IOException 
      */
     public static void main(final String[] args) throws IOException {
-        GameController.main(args);
+    	launch(args);
     }
+    
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.show();
+		new SceneSwapper().swapScene(
+				new LoadingView(primaryStage),
+				"LoadingView.fxml",
+				primaryStage);
+	}
 }
