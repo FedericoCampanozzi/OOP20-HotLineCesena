@@ -12,13 +12,12 @@ java -jar hotline-cesena.jar
 
 Al lancio dell'applicazione, superata la schermata iniziale, verrà presentato il Menu principale.
 
-![Screenshot](../startingMenu.jpg)
+![Screenshot](guide/startingMenu.jpg)
 
 Alla pressione del bottone "New Game", verrà caricata una nuova scena contenente il mondo di gioco (simile a come mostrato di seguito).
 
 
-<img src="guide/game.jpg" width="780" height="500"> <br \> <br \>
-
+<img src="guide/game.jpg" width="780" height="500">
 <img src="guide/userKeybinds.jpg" width="780" height="250">
 
 ## Contributing
