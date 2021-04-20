@@ -49,16 +49,19 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+/**
+ * Controller of {@code WorldView}.
+ */
 public class WorldController implements Subscriber {
 
 	private final SceneSwapper sceneSwapper = new SceneSwapper();
 	private final GameLoopController gameLoopController = new GameLoopController();
 	private final Stage primaryStage;
+	
     private WorldView worldView;
     private MissionController missionController;
     private InputListener listener;
     private AudioControllerImpl audioController;
-    
     private Score score;
 
     private double playerTimeLife = 0;
@@ -69,6 +72,15 @@ public class WorldController implements Subscriber {
     private boolean pickBriefCase = false;
     private int enemyKilled;
 
+    /**
+     * Class constructor.
+     * Initialize the {@code GameLoopController} and all controllers related to it. After that, the loop starts.
+     * @param primaryStage
+     * 				The stage containing the world scene.
+     * @param audioController
+     * 				The audio controller of the entire application.
+     * @throws IOException
+     */
     public WorldController(final Stage primaryStage, final AudioControllerImpl audioController) throws IOException {
         JSONDataAccessLayer.getInstance().getPlayer().getPly().register(this);
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(itm -> itm.register(this));
@@ -90,6 +102,10 @@ public class WorldController implements Subscriber {
         gameLoopController.loop();
     }
 
+    /**
+     * Initialize the {@code PauseController}.
+     * Check whether user presses the pause key.
+     */
     private void initPauseController() {
         gameLoopController.addMethodToUpdate(d -> {
             if (listener.deliverInputs().getKey().contains(KeyCode.P)) {
@@ -110,6 +126,10 @@ public class WorldController implements Subscriber {
         });
     }
 
+    /**
+     * Initialize the {@code RankingController}.
+     * Check the match status: if all missions are completed, than its a victory. Else if the player is dead, it's a defeat.
+     */
     private void initRankingController() {
         gameLoopController.addMethodToUpdate(d -> {
             try {
@@ -126,6 +146,11 @@ public class WorldController implements Subscriber {
         });
     }
 
+    /**
+     * Show the outcome of the match for a few seconds, then go to the {@code RankingView}.
+     * @param win
+     * @throws IOException
+     */
     private void endGame(final Boolean win) throws IOException {
         audioController.stopMusic();
         gameLoopController.stop();
@@ -170,10 +195,17 @@ public class WorldController implements Subscriber {
         });
     }
 
+    /**
+     * Initialize the {@code ScoreModel}.
+     * It tracks the match stats.
+     */
     private void initScoreModel() {
         score = new ScoreImpl(new PartialStrategyFactoryImpl());
     }
 
+    /**
+     * Initialize the {@code ProjectileController}.
+     */
     private void initProjectileController() {
         ProjectileController projectileController = new ProjectileController(worldView);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
@@ -193,11 +225,17 @@ public class WorldController implements Subscriber {
         gameLoopController.addMethodToUpdate(camera.getUpdateMethod());
     }
 
+    /**
+     * Initialize the {@code InputListener}.
+     */
     private void initListener() {
         listener = new InputListenerFX();
-        listener.addEventHandlers(worldView.getStage().getScene());
+        listener.addEventHandlers(worldView.getStackPane().getScene());
     }
 
+    /**
+     * Initialize the {@code EnemyController}.
+     */
     private void initEnemyController() {
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
             final EnemyController ec = new EnemyController(e, worldView.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly());
@@ -206,6 +244,11 @@ public class WorldController implements Subscriber {
         });
     }
 
+    /**
+     * Initialize the {@code HUDController}.
+     * It tracks the player stats.
+     * @throws IOException
+     */
     private void initHudController() throws IOException {
         PlayerStatsController playerStatsController = new PlayerStatsController(worldView, missionController);
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("GUI/PlayerStatsView.fxml"));
@@ -214,6 +257,9 @@ public class WorldController implements Subscriber {
         gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
     }
 
+    /**
+     * Initialize the {@code MissionController}.
+     */
     private void initMissionController() {
         missionController = new MissionBuilderImpl(this)
                 .addAmmoMission(2, 6)
@@ -225,45 +271,77 @@ public class WorldController implements Subscriber {
         gameLoopController.addMethodToUpdate(d -> missionController.update(d));
     }
 
+    /**
+     * Initialize the {@code WorldView}.
+     */
     private void initWorldView() {
     	worldView = new WorldView(primaryStage);
     	worldView.start();
     }
 
+    /**
+     * Initialize the {@code AudioEventController}.
+     * @param audioController
+     */
     private void initAudioController(final AudioControllerImpl audioController) {
         this.audioController = audioController;
         this.audioController.playMusic();
         new AudioEventController();
     }
 
+    /**
+     * @return the player life time of the current match.
+     */
 	public int getPlayerLifeTime() {
         return (int)(playerTimeLife / 1000.0d);
     }
 
+	/**
+	 * @return the amount of kills.
+	 */
 	public int getEnemyKilledByPlayer() {
         return enemyKilled;
     }
 
+	/**
+	 * @return the amount of ammunitions bag picked.
+	 */
 	public int getTotalAmmoBag() {
         return totalAmmoBag;
     }
 
+	/**
+	 * @return the amount of medikit picked.
+	 */
 	public int getTotalMedikit() {
         return totalMedikit;
     }
 
+	/**
+	 * @return how many times the player has switched weapon.
+	 */
 	public int getTotalWeaponsChanged() {
         return totalWeaponsChanged;
     }
 
+	/**
+	 * @return the amount of bullets fired by player.
+	 */
 	public int getTotalAmmoShootedByPlayer() {
         return totalAmmoShootedByPlayer;
     }
 
+	/**
+	 * @return whether the player has picked or not the brief case.
+	 */
 	public boolean isPickBriefCase() {
         return pickBriefCase;
     }
 
+	/**
+	 * Updates the amount of items picked by player.
+	 * @param event
+	 */
     @Subscribe
     private void addItemType(final ItemPickUpEvent event) {
         if(event.getItemType().equals(ItemsType.AMMO_BAG)) {
@@ -275,11 +353,19 @@ public class WorldController implements Subscriber {
         }
     }
 
+    /**
+     * Updates the amount of times the player has changed weapon.
+     * @param event
+     */
     @Subscribe
     private void addChangedWeapons(final WeaponPickUpEvent event) {
         totalWeaponsChanged ++;
     }
 
+    /**
+     * updates the amount of bullets fired by player.
+     * @param event
+     */
     @Subscribe
     private void addAmmoShoot(final AttackPerformedEvent event) {
         if(event.getSourceInterfaces().contains(Player.class)) {
@@ -287,6 +373,10 @@ public class WorldController implements Subscriber {
         }
     }
 
+    /**
+     * Update the amount of kills.
+     * @param event
+     */
     @Subscribe
     private void addAmmoShoot(final DeathEvent event) {
         if(event.getSourceInterfaces().contains(Enemy.class)) {

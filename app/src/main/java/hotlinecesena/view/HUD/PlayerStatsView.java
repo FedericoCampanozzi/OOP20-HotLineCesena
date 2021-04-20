@@ -25,6 +25,9 @@ import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+/**
+ * HUD view containing the player stats, controls the {@code PlayerStatsView.fxml}.
+ */
 public class PlayerStatsView implements Initializable{
 	
 	@FXML
@@ -51,33 +54,38 @@ public class PlayerStatsView implements Initializable{
 	private final ProxyImage proxyImage = new ProxyImage();
 	private final MissionController missionController;
 	private final WorldView worldView;
+	
 	private List<Pair<String, Boolean>> missions;
 	private Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
 	private FadeTransition fade = new FadeTransition(Duration.millis(200));
+	
 	private int currentMission = 0;
 	
+	/**
+	 * Class constructor.
+	 * @param worldView
+	 * @param missionController
+	 */
 	public PlayerStatsView(WorldView worldView, MissionController missionController) {
 		this.worldView = worldView;
 		this.missionController = missionController;
 		missions = missionController.getMissions();
 	}
 
+	/**
+	 * Set up the scene layout.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		borderPane.prefWidthProperty().bind(worldView.getStackPane().widthProperty());
-		borderPane.prefHeightProperty().bind(worldView.getStackPane().heightProperty());
-		missionCheckBox.setText(missions.get(currentMission).getKey());
-		
-		fade.setFromValue(1.0);
-		fade.setToValue(0.0);
-		fade.setCycleCount(2);
-		fade.setAutoReverse(true);
-		
-		Rectangle2D croppedPortion = new Rectangle2D(
-				0,0,0,0);
-		miniMapImageView.setViewport(croppedPortion);
+		initPane();
+		updateMissionCB();
+		initAnimations();
+		initMiniMap();
 	}
 	
+	/**
+	 * Update the {@code lifeBar} and the {@code hpLabel} with the current health of the player.
+	 */
 	public void updateLifeStats() {
 		lifeBar.setProgress(player.getCurrentHealth() / player.getMaxHealth());
 		hpLabel.setText(((int) player.getCurrentHealth()) + "/" + ((int) player.getMaxHealth()));
@@ -89,6 +97,10 @@ public class PlayerStatsView implements Initializable{
 		}
 	}
 	
+	/**
+	 * Update the {@code weaponImageView} with the current equipped weapon 
+	 * and the {@code bulletLabel} with the current amount of bullets in magazine.
+	 */
 	public void updateGunStats() {
 		player.getInventory().getWeapon().ifPresentOrElse(weapon -> {
             bulletLabel.setText(
@@ -113,15 +125,25 @@ public class PlayerStatsView implements Initializable{
         }, () -> bulletLabel.setText("0/0"));
 	}
 	
+	/**
+	 * Update the {@code miniMapImageView} with the current position of the player in the world.
+	 */
 	public void updateMiniMapView() {
 		miniMapImageView.setImage(JSONDataAccessLayer.getInstance().getWorld().getImageVIewUpdated());
 	}
 	
+	/**
+	 * Update the {@code missionCheckBox} when a mission is completed.
+	 */
 	public void updateMissionsStatus() {
 		missions = missionController.getMissions();
 		missionCheckBox.setSelected(missions.get(currentMission).getValue());
 	}
 	
+	/**
+	 * Show the next mission if the player requested the next one, else show the previous mission.
+	 * @param next
+	 */
 	public void showNextMission(final boolean next) {
 		if (next) {
 			currentMission++;
@@ -137,8 +159,41 @@ public class PlayerStatsView implements Initializable{
 			}
 	    	fade.setNode(previousMission);
 		}
-    	missionCheckBox.setText(missions.get(currentMission).getKey());
+		updateMissionCB();
     	fade.play();
 	}
+	
+	/**
+	 * Set the pane to fit to the entire stage
+	 */
+	private void initPane() {
+		borderPane.prefWidthProperty().bind(worldView.getStackPane().widthProperty());
+		borderPane.prefHeightProperty().bind(worldView.getStackPane().heightProperty());
+	}
 
+	/**
+	 * Update the current mission displayed
+	 */
+	private void updateMissionCB() {
+		missionCheckBox.setText(missions.get(currentMission).getKey());
+	}
+	
+	/**
+	 * Initialize the fade animation for the {@code nextMissionKey} and the {@code previousMissionKey}.
+	 */
+	private void initAnimations() {
+		fade.setFromValue(1.0);
+		fade.setToValue(0.0);
+		fade.setCycleCount(2);
+		fade.setAutoReverse(true);
+	}
+	
+	/**
+	 * Initialize the {@code miniMapImageView} for a correct view.
+	 */
+	private void initMiniMap() {
+		Rectangle2D croppedPortion = new Rectangle2D(
+				0,0,0,0);
+		miniMapImageView.setViewport(croppedPortion);
+	}
 }

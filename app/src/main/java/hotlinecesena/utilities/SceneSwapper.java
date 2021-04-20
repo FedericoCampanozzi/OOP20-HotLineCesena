@@ -12,13 +12,28 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
+/**
+ * Utility class for swapping scenes.
+ */
 public class SceneSwapper {
+	
 	private static final int MIN_WIDTH = 800;
 	private static final int MIN_HEIGHT = 600;
     private static final String PATH = "GUI";
     private static final String SEP = "/";
+    
     private final ProxyImage proxyImage = new ProxyImage();
 
+    /**
+     * Create a scene with a fxml file and assign a controller to it a controller.
+     * @param controller
+     * 				The controller of the fxml file.
+     * @param fxml
+     * 				The fxml file name which has to be loaded in the scene.
+     * @param stage
+     * 				The stage containing the new scene.
+     * @throws IOException
+     */
     public void swapScene(final Initializable controller, final String fxml, final Stage stage) throws IOException {
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(PATH + SEP + fxml));
         loader.setController(controller);
@@ -28,6 +43,10 @@ public class SceneSwapper {
         stage.setScene(new Scene(pane));
     }
     
+    /**
+     * If a new stage has been created, set it up (title, size, icon and position). Use only for menu scenes.
+     * @param stage
+     */
     public void setUpStage(Stage stage) {
     	updateDim(stage);
         stage.setResizable(true);
@@ -43,6 +62,10 @@ public class SceneSwapper {
         stage.heightProperty().addListener(stageSizeListener);
     }
     
+    /**
+     * Update the size of the stage (use only for menu scenes).
+     * @param stage
+     */
     private void updateDim(Stage stage) {
     	int width = JSONDataAccessLayer.getInstance().getSettings().getDefaultWidth();
     	int height = JSONDataAccessLayer.getInstance().getSettings().getDefaultHeight();

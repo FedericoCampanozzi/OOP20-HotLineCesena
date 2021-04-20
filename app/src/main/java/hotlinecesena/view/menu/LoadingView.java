@@ -14,12 +14,15 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
+/**
+ * Timed project presentation scene, controls {@code LoadingView.fxml}.
+ */
 public class LoadingView implements Initializable{
 	
 	@FXML
-	ProgressBar progressBar;
+	private ProgressBar progressBar;
 	@FXML
-	Label loadingLabel;
+	private Label loadingLabel;
 	
 	private static final double EPSILON = 0.0000005;
 	
@@ -27,10 +30,18 @@ public class LoadingView implements Initializable{
 	private final AudioControllerImpl audioControllerImpl = new AudioControllerImpl();
 	private final Stage primaryStage;
 	
+	/**
+	 * Class constructor.
+	 * @param primaryStage
+	 * 				The stage where the scene is contained.
+	 */
 	public LoadingView(final Stage primaryStage) {
 		this.primaryStage = primaryStage;
 	}
-
+	
+	/**
+	 * Set up the loading screen, when loading is completed the {@code StartMenu} will be shown.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		sceneSwapper.setUpStage(primaryStage);
@@ -61,10 +72,8 @@ public class LoadingView implements Initializable{
                 
             }
         });
-        
         final Thread thread = new Thread(task, "task-thread");
         thread.setDaemon(true);
         thread.start();
 	}
-	
 }

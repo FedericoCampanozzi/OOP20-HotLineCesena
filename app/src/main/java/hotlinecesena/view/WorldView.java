@@ -36,6 +36,9 @@ import javafx.scene.transform.Translate;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Scene of the game world: map, items, enemies and player.
+ */
 public class WorldView implements Subscriber {
 
     private static final int SCALE = 100;
@@ -55,21 +58,48 @@ public class WorldView implements Subscriber {
     private final Map<Point2D, ImageView> obstaclesPos = new LinkedHashMap<>();
     private Pair<Point2D, ImageView> playersPos;
 
+    /**
+     * Class constructor.
+     * @param primaryStage
+     * 				The stage containing the world scene
+     */
     public WorldView(final Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
 
+    /**
+     * Start all the initializations of the scene.
+     */
     public final void start() {
         player.register(this);
-        primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        
+        initStage();
+        initMap();
+        initItemsAndObstacles();
+        initEnemiesAndPlayer();
+        
+        setScale();
+        updateLayoutOfStage();
+    }
+    
+    /**
+     * Initialize the first scene of the stage.
+     */
+    private void initStage() {
+    	primaryStage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
         primaryStage.setResizable(false);
         stackPane.getChildren().add(borderPane);
         final Scene scene = new Scene(stackPane);
         scene.setCursor(new ImageCursor(proxyImage.getImage(SceneType.MENU, ImageType.SCOPE)));
         primaryStage.setScene(scene);
         borderPane.setCenter(gridPane);
-
-        worldMap.forEach((p, s) -> {
+    }
+    
+    /**
+     * Initialize the images of walls, grass and floor.
+     */
+    private void initMap() {
+    	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
             final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
@@ -85,8 +115,13 @@ public class WorldView implements Subscriber {
             }
             this.addTileToMap(tile, point);
         });
-
-        worldMap.forEach((p, s) -> {
+    }
+    
+    /**
+     * Initialize the images of collectible items, money bag, weapons and obstacles.
+     */
+    private void initItemsAndObstacles() {
+    	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
             final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
@@ -116,8 +151,13 @@ public class WorldView implements Subscriber {
             }
             this.addTileToMap(tile, point);
         });
-
-        worldMap.forEach((p, s) -> {
+    }
+    
+    /**
+     * Initialize the images of enemies and player.
+     */
+    private void initEnemiesAndPlayer() {
+    	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
             final Point2D point = Utilities.convertPairToPoint2D(p);
             switch (s) {
@@ -134,25 +174,16 @@ public class WorldView implements Subscriber {
             }
             this.addTileToMap(tile, point);
         });
-
-        enemiesPos.forEach((p, i) -> {
+    	enemiesPos.forEach((p, i) -> {
             enemiesSprite.add(new SpriteImpl(i));
         });
-
-        borderPane.getCenter().setScaleX(SCALE);
-        borderPane.getCenter().setScaleY(SCALE);
-
-        if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
-            primaryStage.setFullScreen(true);
-        }
-        else {
-            primaryStage.setFullScreen(false);
-            primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-            primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-            primaryStage.centerOnScreen();
-        }
     }
 
+    /**
+     * Add the created image to the grid pane.
+     * @param tile
+     * @param point
+     */
     private void addTileToMap(final ImageView tile, final Point2D point) {
         final Translate trans = new Translate();
         tile.getTransforms().add(trans);
@@ -163,6 +194,10 @@ public class WorldView implements Subscriber {
         trans.setY(point.getY());
     }
 
+    /**
+     * @param type
+     * @return the image corresponding to the item type.
+     */
     private Image pickItemImage(final ItemsType type) {
         Image image = proxyImage.getImage(SceneType.GAME, ImageType.BLANK);
         switch (type) {
@@ -178,6 +213,10 @@ public class WorldView implements Subscriber {
         return image;
     }
 
+    /**
+     * @param type
+     * @return the image corresponding to the weapon type.
+     */
     private Image pickWeaponImage(final WeaponType type) {
         Image image = proxyImage.getImage(SceneType.GAME, ImageType.BLANK);
         switch (type) {
@@ -195,50 +234,93 @@ public class WorldView implements Subscriber {
         }
         return image;
     }
+    
+    /**
+     * Set the scale of the grid pane.
+     */
+    private void setScale() {
+    	borderPane.getCenter().setScaleX(SCALE);
+        borderPane.getCenter().setScaleY(SCALE);
+    }
+    
+    /**
+     * Update the stage size.
+     */
+    private void updateLayoutOfStage() {
+    	if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
+            primaryStage.setFullScreen(true);
+        }
+        else {
+            primaryStage.setFullScreen(false);
+            primaryStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+            primaryStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+            primaryStage.centerOnScreen();
+        }
+    }
 
+    /**
+     * @return the grid pane containing the world map
+     */
     public GridPane getGridPane() {
         return gridPane;
     }
 
+    /**
+     * @return the positions of all the enemies in the map.
+     */
     public Map<Point2D, ImageView> getEnemiesPos() {
         return enemiesPos;
     }
-
+    
+    /**
+     * @return the positions of all the items in the map.
+     */
     public Map<Point2D, ImageView> getItemsPos() {
         return itemsPos;
     }
 
+    /**
+     * @return the positions of all the obstacles in the map.
+     */
     public Map<Point2D, ImageView> getObstaclesPos() {
         return obstaclesPos;
     }
 
+    /**
+     * @return the position of the player in the map.
+     */
     public Pair<Point2D, ImageView> getPlayersPos() {
         return playersPos;
     }
 
+    /**
+     * @return the most background pane, useful for adding overlay panes.
+     */
     public StackPane getStackPane() {
         return stackPane;
     }
 
-    public Stage getStage() {
-        return primaryStage;
-    }
-
-    public void updateResolution(final int width, final int height) {
-        primaryStage.setWidth(width);
-        primaryStage.setHeight(height);
-    }
-
+    /**
+     * @return a list of all the enemy sprites.
+     */
     public List<Sprite> getEnemiesSprite() {
         return enemiesSprite;
     }
 
+    /**
+     * Delete the image of the item picked up.
+     * @param e
+     */
     @Subscribe
     private void onItemPickUP(final ItemPickUpEvent e) {
         this.getItemsPos().get(e.getItemPosition())
         .setImage(proxyImage.getImage(SceneType.GAME, ImageType.BLANK));
     }
 
+    /**
+     * Change the weapon image on the ground if picked up by player.
+     * @param e
+     */
     @Subscribe
     private void onWeaponPickUP(final WeaponPickUpEvent e) {
         Image image = proxyImage.getImage(SceneType.GAME, ImageType.BLANK);

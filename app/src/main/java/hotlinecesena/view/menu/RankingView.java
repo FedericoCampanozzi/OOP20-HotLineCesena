@@ -34,6 +34,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Scene that will show the data retrieved from the rankings stats, controls {@code RankingView.fxml}.
+ */
 public class RankingView implements Initializable{
 
     @FXML
@@ -60,15 +63,30 @@ public class RankingView implements Initializable{
     private final RankingController rankingController;
     private final Map<String, Pair<Integer, Integer>> partialScore;
     private final int totalScore;
+    
     private List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
     private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
 
+    /**
+     * Class constructor.
+     * @param primaryStage
+     * 				The stage containing the ranking scene.
+     * @param audioControllerImpl
+     * 				The audio controller of the entire application.
+     * @param partialScore
+     * 				Contains current match stats.
+     * @param totalScore
+     * 				Contains the total points of the current match.
+     */
     public RankingView(final Stage primaryStage, final AudioControllerImpl audioControllerImpl, final Map<String, Pair<Integer, Integer>> partialScore, final int totalScore) {
         this.partialScore = partialScore;
         this.totalScore = totalScore;
         this.rankingController = new RankingController(primaryStage, audioControllerImpl);
     }
 
+    /**
+     * Set up column layouts and the content of the TableView.
+     */
     @Override
     public void initialize(final URL location, final ResourceBundle resources) {
     	setUpRankColumn();
@@ -81,11 +99,22 @@ public class RankingView implements Initializable{
         tableView.setItems(recordObservableList);
     }
 
+    /**
+     * {@link hotlinecesena.controller.menu.RankingController#backButtonClick()}.
+     * @throws IOException
+     */
     @FXML
     public void backButtonClick() throws IOException {
         rankingController.backButtonClick();
     }
 
+    /**
+     * When the {@code addScore} button is pressed, create a new Row, containing the current match stats.
+     * {@link hotlinecesena.controller.menu.RankingController#getNameFromUser()}.
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     @FXML
     public void addScoreClick() throws JsonGenerationException, JsonMappingException, IOException {
     	String name = rankingController.getNameFromUser();
@@ -101,6 +130,13 @@ public class RankingView implements Initializable{
         addScoreButton.setVisible(false);
     }
 
+    /**
+     * Add the Row containing the current match stats to the ranking list and updates the TableView.
+     * @param matchStatsRow
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     private void addRowToRecords(Row matchStatsRow) throws JsonGenerationException, JsonMappingException, IOException {
     	recordList.add(matchStatsRow);
     	recordList.sort(Comparator.comparing(Row::getPoints).reversed());
@@ -109,6 +145,9 @@ public class RankingView implements Initializable{
         JSONDataAccessLayer.getInstance().getRanking().write();
     }
     
+    /**
+     * Set up the {@code rank} column. Based on the total score of each row, assign the ranks.
+     */
     private void setUpRankColumn() {
     	rank.setCellFactory(col -> {
             final TableCell<Row, Integer> indexCell = new TableCell<>();
@@ -128,6 +167,13 @@ public class RankingView implements Initializable{
         });
     }
     
+    /**
+     * Set up the CellValueFactory of a specific column.
+     * @param <S>
+     * @param <T>
+     * @param tableColumn
+     * @param value
+     */
     private <S, T> void setUpColumn(TableColumn<S, T> tableColumn, String value) {
     	tableColumn.setCellValueFactory(new PropertyValueFactory<>(value));
     }

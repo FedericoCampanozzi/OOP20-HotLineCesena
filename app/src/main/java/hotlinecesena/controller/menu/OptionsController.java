@@ -24,6 +24,9 @@ import javafx.scene.control.Slider;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**
+ * Options menu scene where user can sets up custom settings, controls {@code OptionsView.fxml}.
+ */
 public class OptionsController implements Initializable {
 	
 	@FXML
@@ -44,9 +47,19 @@ public class OptionsController implements Initializable {
 	private final Optional<PauseController> pauseController;
 	private final Optional<Stage> worldStage;
 	private final Stage optionsStage;
+	
 	private Map<String, String> resMap = JSONDataAccessLayer.getInstance().getSettings().getResolutions();
 	private List<Pair<Integer, Integer>> resolutions = new ArrayList<>();
 
+	/**
+	 * Class constructor.
+	 * @param optionsStage
+	 * 				The stage of the Options scene.
+	 * @param audioControllerImpl
+	 * 				The audio controller of the entire application.
+	 * @param pauseController
+	 * 				The controller of the Pause menu (Optional).
+	 */
 	public OptionsController(Stage optionsStage, AudioControllerImpl audioControllerImpl, Optional<PauseController> pauseController) {
 		this.optionsStage = optionsStage;
 		this.worldStage = Optional.of(pauseController.get().getWorldStage());
@@ -55,27 +68,24 @@ public class OptionsController implements Initializable {
 		this.optionsStage.setOnCloseRequest(e -> backButton.fire());
 	}
 	
+	/**
+	 * Initialize audio and graphic settings.
+	 */
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// Initialize audio settings
-		audioControllerImpl.playMusic();
-		musicRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isMusicActive());
-		soundsRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isEffectActive());
-		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
-		volSlider.setValue(startVolumeValue);
 		try {
-			volSliderValueChanged();
+			initAudioSettings();
+			initGraphicSettings();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Initialize graphic settings
-		fullScreenRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
-		resMap.forEach((x, y) -> resolutions.add(new Pair<Integer, Integer>(Integer.parseInt(x), Integer.parseInt(y))));
-		resolutionComboBox.setItems(FXCollections.observableArrayList(resolutions));
-		resolutionComboBox.setDisable(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 	}	
 	
+	/**
+	 * When the {@code back} button is pressed, go back to previous scene.
+	 * @param event
+	 * @throws IOException
+	 */
 	@FXML
 	public void backClick(final ActionEvent event) throws IOException {
 		JSONDataAccessLayer.getInstance().getSettings().write();
@@ -91,12 +101,19 @@ public class OptionsController implements Initializable {
 		}
 	}
 	
+	/**
+	 * When user changes the {@code volumeSlider} value, update volume in settings.
+	 * @throws IOException
+	 */
 	@FXML
 	public void volSliderValueChanged() throws IOException {
 		JSONDataAccessLayer.getInstance().getSettings().setVolume((int) volSlider.getValue());
 		audioControllerImpl.updateSettings();
 	}
 	
+	/**
+	 * When user changes the {@code fullScreenRadioButton} value, update full screen status in settings.
+	 */
 	@FXML
 	public void fullScreenRadioButtonChangedState() {
 		if (fullScreenRadioButton.isSelected()) {
@@ -108,7 +125,9 @@ public class OptionsController implements Initializable {
 			JSONDataAccessLayer.getInstance().getSettings().setFullScreen(false);
 		}
 	}
-	
+	/**
+	 * When user changes the {@code resolutionComboBox} value, update resolution in settings.
+	 */
 	@FXML
 	public void resolutionChoosed() {
 		resolutions.forEach(r -> {
@@ -119,6 +138,9 @@ public class OptionsController implements Initializable {
 		});
 	}
 	
+	/**
+	 * When user changes the {@code musicRadioButton} value, update playing music status in settings.
+	 */
 	@FXML
 	public void musicRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
@@ -131,6 +153,9 @@ public class OptionsController implements Initializable {
 		}
 	}
 	
+	/**
+	 * When user changes the {@code soundsRadioButton} value, update playing sounds status in settings.
+	 */
 	@FXML
 	public void soundsRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
@@ -141,5 +166,28 @@ public class OptionsController implements Initializable {
 			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(false);
 			audioControllerImpl.updateSettings();
 		}
+	}
+	
+	/**
+	 * Initialize audio view settings.
+	 * @throws IOException
+	 */
+	private void initAudioSettings() throws IOException{
+		audioControllerImpl.playMusic();
+		musicRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isMusicActive());
+		soundsRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().isEffectActive());
+		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
+		volSlider.setValue(startVolumeValue);
+		volSliderValueChanged();
+	}
+	
+	/**
+	 * Initialize graphic view settings.
+	 */
+	private void initGraphicSettings() {
+		fullScreenRadioButton.setSelected(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
+		resMap.forEach((x, y) -> resolutions.add(new Pair<Integer, Integer>(Integer.parseInt(x), Integer.parseInt(y))));
+		resolutionComboBox.setItems(FXCollections.observableArrayList(resolutions));
+		resolutionComboBox.setDisable(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 	}
 }

@@ -11,17 +11,31 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.stage.Stage;
 
+/**
+ * Controller of {@code RankingView}.
+ */
 public class RankingController{
 	
 	private final SceneSwapper sceneSwapper = new SceneSwapper();
 	private final AudioControllerImpl audioControllerImpl;
 	private final Stage primaryStage;
 
+	/**
+	 * Class constructor.
+	 * @param primaryStage
+	 * 				The stage containing the rankings scene.
+	 * @param audioControllerImpl
+	 * 				The audio controller of the entire application.
+	 */
     public RankingController(Stage primaryStage, AudioControllerImpl audioControllerImpl) {
     	this.primaryStage = primaryStage;
     	this.audioControllerImpl = audioControllerImpl;
     }
 
+    /**
+     * When the {@code back} button is pressed, go back to {@code StartMenu} and create a new instance of DAL.
+     * @throws IOException
+     */
     public void backButtonClick() throws IOException {
         JSONDataAccessLayer.newInstance();
         sceneSwapper.swapScene(
@@ -29,6 +43,13 @@ public class RankingController{
         		"StartMenuView.fxml", primaryStage);
     }
 
+    /**
+     * Show a TextInputDialog where user can enter his name. The current match stats will be saved with that name.
+     * @return The name entered by the user in the TextInputDialog.
+     * @throws JsonGenerationException
+     * @throws JsonMappingException
+     * @throws IOException
+     */
     public String getNameFromUser() throws JsonGenerationException, JsonMappingException, IOException {
         final TextInputDialog textInputDialog = new TextInputDialog();
         textInputDialog.setTitle("Text Input Dialog");
