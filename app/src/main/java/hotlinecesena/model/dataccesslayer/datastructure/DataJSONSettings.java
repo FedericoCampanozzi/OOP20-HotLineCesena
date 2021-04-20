@@ -78,7 +78,11 @@ public class DataJSONSettings  extends AbstractData  {
     private float obstaclesEdge;
     
     
-    public void setDefaultLanguage(int defaultLanguage) {
+    public void setDefaultWidth(int defaultWidth) {
+		this.defaultWidth = defaultWidth;
+	}
+
+	public void setDefaultLanguage(int defaultLanguage) {
 		this.defaultLanguage = defaultLanguage;
 	}
 
