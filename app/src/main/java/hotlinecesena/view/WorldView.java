@@ -220,10 +220,6 @@ public class WorldView implements Subscriber {
         return stackPane;
     }
 
-    public BorderPane getBorderPane() {
-        return borderPane;
-    }
-
     public Stage getStage() {
         return primaryStage;
     }

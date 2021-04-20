@@ -20,7 +20,7 @@
    <top>
       <BorderPane BorderPane.alignment="CENTER">
          <center>
-            <Label styleClass="shadow-effect" text="Rankings" textFill="WHITE" BorderPane.alignment="CENTER">
+            <Label text="Rankings" textFill="WHITE" BorderPane.alignment="CENTER">
                <font>
                   <Font name="Bauhaus 93" size="64.0" />
                </font>

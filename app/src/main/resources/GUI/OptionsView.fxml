@@ -37,7 +37,7 @@
    <top>
       <BorderPane>
          <center>
-            <Label alignment="CENTER" styleClass="shadow-effect" text="Options" textFill="WHITE">
+            <Label alignment="CENTER" text="Options" textFill="WHITE">
                <font>
                   <Font name="Bauhaus 93" size="64.0" />
                </font>

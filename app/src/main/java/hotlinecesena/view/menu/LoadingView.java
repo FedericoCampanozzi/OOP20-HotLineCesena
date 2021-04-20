@@ -1,10 +1,11 @@
-package hotlinecesena.controller.menu;
+package hotlinecesena.view.menu;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
+import hotlinecesena.controller.menu.StartMenuController;
 import hotlinecesena.utilities.SceneSwapper;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -13,24 +14,26 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
-public class LoadingController implements Initializable{
+public class LoadingView implements Initializable{
 	
 	@FXML
 	ProgressBar progressBar;
 	@FXML
 	Label loadingLabel;
 	
-	private SceneSwapper sceneSwapper = new SceneSwapper();
 	private static final double EPSILON = 0.0000005;
-	private Stage stage;
-	private AudioControllerImpl audioControllerImpl = new AudioControllerImpl();
 	
-	public LoadingController(Stage stage) {
-		this.stage = stage;
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final AudioControllerImpl audioControllerImpl = new AudioControllerImpl();
+	private final Stage primaryStage;
+	
+	public LoadingView(final Stage primaryStage) {
+		this.primaryStage = primaryStage;
 	}
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		sceneSwapper.setUpStage(primaryStage);
 		final Task<Void> task = new Task<Void>() {
             final int N_ITERATIONS = 10;
 
@@ -48,7 +51,10 @@ public class LoadingController implements Initializable{
             if (progressBar.getProgress() >= 1 - EPSILON) {
                 progressBar.setStyle("-fx-accent: green;");
                 try {
-					sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
+					sceneSwapper.swapScene(
+							new StartMenuController(primaryStage, audioControllerImpl),
+							"StartMenuView.fxml",
+							primaryStage);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

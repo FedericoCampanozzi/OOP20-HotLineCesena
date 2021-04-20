@@ -39,17 +39,17 @@ public class OptionsController implements Initializable {
 	@FXML
 	private Button backButton;
 	
-	private SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final AudioControllerImpl audioControllerImpl;
+	private final Optional<PauseController> pauseController;
+	private final Optional<Stage> worldStage;
+	private final Stage optionsStage;
 	private Map<String, String> resMap = JSONDataAccessLayer.getInstance().getSettings().getResolutions();
 	private List<Pair<Integer, Integer>> resolutions = new ArrayList<>();
-	private Optional<Stage> worldStage;
-	private Stage optionsStage;
-	private AudioControllerImpl audioControllerImpl;
-	private Optional<PauseController> pauseController;
-	
-	public OptionsController(Stage optionsStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl, Optional<PauseController> pauseController) {
+
+	public OptionsController(Stage optionsStage, AudioControllerImpl audioControllerImpl, Optional<PauseController> pauseController) {
 		this.optionsStage = optionsStage;
-		this.worldStage = worldStage;
+		this.worldStage = Optional.of(pauseController.get().getWorldStage());
 		this.audioControllerImpl = audioControllerImpl;
 		this.pauseController = pauseController;
 		this.optionsStage.setOnCloseRequest(e -> backButton.fire());
@@ -64,8 +64,9 @@ public class OptionsController implements Initializable {
 		int startVolumeValue = JSONDataAccessLayer.getInstance().getSettings().getVolume();
 		volSlider.setValue(startVolumeValue);
 		try {
-			updateVolume(startVolumeValue);
+			volSliderValueChanged();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// Initialize graphic settings
@@ -75,6 +76,7 @@ public class OptionsController implements Initializable {
 		resolutionComboBox.setDisable(JSONDataAccessLayer.getInstance().getSettings().getFullScreen());
 	}	
 	
+	@FXML
 	public void backClick(final ActionEvent event) throws IOException {
 		JSONDataAccessLayer.getInstance().getSettings().write();
 		audioControllerImpl.stopMusic();
@@ -82,19 +84,20 @@ public class OptionsController implements Initializable {
 			sceneSwapper.swapScene(pauseController.get(), "PauseView.fxml", optionsStage);
 		}
 		else {
-			sceneSwapper.swapScene(new StartMenuController(optionsStage, audioControllerImpl), "StartMenuView.fxml", optionsStage);
+			sceneSwapper.swapScene(
+					new StartMenuController(optionsStage, audioControllerImpl),
+					"StartMenuView.fxml",
+					optionsStage);
 		}
 	}
 	
+	@FXML
 	public void volSliderValueChanged() throws IOException {
-		updateVolume((int) volSlider.getValue());
-	}
-	
-	private void updateVolume(int value) throws JsonGenerationException, JsonMappingException, IOException {
-		JSONDataAccessLayer.getInstance().getSettings().setVolume(value);
+		JSONDataAccessLayer.getInstance().getSettings().setVolume((int) volSlider.getValue());
 		audioControllerImpl.updateSettings();
 	}
 	
+	@FXML
 	public void fullScreenRadioButtonChangedState() {
 		if (fullScreenRadioButton.isSelected()) {
 			resolutionComboBox.setDisable(true);
@@ -106,6 +109,7 @@ public class OptionsController implements Initializable {
 		}
 	}
 	
+	@FXML
 	public void resolutionChoosed() {
 		resolutions.forEach(r -> {
 			if (resolutionComboBox.getValue() == r) {
@@ -115,6 +119,7 @@ public class OptionsController implements Initializable {
 		});
 	}
 	
+	@FXML
 	public void musicRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setMusicActive(true);
@@ -126,6 +131,7 @@ public class OptionsController implements Initializable {
 		}
 	}
 	
+	@FXML
 	public void soundsRDClick() throws JsonGenerationException, JsonMappingException, IOException {
 		if (musicRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(true);

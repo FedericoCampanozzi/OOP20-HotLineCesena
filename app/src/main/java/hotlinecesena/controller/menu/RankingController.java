@@ -1,142 +1,45 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking.Row;
-import hotlinecesena.model.score.partials.CunningStrategy;
-import hotlinecesena.model.score.partials.KillCountStrategy;
-import hotlinecesena.model.score.partials.TimeStrategy;
 import hotlinecesena.utilities.SceneSwapper;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.ObjectBinding;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Pair;
 
-public class RankingController implements Initializable{
+public class RankingController{
+	
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final AudioControllerImpl audioControllerImpl;
+	private final Stage primaryStage;
 
-    @FXML
-    private Button backButton;
-    @FXML
-    private Button addScoreButton;
-    @FXML
-    private TableView<Row> tableView;
-    @FXML
-    private TableColumn<Row, Integer> rank;
-    @FXML
-    private TableColumn<Row, String> name;
-    @FXML
-    private TableColumn<Row, Integer> points;
-    @FXML
-    private TableColumn<Row, String> time;
-    @FXML
-    private TableColumn<Row, Integer> enemyKilled;
-    @FXML
-    private TableColumn<Row, Integer> cunning;
-    @FXML
-    private VBox vBox;
-
-    private final SceneSwapper sceneSwapper = new SceneSwapper();
-    private final AudioControllerImpl audioControllerImpl;
-    private final Stage stage;
-    private final List<Row> recordList = JSONDataAccessLayer.getInstance().getRanking().getRecords();
-    private ObservableList<Row> recordObservableList = FXCollections.observableList(recordList);
-    private Row matchStats = new Row();
-    private final Map<String, Pair<Integer, Integer>> partialScore;
-    private final int totalScore;
-
-    public RankingController(final Stage stage, final AudioControllerImpl audioControllerImpl, final Map<String, Pair<Integer, Integer>> partialScore, final int totalScore) {
-        this.stage = stage;
-        this.audioControllerImpl = audioControllerImpl;
-        this.partialScore = partialScore;
-        this.totalScore = totalScore;
-    }
-
-    @Override
-    public void initialize(final URL location, final ResourceBundle resources) {
-        rank.setCellFactory(col -> {
-            final TableCell<Row, Integer> indexCell = new TableCell<>();
-            final ReadOnlyObjectProperty<TableRow<Row>> rowProperty = indexCell.tableRowProperty();
-            final ObjectBinding<String> rowBinding = Bindings.createObjectBinding(() -> {
-                final TableRow<Row> row = rowProperty.get();
-                if (row != null) {
-                    final int rowIndex = row.getIndex();
-                    if (rowIndex < row.getTableView().getItems().size()) {
-                        return Integer.toString(rowIndex + 1);
-                    }
-                }
-                return null;
-            }, rowProperty);
-            indexCell.textProperty().bind(rowBinding);
-            return indexCell;
-        });
-
-        name.setCellValueFactory(new PropertyValueFactory<>("name"));
-        points.setCellValueFactory(new PropertyValueFactory<>("points"));
-        time.setCellValueFactory(new PropertyValueFactory<>("time"));
-        enemyKilled.setCellValueFactory(new PropertyValueFactory<>("enemyKilled"));
-        cunning.setCellValueFactory(new PropertyValueFactory<>("cunning"));
-
-        tableView.setItems(recordObservableList);
+    public RankingController(Stage primaryStage, AudioControllerImpl audioControllerImpl) {
+    	this.primaryStage = primaryStage;
+    	this.audioControllerImpl = audioControllerImpl;
     }
 
     public void backButtonClick() throws IOException {
         JSONDataAccessLayer.newInstance();
-        sceneSwapper.swapScene(new StartMenuController(stage, audioControllerImpl), "StartMenuView.fxml", stage);
+        sceneSwapper.swapScene(
+        		new StartMenuController(primaryStage, audioControllerImpl),
+        		"StartMenuView.fxml", primaryStage);
     }
 
-    public void addScoreClick() throws JsonGenerationException, JsonMappingException, IOException {
+    public String getNameFromUser() throws JsonGenerationException, JsonMappingException, IOException {
         final TextInputDialog textInputDialog = new TextInputDialog();
         textInputDialog.setTitle("Text Input Dialog");
         textInputDialog.getDialogPane().setContentText("Insert your name:");
         textInputDialog.showAndWait();
         final TextField input = textInputDialog.getEditor();
         if (input.getText() != null && input.getText().toString().length() != 0) {
-            matchStats = new Row(
-                    input.getText(),
-                    totalScore,
-                    partialScore.get(TimeStrategy.class.getSimpleName()).getValue(),
-                    partialScore.get(KillCountStrategy.class.getSimpleName()).getValue(),
-                    partialScore.get(CunningStrategy.class.getSimpleName()).getValue()
-                    );
+        	return input.getText();
         }
-        recordList.add(matchStats);
-        this.updateList();
-        JSONDataAccessLayer.getInstance().getRanking().write();
-        addScoreButton.setDisable(true);
-        addScoreButton.setVisible(false);
-    }
-
-    private void sortRecords() {
-        recordList.sort(Comparator.comparing(Row::getPoints).reversed());
-    }
-
-    private void updateList() {
-        this.sortRecords();
-        recordObservableList = FXCollections.observableList(recordList);
-        tableView.refresh();
+        else {
+			throw new IOException("Invalid name!");
+		}
     }
 }

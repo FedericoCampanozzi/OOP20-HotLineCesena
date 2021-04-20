@@ -3,7 +3,6 @@ package hotlinecesena.controller.menu;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -19,43 +18,39 @@ import hotlinecesena.utilities.SceneSwapper;
 public class StartMenuController implements Initializable{
 	
 	@FXML
-	private Button newGameButton;
-	@FXML
-	private Button optionsButton;
-	@FXML
-	private Button exitButton;
-	@FXML
 	private VBox vBox;
 	
-	private SceneSwapper sceneSwapper = new SceneSwapper();
-	private Stage stage;
-	private AudioControllerImpl audioControllerImpl;
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final AudioControllerImpl audioControllerImpl;
+	private final Stage primaryStage;
 	
-	public StartMenuController(Stage stage, AudioControllerImpl audioControllerImpl) {
-		this.stage = stage;
+	public StartMenuController(final Stage primaryStage, final AudioControllerImpl audioControllerImpl) {
+		this.primaryStage = primaryStage;
 		this.audioControllerImpl = audioControllerImpl;
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		vBox.getChildren().forEach(c -> VBox.setVgrow(c, Priority.ALWAYS));
-		vBox.prefWidthProperty().bind(stage.widthProperty().multiply(3).divide(5));
 	}
 	
+	@FXML
 	public void newGameClick(final ActionEvent event) throws IOException {
+		Stage stage = new Stage();
+		stage.show();
         new WorldController(stage, audioControllerImpl);
+        primaryStage.close();
 	}
 	
+	@FXML
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(
-				stage,
-				Optional.empty(),
-				audioControllerImpl,
-				Optional.empty()),
+		sceneSwapper.swapScene(
+				new OptionsController(primaryStage, audioControllerImpl, Optional.empty()),
 				"OptionsView.fxml",
-				stage);
+				primaryStage);
 	}
 	
+	@FXML
 	public void exitClick(final ActionEvent event) throws IOException {
 		System.exit(0);
 	}

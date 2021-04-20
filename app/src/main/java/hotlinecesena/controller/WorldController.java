@@ -1,8 +1,6 @@
 package hotlinecesena.controller;
 
 import java.io.IOException;
-import java.util.Optional;
-
 import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.controller.HUD.PlayerStatsController;
@@ -13,7 +11,6 @@ import hotlinecesena.controller.entities.ProjectileController;
 import hotlinecesena.controller.entities.enemy.EnemyController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.controller.menu.PauseController;
-import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.controller.mission.MissionBuilderImpl;
 import hotlinecesena.controller.mission.MissionController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
@@ -40,6 +37,7 @@ import hotlinecesena.view.input.InputListenerFX;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
+import hotlinecesena.view.menu.RankingView;
 import javafx.animation.FadeTransition;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -47,24 +45,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class WorldController implements Subscriber {
 
-    private WorldView view;
-    private Camera camera;
-    private final Stage primaryStage;
-    private final GameLoopController gameLoopController = new GameLoopController();
-    private EntityController playerController;
-    private ProjectileController projectileController;
-    private PlayerStatsController playerStatsController;
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final GameLoopController gameLoopController = new GameLoopController();
+	private final Stage primaryStage;
+    private WorldView worldView;
     private MissionController missionController;
     private InputListener listener;
     private AudioControllerImpl audioController;
-    private final SceneSwapper sceneSwapper = new SceneSwapper();
+    
     private Score score;
 
     private double playerTimeLife = 0;
@@ -104,8 +98,9 @@ public class WorldController implements Subscriber {
                     gameLoopController.stop();
                     final Stage stage = new Stage();
                     stage.show();
+                    sceneSwapper.setUpStage(stage);
                     sceneSwapper.swapScene(
-                            new PauseController(stage, Optional.of(primaryStage), audioController, gameLoopController),
+                            new PauseController(stage, primaryStage, audioController, gameLoopController),
                             "PauseView.fxml",
                             stage);
                 } catch (final IOException e1) {
@@ -136,7 +131,7 @@ public class WorldController implements Subscriber {
         gameLoopController.stop();
         final BorderPane imageBorderPane = new BorderPane();
         Image image;
-        ImageView imageView;
+        ImageView imageView = new ImageView();
         final ProxyImage proxyImage = new ProxyImage();
         if (win) {
             image = proxyImage.getImage(SceneType.MENU, ImageType.VICTORY);
@@ -144,7 +139,8 @@ public class WorldController implements Subscriber {
         else {
             image = proxyImage.getImage(SceneType.MENU, ImageType.YOU_DIED);
         }
-        imageView = new ImageView(image);
+        imageView.setOpacity(0.0);
+        imageView.setImage(image);
         imageView.setPreserveRatio(true);
         imageView.fitWidthProperty().bind(primaryStage.widthProperty());
         imageBorderPane.setCenter(imageView);
@@ -152,20 +148,21 @@ public class WorldController implements Subscriber {
         fade.setFromValue(0.0);
         fade.setToValue(1.0);
         fade.setCycleCount(1);
-        fade.setNode(imageBorderPane);
-        view.getStackPane().getChildren().add(imageBorderPane);
+        fade.setNode(imageView);
+        worldView.getStackPane().getChildren().add(imageBorderPane);
         fade.play();
         fade.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
             public void handle(final ActionEvent event) {
                 try {
-                    sceneSwapper.swapScene(new RankingController(
+                    sceneSwapper.swapScene(new RankingView(
                             primaryStage,
                             audioController,
                             score.getPartialScores(),
                             score.getTotalScore()),
                             "RankingView.fxml",
                             primaryStage);
+                    sceneSwapper.setUpStage(primaryStage);
                 } catch (final IOException e) {
                     e.printStackTrace();
                 }
@@ -178,41 +175,42 @@ public class WorldController implements Subscriber {
     }
 
     private void initProjectileController() {
-        projectileController = new ProjectileController(view);
+        ProjectileController projectileController = new ProjectileController(worldView);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
     }
 
     private void initPlayerAndCameraController() {
-        final Sprite playerSprite = new SpriteImpl(view.getPlayersPos().getValue());
-        playerController = new PlayerControllerFactoryFX()
-                .createPlayerController(playerSprite, listener);
+        final Sprite playerSprite = new SpriteImpl(worldView.getPlayersPos().getValue());
+        EntityController playerController = new PlayerControllerFactoryFX().create(
+                JSONDataAccessLayer.getInstance().getPlayer().getPly(),
+                playerSprite,
+                listener
+                );
         gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
 
-        final CameraView cameraView = new CameraViewImpl(view.getGridPane());
-        camera = new CameraImpl(cameraView, playerSprite, listener);
+        final CameraView cameraView = new CameraViewImpl(worldView.getGridPane());
+        Camera camera = new CameraImpl(cameraView, playerSprite, listener);
         gameLoopController.addMethodToUpdate(camera.getUpdateMethod());
     }
 
     private void initListener() {
         listener = new InputListenerFX();
-        listener.addEventHandlers(view.getStage().getScene());
+        listener.addEventHandlers(worldView.getStage().getScene());
     }
 
     private void initEnemyController() {
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
-            final EnemyController ec = new EnemyController(e, view.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly());
+            final EnemyController ec = new EnemyController(e, worldView.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly());
             gameLoopController.addMethodToUpdate(ec.getUpdateMethod());
-            view.getEnemiesSprite().remove(0);
+            worldView.getEnemiesSprite().remove(0);
         });
     }
 
     private void initHudController() throws IOException {
-        playerStatsController = new PlayerStatsController(view, missionController);
-        final AnchorPane hudPane = new AnchorPane();
+        PlayerStatsController playerStatsController = new PlayerStatsController(worldView, missionController);
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("GUI/PlayerStatsView.fxml"));
-        loader.setController(playerStatsController);
-        hudPane.getChildren().add(loader.load());
-        view.getStackPane().getChildren().add(hudPane);
+        loader.setController(playerStatsController.getPlayerStatsView());
+        worldView.getStackPane().getChildren().add(loader.load());
         gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
     }
 
@@ -228,8 +226,8 @@ public class WorldController implements Subscriber {
     }
 
     private void initWorldView() {
-        view = new WorldView(primaryStage);
-        view.start();
+    	worldView = new WorldView(primaryStage);
+    	worldView.start();
     }
 
     private void initAudioController(final AudioControllerImpl audioController) {
@@ -238,31 +236,31 @@ public class WorldController implements Subscriber {
         new AudioEventController();
     }
 
-    public int getPlayerLifeTime() {
+	public int getPlayerLifeTime() {
         return (int)(playerTimeLife / 1000.0d);
     }
 
-    public int getEnemyKilledByPlayer() {
+	public int getEnemyKilledByPlayer() {
         return enemyKilled;
     }
 
-    public int getTotalAmmoBag() {
+	public int getTotalAmmoBag() {
         return totalAmmoBag;
     }
 
-    public int getTotalMedikit() {
+	public int getTotalMedikit() {
         return totalMedikit;
     }
 
-    public int getTotalWeaponsChanged() {
+	public int getTotalWeaponsChanged() {
         return totalWeaponsChanged;
     }
 
-    public int getTotalAmmoShootedByPlayer() {
+	public int getTotalAmmoShootedByPlayer() {
         return totalAmmoShootedByPlayer;
     }
 
-    public boolean isPickBriefCase() {
+	public boolean isPickBriefCase() {
         return pickBriefCase;
     }
 

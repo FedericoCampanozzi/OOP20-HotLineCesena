@@ -23,48 +23,60 @@ public class PauseController implements Initializable{
 	@FXML
 	Button quitButton;
 	
-	SceneSwapper sceneSwapper = new SceneSwapper();
-	private Optional<Stage> worldStage;
-	private AudioControllerImpl audioControllerImpl;
-	private Stage pauseStage;
-	private GameLoopController gameLoopController;
+	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final AudioControllerImpl audioControllerImpl;
+	private final GameLoopController gameLoopController;
+	private final Stage worldStage;
+	private final Stage pauseStage;
 	
-	public PauseController(Stage pauseStage, Optional<Stage> worldStage, AudioControllerImpl audioControllerImpl, GameLoopController gameLoopController) {
+	
+	public PauseController(Stage pauseStage, Stage worldStage, AudioControllerImpl audioControllerImpl, GameLoopController gameLoopController) {
 		this.pauseStage = pauseStage;
 		this.worldStage = worldStage;
 		this.audioControllerImpl = audioControllerImpl;
 		this.gameLoopController = gameLoopController;
-		this.pauseStage.setOnCloseRequest(e -> resumeButton.fire());
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		pauseStage.setOnCloseRequest(e -> resumeButton.fire());
 	}
 	
+	@FXML
 	public void resumeClick(final ActionEvent event) throws IOException {
 		if (JSONDataAccessLayer.getInstance().getSettings().getFullScreen()) {
-			worldStage.get().setFullScreen(true);
+			worldStage.setFullScreen(true);
 		}
 		else {
-			worldStage.get().setFullScreen(false);
-			worldStage.get().setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
-			worldStage.get().setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
-			worldStage.get().centerOnScreen();
+			worldStage.setFullScreen(false);
+			worldStage.setWidth(JSONDataAccessLayer.getInstance().getSettings().getMonitorX());
+			worldStage.setHeight(JSONDataAccessLayer.getInstance().getSettings().getMonitorY());
+			worldStage.centerOnScreen();
 		}
 		audioControllerImpl.playMusic();
 		gameLoopController.restart();
 		pauseStage.close();
 	}
 	
+	@FXML
 	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage, audioControllerImpl, Optional.of(this)), "OptionsView.fxml", pauseStage);
+		sceneSwapper.swapScene(
+				new OptionsController(pauseStage, audioControllerImpl, Optional.of(this)),
+				"OptionsView.fxml",
+				pauseStage);
 	}
 	
+	@FXML
 	public void quitClick(final ActionEvent event) throws IOException {
-		if (worldStage.isPresent()) {
-			worldStage.get().close();
-		}
+		worldStage.close();
 		JSONDataAccessLayer.newInstance();
-		sceneSwapper.swapScene(new StartMenuController(pauseStage, audioControllerImpl), "StartMenuView.fxml", pauseStage);
+		sceneSwapper.swapScene(
+				new StartMenuController(pauseStage, audioControllerImpl),
+				"StartMenuView.fxml",
+				pauseStage);
+	}
+	
+	public Stage getWorldStage() {
+		return worldStage;
 	}
 }
