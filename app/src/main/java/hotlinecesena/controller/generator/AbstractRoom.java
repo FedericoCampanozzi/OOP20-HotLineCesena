@@ -15,6 +15,9 @@ public abstract class AbstractRoom implements Room {
 		
 	}
 
+	public abstract void generate();
+	public abstract Room deepCopy();
+	
 	public AbstractRoom(Map<Pair<Integer, Integer>, SymbolsType> map, Pair<Integer, Integer> center) {
 		this.map = map;
 		this.center = center;
