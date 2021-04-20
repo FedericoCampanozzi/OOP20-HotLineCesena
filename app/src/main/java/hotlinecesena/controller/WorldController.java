@@ -264,7 +264,6 @@ public class WorldController implements Subscriber {
         missionController = new MissionBuilderImpl(this)
                 .addAmmoMission(2, 6)
                 .addMedikitMission(3, 6)
-                .addChangeWeaponsMission(1, 3)
                 .addKeyObjectMission()
                 .addKillMission(1, 7)
                 .build();

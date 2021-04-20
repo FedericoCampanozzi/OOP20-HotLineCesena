@@ -50,6 +50,7 @@ public class PlayerStatsController implements Updatable{
 	 * Check whether the user pressed the {@code nextMissionKey} or the {@code previousMissionKey}.
 	 */
 	private void updateMissionsView() {
+		playerStatsView.updateMissionsStatus();
 		worldView.getStackPane().setOnKeyPressed(e -> {
 		    if (e.getCode() == KeyCode.M) {
 		    	playerStatsView.showNextMission(true);
