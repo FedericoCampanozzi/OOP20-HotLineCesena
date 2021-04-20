@@ -45,7 +45,6 @@ public class OptionsController implements Initializable {
 	private final SceneSwapper sceneSwapper = new SceneSwapper();
 	private final AudioControllerImpl audioControllerImpl;
 	private final Optional<PauseController> pauseController;
-	private final Optional<Stage> worldStage;
 	private final Stage optionsStage;
 	
 	private Map<String, String> resMap = JSONDataAccessLayer.getInstance().getSettings().getResolutions();
@@ -62,7 +61,6 @@ public class OptionsController implements Initializable {
 	 */
 	public OptionsController(Stage optionsStage, AudioControllerImpl audioControllerImpl, Optional<PauseController> pauseController) {
 		this.optionsStage = optionsStage;
-		this.worldStage = Optional.of(pauseController.get().getWorldStage());
 		this.audioControllerImpl = audioControllerImpl;
 		this.pauseController = pauseController;
 		this.optionsStage.setOnCloseRequest(e -> backButton.fire());
@@ -90,7 +88,7 @@ public class OptionsController implements Initializable {
 	public void backClick(final ActionEvent event) throws IOException {
 		JSONDataAccessLayer.getInstance().getSettings().write();
 		audioControllerImpl.stopMusic();
-		if (worldStage.isPresent()) {
+		if (pauseController.isPresent()) {
 			sceneSwapper.swapScene(pauseController.get(), "PauseView.fxml", optionsStage);
 		}
 		else {
