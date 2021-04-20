@@ -9,9 +9,13 @@ import com.google.common.eventbus.Subscribe;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
+import hotlinecesena.model.dataccesslayer.datastructure.DataItems;
+import hotlinecesena.model.dataccesslayer.datastructure.DataPlayer;
+import hotlinecesena.model.dataccesslayer.datastructure.DataWeapons;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.items.ItemsType;
+import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.ItemPickUpEvent;
 import hotlinecesena.model.events.Subscriber;
@@ -48,10 +52,13 @@ public class WorldView implements Subscriber {
     private final BorderPane borderPane = new BorderPane();
     private final GridPane gridPane = new GridPane();
     private final ImageLoader proxyImage = new ProxyImage();
-    private final DataWorldMap world = JSONDataAccessLayer.getInstance().getWorld();
-    private final Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
-    private final Map<Pair<Integer, Integer>, SymbolsType> worldMap = world.getWorldMap();
+
     private final List<Sprite> enemiesSprite = new ArrayList<>();
+    
+    private final Map<Pair<Integer, Integer>, SymbolsType> worldMap;
+    private final Player player;
+    private final Map<Point2D, ItemsType> items;
+    private final Map<Point2D, Weapon> weapons;
 
     private final Map<Point2D, ImageView> enemiesPos = new LinkedHashMap<>();
     private final Map<Point2D, ImageView> itemsPos = new LinkedHashMap<>();
@@ -62,9 +69,23 @@ public class WorldView implements Subscriber {
      * Class constructor.
      * @param primaryStage
      * 				The stage containing the world scene
+     * @param dataWeapons 
+     * @param dataItems 
+     * @param dataEnemy 
+     * @param dataPlayer 
+     * @param dataWorldMap 
      */
-    public WorldView(final Stage primaryStage) {
+    public WorldView(
+    		final Stage primaryStage,
+    		DataWorldMap dataWorldMap,
+    		DataPlayer dataPlayer,
+    		DataItems dataItems,
+    		DataWeapons dataWeapons) {
         this.primaryStage = primaryStage;
+        this.worldMap = dataWorldMap.getWorldMap();
+        this.player = dataPlayer.getPly();
+        this.items = dataItems.getItems();
+        this.weapons = dataWeapons.getWeapons();
     }
 
     /**
@@ -127,7 +148,7 @@ public class WorldView implements Subscriber {
             switch (s) {
             case ITEM:
                 tile.setImage(this.pickItemImage(
-                        JSONDataAccessLayer.getInstance().getDataItems().getItems().get(point))
+                        items.get(point))
                         );
                 itemsPos.put(point, tile);
                 break;
@@ -137,7 +158,7 @@ public class WorldView implements Subscriber {
                 break;
             case WEAPONS:
                 tile.setImage(this.pickWeaponImage(
-                        JSONDataAccessLayer.getInstance().getWeapons().getWeapons().get(point)
+                        weapons.get(point)
                         .getWeaponType())
                         );
                 itemsPos.put(point, tile);
