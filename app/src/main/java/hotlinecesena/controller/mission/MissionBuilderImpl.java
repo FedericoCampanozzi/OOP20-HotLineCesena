@@ -1,15 +1,17 @@
 package hotlinecesena.controller.mission;
 
 import java.util.Random;
-
 import hotlinecesena.controller.WorldController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.items.ItemsType;
 import hotlinecesena.utilities.Utilities;
-
 import static java.util.stream.Collectors.*;
 
+/**
+ * An example of {@code MissionBuilder}
+ * @author Federico
+ */
 public class MissionBuilderImpl implements MissionBuilder {
 
 	private final MissionController mController;
