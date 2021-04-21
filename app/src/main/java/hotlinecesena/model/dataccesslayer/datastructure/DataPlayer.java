@@ -9,9 +9,8 @@ import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*; 
 
 /**
- * 
+ * A class that maintains updated a instance of player {@code Player}
  * @author Federico
- *
  */
 public class DataPlayer extends AbstractData {
 

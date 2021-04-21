@@ -16,7 +16,6 @@ import static java.util.stream.Collectors.*;
 /**
  * Class that provides to memorization of each languages his transactions
  * @author Federico
- *
  */
 public class DataJSONLanguages extends AbstractData {
 
@@ -29,7 +28,6 @@ public class DataJSONLanguages extends AbstractData {
 	 * Class that represent how translate a single 
 	 * GUI object (label, button, message etc..)
 	 * @author Federico
-	 *
 	 */
 	public static class decode {
 		@JsonProperty("idFxml")
@@ -58,11 +56,6 @@ public class DataJSONLanguages extends AbstractData {
 		}
 	}
 	
-	/**
-	 * Get a map that for each id_fxml map his translations
-	 * @param lName
-	 * @return
-	 */
 	public Map<String, String> getLanguageMap(String lName){
 		final int index = this.language.indexOf(lName);
 		return this.decodifications.stream()

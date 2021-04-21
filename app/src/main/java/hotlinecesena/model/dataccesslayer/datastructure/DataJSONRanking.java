@@ -14,7 +14,7 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.Utilities;
 
 /**
- * 
+ * A data-class that provide to store all results of a game
  * @author Federico
  *
  */
@@ -23,7 +23,6 @@ public class DataJSONRanking extends AbstractData {
 	/**
 	 * A class represent a single record of result
 	 * @author Federico
-	 *
 	 */
 	public static class Row {
 		@JsonProperty("name")

@@ -12,10 +12,9 @@ import hotlinecesena.model.dataccesslayer.datastructure.DataWeapons;
 import hotlinecesena.model.dataccesslayer.datastructure.DataWorldMap;
 
 /**
- * this interface represent what kind of data need to saved
- * for continue application run correctly
+ * This interface represent what kind of data need to saved
+ * for run application correctly
  * @author Federico
- *
  */
 public interface DataAccessLayer {
 

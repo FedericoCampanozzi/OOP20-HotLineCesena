@@ -1,7 +1,7 @@
 package hotlinecesena.model.dataccesslayer;
 
 /**
- * this interface represent a classic data that define
+ * This interface represent a classic data that define
  * how read it and write it
  * @author Federico
  *

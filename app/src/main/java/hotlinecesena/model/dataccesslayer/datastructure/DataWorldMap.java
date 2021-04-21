@@ -84,7 +84,7 @@ public class DataWorldMap extends AbstractData {
 	}
 	
 	/**
-	 * the current updated miniMap
+	 * The current updated miniMap
 	 * @return the minimap as a image
 	 */
 	public Image getImageVIewUpdated() {
@@ -110,9 +110,6 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
-	/**
-	 * @return the world map
-	 */
 	public Map<Pair<Integer, Integer>, SymbolsType> getWorldMap(){
 		return this.worldMap;
 	}
