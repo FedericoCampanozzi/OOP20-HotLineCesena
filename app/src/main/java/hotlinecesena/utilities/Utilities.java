@@ -5,15 +5,13 @@ import javafx.geometry.Point2D;
 import javafx.util.Pair;
 
 /**
- * static class for simplify come calculations
+ * A utility Static class for simplify commons calculations
  * @author Federico
- *
  */
 public class Utilities {
 	
 	/**
-	 * get a distance of two integer position
-	 * @return the distance
+	 * Get a distance of two integer position
 	 */
 	public static double distance(Pair<Integer,Integer> p1, Pair<Integer, Integer> p2) {
 		return Math.sqrt((p2.getKey() - p1.getKey()) * (p2.getKey() - p1.getKey()) + (p2.getValue() - p1.getValue()) * (p2.getValue() - p1.getValue()));
@@ -21,8 +19,8 @@ public class Utilities {
 
 	/**
 	 * Sum a variable number of positions
-	 * @param points variable arguments
-	 * @return the summed position
+	 * @param points All points to be added together
+	 * @return The final position
 	 */
 	@SafeVarargs
 	public static Pair<Integer,Integer> sumPair( Pair<Integer,Integer>... points) {
@@ -36,10 +34,10 @@ public class Utilities {
 	}
 	
 	/**
-	 * Subtract to p n points 
-	 * @param p point that have to be subtracted
-	 * @param points 
-	 * @return the result point
+	 * Subtract to p some points
+	 * @param p The point that have to be subtracted
+	 * @param points All points to be subtracted
+	 * @return The result point
 	 */
 	@SafeVarargs
 	public static Pair<Integer,Integer> subPair(Pair<Integer,Integer> p, Pair<Integer,Integer>... point) {
@@ -54,36 +52,30 @@ public class Utilities {
 	
 	/**
 	 * Multiply a integer point from scalar
-	 * @param p the point
-	 * @param scalar the natural number
-	 * @return
+	 * @param p The point
+	 * @param scalar The natural number
+	 * @return The result point
 	 */
 	public static Pair<Integer,Integer> mulPairScalar(Pair<Integer,Integer> p, int scalar) {
 		return new Pair<>(scalar * p.getKey(), scalar * p.getValue());
 	}
 	
 	/**
-	 * Convert integer positions in a spatial point
-	 * @param p the integer position
-	 * @return the point
+	 * Convert integer position in a spatial position
 	 */
 	public static Point2D convertPairToPoint2D(Pair<Integer,Integer> p) {
 		return new Point2D((double)p.getKey(), (double)p.getValue());
 	}
 	
 	/**
-	 * Convert spatial point in a integer position 
-	 * @param p spatial point
-	 * @return the integer point
+	 * Convert spatial position in a integer position 
 	 */
 	public static Pair<Integer,Integer> convertPoint2DToPair(Point2D p) {
 		return new Pair<Integer,Integer>((int)p.getX(), (int)p.getY());
 	}
 	
 	/**
-	 * Convert color from java.awt.Color to javafx.scene.paint.Color
-	 * @param color
-	 * @return
+	 * Convert from color from {@link java.awt.Color} to {@link javafx.scene.paint.Color}
 	 */
 	public static javafx.scene.paint.Color convertColor(java.awt.Color color) {
 		return new javafx.scene.paint.Color(
@@ -95,9 +87,9 @@ public class Utilities {
 	
 	/**
 	 * Convert seconds to string time
-	 * @param format the output format
-	 * @param seconds time
-	 * @return the format string
+	 * @param format How output have to be formatted
+	 * @param seconds Time in seconds
+	 * @return The format string
 	 */
 	public static String convertSecondsToTimeString(long seconds, String format) {
 		long s = (seconds / 1000) % 60;
@@ -107,11 +99,11 @@ public class Utilities {
 	}
 	
 	/**
-	 * generate a number from lowerBound (include) to upperBound (exclude)
+	 * Generate a number from lowerBound (include) to upperBound (exclude)
 	 * @param rnd instance of random
 	 * @param lowerBound the minimums value possible
 	 * @param upperBound the maximums value possible
-	 * @return
+	 * @return a random int
 	 */
 	public static int randomBetween(Random rnd, int lowerBound, int upperBound) {
 		if(upperBound  < lowerBound) {
