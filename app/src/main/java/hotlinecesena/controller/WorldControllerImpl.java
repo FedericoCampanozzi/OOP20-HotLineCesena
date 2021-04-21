@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  */
 public class WorldControllerImpl implements WorldController {
 
-	private final GameLoopController gameLoopController = new GameLoopController();
+	private final GameLoopController gameLoopController = new GameLoopControllerImpl();
 	private final Stage primaryStage;
 	
     private WorldView worldView;
@@ -100,7 +100,7 @@ public class WorldControllerImpl implements WorldController {
     			audioController,
     			gameLoopController,
     			listener);
-        gameLoopController.addMethodToUpdate(pauseController.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(pauseController);
     }
 
     /**
@@ -115,7 +115,7 @@ public class WorldControllerImpl implements WorldController {
         		primaryStage,
         		worldView.getStackPane(),
         		score)
-        		.getUpdateMethod());
+        		);
     }
 
     /**
@@ -131,7 +131,7 @@ public class WorldControllerImpl implements WorldController {
      */
     private void initProjectileController() {
         ProjectileControllerImpl projectileController = new ProjectileControllerImpl(worldView);
-        gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(projectileController);
     }
 
     private void initPlayerAndCameraController() {
@@ -141,11 +141,11 @@ public class WorldControllerImpl implements WorldController {
                 playerSprite,
                 listener
                 );
-        gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(playerController);
 
         final CameraView cameraView = new CameraViewImpl(worldView.getGridPane());
         Camera camera = new CameraImpl(cameraView, playerSprite, listener);
-        gameLoopController.addMethodToUpdate(camera.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(camera);
     }
 
     /**
@@ -162,7 +162,7 @@ public class WorldControllerImpl implements WorldController {
     private void initEnemyController() {
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
             final EnemyController ec = new EnemyController(e, worldView.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly());
-            gameLoopController.addMethodToUpdate(ec.getUpdateMethod());
+            gameLoopController.addMethodToUpdate(ec);
             worldView.getEnemiesSprite().remove(0);
         });
     }
@@ -177,7 +177,7 @@ public class WorldControllerImpl implements WorldController {
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("GUI/PlayerStatsView.fxml"));
         loader.setController(playerStatsController.getPlayerStatsView());
         worldView.getStackPane().getChildren().add(loader.load());
-        gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(playerStatsController);
     }
 
     /**
@@ -190,7 +190,7 @@ public class WorldControllerImpl implements WorldController {
                 .addKeyObjectMission()
                 .addKillMission(1, 7)
                 .build();
-        gameLoopController.addMethodToUpdate(missionController.getUpdateMethod());
+        gameLoopController.addMethodToUpdate(missionController);
     }
 
     /**
