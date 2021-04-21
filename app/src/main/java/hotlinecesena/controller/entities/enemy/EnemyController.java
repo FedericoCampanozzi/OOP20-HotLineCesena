@@ -14,8 +14,6 @@ import hotlinecesena.model.events.RotationEvent;
 import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.loader.ImageType;
-import hotlinecesena.view.loader.ProxyImage;
-import hotlinecesena.view.loader.SceneType;
 
 /**
  * Controls the actions that each enemy
@@ -31,7 +29,6 @@ public final class EnemyController implements Updatable, Subscriber {
     private static final int WAIT_TO_START = 3 * SECONDS;
     private static final int STOP_PURSUIT = 8 * SECONDS;
 
-    private final ProxyImage loader;
     private final Enemy enemy;
     private final Sprite sprite;
     private final Player player;
@@ -52,7 +49,6 @@ public final class EnemyController implements Updatable, Subscriber {
     public EnemyController(final Enemy enemy, final Sprite sprite,
             final Player player) {
 
-        this.loader = new ProxyImage();
         this.enemy = enemy;
         this.enemy.register(this);
         this.sprite = sprite;
@@ -104,7 +100,7 @@ public final class EnemyController implements Updatable, Subscriber {
                 }
 
                 if (this.enemy.getActorStatus().equals(ActorStatus.DEAD) && current - timeAfterDeath > UPDATE_AFTER_DEATH) {
-                    this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.BLANK));
+                    this.sprite.updateImage(ImageType.BLANK);
                 }
         };
     }
@@ -136,7 +132,7 @@ public final class EnemyController implements Updatable, Subscriber {
      */
     @Subscribe
     private void onDeathEvent(final DeathEvent e) {
-        this.sprite.updateImage(this.loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
+        this.sprite.updateImage(ImageType.TOMBSTONE);
         this.sprite.updateRotation(0);
         this.timeAfterDeath = System.currentTimeMillis();
     }
