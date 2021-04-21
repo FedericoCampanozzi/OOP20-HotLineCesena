@@ -8,9 +8,8 @@ import java.util.function.Supplier;
 import javafx.util.Pair;
 import java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
-import hotlinecesena.controller.Updatable;
 
-public class MissionControllerImpl implements Updatable , MissionController {
+public class MissionControllerImpl implements MissionController {
 	
 	private final Map<String, Pair<Supplier<Boolean>,Boolean>> quests = new HashMap<>();
 	
