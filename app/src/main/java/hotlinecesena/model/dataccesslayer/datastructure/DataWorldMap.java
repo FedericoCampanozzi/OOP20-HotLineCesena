@@ -8,7 +8,7 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.util.Pair;
 import org.apache.commons.io.FileUtils;
-import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
+import hotlinecesena.controller.generator.BaseRoomsGeneratorFactoryImpl;
 import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.AbstractData;
@@ -32,7 +32,7 @@ public class DataWorldMap extends AbstractData {
 	
 	public DataWorldMap(DataJSONSettings settings) throws IOException {
 		WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectungolarRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateRectungolarRoomList(
 						settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 						settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
 						settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
@@ -84,7 +84,7 @@ public class DataWorldMap extends AbstractData {
 	}
 	
 	/**
-	 * the current updated miniMap
+	 * The current updated miniMap
 	 * @return the minimap as a image
 	 */
 	public Image getImageVIewUpdated() {
@@ -110,9 +110,6 @@ public class DataWorldMap extends AbstractData {
 		FileUtils.writeStringToFile(new File(JSONDataAccessLayer.FILE_FOLDER_PATH + "WorldMap.txt"), debug);
 	}
 	
-	/**
-	 * @return the world map
-	 */
 	public Map<Pair<Integer, Integer>, SymbolsType> getWorldMap(){
 		return this.worldMap;
 	}

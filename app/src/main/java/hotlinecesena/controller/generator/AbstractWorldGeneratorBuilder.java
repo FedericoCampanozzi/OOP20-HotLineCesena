@@ -7,6 +7,10 @@ import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 import static java.util.stream.Collectors.*;
 
+/**
+ * A common implementations of a generic worlWorldGeneratorBuilderd {@code WorldGeneratorBuilder}
+ * @author Federico
+ */
 public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBuilder {
 	
 	protected static final int ACCETABLE_MAP = 5;
@@ -233,14 +237,18 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.haveInitBaseRoom();
 	}
 
-	//check if generate have called
+	/**
+	 * check if generate have called 
+	 */
 	protected void haveInitMap() {
 		if(this.rooms.isEmpty()) {
 			throw new IllegalStateException();
 		}
 	}
 
-	//check if addSingleBaseRoom or addSomeBaseRoom have called
+	/**
+	 * check if addSingleBaseRoom or addSomeBaseRoom have called
+	 */
 	protected void haveInitBaseRoom() {
 		if(this.baseRooms.isEmpty()) {
 			throw new IllegalStateException();

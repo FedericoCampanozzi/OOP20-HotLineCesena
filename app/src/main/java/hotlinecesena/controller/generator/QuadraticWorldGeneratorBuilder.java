@@ -8,12 +8,19 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * This class provide to generate a map with {@link QuadraticRoom} 
+ * @author Federico
+ */
 public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
 	public QuadraticWorldGeneratorBuilder() {
 		super();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();

@@ -2,10 +2,13 @@ package hotlinecesena.controller.generator;
 
 import java.util.List;
 import java.util.Map;
-
-import hotlinecesena.model.dataccesslayer.SymbolsType;
 import javafx.util.Pair;
+import hotlinecesena.model.dataccesslayer.SymbolsType;
 
+/**
+ * This interface establishes how a wold builder have to be made
+ * @author Federico
+ */
 public interface WorldGeneratorBuilder {
 	/**
 	 * Add single room in base room list
@@ -27,58 +30,67 @@ public interface WorldGeneratorBuilder {
 	 */
 	WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax);
 	/**
-	 * put player symbols in gamemap
+	 * Put player symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generatePlayer();
 	/**
-	 * put player symbols in gamemap
+	 * Put player symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generateKeyObject();
 	/**
-	 *  put some enemy symbols in gamemap
+	 * Put some enemy symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generateEnemy(int minRoom, int maxRoom);
 	/**
-	 * put some obstacles symbols in gamemap
+	 * Put some obstacles symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generateObstacoles(int minRoom, int maxRoom);
 	/**
-	 * put some items symbols in gamemap
+	 * Put some items symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generateItem(int minRoom, int maxRoom);
 	/**
-	 * put some weapons symbols in gamemap
+	 * Put some weapons symbols in gamemap
 	 * @return
 	 */
 	WorldGeneratorBuilder generateWeapons(int minRoom, int maxRoom);
 	/**
-	 * apply some effect of post-processing
+	 * Apply some effect of post-processing
 	 * @return
 	 */
 	WorldGeneratorBuilder finishes();
 	/**
-	 * return the final builder
+	 * Return the final builder
 	 * @return
 	 */
 	WorldGeneratorBuilder build();
 	/**
-	 * get the result
-	 * @return
+	 * Get the low level map result
 	 */
 	Map<Pair<Integer, Integer>, SymbolsType> getMap();
-
+	/**
+	 * Get the minimuos x
+	 */
 	int getMinX();
-
+	/**
+	 * Get the maximous x
+	 */
 	int getMaxX();
-
+	/**
+	 * Get the minimuos y
+	 */
 	int getMinY();
-
+	/**
+	 * Get the maximous y
+	 */
 	int getMaxY();
-	
+	/**
+	 * @return true if key object is present, false otherwise
+	 */
 	boolean isKeyObjectPresent();
 }
