@@ -2,6 +2,10 @@ package hotlinecesena.controller.generator;
 
 import java.util.List;
 
+/**
+ * This factory provide to generate some list of rooms
+ * @author Federico
+ */
 public interface BaseRoomsGeneratorFactory {
 
 	/**
