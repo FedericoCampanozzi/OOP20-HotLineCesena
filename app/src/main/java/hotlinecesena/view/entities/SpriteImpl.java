@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import hotlinecesena.view.loader.ImageLoader;
+import hotlinecesena.view.loader.ImageType;
+import hotlinecesena.view.loader.ProxyImage;
+import hotlinecesena.view.loader.SceneType;
 import javafx.geometry.Point2D;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
@@ -18,10 +21,12 @@ import javafx.scene.transform.Translate;
  */
 public final class SpriteImpl implements Sprite {
 
+    private static final double VIEW_SCALE = 2.0;
     private final ImageView imageView;
     private Point2D imageOffset;
     private Rotate rotate;
     private Translate trans;
+    private final ImageLoader loader = new ProxyImage();
 
     /**
      * Instantiates a new {@code SpriteImpl} with a given {@link ImageView}.
@@ -66,10 +71,10 @@ public final class SpriteImpl implements Sprite {
     @Override
     public void updatePosition(@Nonnull final Point2D entityPos) {
         Objects.requireNonNull(entityPos);
-        rotate.setPivotX(entityPos.getX() / 2.0 + imageOffset.getX());
-        rotate.setPivotY(entityPos.getY() / 2.0 + imageOffset.getY());
-        trans.setX(entityPos.getX() / 2.0);
-        trans.setY(entityPos.getY() / 2.0);
+        rotate.setPivotX(entityPos.getX() / VIEW_SCALE + imageOffset.getX());
+        rotate.setPivotY(entityPos.getY() / VIEW_SCALE + imageOffset.getY());
+        trans.setX(entityPos.getX() / VIEW_SCALE);
+        trans.setY(entityPos.getY() / VIEW_SCALE);
     }
 
     @Override
@@ -78,8 +83,8 @@ public final class SpriteImpl implements Sprite {
     }
 
     @Override
-    public void updateImage(final Image image) {
-        imageView.setImage(image);
+    public void updateImage(final ImageType image) {
+        imageView.setImage(loader.getImage(SceneType.GAME, image));
         imageOffset = new Point2D(imageView.getFitWidth() / 2.0, imageView.getFitHeight() / 2.0);
     }
 
