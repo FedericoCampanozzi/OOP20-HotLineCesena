@@ -8,9 +8,8 @@ import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
 /**
- * This class provide to represent an octagonal room
+ * This class represent an octagonal room
  * @author Federico
- *
  */
 public class OctagonalRoom extends AbstractRoom {
 	final private  int width;
@@ -35,6 +34,9 @@ public class OctagonalRoom extends AbstractRoom {
 		generate();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void generate() {
 		final int edge2 = (edge-1)/2;
@@ -97,6 +99,9 @@ public class OctagonalRoom extends AbstractRoom {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Room deepCopy() {
 		return new OctagonalRoom(this.map, this.center, this.edge);

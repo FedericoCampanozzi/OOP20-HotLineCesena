@@ -8,6 +8,10 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * This class provide to generate a map with {@link OctagonalRoom} 
+ * @author Federico
+ */
 public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
 	public OctagonalWorldGeneratorBuilder() {

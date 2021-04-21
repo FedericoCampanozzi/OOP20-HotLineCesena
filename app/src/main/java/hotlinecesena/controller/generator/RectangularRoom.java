@@ -5,10 +5,13 @@ import java.util.Map;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 
+/**
+ * This class represent a rectangular room
+ * @author Federico
+ */
 public class RectangularRoom extends AbstractRoom {
 	private  int w;
 	private  int h;

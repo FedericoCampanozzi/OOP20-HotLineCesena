@@ -7,10 +7,14 @@ import java.util.Random;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.Utilities;
 
+/**
+ * This factory provide to generate some list of rooms
+ * @author Federico
+ */
 public final class BaseRoomsGeneratorFactory {
 
 	/**
-	 * get a list of quadratic room
+	 * Get a list of quadratic room
 	 * @param wMin
 	 * @param wMax
 	 * @param dMin
@@ -38,7 +42,7 @@ public final class BaseRoomsGeneratorFactory {
 	}
 
 	/**
-	 * get a list of rectangular room
+	 * Get a list of rectangular room
 	 * @param wMin
 	 * @param wMax
 	 * @param hMin
@@ -69,7 +73,7 @@ public final class BaseRoomsGeneratorFactory {
 		return baseRooms;
 	}
 	/**
-	 * get a list of octagonal room
+	 * Get a list of octagonal room
 	 * @param edgeMin
 	 * @param edgeMax
 	 * @param dMin
