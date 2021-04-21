@@ -6,7 +6,7 @@ import com.google.common.eventbus.Subscribe;
 import hotlinecesena.controller.camera.Camera;
 import hotlinecesena.controller.camera.CameraImpl;
 import hotlinecesena.controller.entities.EntityController;
-import hotlinecesena.controller.entities.ProjectileController;
+import hotlinecesena.controller.entities.ProjectileControllerImpl;
 import hotlinecesena.controller.entities.enemy.EnemyController;
 import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
 import hotlinecesena.controller.hud.PlayerStatsControllerImpl;
@@ -130,7 +130,7 @@ public class WorldControllerImpl implements WorldController {
      * Initialize the {@code ProjectileController}.
      */
     private void initProjectileController() {
-        ProjectileController projectileController = new ProjectileController(worldView);
+        ProjectileControllerImpl projectileController = new ProjectileControllerImpl(worldView);
         gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
     }
 

@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.GameLoopController;
 import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.view.input.InputListener;
 import javafx.event.ActionEvent;
@@ -29,7 +30,7 @@ public class PauseControllerImpl implements PauseController{
 	@FXML
 	Button quitButton;
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final AudioControllerImpl audioControllerImpl;
 	private final GameLoopController gameLoopController;
 	private final Stage worldStage;

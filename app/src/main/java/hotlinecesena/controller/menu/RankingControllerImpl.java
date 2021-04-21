@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -16,7 +17,7 @@ import javafx.stage.Stage;
  */
 public class RankingControllerImpl implements RankingController{
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final AudioControllerImpl audioControllerImpl;
 	private final Stage primaryStage;
 

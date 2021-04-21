@@ -1,18 +1,13 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+/**
+ * Start menu scene, controls {@code StartMenuView.fxml}.
+ */
 public interface StartMenuController extends Initializable{
-
-	/**
-	 * Set up the scene layout.
-	 */
-	void initialize(URL location, ResourceBundle resources);
 
 	/**
 	 * When the {@code newGame} button is pressed, initialize the World.

@@ -11,6 +11,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 
+/**
+ * Scene of the game world: map, items, enemies and player.
+ */
 public interface WorldView extends Subscriber{
 
 	/**

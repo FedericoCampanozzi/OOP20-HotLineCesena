@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.controller.menu.StartMenuControllerImpl;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -25,7 +26,7 @@ public class LoadingViewImpl implements LoadingView{
 	
 	private static final double EPSILON = 0.0000005;
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final AudioControllerImpl audioControllerImpl = new AudioControllerImpl();
 	private final Stage primaryStage;
 	

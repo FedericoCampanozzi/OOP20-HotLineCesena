@@ -26,7 +26,7 @@ import javafx.util.Duration;
  */
 public class EndgameControllerImpl implements EndgameController{
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final MissionController missionController;
 	private final AudioControllerImpl audioControllerImpl;
 	private final GameLoopController gameLoopController;

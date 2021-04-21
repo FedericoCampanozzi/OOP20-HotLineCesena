@@ -5,6 +5,9 @@ import java.io.IOException;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
+/**
+ * Controller of {@code RankingView}.
+ */
 public interface RankingController {
 
 	/**

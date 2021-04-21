@@ -1,16 +1,11 @@
 package hotlinecesena.view.hud;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import javafx.fxml.Initializable;
 
+/**
+ * HUD view containing the player stats, controls the {@code PlayerStatsView.fxml}.
+ */
 public interface PlayerStatsView extends Initializable{
-
-	/**
-	 * Set up the scene layout.
-	 */
-	void initialize(URL location, ResourceBundle resources);
 
 	/**
 	 * Update the {@code lifeBar} and the {@code hpLabel} with the current health of the player.

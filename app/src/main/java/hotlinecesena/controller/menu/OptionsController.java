@@ -1,21 +1,16 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 
+/**
+ * Options menu scene where user can sets up custom settings, controls {@code OptionsView.fxml}.
+ */
 public interface OptionsController extends Initializable{
-
-	/**
-	 * Initialize audio and graphic settings.
-	 */
-	void initialize(URL location, ResourceBundle resources);
 
 	/**
 	 * When the {@code back} button is pressed, go back to previous scene.

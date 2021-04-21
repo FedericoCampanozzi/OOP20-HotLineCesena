@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -41,7 +42,7 @@ public class OptionsControllerImpl implements OptionsController {
 	@FXML
 	private Button backButton;
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final AudioControllerImpl audioControllerImpl;
 	private final Optional<PauseControllerImpl> pauseController;
 	private final Stage optionsStage;

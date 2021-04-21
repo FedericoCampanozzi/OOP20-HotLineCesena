@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.SceneSwapper;
+import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.controller.WorldControllerImpl;
 
 /**
@@ -22,7 +23,7 @@ public class StartMenuControllerImpl implements StartMenuController{
 	@FXML
 	private VBox vBox;
 	
-	private final SceneSwapper sceneSwapper = new SceneSwapper();
+	private final SceneSwapper sceneSwapper = new SceneSwapperImpl();
 	private final AudioControllerImpl audioControllerImpl;
 	private final Stage primaryStage;
 	
