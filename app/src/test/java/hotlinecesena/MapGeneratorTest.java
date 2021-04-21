@@ -10,7 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
+import hotlinecesena.controller.generator.BaseRoomsGeneratorFactoryImpl;
 import hotlinecesena.controller.generator.OctagonalWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.QuadraticWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
@@ -47,7 +47,7 @@ public class MapGeneratorTest {
 	private void generateQuadratic(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new QuadraticWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
 							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
@@ -71,7 +71,7 @@ public class MapGeneratorTest {
 	private void generateRectangular(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectungolarRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateRectungolarRoomList(
 							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 							settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
@@ -96,7 +96,7 @@ public class MapGeneratorTest {
 	private void generateEsagonal(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new OctagonalWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateOctagonalRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateOctagonalRoomList(
 							3, 5,
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
 							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
@@ -142,7 +142,7 @@ public class MapGeneratorTest {
 	 */
 	public void correctBuilderFlow() {
 		new QuadraticWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4
@@ -157,7 +157,7 @@ public class MapGeneratorTest {
 				.build();
 		
 		new QuadraticWorldGeneratorBuilder()
-		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 				8, 10,
 				1, 2,
 				3, 4
@@ -173,7 +173,7 @@ public class MapGeneratorTest {
 		
 		
 		new QuadraticWorldGeneratorBuilder()
-		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 				8, 10,
 				1, 2,
 				3, 4
@@ -196,7 +196,7 @@ public class MapGeneratorTest {
 		   try{
 			   new QuadraticWorldGeneratorBuilder()
 			   .generatePlayer()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4
@@ -218,7 +218,7 @@ public class MapGeneratorTest {
 		   
 		   try{
 			   new QuadraticWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4
