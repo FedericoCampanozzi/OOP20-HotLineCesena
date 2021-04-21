@@ -17,11 +17,7 @@ import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.input.InputListener;
-import hotlinecesena.view.loader.ImageLoader;
 import hotlinecesena.view.loader.ImageType;
-import hotlinecesena.view.loader.ProxyImage;
-import hotlinecesena.view.loader.SceneType;
-import javafx.scene.image.Image;
 
 /**
  *
@@ -34,7 +30,6 @@ public final class PlayerController implements EntityController, Subscriber {
     private final InputInterpreter interpreter;
     private final Sprite sprite;
     private final InputListener listener;
-    private final ImageLoader loader = new ProxyImage();
 
     public PlayerController(@Nonnull final Player player, @Nonnull final Sprite sprite,
             @Nonnull final InputInterpreter interpreter, @Nonnull final InputListener listener) {
@@ -55,20 +50,20 @@ public final class PlayerController implements EntityController, Subscriber {
         sprite.updateRotation(player.getAngle());
         player.getInventory().getWeapon().ifPresentOrElse(
                 weapon -> sprite.updateImage(this.getImageByWeapon(weapon.getWeaponType())),
-                () -> sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.PLAYER)));
+                () -> sprite.updateImage(ImageType.PLAYER));
     }
 
-    private @Nonnull Image getImageByWeapon(final WeaponType weapon) {
-        Image outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER);
+    private @Nonnull ImageType getImageByWeapon(final WeaponType weapon) {
+        ImageType outImage = ImageType.PLAYER;
         switch (weapon) {
         case PISTOL:
-            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_PISTOL);
+            outImage = ImageType.PLAYER_PISTOL;
             break;
         case SHOTGUN:
-            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_SHOTGUN);
+            outImage = ImageType.PLAYER_SHOTGUN;
             break;
         case RIFLE:
-            outImage = loader.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE);
+            outImage = ImageType.PLAYER_RIFLE;
             break;
         default:
             break;
@@ -123,7 +118,7 @@ public final class PlayerController implements EntityController, Subscriber {
      */
     @Subscribe
     private void handleDeathEvent(final DeathEvent e) {
-        sprite.updateImage(loader.getImage(SceneType.GAME, ImageType.TOMBSTONE));
+        sprite.updateImage(ImageType.TOMBSTONE);
         sprite.updateRotation(0.0);
     }
 }

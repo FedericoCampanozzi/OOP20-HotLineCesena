@@ -1,8 +1,8 @@
 package hotlinecesena.view.entities;
 
+import hotlinecesena.view.loader.ImageType;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.transform.Translate;
 
 /**
@@ -30,7 +30,7 @@ public interface Sprite {
      * Updates this sprite's image.
      * @param image the new image.
      */
-    void updateImage(Image image);
+    void updateImage(ImageType image);
 
     /**
      * Returns this sprite's position relative to its parent node.

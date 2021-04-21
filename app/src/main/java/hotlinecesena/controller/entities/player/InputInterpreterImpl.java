@@ -120,7 +120,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * Ignores mouse movement when too close to the sprite.
      */
     private Point2D processMouseCoordinates(final Point2D mouseCoords, final Point2D spritePosition) {
-        if (spritePosition.distance(mouseCoords.getX(), mouseCoords.getY()) > DEADZONE) {
+        if (spritePosition.distance(mouseCoords) > DEADZONE) {
             return mouseCoords.subtract(spritePosition);
         }
         return currentMouseCoords;
