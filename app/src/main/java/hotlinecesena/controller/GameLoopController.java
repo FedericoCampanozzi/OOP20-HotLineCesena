@@ -1,7 +1,7 @@
 package hotlinecesena.controller;
 
 /**
- * This class class each frame a method defined by {@code Updatable}
+ * This class update each frame others class that extends or implement {@code Updatable}
  * @author Federico
  */
 public interface GameLoopController {

@@ -1,9 +1,13 @@
 package hotlinecesena.controller;
 
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.HashSet;
+import java.util.Set;
 import javafx.animation.AnimationTimer;
 
+/**
+ * An implementation on {@code GameLoopController}
+ * @author Federico
+ */
 public class GameLoopControllerImpl implements GameLoopController {
 	private final Set<Updatable> methods = new HashSet<>();
 	private long lastTime;
@@ -12,7 +16,9 @@ public class GameLoopControllerImpl implements GameLoopController {
 	public GameLoopControllerImpl() {
 		lastTime = System.currentTimeMillis();
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void loop() {
 		animationTimer = new AnimationTimer() {
@@ -24,30 +30,34 @@ public class GameLoopControllerImpl implements GameLoopController {
 
 		animationTimer.start();
 	}
-
+	/**
+	 * The effective loop method
+	 */
 	private void loopMethod() {
 		final long current = System.currentTimeMillis();
 		final int elapsed = (int) (current - lastTime);
-		/*
-		for (Consumer<Double> m : this.methods) {
-			m.accept((double) elapsed / 1000.0d);
-		}*/
 		for (Updatable m : this.methods) {
 			m.getUpdateMethod().accept((double) elapsed / 1000.0d);
 		}
 		this.lastTime = current;
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void addMethodToUpdate(final Updatable m) {
 		methods.add(m);
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void stop() {
 		this.animationTimer.stop();
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void restart() {
 		this.animationTimer.start();

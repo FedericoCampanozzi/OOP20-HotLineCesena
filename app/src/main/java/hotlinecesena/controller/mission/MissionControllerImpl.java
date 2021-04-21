@@ -9,6 +9,10 @@ import javafx.util.Pair;
 import java.util.Map.Entry;
 import static java.util.stream.Collectors.*;
 
+/**
+ * A controller for mission {@code MissionController}
+ * @author Federico
+ */
 public class MissionControllerImpl implements MissionController {
 	
 	private final Map<String, Pair<Supplier<Boolean>,Boolean>> quests = new HashMap<>();
@@ -25,9 +29,7 @@ public class MissionControllerImpl implements MissionController {
     }
 	
 	/**
-	 * add a new quest of current set of missions
-	 * @param guiName
-	 * @param complete
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addQuest(String guiName, Supplier<Boolean> complete) {
@@ -35,8 +37,7 @@ public class MissionControllerImpl implements MissionController {
 	}
 	
 	/**
-	 * notify that a mission is end
-	 * @param name
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void completeQuest(String name) {
@@ -44,8 +45,8 @@ public class MissionControllerImpl implements MissionController {
 	}
 
 	/**
-	 * @return the list of mission and if it is completed or not
-	 */	
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<Pair<String,Boolean>> getMissions(){
 		return quests.entrySet().stream()
@@ -54,7 +55,7 @@ public class MissionControllerImpl implements MissionController {
 	}
 
 	/**
-	 * @return the list of names of remaining mission
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String> missionPending(){
@@ -65,7 +66,7 @@ public class MissionControllerImpl implements MissionController {
 	}
 	
 	/**
-	 * @return the list of names of completed mission
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String> missionComplete(){
