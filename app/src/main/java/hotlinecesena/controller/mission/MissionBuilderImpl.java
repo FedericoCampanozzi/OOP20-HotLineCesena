@@ -17,7 +17,7 @@ public class MissionBuilderImpl implements MissionBuilder {
 	private final WorldController wController;
 
 	public MissionBuilderImpl(WorldController wController) {
-		mController = new MissionController();
+		mController = new MissionControllerImpl();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		this.wController = wController;
 	}

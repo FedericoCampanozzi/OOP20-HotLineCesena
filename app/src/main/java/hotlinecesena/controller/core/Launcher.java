@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javafx.stage.Stage;
 import javafx.application.Application;
-import hotlinecesena.controller.SceneSwapper;
-import hotlinecesena.view.menu.LoadingView;
+import hotlinecesena.controller.SceneSwapperImpl;
+import hotlinecesena.view.menu.LoadingViewImpl;
 
 public class Launcher extends Application {
 	/**
@@ -21,8 +21,8 @@ public class Launcher extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.show();
-		new SceneSwapper().swapScene(
-				new LoadingView(primaryStage),
+		new SceneSwapperImpl().swapScene(
+				new LoadingViewImpl(primaryStage),
 				"LoadingView.fxml",
 				primaryStage);
 	}

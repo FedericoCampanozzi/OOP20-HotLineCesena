@@ -13,6 +13,7 @@ import hotlinecesena.controller.hud.PlayerStatsControllerImpl;
 import hotlinecesena.controller.menu.PauseControllerImpl;
 import hotlinecesena.controller.mission.MissionBuilderImpl;
 import hotlinecesena.controller.mission.MissionController;
+import hotlinecesena.controller.mission.MissionControllerImpl;
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
@@ -190,7 +191,8 @@ public class WorldControllerImpl implements WorldController {
                 .addKeyObjectMission()
                 .addKillMission(1, 7)
                 .build();
-        gameLoopController.addMethodToUpdate(d -> missionController.update(d));
+        //gameLoopController.addMethodToUpdate(d -> missionController.update(d));
+        gameLoopController.addMethodToUpdate(missionController.getUpdateMethod());
     }
 
     /**
