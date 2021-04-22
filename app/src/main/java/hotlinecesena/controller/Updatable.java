@@ -4,8 +4,6 @@ import java.util.function.Consumer;
 
 /**
  * Interface for controllers that need to be polled by the game loop.
- * @author Federico
- *
  */
 public interface Updatable {
 
