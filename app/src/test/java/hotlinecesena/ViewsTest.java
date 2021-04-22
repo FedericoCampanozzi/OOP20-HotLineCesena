@@ -6,7 +6,8 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
 import hotlinecesena.controller.AudioControllerImpl;
 import hotlinecesena.controller.SceneSwapperImpl;
 import hotlinecesena.controller.menu.OptionsControllerImpl;
