@@ -5,14 +5,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javafx.util.Pair;
-import hotlinecesena.controller.generator.BaseRoomsGeneratorFactory;
+import hotlinecesena.controller.generator.BaseRoomsGeneratorFactoryImpl;
 import hotlinecesena.controller.generator.OctagonalWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.QuadraticWorldGeneratorBuilder;
 import hotlinecesena.controller.generator.RectangularWorldGeneratorBuilder;
@@ -21,7 +19,7 @@ import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.datastructure.*;
 
 public class MapGeneratorTest {
-
+	private static final int PIXEL_SIZE = 10;
 	private static final int N_IMAGE = 10;
 	private final DataJSONSettings settings = JSONDataAccessLayer.getInstance().getSettings();
 	
@@ -37,7 +35,7 @@ public class MapGeneratorTest {
 		}
 		
 		for (int i = 0; i < N_IMAGE; i++) {
-			JSONDataAccessLayer.generateDebugSeed();
+			JSONDataAccessLayer.generateNewSeed();
 			generateQuadratic(i);
 			generateRectangular(i);
 			generateEsagonal(i);
@@ -49,13 +47,14 @@ public class MapGeneratorTest {
 	private void generateQuadratic(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new QuadraticWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
 							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
 					))
 					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
+					.generateKeyObject()
 					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
 					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
 					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
@@ -72,7 +71,7 @@ public class MapGeneratorTest {
 	private void generateRectangular(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new RectangularWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateRectangolarRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateRectungolarRoomList(
 							settings.getMinRoomWidth(), settings.getMaxRoomWidth(),
 							settings.getMinRoomHeight(), settings.getMaxRoomHeight(),
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
@@ -80,6 +79,7 @@ public class MapGeneratorTest {
 					))
 					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
+					.generateKeyObject()
 					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
 					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
 					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
@@ -96,13 +96,14 @@ public class MapGeneratorTest {
 	private void generateEsagonal(int fileIndex) {
 		try {
 			WorldGeneratorBuilder sgwb = new OctagonalWorldGeneratorBuilder()
-					.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateOctagonalRoomList(
+					.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateOctagonalRoomList(
 							3, 5,
 							settings.getMinRoomDoor(), settings.getMaxRoomDoor(),
 							settings.getMinBaseRoom(), settings.getMaxBaseRoom()
 					))
 					.generateRooms(settings.getMinRoom(), settings.getMaxRoom())
 					.generatePlayer()
+					.generateKeyObject()
 					.generateEnemy(settings.getMinEnemyForRoom(), settings.getMaxEnemyForRoom())
 					.generateItem(settings.getMinItemForRoom(), settings.getMaxItemForRoom())
 					.generateWeapons(settings.getMinRoomWeapons(), settings.getMaxRoomWeapons())
@@ -117,30 +118,21 @@ public class MapGeneratorTest {
 	}
 
 	private void saveImageFile(WorldGeneratorBuilder builder, String path) throws IOException {
-		int pixSize = 9;
-		int width = pixSize * (builder.getMaxX() - builder.getMinX() + 1);
-		int height = pixSize * (builder.getMaxY() - builder.getMinY() + 1);
+		int width = PIXEL_SIZE * (builder.getMaxX() - builder.getMinX() + 1);
+		int height = PIXEL_SIZE * (builder.getMaxY() - builder.getMinY() + 1);
 
 		BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g2d = bufferedImage.createGraphics();
-
-		for (int i = builder.getMinX(); i <= builder.getMaxX(); i++) {
-			for (int j = builder.getMinY(); j <= builder.getMaxY(); j++) {
-				int tI = i - builder.getMinX();
-				int tY = j - builder.getMinY();
-				if (builder.getMap().containsKey(new Pair<>(i, j))) {
-					g2d.setColor(builder.getMap().get(new Pair<>(i, j)).getColor());
-					g2d.fillRect(pixSize * tI, pixSize * tY, pixSize, pixSize);
-				} else {
-					g2d.setColor(Color.BLACK);
-					g2d.fillRect(pixSize * tI, pixSize * tY, pixSize, pixSize);
-				}
-			}
-		}
-
+		builder.getMap().entrySet().stream()
+		.forEach(itm->{
+			g2d.setColor(itm.getValue().getTestColor());
+			g2d.fillRect(	PIXEL_SIZE * (itm.getKey().getKey()- builder.getMinX()), 
+							PIXEL_SIZE * (itm.getKey().getValue()- builder.getMinY()), 
+							PIXEL_SIZE, 
+							PIXEL_SIZE);
+		});
 		g2d.dispose();
 		ImageIO.write(bufferedImage, "png", new File(path));
-
 	}
 
 	@Test
@@ -150,7 +142,7 @@ public class MapGeneratorTest {
 	 */
 	public void correctBuilderFlow() {
 		new QuadraticWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4
@@ -165,7 +157,7 @@ public class MapGeneratorTest {
 				.build();
 		
 		new QuadraticWorldGeneratorBuilder()
-		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 				8, 10,
 				1, 2,
 				3, 4
@@ -181,7 +173,7 @@ public class MapGeneratorTest {
 		
 		
 		new QuadraticWorldGeneratorBuilder()
-		.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+		.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 				8, 10,
 				1, 2,
 				3, 4
@@ -204,7 +196,7 @@ public class MapGeneratorTest {
 		   try{
 			   new QuadraticWorldGeneratorBuilder()
 			   .generatePlayer()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4
@@ -226,7 +218,7 @@ public class MapGeneratorTest {
 		   
 		   try{
 			   new QuadraticWorldGeneratorBuilder()
-				.addSomeBaseRoom(new BaseRoomsGeneratorFactory().generateQuadraticRoomList(
+				.addSomeBaseRoom(new BaseRoomsGeneratorFactoryImpl().generateQuadraticRoomList(
 						8, 10,
 						1, 2,
 						3, 4

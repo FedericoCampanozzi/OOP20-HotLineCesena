@@ -3,23 +3,29 @@ package hotlinecesena.controller.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-
+import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
-import javafx.util.Pair;
 
+/**
+ * This class provide to generate a map with {@link QuadraticRoom} 
+ * @author Federico
+ */
 public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
 	public QuadraticWorldGeneratorBuilder() {
 		super();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
+		int nRooms = Utilities.randomBetween(rnd, nRoomsMin, nRoomsMax);
 		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
@@ -42,7 +48,6 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				}
 			}
 		}
-
 		return this;
 	}
 	

@@ -45,7 +45,7 @@ public class UtilitiesTest {
 	 */
 	public void wrongParametresForRandom() {
 		try {
-			Utilities.RandomBetween(new Random(), 10, 5);
+			Utilities.randomBetween(new Random(), 10, 5);
 		} catch (IllegalArgumentException exc) {
 			assertTrue(true);
 		} catch (Exception e) {

@@ -2,9 +2,26 @@ package hotlinecesena.model.score;
 
 import java.util.Map;
 
+import javafx.util.Pair;
+
+/**
+ * Models the game's score computation logics.
+ */
 public interface Score {
 
-    Map<String, Integer> getPartialScores();
+    /**
+     * Returns a Map containing all partial scores and their
+     * relevant factors used in calculations.
+     * @return a Map containing all partial scores and their
+     * relevant factors.
+     */
+    Map<String, Pair<Integer, Integer>> getPartialScores();
 
+    /**
+     * Returns the total score achieved at the end of the
+     * current game as sum of all partial scores.
+     * @return the total score achieved at the end of the
+     * current game.
+     */
     int getTotalScore();
 }

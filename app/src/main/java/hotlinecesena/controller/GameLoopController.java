@@ -1,38 +1,30 @@
 package hotlinecesena.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.function.Consumer;
+/**
+ * This class update each frame others class that extends or implement {@code Updatable}
+ * @author Federico
+ */
+public interface GameLoopController {
 
-import javafx.animation.AnimationTimer;
+	/**
+	 * The Main Loop Method
+	 */
+	void loop();
 
-public class GameLoopController {
-	private final Set<Consumer<Double>> methods = new HashSet<>();
-	private long lastTime;
-	
-	public GameLoopController() {
-		lastTime = System.currentTimeMillis();
-	}
+	/**
+	 * Add a class that need to be called each frame
+	 * @param  The class that extend {@code Updatable}
+	 */
+	void addMethodToUpdate(Updatable m);
 
-	public void loop() {
-		new AnimationTimer() {
-			@Override
-			public void handle(final long now) {
-				loopMethod();
-			}
-		}.start();
-	}
+	/**
+	 * Stop the loop
+	 */
+	void stop();
 
-	private void loopMethod() {
-		final long current = System.currentTimeMillis();
-		final int elapsed = (int)(current - lastTime);		
-		for(final Consumer<Double> m : methods) {
-			m.accept((double)elapsed / 1000.0d);
-		}
-		this.lastTime = current;
-	}
-	
-	public void addMethodToUpdate(final Consumer<Double> m) {
-		methods.add(m);
-	}
+	/**
+	 * Restart the loop
+	 */
+	void restart();
+
 }

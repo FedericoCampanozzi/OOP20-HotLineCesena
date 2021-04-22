@@ -1,0 +1,15 @@
+.custom-button{
+	-fx-background-color: #4cc9f0;
+    -fx-text-fill: #FFFFFF;
+    -fx-background-radius: 4;
+    -fx-font: 30px "Bauhaus 93";
+    -fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+}
+
+.custom-background{
+	-fx-background-color: linear-gradient(to bottom right, #480ca8, #7209b7);
+}
+
+.shadow-effect{
+	-fx-effect: dropshadow( one-pass-box , black , 8 , 0.0 , 2 , 0 );
+}

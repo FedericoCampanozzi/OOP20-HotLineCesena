@@ -12,12 +12,6 @@ public enum ImageType {
     PLAYER("player.png"),
 
     /**
-     * Relative path to the dead player image file.
-     * Used once the player dies
-     */
-    PLAYER_DEAD("playerDead.png"),
-
-    /**
      * Relative path to the player with rifle image file.
      * Used when the player has a rifle equipped
      */
@@ -27,13 +21,13 @@ public enum ImageType {
      * Relative path to the player with pistol image file.
      * Used when the player has a pistol equipped
      */
-    PLAYER_PISTOL("playerRifle.png"),
+    PLAYER_PISTOL("playerPistol.png"),
 
     /**
      * Relative path to the player with shotgun image file.
      * Used when the player has a shotgun equipped
      */
-    PLAYER_SHOTGUN("playerRifle.png"),
+    PLAYER_SHOTGUN("playerShotgun.png"),
 
     /**
      * Relative path to the enemy image file.
@@ -42,10 +36,12 @@ public enum ImageType {
     ENEMY_1("enemy.png"),
 
     /**
-     * Relative path to the dead enemy image file.
-     * Used when an enemy dies
+     * Relative path to the tombstone image file.
+     * Used as the image to display when an Actor
+     * dies
+     * @see Actor
      */
-    ENEMY_DEAD("enemyDead.png"),
+    TOMBSTONE("tombstone.png"),
 
     /**
      * Relative path to the wall image file.
@@ -72,6 +68,13 @@ public enum ImageType {
      * to the player
      */
     MEDKIT("medkit.png"),
+
+    /**
+     * Relative path to the money bag image file.
+     * Used as environment element that can be
+     * interact to complete a quest
+     */
+    MONEY_BAG("moneyBag.png"),
 
     /**
      * Relative path to the ammo box image file.
@@ -127,6 +130,12 @@ public enum ImageType {
      * player is currently holding
      */
     SHOTGUN("shotgun.png"),
+
+    /**
+     * Relative path to the scope image file.
+     * Used to replace the cursor icon
+     */
+    SCOPE("scope.png"),
 
     /**
      * Relative path to the player image file.

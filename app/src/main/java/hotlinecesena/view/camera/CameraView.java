@@ -1,34 +1,43 @@
 package hotlinecesena.view.camera;
 
-import hotlinecesena.view.entities.Sprite;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
-import javafx.scene.transform.Translate;
+import javafx.scene.layout.Region;
 
 /**
  *
- * Controller for JavaFX which follows the movements of a {@link Sprite}.
+ * Controller for JavaFX which follows the movements of an {@link Entity}.
  *
  */
 public interface CameraView {
 
     /**
-     * Attaches a {@link Translate} to a JavaFX {@link Pane} to simulate camera movement.
-     *
-     * @param pane the {@code Pane} which will be translated.
+     * Returns the region associated to this camera.
+     * @return the region associated to this camera.
      */
-    void setPane(Pane pane);
+    Region getRegion();
 
     /**
-     * Detaches the {@link Translate} from this camera's current JavaFX {@link Pane}.
+     * Attaches this camera to a JavaFX {@link Region}.
+     * @param region the {@code Region} which will be translated
+     * by this camera.
      */
-    void removePane();
+    void setRegion(Region region);
 
     /**
-     * Updates the {@link Translate} position based on the movements of a {@link Sprite}.
-     *
-     * @param spritePosition Sprite position on the view.
-     * @param deltaTime time elapsed since the last update.
+     * Returns this camera's current coordinates.
+     * @return this camera's current coordinates.
      */
-    void update(Point2D spritePosition, double deltaTime);
+    Point2D getPosition();
+
+    /**
+     * Sets this camera's position.
+     * @param newPosition the new position this camera will
+     * be set to.
+     */
+    void setPosition(Point2D newPosition);
+
+    /**
+     * Detaches this camera from the currently set {@link Region}.
+     */
+    void detachCameraFromRegion();
 }

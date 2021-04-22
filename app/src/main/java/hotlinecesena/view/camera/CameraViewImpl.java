@@ -4,58 +4,65 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.scene.transform.Translate;
 
 /**
  * Simple camera controller for JavaFX.
- *
  */
 public final class CameraViewImpl implements CameraView {
 
-    private static final double HUD_HEIGHT = 100; //TODO Gotta retrieve this from DAL
-    private static final double ACCEL = 30.0;
-    private static final double SHARPNESS = 0.2;
-    private Pane pane;
-    private final Translate paneTranslate = new Translate();
+    private Region region;
+    private final Translate regionTranslate = new Translate();
 
     /**
-     * Instantiates a new Camera.
+     * Instantiates a new CameraView and binds it to the
+     * given {@link Region}.
+     * @param region the {@code Region} this camera will be
+     * bound to.
+     * @throws NullPointerException if the supplied {@code Region} is null.
      */
-    public CameraViewImpl() {
-    }
-
-    /**
-     * @throws NullPointerException if the supplied {@code Pane} is null.
-     */
-    @Override
-    public void setPane(final Pane pane) {
-        this.pane = Objects.requireNonNull(pane);
-        pane.getTransforms().add(paneTranslate);
+    public CameraViewImpl(@Nonnull final Region region) {
+        this.setRegion(region);
     }
 
     @Override
-    public void removePane() {
-        pane.getTransforms().remove(paneTranslate);
+    public Region getRegion() {
+        return region;
     }
 
     /**
-     * @throws NullPointerException if the given spritePosition is null.
+     * @throws NullPointerException if the supplied {@code Region} is null.
      */
     @Override
-    public void update(@Nonnull final Point2D spritePosition, final double deltaTime) {
-        Objects.requireNonNull(spritePosition);
-        final double blend = MathUtils.blend(SHARPNESS, ACCEL, deltaTime);
-        final Point2D currentPos = new Point2D(-paneTranslate.getX(), -paneTranslate.getY());
-        final Point2D newPos = MathUtils.lerp(
-                currentPos,
-                spritePosition.subtract(
-                        pane.getScene().getWidth() / 2,
-                        (pane.getScene().getHeight() - HUD_HEIGHT) / 2),
-                blend);
-        paneTranslate.setX(-newPos.getX());
-        paneTranslate.setY(-newPos.getY());
+    public void setRegion(@Nonnull final Region region) {
+        this.detachCameraFromRegion();
+        this.region = Objects.requireNonNull(region);
+        region.getTransforms().add(regionTranslate);
+    }
+
+    @Override
+    public Point2D getPosition() {
+        return new Point2D(-regionTranslate.getX(), -regionTranslate.getY());
+    }
+
+    /**
+     * @throws IllegalStateException if this camera is not attached to a Region.
+     */
+    @Override
+    public void setPosition(@Nonnull final Point2D newPosition) {
+        if (region == null) {
+            throw new IllegalStateException("Camera is not attached to a Region.");
+        }
+        regionTranslate.setX(-newPosition.getX());
+        regionTranslate.setY(-newPosition.getY());
+    }
+
+    @Override
+    public void detachCameraFromRegion() {
+        if (region != null && region.getTransforms().contains(regionTranslate)) {
+            region.getTransforms().remove(regionTranslate);
+        }
     }
 }

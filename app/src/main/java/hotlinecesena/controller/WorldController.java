@@ -1,57 +1,42 @@
 package hotlinecesena.controller;
 
-import java.io.IOException;
-import hotlinecesena.controller.HUD.PlayerStatsController;
-import hotlinecesena.controller.entities.ProjectileController;
-import hotlinecesena.controller.entities.enemy.EnemyController;
-import hotlinecesena.controller.entities.player.PlayerController;
-import hotlinecesena.controller.entities.player.PlayerControllerFactoryFX;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.view.WorldView;
-import hotlinecesena.view.entities.SpriteImpl;
-import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
+import hotlinecesena.model.events.Subscriber;
 
-public class WorldController{
-	
-	private final WorldView view;
-	private Stage primaryStage;
-	private final GameLoopController gameLoopController = new GameLoopController();
-    private PlayerController playerController;
-    private ProjectileController projectileController;
-    private PlayerStatsController playerStatsController;
-    private MissionController missionController;
-	
-	public WorldController(Stage primaryStage) throws IOException{
-		this.primaryStage = primaryStage;
-		view = new WorldView(this.primaryStage);
-		view.start();
-		
-		missionController = new MissionController();
-		gameLoopController.addMethodToUpdate(d -> missionController.update(d));
-		
-		playerStatsController = new PlayerStatsController(view, missionController);
-		FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource(JSONDataAccessLayer.getInstance().getGuiPath().getPath("PlayerStatsView.fxml")));
-		loader.setController(playerStatsController);
-		view.getBorderPane().setBottom(loader.load());
-		gameLoopController.addMethodToUpdate(playerStatsController.getUpdateMethod());
-		
-		
-		JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> {
-            final EnemyController ec = new EnemyController(e, view.getEnemiesSprite().get(0), JSONDataAccessLayer.getInstance().getPlayer().getPly()); 
-            gameLoopController.addMethodToUpdate(ec.getUpdateMethod());
-            view.getEnemiesSprite().remove(0);
-        });
+public interface WorldController extends Subscriber {
 
-		
-		playerController = new PlayerControllerFactoryFX(primaryStage.getScene(), view.getGridPane())
-                .createPlayerController(new SpriteImpl(view.getPlayersPos().getValue()));
-        gameLoopController.addMethodToUpdate(playerController.getUpdateMethod());
-        
-        projectileController = new ProjectileController(view);
-        gameLoopController.addMethodToUpdate(projectileController.getUpdateMethod());
-        
-		gameLoopController.loop();
-	}
-	
+	/**
+	 * @return the player life time of the current match.
+	 */
+	int getPlayerLifeTime();
+
+	/**
+	 * @return the amount of kills.
+	 */
+	int getEnemyKilledByPlayer();
+
+	/**
+	 * @return the amount of ammunitions bag picked.
+	 */
+	int getTotalAmmoBag();
+
+	/**
+	 * @return the amount of medikit picked.
+	 */
+	int getTotalMedikit();
+
+	/**
+	 * @return the amount of bullets fired by player.
+	 */
+	int getTotalAmmoShootedByPlayer();
+
+	/**
+	 * @return whether the player has picked or not the brief case.
+	 */
+	boolean isPickBriefCase();
+
+	/**
+	 * @return how many times the player has switched weapon.
+	 */
+	int getTotalWeaponsChanged();
+
 }

@@ -1,9 +1,10 @@
 package hotlinecesena.model.entities.actors;
 
 /**
- *
+ * Statuses indicating whether {@link Actor}s are
+ * performing specific actions at a given moment.
  */
-public enum ActorStatus {
+public enum ActorStatus implements Status {
 
     /**
      * Actor is receiving no inputs.

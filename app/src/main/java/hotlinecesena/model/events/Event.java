@@ -1,18 +1,18 @@
 package hotlinecesena.model.events;
 
-import hotlinecesena.model.entities.Entity;
+import java.util.Collection;
 
 /**
- * Loosely based on github.com/iluwatar/java-design-patterns/tree/master/data-bus
- * and adapted for use with Guava's EventBus without singletons.
- * @param <E> an interface extending {@link Entity}.
+ * Models an event that game entities may trigger to notify
+ * external controllers.
  */
-public interface Event<E extends Entity> {
+public interface Event {
 
     /**
-     * Returns the {@link Entity} (or a subclass of {@code Entity})
+     * Returns the interfaces implemented by the entity
      * that has triggered this event.
-     * @return the {@code Entity} that has triggered this event.
+     * @return the interfaces implemented by the entity
+     * that has triggered this event.
      */
-    E getSource();
+    Collection<Class<?>> getSourceInterfaces();
 }

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.Glow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="custom-background" stylesheets="@Style/Styles.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+   <top>
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <Label text="Rankings" textFill="WHITE" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="Bauhaus 93" size="64.0" />
+               </font>
+            </Label>
+         </center>
+      </BorderPane>
+   </top>
+   <bottom>
+      <AnchorPane>
+         <children>
+            <Button fx:id="backButton" alignment="CENTER" mnemonicParsing="false" onAction="#backButtonClick" prefHeight="34.0" prefWidth="760.0" styleClass="custom-button" text="Back to Start Menu" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <font>
+                  <Font name="Arial Black" size="16.0" />
+               </font>
+            </Button>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <center>
+      <GridPane BorderPane.alignment="CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" percentHeight="20.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <BorderPane>
+               <center>
+                  <Button fx:id="addScoreButton" mnemonicParsing="false" onAction="#addScoreClick" styleClass="custom-button" text="Add your score" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Arial Black" size="16.0" />
+                     </font>
+                  </Button>
+               </center>
+            </BorderPane>
+            <TableView fx:id="tableView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="100.0" prefHeight="263.0" prefWidth="760.0" styleClass="shadow-effect" GridPane.rowIndex="1">
+              <columns>
+                <TableColumn fx:id="rank" editable="false" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Rank" />
+                <TableColumn fx:id="name" editable="false" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Name" />
+                  <TableColumn fx:id="points" editable="false" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Points" />
+                  <TableColumn fx:id="time" editable="false" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Time" />
+                  <TableColumn fx:id="enemyKilled" editable="false" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Kills" />
+                  <TableColumn fx:id="cunning" minWidth="0.0" prefWidth="75.0" style="-fx-font: 20px &quot;Bauhaus 93&quot;;" text="Cunning" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="20.0" top="20.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+   <effect>
+      <Glow />
+   </effect>
+</BorderPane>

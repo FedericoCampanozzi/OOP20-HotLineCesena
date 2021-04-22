@@ -22,8 +22,8 @@ public interface Inventory {
 
     /**
      * Returns the quantity of a given {@link Item} present in this inventory.
-     * @param item the item to look for in the inventory
-     * @return the quantity of the given item, or {@code 0} if it's not present.
+     * @param item the item to look for in this inventory
+     * @return the quantity of the given item that this inventory is holding.
      */
     int getQuantityOf(Item item);
 
@@ -39,8 +39,14 @@ public interface Inventory {
      */
     void reloadWeapon();
 
+    /**
+     * Makes the actor equip the next weapon.
+     */
     void switchToNextWeapon();
 
+    /**
+     * Makes the actor equip the previous weapon.
+     */
     void switchToPreviousWeapon();
 
     /**

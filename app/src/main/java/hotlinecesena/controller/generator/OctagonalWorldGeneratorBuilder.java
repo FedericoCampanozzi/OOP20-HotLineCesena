@@ -3,23 +3,29 @@ package hotlinecesena.controller.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-
+import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.Utilities;
-import javafx.util.Pair;
 
+/**
+ * This class provide to generate a map with {@link OctagonalRoom} 
+ * @author Federico
+ */
 public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilder {
 	
 	public OctagonalWorldGeneratorBuilder() {
 		super();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		int nRooms = Utilities.RandomBetween(rnd, nRoomsMin, nRoomsMax);
+		int nRooms = Utilities.randomBetween(rnd, nRoomsMin, nRoomsMax);
 		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
@@ -38,7 +44,6 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				}
 			}
 		}
-
 		return this;
 	}
 	
@@ -99,6 +104,9 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 		return allDoors.get(rnd.nextInt(allDoors.size()));
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public WorldGeneratorBuilder finishes() {
 		this.haveInitMapAndBaseRoom();

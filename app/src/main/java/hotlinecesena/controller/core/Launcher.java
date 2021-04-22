@@ -2,20 +2,21 @@ package hotlinecesena.controller.core;
 
 import java.io.IOException;
 
-import hotlinecesena.controller.GameController;
-
+/**
+ * The entry point of application
+ * @author Federico
+ */
 public class Launcher {
 
-	private Launcher() {
-	}
-	
-	/**
-     * Main method of application.
-     * 
+    public Launcher() {
+    
+    }
+    /**
+     * Main method of application. 
      * @param args parameters
-	 * @throws IOException 
+     * @throws IOException 
      */
     public static void main(final String[] args) throws IOException {
-        GameController.main(args);
+        GameLoader.main(args);
     }
 }

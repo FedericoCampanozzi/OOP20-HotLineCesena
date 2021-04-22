@@ -1,7 +1,6 @@
 package hotlinecesena.view.loader;
 
-import java.io.File;
-import java.nio.file.Paths;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,6 +16,8 @@ import javafx.scene.media.MediaPlayer;
  */
 public final class ProxyAudio implements SoundLoader {
 
+    private static final String SEP = "/";
+
     private final ProxyAudioLoader audioLoader;
     private final Map<String, AudioClip> loadedAudioClips;
 
@@ -24,8 +25,8 @@ public final class ProxyAudio implements SoundLoader {
      * Class constructor.
      */
     public ProxyAudio() {
-        this.audioLoader = new ProxyAudioLoader();
-        this.loadedAudioClips = new HashMap<>();
+        audioLoader = new ProxyAudioLoader();
+        loadedAudioClips = new HashMap<>();
     }
 
     /**
@@ -37,11 +38,11 @@ public final class ProxyAudio implements SoundLoader {
      */
     @Override
     public AudioClip getAudioClip(final AudioType type) {
-        if (this.loadedAudioClips.containsKey(type.toString())) {
-            return this.loadedAudioClips.get(type.toString());
+        if (loadedAudioClips.containsKey(type.toString())) {
+            return loadedAudioClips.get(type.toString());
         } else {
-            this.loadedAudioClips.put(type.toString(), audioLoader.getAudioClip(type));
-            return this.loadedAudioClips.get(type.toString());
+            loadedAudioClips.put(type.toString(), audioLoader.getAudioClip(type));
+            return loadedAudioClips.get(type.toString());
         }
     }
 
@@ -51,19 +52,28 @@ public final class ProxyAudio implements SoundLoader {
     }
 
     private static class ProxyAudioLoader implements SoundLoader {
-        private static final String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator
-                + "resources" + File.separator + "FX";
+        private static final String PATH = "FX";
+        private final ClassLoader classLoader = this.getClass().getClassLoader();
 
         @Override
         public AudioClip getAudioClip(final AudioType type) {
-            return new AudioClip(Paths.get(ABSOLUTE_PATH + File.separator
-                    + type.toString()).toUri().toString());
+            AudioClip audio = null;
+            try {
+                audio = new AudioClip(classLoader.getResource(PATH + SEP + type).toURI().toString());
+            } catch (final URISyntaxException e) {
+                e.printStackTrace();
+            }
+            return audio;
         }
 
         @Override
         public MediaPlayer getMediaPlayer(final AudioType type) {
-            final Media media = new Media(Paths.get(ABSOLUTE_PATH + File.separator
-                    + type.toString()).toUri().toString());
+            Media media = null;
+            try {
+                media = new Media(classLoader.getResource(PATH + SEP + type).toURI().toString());
+            } catch (final URISyntaxException e) {
+                e.printStackTrace();
+            }
             return new MediaPlayer(media);
         }
     }

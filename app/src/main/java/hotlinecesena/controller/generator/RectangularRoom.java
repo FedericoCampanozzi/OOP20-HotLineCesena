@@ -5,10 +5,13 @@ import java.util.Map;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
-
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 
+/**
+ * This class represent a rectangular room
+ * @author Federico
+ */
 public class RectangularRoom extends AbstractRoom {
 	private  int w;
 	private  int h;
@@ -36,7 +39,9 @@ public class RectangularRoom extends AbstractRoom {
 		this.d = nDoor;
 		generate();
 	}
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void generate() {
 		final int width2 = (this.w - 1) / 2;
@@ -71,7 +76,9 @@ public class RectangularRoom extends AbstractRoom {
 			}
 		}
 	}
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Room deepCopy() {
 		return new RectangularRoom(this.map, this.center, this.w, this.h);

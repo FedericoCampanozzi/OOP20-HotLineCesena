@@ -1,52 +1,41 @@
 package hotlinecesena.controller.menu;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
-
-import hotlinecesena.utilities.SceneSwapper;
+import hotlinecesena.controller.Updatable;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class PauseController implements Initializable{
-	@FXML
-	Button resumeButton;
-	@FXML
-	Button optionsButton;
-	@FXML
-	Button quitButton;
-	
-	SceneSwapper sceneSwapper = new SceneSwapper();
-	private Optional<Stage> worldStage;
-	private Stage pauseStage;
-	
-	public PauseController(Stage pauseStage, Optional<Stage> worldStage) {
-		this.pauseStage = pauseStage;
-		this.worldStage = worldStage;
-	}
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-	}
-	
-	public void resumeClick(final ActionEvent event) throws IOException {
-		pauseStage = (Stage) ((Node) event.getSource()).getScene().getWindow();;
-		pauseStage.close();
-	}
-	
-	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(pauseStage, worldStage), "OptionsView.fxml", pauseStage);
-	}
-	
-	public void quitClick(final ActionEvent event) throws IOException {
-		if (worldStage.isPresent()) {
-			worldStage.get().close();
-		}
-		sceneSwapper.swapScene(new StartMenuController(pauseStage), "StartMenuView.fxml", pauseStage);
-	}
+/**
+ * Pause menu scene, controls {@code PauseView.fxml}.
+ */
+public interface PauseController extends Updatable, Initializable{
+
+	/**
+	 * When the {@code resume} button is pressed, resume the game.
+	 * @param event
+	 * @throws IOException
+	 */
+	void resumeClick(ActionEvent event) throws IOException;
+
+	/**
+	 * When the {@code options} button is pressed, initialize the {@code OptionsMenu}.
+	 * @param event
+	 * @throws IOException
+	 */
+	void optionsClick(ActionEvent event) throws IOException;
+
+	/**
+	 * When the {@code quit} button is pressed, end game and go back to {@code StartMenu}.
+	 * @param event
+	 * @throws IOException
+	 */
+	void quitClick(ActionEvent event) throws IOException;
+
+	/**
+	 * 
+	 * @return the stage containing the world scene.
+	 */
+	Stage getWorldStage();
+
 }

@@ -1,7 +1,7 @@
 package hotlinecesena.view.loader;
 
-import java.io.File;
-import java.nio.file.Paths;
+
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +15,14 @@ import javafx.scene.image.Image;
  */
 public class ProxyImage implements ImageLoader {
 
+    private static final String SEP = "/";
+
     private final ProxyImageLoader imageLoader;
     private final Map<ImageType, Image> loadedImages;
 
     public ProxyImage() {
-        this.imageLoader = new ProxyImageLoader();
-        this.loadedImages = new HashMap<>();
+        imageLoader = new ProxyImageLoader();
+        loadedImages = new HashMap<>();
     }
 
     /**
@@ -32,22 +34,23 @@ public class ProxyImage implements ImageLoader {
      */
     @Override
     public Image getImage(final SceneType scene, final ImageType image) {
-        if (this.loadedImages.containsKey(image)) {
+        if (loadedImages.containsKey(image)) {
             return loadedImages.get(image);
         } else {
-            this.loadedImages.put(image, this.imageLoader.getImage(scene, image));
-            return this.loadedImages.get(image);
+            loadedImages.put(image, imageLoader.getImage(scene, image));
+            return loadedImages.get(image);
         }
     }
 
     private static class ProxyImageLoader implements ImageLoader {
-        private static final String ABSOLUTE_PATH = "src" + File.separator + "main" + File.separator + "resources"
-                + File.separator + "Images";
+        private static final String PATH = "Images";
+        private final ClassLoader classLoader = this.getClass().getClassLoader();
 
         @Override
         public Image getImage(final SceneType scene, final ImageType image) {
-            return new Image(Paths.get(ABSOLUTE_PATH + File.separator + scene.toString()
-                    + File.separator + image.toString()).toUri().toString());
+            final InputStream imageStream = classLoader.getResourceAsStream(
+                    PATH + SEP + scene.toString() + SEP + image.toString());
+            return new Image(imageStream);
         }
-    } 
+    }
 }

@@ -9,7 +9,6 @@ import hotlinecesena.model.events.AttackPerformedEvent;
 import hotlinecesena.model.events.DamageReceivedEvent;
 import hotlinecesena.model.events.DeathEvent;
 import hotlinecesena.model.events.ReloadEvent;
-import hotlinecesena.model.events.Subscriber;
 import hotlinecesena.model.inventory.Inventory;
 import javafx.geometry.Point2D;
 
@@ -18,11 +17,11 @@ import javafx.geometry.Point2D;
  * Base class to extend when creating new Actor specializations.
  *
  */
-public abstract class AbstractActor extends AbstractMovableEntity implements Actor, Subscriber {
+public abstract class AbstractActor extends AbstractMovableEntity implements Actor {
 
     private final double maxHealth;
     private double currentHealth;
-    private ActorStatus status = ActorStatus.IDLE;
+    private Status status = ActorStatus.IDLE;
     private final Inventory inventory;
 
     /**
@@ -57,14 +56,18 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public final void attack() {
         if (this.isAlive()) {
             inventory.getWeapon().ifPresent(w -> {
-                final int previousAmmo = w.getCurrentAmmo();
-                if (previousAmmo == 0) {
-                    inventory.reloadWeapon();
+                if (w.getCurrentAmmo() == 0) {
+                    this.reload();
                 } else {
+                    final int previousAmmo = w.getCurrentAmmo();
                     w.usage().accept(this);
+                    /*
+                     * Limit the number of events published by checking
+                     * if the weapon did actually shoot.
+                     */
                     if (w.getCurrentAmmo() < previousAmmo) {
                         status = ActorStatus.ATTACKING;
-                        this.publish(new AttackPerformedEvent<>(this, w.getWeaponType()));
+                        this.publish(new AttackPerformedEvent(this, w.getWeaponType()));
                     }
                 }
             });
@@ -75,8 +78,13 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     public final void reload() {
         if (this.isAlive() && !inventory.isReloading()) {
             inventory.reloadWeapon();
+            /*
+             * Inventory may not initiate reloading if the weapon's
+             * magazine is already full or if no spare ammo is available.
+             */
             if (inventory.isReloading()) {
-                this.publish(new ReloadEvent<>(this, inventory.getWeapon().get().getWeaponType()));
+                // If reloading has begun, it's safe to retrieve the weapon.
+                this.publish(new ReloadEvent(this, inventory.getWeapon().orElseThrow().getWeaponType()));
             }
         }
     }
@@ -91,11 +99,11 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
         }
         if (this.isAlive()) {
             currentHealth = (currentHealth > damage) ? (currentHealth - damage) : 0;
-            this.publish(new DamageReceivedEvent<>(this, damage));
+            this.publish(new DamageReceivedEvent(this, damage));
         }
         if (currentHealth == 0) {
             status = ActorStatus.DEAD;
-            this.publish(new DeathEvent<>(this));
+            this.publish(new DeathEvent(this));
         }
     }
 
@@ -136,7 +144,7 @@ public abstract class AbstractActor extends AbstractMovableEntity implements Act
     }
 
     @Override
-    public final ActorStatus getActorStatus() {
+    public final Status getActorStatus() {
         return status;
     }
 

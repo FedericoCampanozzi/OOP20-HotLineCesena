@@ -16,7 +16,7 @@ import javafx.util.Pair;
 
 /**
  * Pathfinder is the actual class that returns a path from a node to another
- * which implements an algorithm called A* to function.
+ * which implements an algorithm called A*.
  */
 public final class Pathfinder {
 
@@ -48,13 +48,13 @@ public final class Pathfinder {
         final PriorityQueue<Node> toVisit = new PriorityQueue<>();
         final Set<Node> visited = new HashSet<>();
         final Pair<Integer, Integer> startPair = new Pair<>((int) start.getX(), (int) start.getY());
-        final Pair<Integer, Integer> endPair = new Pair<>((int) end.getX(), (int) end.getY());
+        Pair<Integer, Integer> endPair = new Pair<>((int) end.getX(), (int) end.getY());
 
         final int dimensionX = JSONDataAccessLayer.getInstance().getWorld().getMaxX()
                 - JSONDataAccessLayer.getInstance().getWorld().getMinX();
         final int dimensionY = JSONDataAccessLayer.getInstance().getWorld().getMaxY()
                 - JSONDataAccessLayer.getInstance().getWorld().getMinY();
-        final Map<Pair<Integer, Integer>, Node> altNodeMap = new HashMap<>();
+        final Map<Pair<Integer, Integer>, Node> nodeMap = new HashMap<>();
         Node current;
         Node startNode = null;
         Node endNode = null;
@@ -63,13 +63,17 @@ public final class Pathfinder {
             for (int x = JSONDataAccessLayer.getInstance().getWorld().getMinX(); x <= dimensionX; x++) {
                 final int heuristic = Math.abs(x - (int) end.getX()) + Math.abs(y - (int) end.getY());
                 final Node node = new Node(0, heuristic, x, y);
-                altNodeMap.put(new Pair<>(x, y), node);
+                nodeMap.put(new Pair<>(x, y), node);
             }
         }
 
-        if (altNodeMap.containsKey(startPair) && altNodeMap.containsKey(endPair)) {
-            startNode = altNodeMap.get(startPair);
-            endNode = altNodeMap.get(endPair);
+        if (!map.contains(end)) {
+            endPair = adjustedPosition(end, map);
+        }
+
+        if (nodeMap.containsKey(startPair) && nodeMap.containsKey(endPair)) {
+            startNode = nodeMap.get(startPair);
+            endNode = nodeMap.get(endPair);
         } else {
             return List.of(start);
         }
@@ -91,7 +95,7 @@ public final class Pathfinder {
             for (int y = current.y - 1; y < current.y + 2; y++) {
                 for (int x = current.x - 1; x < current.x + 2; x++) {
                     if (map.contains(new Point2D(x, y))) {
-                        final Node neighbor = altNodeMap.get(new Pair<>(x, y));
+                        final Node neighbor = nodeMap.get(new Pair<>(x, y));
 
                         if (visited.contains(neighbor)) {
                             continue;
@@ -144,8 +148,10 @@ public final class Pathfinder {
      * @return a list of points that need to be traversed
      * to reach the desired end
      */
-    private static List<Point2D> getPath(Node current) {
+    private static List<Point2D> getPath(final Node last) {
+        Node current = last;
         final List<Point2D> path = new ArrayList<>();
+
         while (!current.parent.isEmpty()) {
             path.add(current.getPosition());
             current = current.parent.get();
@@ -153,6 +159,29 @@ public final class Pathfinder {
 
         Collections.reverse(path);
         return path;
+    }
+
+    /**
+     * Returns a new {@code Pair} that is contained
+     * within the reachable points in the map.
+     * @param unreachable the target position
+     * @param map collections of points that are
+     * walkable by the enemy
+     * @return a new Pair
+     */
+    private static Pair<Integer, Integer> adjustedPosition(final Point2D unreachable,
+            final Set<Point2D> map) {
+
+        Pair<Integer, Integer> retval = new Pair<>(0, 0);
+
+        for (int y = (int) unreachable.getY() - 1; y < (int) unreachable.getY() + 1; y++) {
+            for (int x = (int) unreachable.getX() - 1; x < (int) unreachable.getX() + 1; x++) {
+                if (map.contains(new Point2D(x, y))) {
+                    retval = new Pair<>(x, y);
+                }
+            }
+        }
+        return retval;
     }
 
     /**

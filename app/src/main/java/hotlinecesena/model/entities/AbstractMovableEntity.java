@@ -34,12 +34,22 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
 
     /**
      *
-     * @apiNote
-     * No default implementation supplied.
-     * Subclasses may require different movement logics.
+     * @apiNote Template method based on executeMovement.
+     * No default implementation is supplied to account for the
+     * need of different movement logics by different subclasses.
      */
     @Override
-    public abstract void move(@Nonnull Point2D direction);
+    public final void move(@Nonnull final Point2D direction) {
+        if (!Objects.requireNonNull(direction).equals(Point2D.ZERO)) {
+            this.executeMovement(direction);
+        }
+    }
+
+    /**
+     * Defines the movement logics for a subclass.
+     * @param direction the direction in which this entity will move.
+     */
+    protected abstract void executeMovement(Point2D direction);
 
     /**
      *
@@ -68,7 +78,7 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
     public final void setAngle(final double angle) {
         if (this.angle != angle && this.canInitiateRotation()) {
             this.angle = angle;
-            this.publish(new RotationEvent<>(this, angle));
+            this.publish(new RotationEvent(this, angle));
         }
     }
 

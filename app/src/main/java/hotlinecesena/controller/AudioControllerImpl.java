@@ -1,7 +1,8 @@
 package hotlinecesena.controller;
 
+import java.util.Collection;
+
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.model.entities.Entity;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.view.loader.AudioType;
 import hotlinecesena.view.loader.ProxyAudio;
@@ -18,8 +19,8 @@ import javafx.scene.media.MediaPlayer;
 public final class AudioControllerImpl implements AudioController {
 
     private static final int POINT_O_PERCENT = 1000;
-    private static final int PERCENT = 100;
-    private static final int BACKGROUND_VOLUME = 10;
+    private static final double PERCENT = 100;
+    private static final double BACKGROUND_VOLUME = 10;
 
     private final SoundLoader loader;
     private AudioClip clip;
@@ -37,48 +38,64 @@ public final class AudioControllerImpl implements AudioController {
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
-        this.volume = (this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT;
+        this.volume = ((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT);
     }
 
     /**
      * Updates the volume of the audio that is
      * already playing in the background.
-     * @param value the new volume setting
      */
-    private void updateMusicVolume(final double value) {
+    private void updateMusicVolume() {
         if (this.audio != null) {
-            this.audio.setVolume(value);
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
+        }
+    }
+
+    /**
+     * Starts or stops the music based on option
+     * menu.
+     */
+    private void startAndStop() {
+        if (this.audio == null && playMusic) {
+            this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
+            this.audio.play();
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
+        } else if (this.audio != null && !playMusic) {
+            this.audio.stop();
+            this.audio = null;
         }
     }
 
     /**
      * Calculates the volume based on the
-     * {@code Entity}.
+     * {@code Actor}.
+     * @param caller the collection of interfaces that an
+     * {@code Actor} could implement
      * @return the value for the volume
-     * @see Entity
+     * @see Actor
      */
-    private double volumeSettings(final Entity caller) {
-        return caller instanceof Enemy 
+    private double volumeSettings(final Collection<Class<?>> caller) {
+        return caller.contains(Enemy.class)
                 ? this.volume - BACKGROUND_VOLUME / PERCENT : this.volume;
     }
 
-    /**
-     * Updates the volume and checks if music or sounds
-     * have been disabled for this instance
-     * of the {@code AudioController} and
-     * updates the volume if a {@code MediaPlayer}
-     * track is already playing.
-     */
+    @Override
     public void updateSettings() {
         this.volume = JSONDataAccessLayer.getInstance().getSettings().getVolume();
         this.playEffects = JSONDataAccessLayer.getInstance().getSettings().isEffectActive();
         this.playMusic = JSONDataAccessLayer.getInstance().getSettings().isMusicActive();
 
-        this.updateMusicVolume(this.volume);
+        this.volume = ((this.volume / PERCENT) + (PERCENT + 1 - this.volume) / POINT_O_PERCENT);
+
+        this.startAndStop();
+
+        if (this.playMusic) {
+            this.updateMusicVolume();
+        }
     }
 
     @Override
-    public void playAudioClip(final AudioType type, final Entity caller) {
+    public void playAudioClip(final AudioType type, final Collection<Class<?>> caller) {
         if (this.playEffects) {
             this.clip = this.loader.getAudioClip(type);
             if (!this.clip.isPlaying()) {
@@ -91,8 +108,15 @@ public final class AudioControllerImpl implements AudioController {
     public void playMusic() {
         if (this.playMusic) {
             this.audio = this.loader.getMediaPlayer(AudioType.BACKGROUND);
-            this.audio.setVolume(this.volume  / BACKGROUND_VOLUME);
             this.audio.setAutoPlay(true);
+            this.audio.setVolume(this.volume - BACKGROUND_VOLUME / PERCENT);
+        }
+    }
+
+    @Override
+    public void stopMusic() {
+        if (this.audio != null) {
+            this.audio.stop();
         }
     }
 }

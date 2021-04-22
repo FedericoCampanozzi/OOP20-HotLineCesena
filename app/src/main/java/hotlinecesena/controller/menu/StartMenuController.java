@@ -1,51 +1,33 @@
 package hotlinecesena.controller.menu;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import java.io.IOException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 
-import hotlinecesena.controller.AudioController;
-import hotlinecesena.controller.AudioControllerImpl;
-import hotlinecesena.controller.WorldController;
-import hotlinecesena.utilities.SceneSwapper;
+/**
+ * Start menu scene, controls {@code StartMenuView.fxml}.
+ */
+public interface StartMenuController extends Initializable{
 
-public class StartMenuController implements Initializable{
-	
-	@FXML
-	private Button newGameButton;
-	@FXML
-	private Button optionsButton;
-	@FXML
-	private Button exitButton;
-	
-	private SceneSwapper sceneSwapper = new SceneSwapper();
-	private AudioController audioController = new AudioControllerImpl();
-	private Stage stage;
-	
-	public StartMenuController(Stage stage) {
-		this.stage = stage;
-	}
-	
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		audioController.playMusic();
-	}
-	
-	public void newGameClick(final ActionEvent event) throws IOException {
-        new WorldController(stage);
-	}
-	
-	public void optionsClick(final ActionEvent event) throws IOException {
-		sceneSwapper.swapScene(new OptionsController(stage, Optional.empty()), "OptionsView.fxml", stage);
-	}
-	
-	public void exitClick(final ActionEvent event) throws IOException {
-		System.exit(0);
-	}
+	/**
+	 * When the {@code newGame} button is pressed, initialize the World.
+	 * @param event
+	 * @throws IOException
+	 */
+	void newGameClick(ActionEvent event) throws IOException;
+
+	/**
+	 * When the {@code options} button is pressed, initialize the {@code OptionsMenu}.
+	 * @param event
+	 * @throws IOException
+	 */
+	void optionsClick(ActionEvent event) throws IOException;
+
+	/**
+	 * When the {@code exit} button is pressed, close the app.
+	 * @param event
+	 * @throws IOException
+	 */
+	void exitClick(ActionEvent event) throws IOException;
+
 }

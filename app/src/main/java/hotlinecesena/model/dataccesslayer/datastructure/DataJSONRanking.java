@@ -2,9 +2,8 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -12,52 +11,69 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
+import hotlinecesena.utilities.Utilities;
 
+/**
+ * A data-class that provide to store all results of a game
+ * @author Federico
+ *
+ */
 public class DataJSONRanking extends AbstractData {
 	
+	/**
+	 * A class represent a single record of result
+	 * @author Federico
+	 */
 	public static class Row {
 		@JsonProperty("name")
 		private String name;
 		@JsonProperty("points")
 		private int points;
 		@JsonProperty("time")
-		private int time;
-		@JsonProperty("enemy_killed")
-		private int enemy_killed;
+		private String time;
+		@JsonProperty("enemyKilled")
+		private int enemyKilled;
+		@JsonProperty("cunning")
+		private int cunning;
+		
+		public Row() {
+			
+		}
+
+		public Row(String name, int points, int time, int enemyKilled, int cunning) {
+			this.name = name;
+			this.points = points;
+			this.time = Utilities.convertSecondsToTimeString(time, "%02d:%02d:%02d");
+			this.enemyKilled = enemyKilled;
+			this.cunning = cunning;
+		}
+		
+		public double getCunning() {
+			return cunning;
+		}
 		
 		public String getName() {
 			return name;
 		}
-		public void setName(String name) {
-			this.name = name;
-		}
+		
 		public int getPoints() {
 			return points;
 		}
-		public void setPoints(int points) {
-			this.points = points;
+		
+		public String getTime() {
+			return this.time;
 		}
-		public int getTime() {
-			return time;
-		}
-		public void setTime(int time) {
-			this.time = time;
-		}
-		public int getEnemy_killed() {
-			return enemy_killed;
-		}
-		public void setEnemy_killed(int enemy_killed) {
-			this.enemy_killed = enemy_killed;
+		
+		public int getEnemyKilled() {
+			return enemyKilled;
 		}
 	}
-	
-	@JsonProperty("description")
-	private Map<String,String> description;
 	
 	@JsonProperty("records")
 	private List<Row> records;
 	
 	public List<Row> getRecords() {
+		this.records.sort(Comparator.comparing(Row::getPoints).reversed());
 		return records;
 	}
 
@@ -65,10 +81,6 @@ public class DataJSONRanking extends AbstractData {
 		this.records = records;
 	}
 
-	public Map<String, String> getDescription() {
-		return description;
-	}
-	
 	@Override
 	public void write() throws JsonGenerationException, JsonMappingException, IOException {
 		ObjectMapper mapper = new ObjectMapper();

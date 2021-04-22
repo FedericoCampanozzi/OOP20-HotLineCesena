@@ -3,7 +3,7 @@ package hotlinecesena.model.dataccesslayer.datastructure;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
+import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -12,22 +12,36 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 
+/**
+ * Class that provides to memorization all game settings
+ * @author Federico
+ *
+ */
 public class DataJSONSettings  extends AbstractData  {
-
+	//GUI SETTINGS
     @JsonProperty("monitorX")
 	private int monitorX;
     @JsonProperty("monitorY")
     private int monitorY;
-    @JsonProperty("isFullScreen")
-    private boolean isFullScreen;
+    @JsonProperty("fullScreen")
+    private boolean fullScreen;
     @JsonProperty("volume")
     private int volume;
-    @JsonProperty("niceseeds")
-    private List<Long> niceseeds;
     @JsonProperty("isMusicActive")
     private boolean isMusicActive;
     @JsonProperty("isEffectActive")
     private boolean isEffectActive;
+    @JsonProperty("defaultLanguage")
+    private int defaultLanguage;
+    @JsonProperty("defaultWidth")
+    private int defaultWidth;
+    @JsonProperty("defaultHeight")
+    private int defaultHeight;
+    @JsonProperty("resolutions")
+    private Map<String, String> resolutions;
+    //GENERATORE
+    @JsonProperty("niceseeds")
+    private List<Long> niceseeds;
     @JsonProperty("minEnemyForRoom")
     private int minEnemyForRoom;
     @JsonProperty("maxEnemyForRoom")
@@ -60,138 +74,167 @@ public class DataJSONSettings  extends AbstractData  {
     private int minRoom;
     @JsonProperty("maxRoom")
     private int maxRoom;
-    @JsonProperty("obstaclesEdge")
-    private float obstaclesEdge;
     @JsonProperty("minRoomWeapons")
     private int minRoomWeapons;
     @JsonProperty("maxRoomWeapons")
     private int maxRoomWeapons;
+    //ALTRO
+    @JsonProperty("obstaclesEdge")
+    private float obstaclesEdge;
     
-	public int getMinRoomWeapons() {
-		return minRoomWeapons;
+    public void setDefaultWidth(int defaultWidth) {
+		this.defaultWidth = defaultWidth;
+	}
+
+    public void setDefaultHeight(int defaultHeight) {
+    	this.defaultHeight = defaultHeight;
+    }
+
+	public void setDefaultLanguage(int defaultLanguage) {
+		this.defaultLanguage = defaultLanguage;
+	}
+	
+	public Map<String, String> getResolutions(){
+    	return this.resolutions;
+    }
+	
+    public int getDefaultWidth() {
+		return this.defaultWidth;
+	}
+
+	public int getDefaultHeight() {
+		return this.defaultHeight;
+	}
+
+	public int getDefaultLanguage() {
+		return this.defaultLanguage;
+	}
+    
+    public int getMinRoomWeapons() {
+		return this.minRoomWeapons;
 	}
 
 	public int getMaxRoomWeapons() {
-		return maxRoomWeapons;
+		return this.maxRoomWeapons;
 	}
 
 	public float getObstaclesEdge() {
-		return obstaclesEdge;
+		return this.obstaclesEdge;
 	}
 
 	public int getMinEnemyForRoom() {
-		return minEnemyForRoom;
+		return this.minEnemyForRoom;
 	}
 
 	public int getMaxEnemyForRoom() {
-		return maxEnemyForRoom;
+		return this.maxEnemyForRoom;
 	}
 
 	public int getMinObstaclesForRoom() {
-		return minObstaclesForRoom;
+		return this.minObstaclesForRoom;
 	}
 
 	public int getMaxObstaclesForRoom() {
-		return maxObstaclesForRoom;
+		return this.maxObstaclesForRoom;
 	}
 
 	public int getMinItemForRoom() {
-		return minItemForRoom;
+		return this.minItemForRoom;
 	}
 
 	public int getMaxItemForRoom() {
-		return maxItemForRoom;
+		return this.maxItemForRoom;
 	}
 
 	public int getMinRoomWidth() {
-		return minRoomWidth;
+		return this.minRoomWidth;
 	}
 
 	public int getMaxRoomWidth() {
-		return maxRoomWidth;
+		return this.maxRoomWidth;
 	}
 
 	public int getMinRoomHeight() {
-		return minRoomHeight;
+		return this.minRoomHeight;
 	}
 
 	public int getMaxRoomHeight() {
-		return maxRoomHeight;
+		return this.maxRoomHeight;
 	}
 
 	public int getMinRoomDoor() {
-		return minRoomDoor;
+		return this.minRoomDoor;
 	}
 
 	public int getMaxRoomDoor() {
-		return maxRoomDoor;
+		return this.maxRoomDoor;
 	}
 
 	public int getMinBaseRoom() {
-		return minBaseRoom;
+		return this.minBaseRoom;
 	}
 
 	public int getMaxBaseRoom() {
-		return maxBaseRoom;
+		return this.maxBaseRoom;
 	}
 
 	public int getMinRoom() {
-		return minRoom;
+		return this.minRoom;
 	}
 
 	public int getMaxRoom() {
-		return maxRoom;
+		return this.maxRoom;
 	}
 
-	public void setMusicActive(boolean isMusicActive) {
+	public void setMusicActive(final boolean isMusicActive) {
 		this.isMusicActive = isMusicActive;
 	}
 
-	public void setEffectActive(boolean isEffectActive) {
+	public void setEffectActive(final boolean isEffectActive) {
 		this.isEffectActive = isEffectActive;
 	}
 
 	public boolean isMusicActive() {
-		return isMusicActive;
+		return this.isMusicActive;
 	}
 
 	public boolean isEffectActive() {
-		return isEffectActive;
+		return this.isEffectActive;
 	}
 
 	public List<Long> getNiceseeds() {
-		return niceseeds;
+		return this.niceseeds;
 	}
 
 	public int getMonitorX() {
-		return monitorX;
+		return this.monitorX;
 	}
 
-	public void setMonitorX(int monitorX) {
+	public void setMonitorX(final int monitorX) {
 		this.monitorX = monitorX;
 	}
 
 	public int getMonitorY() {
-		return monitorY;
+		return this.monitorY;
 	}
 
-	public void setMonitorY(int monitorY) {
+	public void setMonitorY(final int monitorY) {
 		this.monitorY = monitorY;
 	}
 
-	public boolean isFullScreen() {
-		return isFullScreen;
+	public boolean getFullScreen() {
+		return this.fullScreen;
 	}
 
-	public void setFullScreen(boolean isFullScreen) {
-		this.isFullScreen = isFullScreen;
+	public void setFullScreen(final boolean fullScreen) {
+		this.fullScreen = fullScreen;
 	}
 
 	public int getVolume() {
-		return volume;
+		return this.volume;
 	}
 
-	public void setVolume(int volume) {
+	public void setVolume(final int volume) {
 		this.volume = volume;
 	}
 	
