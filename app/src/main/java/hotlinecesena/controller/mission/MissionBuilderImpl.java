@@ -93,7 +93,9 @@ public class MissionBuilderImpl implements MissionBuilder {
 	 */
 	@Override
 	public MissionBuilder addKeyObjectMission() {
-		mController.addQuest("Cerca e Raccogli il denaro nascosto", () -> wController.isPickBriefCase());
+		if(JSONDataAccessLayer.getInstance().getWorld().isKeyObjectPresent()) {
+			mController.addQuest("Cerca e Raccogli il denaro nascosto", () -> wController.isPickBriefCase());
+		}
 		return this;
 	}
 

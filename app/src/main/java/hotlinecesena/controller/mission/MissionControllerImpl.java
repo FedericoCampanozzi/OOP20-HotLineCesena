@@ -22,7 +22,7 @@ public class MissionControllerImpl implements MissionController {
         return delta -> {
             for(Entry<String, Pair<Supplier<Boolean>,Boolean>> m : this.quests.entrySet()){
                 if(m.getValue().getKey().get() && !m.getValue().getValue()) {
-                this.completeQuest(m.getKey());
+                	this.completeQuest(m.getKey());
                 }
             }
         };

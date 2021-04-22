@@ -19,7 +19,7 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 	protected Random rnd = new Random();
 	protected int xMin, xMax, yMin, yMax;
 	protected int pRoomIndex;
-	protected Optional<Integer> objRoomIndex;
+	protected Optional<Integer> objRoomIndex = Optional.empty();
 	
 	// Low level description
 	protected Map<Pair<Integer, Integer>, SymbolsType> map = new HashMap<>();
