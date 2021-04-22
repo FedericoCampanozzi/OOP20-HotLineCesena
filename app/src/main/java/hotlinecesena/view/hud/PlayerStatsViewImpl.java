@@ -7,7 +7,6 @@ import java.util.ResourceBundle;
 import hotlinecesena.controller.mission.MissionController;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.entities.actors.player.Player;
-import hotlinecesena.view.WorldView;
 import hotlinecesena.view.loader.ImageType;
 import hotlinecesena.view.loader.ProxyImage;
 import hotlinecesena.view.loader.SceneType;
@@ -20,6 +19,7 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Polygon;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -52,7 +52,7 @@ public class PlayerStatsViewImpl implements PlayerStatsView{
 	
 	private final ProxyImage proxyImage = new ProxyImage();
 	private final MissionController missionController;
-	private final WorldView worldView;
+	private final StackPane stackPane;
 	
 	private List<Pair<String, Boolean>> missions;
 	private Player player = JSONDataAccessLayer.getInstance().getPlayer().getPly();
@@ -65,10 +65,11 @@ public class PlayerStatsViewImpl implements PlayerStatsView{
 	 * @param worldView
 	 * @param missionController
 	 */
-	public PlayerStatsViewImpl(WorldView worldView, MissionController missionController) {
-		this.worldView = worldView;
+	public PlayerStatsViewImpl(StackPane stackPane, MissionController missionController) {
+		this.stackPane = stackPane;
 		this.missionController = missionController;
 		missions = missionController.getMissions();
+		System.out.println(missions);
 	}
 
 	/**
@@ -171,8 +172,8 @@ public class PlayerStatsViewImpl implements PlayerStatsView{
 	 * Set the pane to fit to the entire stage
 	 */
 	private void initPane() {
-		borderPane.prefWidthProperty().bind(worldView.getStackPane().widthProperty());
-		borderPane.prefHeightProperty().bind(worldView.getStackPane().heightProperty());
+		borderPane.prefWidthProperty().bind(stackPane.widthProperty());
+		borderPane.prefHeightProperty().bind(stackPane.heightProperty());
 	}
 
 	/**

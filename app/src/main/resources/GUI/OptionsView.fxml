@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" styleClass="custom-background" stylesheets="@Style/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" styleClass="custom-background" stylesheets="@Style/Styles.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <bottom>
       <AnchorPane BorderPane.alignment="CENTER">
          <children>

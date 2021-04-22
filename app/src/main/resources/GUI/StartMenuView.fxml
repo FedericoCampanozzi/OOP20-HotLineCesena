@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url(/Images/GUI/menu.png); -fx-background-size: 100% 100%;" stylesheets="@Style/Styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-image: url(/Images/GUI/menu.png); -fx-background-size: 100% 100%;" stylesheets="@Style/Styles.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <center>
       <VBox fx:id="vBox" alignment="CENTER" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>

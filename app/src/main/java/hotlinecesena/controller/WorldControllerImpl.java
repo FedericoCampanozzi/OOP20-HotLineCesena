@@ -173,7 +173,7 @@ public class WorldControllerImpl implements WorldController {
      * @throws IOException
      */
     private void initHudController() throws IOException {
-        PlayerStatsControllerImpl playerStatsController = new PlayerStatsControllerImpl(worldView, missionController);
+        PlayerStatsControllerImpl playerStatsController = new PlayerStatsControllerImpl(worldView.getStackPane(), missionController);
         final FXMLLoader loader = new FXMLLoader(ClassLoader.getSystemResource("GUI/PlayerStatsView.fxml"));
         loader.setController(playerStatsController.getPlayerStatsView());
         worldView.getStackPane().getChildren().add(loader.load());

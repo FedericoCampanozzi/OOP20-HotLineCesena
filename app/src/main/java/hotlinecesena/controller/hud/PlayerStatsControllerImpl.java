@@ -3,17 +3,17 @@ package hotlinecesena.controller.hud;
 import java.util.function.Consumer;
 
 import hotlinecesena.controller.mission.MissionController;
-import hotlinecesena.view.WorldView;
 import hotlinecesena.view.hud.PlayerStatsView;
 import hotlinecesena.view.hud.PlayerStatsViewImpl;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.StackPane;
 
 /**
  * Controller of the {@code PlayerStatsView}.
  */
 public class PlayerStatsControllerImpl implements PlayerStatsController{
 	
-	private final WorldView worldView;
+	private final StackPane stackPane;
 	private final PlayerStatsView playerStatsView;
 
 	/**
@@ -21,9 +21,9 @@ public class PlayerStatsControllerImpl implements PlayerStatsController{
 	 * @param worldView
 	 * @param missionController
 	 */
-	public PlayerStatsControllerImpl(WorldView worldView, MissionController missionController) {
-		this.worldView = worldView;
-		this.playerStatsView = new PlayerStatsViewImpl(worldView, missionController);
+	public PlayerStatsControllerImpl(StackPane stackPane, MissionController missionController) {
+		this.stackPane = stackPane;
+		this.playerStatsView = new PlayerStatsViewImpl(stackPane, missionController);
 	}
 
 	/**
@@ -52,7 +52,7 @@ public class PlayerStatsControllerImpl implements PlayerStatsController{
 	 */
 	private void updateMissionsView() {
 		playerStatsView.updateMissionsStatus();
-		worldView.getStackPane().setOnKeyPressed(e -> {
+		stackPane.setOnKeyPressed(e -> {
 		    if (e.getCode() == KeyCode.M) {
 		    	playerStatsView.showNextMission(true);
 		    }
