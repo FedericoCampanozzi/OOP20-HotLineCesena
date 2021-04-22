@@ -32,16 +32,19 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
             KeyCode.E,             "use",
             MouseButton.PRIMARY,   "attack"
             );
-    private final Map<String, Direction> movementActions = Map.of(
+
+    private final Map<String, Direction> movements = Map.of(
             "move_north",   DirectionList.NORTH,
             "move_south",   DirectionList.SOUTH,
             "move_east",    DirectionList.EAST,
             "move_west",    DirectionList.WEST
             );
     private final Map<String, Command> otherActions = Map.of(
-            "attack",       Player::attack,
-            "reload",       Player::reload,
-            "use",          Player::use
+            "attack",       Player::attack
+            );
+    private final Map<String, Command> doOnlyOnce = Map.of(
+            "use",          Player::use,
+            "reload",       Player::reload
             );
 
     /**
@@ -61,7 +64,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
         return new PlayerController(
                 Objects.requireNonNull(player),
                 Objects.requireNonNull(sprite),
-                new InputInterpreterImpl(bindings, movementActions, otherActions),
+                new InputInterpreterImpl(bindings, movements, otherActions, doOnlyOnce),
                 Objects.requireNonNull(listener)
                 );
     }

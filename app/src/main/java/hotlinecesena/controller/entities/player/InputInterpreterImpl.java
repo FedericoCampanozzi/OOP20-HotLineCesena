@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -33,6 +34,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private final Map<Enum<?>, String> bindings;
     private final Map<String, Direction> movementActions;
     private final Map<String, Command> otherActions;
+    private final Map<String, Command> doOnlyOnce;
+    private final Set<String> onceBuffer = new HashSet<>();
 
     /**
      * Instantiates a new {@code InputInterpreterImpl} that will
@@ -42,14 +45,18 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param movementActions Map associating strings to player movements.
      * @param otherActions Map associating strings to player actions
      * excluding movements.
+     * @param doOnlyOnce Map associating strings to actions that need to
+     * be executed only once if the player keeps holding the same key.
      * @throws NullPointerException if the given bindings, movementActions
      * or otherActions are null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
-            @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions) {
+            @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions,
+            @Nonnull final Map<String, Command> doOnlyOnce) {
         this.bindings = Objects.requireNonNull(bindings);
         this.movementActions = Objects.requireNonNull(movementActions);
         this.otherActions = Objects.requireNonNull(otherActions);
+        this.doOnlyOnce = Objects.requireNonNull(doOnlyOnce);
     }
 
     /**
@@ -64,12 +71,12 @@ public final class InputInterpreterImpl implements InputInterpreter {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
         final List<Command> commandsToDeliver = new ArrayList<>();
-        final Set<String> actions = this.convertBindings(inputs.getKey());
+        final Set<String> actionsToProcess = this.convertBindings(inputs.getKey());
 
         /*
          * Compute new movement direction
          */
-        final Point2D newMovementDir = this.processMovementDirection(actions);
+        final Point2D newMovementDir = this.processMovementDirection(actionsToProcess);
         if (!newMovementDir.equals(Point2D.ZERO)) {
             commandsToDeliver.add(new MoveCommand(newMovementDir.multiply(deltaTime)));
         }
@@ -84,26 +91,29 @@ public final class InputInterpreterImpl implements InputInterpreter {
         }
 
         /*
+         * Compute actions that need to be executed only once if
+         * the user keeps holding the assigned key
+         */
+        commandsToDeliver.addAll(this.processDoOnlyOnceActions(actionsToProcess));
+
+        /*
          * Compute all other remaining actions
          */
-        commandsToDeliver.addAll(this.computeRemainingCommands(actions));
+        commandsToDeliver.addAll(this.processRemainingActions(actionsToProcess));
 
         return commandsToDeliver;
     }
 
-    /**
-     * Converts all bindings into PlayerActions.
+    /*
+     * Converts all bindings to PlayerActions.
      */
     private Set<String> convertBindings(final Set<Enum<?>> inputs) {
         return inputs.stream()
                 .filter(bindings::containsKey)
                 .map(bindings::get)
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 
-    /**
-     * Computes the new movement direction while also normalizing it.
-     */
     private Point2D processMovementDirection(final Set<String> actions) {
         return movementActions.entrySet()
                 .stream()
@@ -114,7 +124,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
                 .normalize();
     }
 
-    /**
+    /*
      * Tweaks mouse coordinates depending on the player's sprite
      * position on screen.
      * Ignores mouse movement when too close to the sprite.
@@ -126,10 +136,20 @@ public final class InputInterpreterImpl implements InputInterpreter {
         return currentMouseCoords;
     }
 
-    /**
-     * Converts all remaining actions to Commands.
-     */
-    private List<Command> computeRemainingCommands(final Set<String> actions) {
+    private List<Command> processDoOnlyOnceActions(final Set<String> actions) {
+        final List<Command> outList = new ArrayList<>();
+        doOnlyOnce.forEach((actionName, command) -> {
+            if (actions.contains(actionName) && !onceBuffer.contains(actionName)) {
+                onceBuffer.add(actionName);
+                outList.add(command);
+            } else if (!actions.contains(actionName)) {
+                onceBuffer.remove(actionName);
+            }
+        });
+        return outList;
+    }
+
+    private List<Command> processRemainingActions(final Set<String> actions) {
         return otherActions.entrySet()
                 .stream()
                 .filter(e -> actions.contains(e.getKey()))
