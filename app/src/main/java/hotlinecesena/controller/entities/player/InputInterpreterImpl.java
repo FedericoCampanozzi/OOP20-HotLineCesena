@@ -32,9 +32,9 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private static final float DEADZONE = 50.0f;
     private Point2D currentMouseCoords = Point2D.ZERO;
     private final Map<Enum<?>, String> bindings;
-    private final Map<String, Direction> movementActions;
-    private final Map<String, Command> otherActions;
-    private final Map<String, Command> doOnlyOnce;
+    private final Map<String, Direction> movements;
+    private final Map<String, Command> continuousActions;
+    private final Map<String, Command> doOnlyOnceActions;
     private final Set<String> onceBuffer = new HashSet<>();
 
     /**
@@ -42,21 +42,21 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * make use of the given input bindings.
      * @param bindings a Map associating keyboard keys and/or
      * mouse buttons to strings representing player actions.
-     * @param movementActions Map associating strings to player movements.
-     * @param otherActions Map associating strings to player actions
-     * excluding movements.
-     * @param doOnlyOnce Map associating strings to actions that need to
-     * be executed only once if the player keeps holding the same key.
+     * @param movements Map associating strings to player movements.
+     * @param continuousActions Map associating strings to player actions
+     * that can be executed continuously, excluding movements.
+     * @param doOnlyOnceActions Map associating strings to actions that need to
+     * be executed only once if the user keeps holding the same key.
      * @throws NullPointerException if the given bindings, movementActions
      * or otherActions are null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
-            @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions,
-            @Nonnull final Map<String, Command> doOnlyOnce) {
+            @Nonnull final Map<String, Direction> movements, @Nonnull final Map<String, Command> continuousActions,
+            @Nonnull final Map<String, Command> doOnlyOnceActions) {
         this.bindings = Objects.requireNonNull(bindings);
-        this.movementActions = Objects.requireNonNull(movementActions);
-        this.otherActions = Objects.requireNonNull(otherActions);
-        this.doOnlyOnce = Objects.requireNonNull(doOnlyOnce);
+        this.movements = Objects.requireNonNull(movements);
+        this.continuousActions = Objects.requireNonNull(continuousActions);
+        this.doOnlyOnceActions = Objects.requireNonNull(doOnlyOnceActions);
     }
 
     /**
@@ -71,12 +71,12 @@ public final class InputInterpreterImpl implements InputInterpreter {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
         final List<Command> commandsToDeliver = new ArrayList<>();
-        final Set<String> actionsToProcess = this.convertBindings(inputs.getKey());
+        final Set<String> actionNames = this.convertBindings(inputs.getKey());
 
         /*
          * Compute new movement direction
          */
-        final Point2D newMovementDir = this.processMovementDirection(actionsToProcess);
+        final Point2D newMovementDir = this.processMovementDirection(actionNames);
         if (!newMovementDir.equals(Point2D.ZERO)) {
             commandsToDeliver.add(new MoveCommand(newMovementDir.multiply(deltaTime)));
         }
@@ -94,12 +94,12 @@ public final class InputInterpreterImpl implements InputInterpreter {
          * Compute actions that need to be executed only once if
          * the user keeps holding the assigned key
          */
-        commandsToDeliver.addAll(this.processDoOnlyOnceActions(actionsToProcess));
+        commandsToDeliver.addAll(this.processDoOnlyOnceActions(actionNames));
 
         /*
-         * Compute all other remaining actions
+         * Compute actions that can be executed continuously
          */
-        commandsToDeliver.addAll(this.processRemainingActions(actionsToProcess));
+        commandsToDeliver.addAll(this.processContinuousActions(actionNames));
 
         return commandsToDeliver;
     }
@@ -115,7 +115,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
     }
 
     private Point2D processMovementDirection(final Set<String> actions) {
-        return movementActions.entrySet()
+        return movements.entrySet()
                 .stream()
                 .filter(e -> actions.contains(e.getKey()))
                 .map(Entry::getValue)
@@ -138,7 +138,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
 
     private List<Command> processDoOnlyOnceActions(final Set<String> actions) {
         final List<Command> outList = new ArrayList<>();
-        doOnlyOnce.forEach((actionName, command) -> {
+        doOnlyOnceActions.forEach((actionName, command) -> {
             if (actions.contains(actionName) && !onceBuffer.contains(actionName)) {
                 onceBuffer.add(actionName);
                 outList.add(command);
@@ -149,8 +149,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
         return outList;
     }
 
-    private List<Command> processRemainingActions(final Set<String> actions) {
-        return otherActions.entrySet()
+    private List<Command> processContinuousActions(final Set<String> actions) {
+        return continuousActions.entrySet()
                 .stream()
                 .filter(e -> actions.contains(e.getKey()))
                 .map(Entry::getValue)

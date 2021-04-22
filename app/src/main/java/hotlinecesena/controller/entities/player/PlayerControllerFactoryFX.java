@@ -39,7 +39,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
             "move_east",    DirectionList.EAST,
             "move_west",    DirectionList.WEST
             );
-    private final Map<String, Command> otherActions = Map.of(
+    private final Map<String, Command> continuousActions = Map.of(
             "attack",       Player::attack
             );
     private final Map<String, Command> doOnlyOnce = Map.of(
@@ -64,7 +64,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
         return new PlayerController(
                 Objects.requireNonNull(player),
                 Objects.requireNonNull(sprite),
-                new InputInterpreterImpl(bindings, movements, otherActions, doOnlyOnce),
+                new InputInterpreterImpl(bindings, movements, continuousActions, doOnlyOnce),
                 Objects.requireNonNull(listener)
                 );
     }
