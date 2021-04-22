@@ -74,7 +74,7 @@ class InterpreterPlayerTest {
     private void setup() {
         player = new PlayerImpl(Point2D.ZERO, ANGLE, WIDTH, HEIGHT, SPEED, MAX_HP, new NaiveInventoryImpl(), Map.of(),
                 List.of(), List.of(), Map.of(), Map.of());
-        interpreter = new InputInterpreterImpl(bindings, movementActions, otherActions);
+        interpreter = new InputInterpreterImpl(bindings, movementActions, otherActions, Map.of());
     }
 
     @BeforeEach
