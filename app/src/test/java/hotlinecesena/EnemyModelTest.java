@@ -1,6 +1,8 @@
 package hotlinecesena;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -16,6 +18,8 @@ import hotlinecesena.model.inventory.NaiveInventoryImpl;
 import javafx.geometry.Point2D;
 
 class EnemyModelTest {
+
+    private static final int OUT_OF_RANGE = 9;
 
     @Test
     void enemyIdle() {
@@ -51,11 +55,11 @@ class EnemyModelTest {
 
         // moves clockwise
         patrol.move(patrol.getAI().getNextMove(null, false, walkable));
-        assertEquals(new Point2D(0, 1), patrol.getPosition());   
+        assertEquals(new Point2D(0, 1), patrol.getPosition());
 
         // moves clockwise
         patrol.move(patrol.getAI().getNextMove(null, false, walkable));
-        assertEquals(new Point2D(0, 0), patrol.getPosition());   
+        assertEquals(new Point2D(0, 0), patrol.getPosition());
     }
 
     @Test
@@ -130,7 +134,7 @@ class EnemyModelTest {
         // enemy does not have the target in the field of view
         assertFalse(enemy.getAI().isShooting(target));
 
-        target = new Point2D(9, 1);
+        target = new Point2D(OUT_OF_RANGE, 1);
 
         // target is to far away
         assertFalse(enemy.getAI().isShooting(target));
