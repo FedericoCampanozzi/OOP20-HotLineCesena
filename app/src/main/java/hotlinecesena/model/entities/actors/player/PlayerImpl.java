@@ -33,14 +33,12 @@ import javafx.geometry.Point2D;
  */
 public final class PlayerImpl extends AbstractActor implements Player {
 
-    private static final long WEAPON_PICKUP_INTERVAL = (long) (1E+9 / 3);
     private static final double DEFAULT_NOISE_LEVEL = 0.0;
     private final Map<ActorStatus, Double> noiseLevels;
     private final Collection<Obstacle> obstacles;
     private final Collection<Enemy> enemies;
     private final Map<Point2D, ItemsType> itemsOnMap;
     private final Map<Point2D, Weapon> weaponsOnMap;
-    private long lastTime = System.nanoTime();
     private final double itemUsageRadius = this.getWidth() * 0.75;
 
     /**
@@ -137,8 +135,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
      * Picks up a nearby weapon, if present.
      */
     private void pickUpWeapon() {
-        final long currentTime = System.nanoTime();
-        if (!this.getInventory().isReloading() && currentTime - lastTime >= WEAPON_PICKUP_INTERVAL) {
+        if (!this.getInventory().isReloading()) {
             final Optional<Entry<Point2D, Weapon>> weaponFound = weaponsOnMap.entrySet()
                     .stream()
                     .filter(e -> MathUtils.isCollision(this.getPosition(), this.getWidth(), this.getHeight(),
@@ -160,7 +157,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
                     this.publish(new WeaponPickUpEvent(this, newWeap.getWeaponType(), null, pos));
                 });
                 this.getInventory().add(newWeap, 1);
-                lastTime = currentTime;
             });
         }
     }
