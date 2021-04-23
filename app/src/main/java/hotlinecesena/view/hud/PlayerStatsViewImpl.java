@@ -69,7 +69,6 @@ public class PlayerStatsViewImpl implements PlayerStatsView{
 		this.stackPane = stackPane;
 		this.missionController = missionController;
 		missions = missionController.getMissions();
-		System.out.println(missions);
 	}
 
 	/**
