@@ -5,6 +5,11 @@ import hotlinecesena.view.menu.LoadingViewImpl;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/**
+ * This class is the first class that initialize applications
+ * and launch the first gui "LoadingView.fxml"
+ * @author Federico
+ */
 public class GameLoader extends Application {
 
     public static void main(String[] args) {
