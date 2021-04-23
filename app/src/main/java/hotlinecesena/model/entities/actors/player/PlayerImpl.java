@@ -73,7 +73,6 @@ public final class PlayerImpl extends AbstractActor implements Player {
     }
 
     /**
-     *
      * @throws NullPointerException if the supplied direction is null.
      */
     @Override
@@ -92,11 +91,8 @@ public final class PlayerImpl extends AbstractActor implements Player {
         }
     }
 
-    /**
+    /*
      * Convenience method to check for collisions on a given stream of entities.
-     * @param newPos
-     * @param stream
-     * @return
      */
     private boolean hasCollided(final Point2D newPos, final Stream<? extends Entity> stream) {
         return stream.anyMatch(e -> this.isCollidingWith(newPos, e));
@@ -115,7 +111,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
         this.pickUpWeapon();
     }
 
-    /**
+    /*
      * Uses nearby items, if there are any.
      */
     private void useItem() {
@@ -131,7 +127,7 @@ public final class PlayerImpl extends AbstractActor implements Player {
         toBeRemoved.forEach(itemsOnMap::remove);
     }
 
-    /**
+    /*
      * Picks up a nearby weapon, if present.
      */
     private void pickUpWeapon() {
