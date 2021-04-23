@@ -19,8 +19,7 @@ public final class MathUtils {
      * @return value in degrees
      */
     public static double mouseToDegrees(final Point2D coords) {
-        final double angle = Math.toDegrees(Math.atan2(coords.getY(), coords.getX()));
-        return angle < 0 ? 360 + angle : angle;
+        return Math.toDegrees(Math.atan2(coords.getY(), coords.getX()));
     }
 
     /**

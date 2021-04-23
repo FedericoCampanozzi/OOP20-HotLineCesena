@@ -16,6 +16,7 @@ import javafx.geometry.Point2D;
  */
 public final class AIImpl implements AI {
 
+    private static final int PROXYMITY = 3;
     private static final int FIELD_OF_VIEW = 90;
     private static final int VISION_RADIUS = 5;
     private static final int HALF = 2;
@@ -138,8 +139,8 @@ public final class AIImpl implements AI {
      * of the enemy
      */
     private boolean inLineOfSight(final Point2D target) {
-        double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
-        double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
+        final double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
+        final double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
 
         return this.rotationToTarget(target) >= negative45DegreesAngle
                 && this.rotationToTarget(target) <= positive45DegreesAngle
@@ -156,7 +157,7 @@ public final class AIImpl implements AI {
             final Set<Point2D> map) {
 
         this.nextMove = this.strategy.move(this.current, player, pursuit, map);
-        return this.nextMove;
+        return !this.isInArea(player, PROXYMITY) ? this.nextMove : new Point2D(0,0);
     }
 
     @Override

@@ -12,7 +12,7 @@ import javafx.geometry.Point2D;
 
 /**
  *
- * Models a factory that instantiates the {@link Player}.
+ * Models a factory to create {@link Player} instances.
  *
  */
 public interface PlayerFactory {

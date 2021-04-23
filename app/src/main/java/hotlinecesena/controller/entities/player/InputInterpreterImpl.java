@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.toUnmodifiableList;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,25 +32,31 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private static final float DEADZONE = 50.0f;
     private Point2D currentMouseCoords = Point2D.ZERO;
     private final Map<Enum<?>, String> bindings;
-    private final Map<String, Direction> movementActions;
-    private final Map<String, Command> otherActions;
+    private final Map<String, Direction> movements;
+    private final Map<String, Command> continuousActions;
+    private final Map<String, Command> oneTimeActions;
+    private final Set<String> oneTimeHistory = new HashSet<>();
 
     /**
      * Instantiates a new {@code InputInterpreterImpl} that will
      * make use of the given input bindings.
      * @param bindings a Map associating keyboard keys and/or
      * mouse buttons to strings representing player actions.
-     * @param movementActions Map associating strings to player movements.
-     * @param otherActions Map associating strings to player actions
-     * excluding movements.
+     * @param movements Map associating strings to player movements.
+     * @param continuousActions Map associating strings to player actions
+     * that can be executed continuously, excluding movements.
+     * @param oneTimeActions Map associating strings to actions that need to
+     * be executed only once if the user keeps holding the same key.
      * @throws NullPointerException if the given bindings, movementActions
      * or otherActions are null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
-            @Nonnull final Map<String, Direction> movementActions, @Nonnull final Map<String, Command> otherActions) {
+            @Nonnull final Map<String, Direction> movements, @Nonnull final Map<String, Command> continuousActions,
+            @Nonnull final Map<String, Command> oneTimeActions) {
         this.bindings = Objects.requireNonNull(bindings);
-        this.movementActions = Objects.requireNonNull(movementActions);
-        this.otherActions = Objects.requireNonNull(otherActions);
+        this.movements = Objects.requireNonNull(movements);
+        this.continuousActions = Objects.requireNonNull(continuousActions);
+        this.oneTimeActions = Objects.requireNonNull(oneTimeActions);
     }
 
     /**
@@ -63,15 +70,15 @@ public final class InputInterpreterImpl implements InputInterpreter {
             @Nonnull final Point2D spritePosition, final double deltaTime) {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
-        final List<Command> commandsToDeliver = new ArrayList<>();
-        final Set<String> actions = this.convertBindings(inputs.getKey());
+        final List<Command> outList = new ArrayList<>();
+        final Set<String> actionNames = this.convertBindings(inputs.getKey());
 
         /*
          * Compute new movement direction
          */
-        final Point2D newMovementDir = this.processMovementDirection(actions);
-        if (!newMovementDir.equals(Point2D.ZERO)) {
-            commandsToDeliver.add(new MoveCommand(newMovementDir.multiply(deltaTime)));
+        final Point2D moveDir = this.processMovementDirection(actionNames);
+        if (!moveDir.equals(Point2D.ZERO)) {
+            outList.add(new MoveCommand(moveDir.multiply(deltaTime)));
         }
 
         /*
@@ -79,33 +86,36 @@ public final class InputInterpreterImpl implements InputInterpreter {
          */
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
         if (!currentMouseCoords.equals(newMouseCoords)) {
-            commandsToDeliver.add(new RotateCommand(MathUtils.mouseToDegrees(newMouseCoords)));
+            outList.add(new RotateCommand(MathUtils.mouseToDegrees(newMouseCoords)));
             currentMouseCoords = newMouseCoords;
         }
 
         /*
-         * Compute all other remaining actions
+         * Compute actions that need to be executed only once if
+         * the user keeps holding the assigned key
          */
-        commandsToDeliver.addAll(this.computeRemainingCommands(actions));
+        outList.addAll(this.processOneTimeActions(actionNames));
 
-        return commandsToDeliver;
+        /*
+         * Compute actions that can be executed continuously
+         */
+        outList.addAll(this.processContinuousActions(actionNames));
+
+        return outList;
     }
 
-    /**
-     * Converts all bindings into PlayerActions.
+    /*
+     * Converts all bindings to PlayerActions.
      */
     private Set<String> convertBindings(final Set<Enum<?>> inputs) {
         return inputs.stream()
                 .filter(bindings::containsKey)
                 .map(bindings::get)
-                .collect(Collectors.toUnmodifiableSet());
+                .collect(Collectors.toSet());
     }
 
-    /**
-     * Computes the new movement direction while also normalizing it.
-     */
     private Point2D processMovementDirection(final Set<String> actions) {
-        return movementActions.entrySet()
+        return movements.entrySet()
                 .stream()
                 .filter(e -> actions.contains(e.getKey()))
                 .map(Entry::getValue)
@@ -114,7 +124,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
                 .normalize();
     }
 
-    /**
+    /*
      * Tweaks mouse coordinates depending on the player's sprite
      * position on screen.
      * Ignores mouse movement when too close to the sprite.
@@ -126,11 +136,21 @@ public final class InputInterpreterImpl implements InputInterpreter {
         return currentMouseCoords;
     }
 
-    /**
-     * Converts all remaining actions to Commands.
-     */
-    private List<Command> computeRemainingCommands(final Set<String> actions) {
-        return otherActions.entrySet()
+    private List<Command> processOneTimeActions(final Set<String> actions) {
+        final List<Command> outList = new ArrayList<>();
+        oneTimeActions.forEach((actionName, command) -> {
+            if (actions.contains(actionName) && !oneTimeHistory.contains(actionName)) {
+                oneTimeHistory.add(actionName);
+                outList.add(command);
+            } else if (!actions.contains(actionName)) {
+                oneTimeHistory.remove(actionName);
+            }
+        });
+        return outList;
+    }
+
+    private List<Command> processContinuousActions(final Set<String> actions) {
+        return continuousActions.entrySet()
                 .stream()
                 .filter(e -> actions.contains(e.getKey()))
                 .map(Entry::getValue)

@@ -14,7 +14,7 @@ public interface ImageLoader {
      * The image is loaded by adding an absolute path to the two arguments.
      * @param scene the relative path to the type of file needed
      * @param image the relative path of the file that needs to be loaded
-     * @return an {@code Image} that can be displayed
+     * @return an {@code Image} object that can be displayed
      * @see Image
      * @see SceneType
      * @see ImageType
