@@ -82,42 +82,42 @@ public final class InputListenerFX implements InputListener {
         ((Stage) scene.getWindow()).focusedProperty().removeListener(this.forgetAllInputs());
     }
 
-    /**
+    /*
      * Handler for key releases.
      */
     private EventHandler<KeyEvent> getOnKeyReleasedHandler() {
         return e -> this.forgetInput(e.getCode());
     }
 
-    /**
+    /*
      * Handler for key presses.
      */
     private EventHandler<KeyEvent> getOnKeyPressedHandler() {
         return e -> this.captureInput(e.getCode());
     }
 
-    /**
+    /*
      * Handler for mouse buttons releases.
      */
     private EventHandler<MouseEvent> getOnMouseReleasedHandler() {
         return e -> this.forgetInput(e.getButton());
     }
 
-    /**
+    /*
      * Handler for mouse buttons presses.
      */
     private EventHandler<MouseEvent> getOnMousePressedHandler() {
         return e -> this.captureInput(e.getButton());
     }
 
-    /**
+    /*
      * Handler common to setOnMouseMoved and setOnMouseDragged properties.
      */
     private EventHandler<MouseEvent> captureMouseCoordinates() {
         return e -> currentMouseCoords = new Point2D(e.getSceneX(), e.getSceneY());
     }
 
-    /**
+    /*
      * Makes this InputListener forget all registered inputs if
      * the {@link Stage} loses focus.
      */
@@ -130,8 +130,6 @@ public final class InputListenerFX implements InputListener {
     }
 
     private <T extends Enum<T>> void forgetInput(final T code) {
-        if (inputs.contains(code)) {
-            inputs.remove(code);
-        }
+        inputs.remove(code);
     }
 }
