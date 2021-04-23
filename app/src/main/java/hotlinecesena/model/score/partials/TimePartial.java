@@ -20,7 +20,7 @@ public final class TimePartial implements PartialScore {
     private long totalTimeMilliseconds;
 
     /**
-     * Instantiates a new TimeStrategy.
+     * Instantiates a new TimePartial.
      * @param basePoints starting points for this algorithm.
      */
     public TimePartial(final int basePoints) {

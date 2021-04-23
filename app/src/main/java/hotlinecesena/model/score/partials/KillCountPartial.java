@@ -16,7 +16,7 @@ public final class KillCountPartial implements PartialScore, Subscriber {
     private int killCount = 0;
 
     /**
-     * Instantiates a new KillCountStrategy.
+     * Instantiates a new KillCountPartial.
      * @param basePoints starting points for this algorithm.
      */
     public KillCountPartial(final int basePoints) {

@@ -27,7 +27,7 @@ public final class CunningPartial implements PartialScore, Subscriber {
     private float hits = 0.0f;
 
     /**
-     * Instantiates a new CunningStrategy.
+     * Instantiates a new CunningPartial.
      * @param basePoints starting points for this algorithm.
      */
     public CunningPartial(final int basePoints) {
