@@ -17,13 +17,13 @@ public interface Publisher {
 
     /**
      * Registers a {@link Subscriber} that will listen to this object's events.
-     * @param subscriber
+     * @param subscriber the {@code Subscriber} to be registered
      */
     void register(Subscriber subscriber);
 
     /**
      * Unregisters a previously registered {@link Subscriber}.
-     * @param subscriber
+     * @param subscriber the {@code Subscriber} to be unregistered
      */
     void unregister(Subscriber subscriber);
 }
