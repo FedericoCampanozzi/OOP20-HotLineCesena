@@ -2,7 +2,6 @@ package hotlinecesena.model.inventory;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,13 +45,7 @@ public final class NaiveInventoryImpl implements Inventory {
      */
     public NaiveInventoryImpl(@Nullable final Weapon weapon, @Nonnull final Map<Item, Integer> items) {
         this.weapon = Optional.ofNullable(weapon);
-        Objects.requireNonNull(items);
-        if (items.entrySet().stream()
-                .map(Entry::getKey)
-                .anyMatch(item -> !(item instanceof CollectibleType))) {
-            throw new IllegalArgumentException(ERROR_MSG);
-        }
-        items.forEach(this::add);
+        Objects.requireNonNull(items).forEach(this::add);
     }
 
     /**
@@ -83,8 +76,8 @@ public final class NaiveInventoryImpl implements Inventory {
     public int getQuantityOf(@Nonnull final Item item) {
         Objects.requireNonNull(item);
         if (item instanceof Weapon) {
-            final Weapon w = (Weapon) item;
-            return weapon.isPresent() && weapon.orElseThrow().getWeaponType() == w.getWeaponType() ? 1 : 0;
+            return weapon.isPresent()
+                    && weapon.orElseThrow().getWeaponType() == ((Weapon) item).getWeaponType() ? 1 : 0;
         } else {
             return collectibles.getOrDefault(item, 0);
         }
@@ -141,36 +134,41 @@ public final class NaiveInventoryImpl implements Inventory {
      */
     @Override
     public void update(final double timeElapsed) {
-        this.updateReloading(timeElapsed);
+        if (this.isReloading()) {
+            if (weapon.isPresent() && weapon.orElseThrow() == reloadBuffer) {
+                this.updateReloading(timeElapsed);
+            } else {
+                reloadTimeRemaining = 0.0;
+                reloadBuffer = null;
+            }
+        }
     }
 
     private void updateReloading(final double timeElapsed) {
-        if (this.isReloading()) {
-            reloadTimeRemaining -= timeElapsed;
-            if (reloadTimeRemaining <= 0.0) {
-                /*
-                 * If the weapon hasn't changed or disappeared for some
-                 * obscure reason, finish reloading it.
-                 * Otherwise, reset everything.
-                 */
-                weapon.filter(w -> w == reloadBuffer)
-                .ifPresent(w -> {
-                    final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
-                    final int ammoOwned = collectibles.getOrDefault(w.getCompatibleAmmunition(), 0);
-                    if (ammoOwned > ammoNeeded) {
-                        w.reload(ammoNeeded);
-                        collectibles.put(
-                                w.getCompatibleAmmunition(),
-                                ammoOwned - ammoNeeded);
-                    } else {
-                        w.reload(ammoOwned);
-                        collectibles.put(
-                                w.getCompatibleAmmunition(),
-                                0);
-                    }
-                });
-                reloadBuffer = null;
-            }
+        reloadTimeRemaining -= timeElapsed;
+        if (reloadTimeRemaining <= 0.0) {
+            /*
+             * If the weapon has changed or disappeared for some
+             * obscure reason, reset everything.
+             * Otherwise, finish reloading it.
+             */
+            weapon.filter(w -> w == reloadBuffer)
+            .ifPresent(w -> {
+                final int ammoNeeded = w.getMagazineSize() - w.getCurrentAmmo();
+                final int ammoOwned = collectibles.getOrDefault(w.getCompatibleAmmunition(), 0);
+                if (ammoOwned > ammoNeeded) {
+                    w.reload(ammoNeeded);
+                    collectibles.put(
+                            w.getCompatibleAmmunition(),
+                            ammoOwned - ammoNeeded);
+                } else {
+                    w.reload(ammoOwned);
+                    collectibles.put(
+                            w.getCompatibleAmmunition(),
+                            0);
+                }
+            });
+            reloadBuffer = null;
         }
     }
 }

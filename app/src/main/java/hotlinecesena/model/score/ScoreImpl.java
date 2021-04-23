@@ -7,16 +7,15 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import hotlinecesena.model.events.Subscriber;
-import hotlinecesena.model.score.partials.PartialStrategyFactory;
 import hotlinecesena.model.score.partials.PartialStrategy;
+import hotlinecesena.model.score.partials.PartialStrategyFactory;
 import javafx.util.Pair;
 
 /**
  * Score implementation. Calculations are left to each
  * {@link PartialStrategy} object created by the factory.
  */
-public final class ScoreImpl implements Score, Subscriber {
+public final class ScoreImpl implements Score {
 
     private final Set<PartialStrategy> partials;
 

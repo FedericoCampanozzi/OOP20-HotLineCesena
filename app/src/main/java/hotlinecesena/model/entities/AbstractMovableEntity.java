@@ -5,6 +5,7 @@ import java.util.Objects;
 import javax.annotation.Nonnull;
 
 import hotlinecesena.model.events.RotationEvent;
+import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
 /**
@@ -57,12 +58,14 @@ public abstract class AbstractMovableEntity extends AbstractEntity implements Mo
      */
     @Override
     public final boolean isCollidingWith(@Nonnull final Point2D newPosition, @Nonnull final Entity other) {
-        Objects.requireNonNull(newPosition);
-        final Point2D otherPos = Objects.requireNonNull(other).getPosition();
-        return otherPos.getX() + other.getWidth() >= newPosition.getX()
-                && otherPos.getY() + other.getHeight() >= newPosition.getY()
-                && otherPos.getX() <= newPosition.getX() + this.getWidth()
-                && otherPos.getY() <= newPosition.getY() + this.getHeight();
+        return MathUtils.isCollision(Objects.requireNonNull(
+                newPosition),
+                this.getWidth(),
+                this.getHeight(),
+                Objects.requireNonNull(other).getPosition(),
+                other.getWidth(),
+                other.getHeight()
+                );
     }
 
     @Override

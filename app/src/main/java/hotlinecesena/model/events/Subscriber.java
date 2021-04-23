@@ -1,9 +1,8 @@
 package hotlinecesena.model.events;
 
 /**
- * 
- * Tags a class as a Subscriber for events posted on one or more {@link EventBus}es.
- *
+ * Tags a class as Subscriber. It will listen for events
+ * from {@link Publisher}s to which it will register.
  */
 public interface Subscriber {
 
