@@ -119,7 +119,7 @@ public final class InputListenerFX implements InputListener {
 
     /*
      * Makes this InputListener forget all registered inputs if
-     * the {@link Stage} loses focus.
+     * the stage loses focus.
      */
     private ChangeListener<? super Boolean> forgetAllInputs() {
         return (obs, oldV, newV) -> inputs.clear();

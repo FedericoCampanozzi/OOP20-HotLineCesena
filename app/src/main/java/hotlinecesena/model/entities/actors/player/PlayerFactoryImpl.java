@@ -16,7 +16,7 @@ import hotlinecesena.model.inventory.InventoryFactory;
 import hotlinecesena.model.inventory.NaiveInventoryFactory;
 import javafx.geometry.Point2D;
 
-/*
+/**
  * Basic {@link PlayerFactory} implementation.
  */
 public final class PlayerFactoryImpl implements PlayerFactory {

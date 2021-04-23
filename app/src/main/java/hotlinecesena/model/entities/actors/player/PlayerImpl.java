@@ -27,9 +27,7 @@ import hotlinecesena.utilities.MathUtils;
 import javafx.geometry.Point2D;
 
 /**
- *
- * Player implementation.
- *
+ * {@link Player} implementation.
  */
 public final class PlayerImpl extends AbstractActor implements Player {
 
