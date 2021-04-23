@@ -8,9 +8,9 @@ import java.util.Set;
 public interface PartialStrategyFactory {
 
     /**
-     * Creates all strategies currently available and
+     * Creates instances of all algorithms currently available and
      * bundles them in a Set.
-     * @return a Set containing all strategies currently
+     * @return a Set containing all algorithms currently
      * available.
      */
     Set<PartialStrategy> createAll();

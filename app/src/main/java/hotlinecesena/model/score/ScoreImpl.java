@@ -22,9 +22,9 @@ public final class ScoreImpl implements Score {
     /**
      * Instantiates a new {@code ScoreImpl} which will make
      * use of the given {@code factory} to instantiate all
-     * available partials.
+     * available partial scores.
      * @param factory the factory to be used to instantiate
-     * all partials.
+     * all partial scores.
      */
     public ScoreImpl(@Nonnull final PartialStrategyFactory factory) {
         partials = Objects.requireNonNull(factory).createAll();
