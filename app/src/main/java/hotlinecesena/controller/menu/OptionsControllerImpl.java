@@ -162,7 +162,7 @@ public class OptionsControllerImpl implements OptionsController {
 	@Override
 	@FXML
 	public void soundsRDClick() throws JsonGenerationException, JsonMappingException, IOException {
-		if (musicRadioButton.isSelected()) {
+		if (soundsRadioButton.isSelected()) {
 			JSONDataAccessLayer.getInstance().getSettings().setEffectActive(true);
 			audioControllerImpl.updateSettings();
 		}

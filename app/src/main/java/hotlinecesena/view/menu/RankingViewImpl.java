@@ -15,9 +15,9 @@ import hotlinecesena.controller.menu.RankingController;
 import hotlinecesena.controller.menu.RankingControllerImpl;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.datastructure.DataJSONRanking.Row;
-import hotlinecesena.model.score.partials.CunningStrategy;
-import hotlinecesena.model.score.partials.KillCountStrategy;
-import hotlinecesena.model.score.partials.TimeStrategy;
+import hotlinecesena.model.score.partials.CunningPartial;
+import hotlinecesena.model.score.partials.KillCountPartial;
+import hotlinecesena.model.score.partials.TimePartial;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -123,9 +123,9 @@ public class RankingViewImpl implements RankingView{
     	Row matchStatsRow = new Row(
                 name,
                 totalScore,
-                partialScore.get(TimeStrategy.class.getSimpleName()).getValue(),
-                partialScore.get(KillCountStrategy.class.getSimpleName()).getValue(),
-                partialScore.get(CunningStrategy.class.getSimpleName()).getValue()
+                partialScore.get(TimePartial.class.getSimpleName()).getValue(),
+                partialScore.get(KillCountPartial.class.getSimpleName()).getValue(),
+                partialScore.get(CunningPartial.class.getSimpleName()).getValue()
                 );
         addRowToRecords(matchStatsRow);
         addScoreButton.setDisable(true);

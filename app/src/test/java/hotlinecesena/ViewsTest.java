@@ -14,7 +14,7 @@ import hotlinecesena.controller.menu.OptionsControllerImpl;
 import hotlinecesena.controller.menu.StartMenuControllerImpl;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
-import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
+import hotlinecesena.model.score.partials.PartialScoreFactoryImpl;
 import hotlinecesena.view.menu.LoadingViewImpl;
 import hotlinecesena.view.menu.RankingViewImpl;
 
@@ -76,7 +76,7 @@ public class ViewsTest {
     public void rankingViewTest() {
     	try {
 	    	Stage stage = new Stage();
-	    	Score score = new ScoreImpl(new PartialStrategyFactoryImpl());
+	    	Score score = new ScoreImpl(new PartialScoreFactoryImpl());
 			AudioControllerImpl audioControllerImpl = new AudioControllerImpl();
 			SceneSwapperImpl sceneSwapperImpl = new SceneSwapperImpl();
 			sceneSwapperImpl.swapScene(new RankingViewImpl(

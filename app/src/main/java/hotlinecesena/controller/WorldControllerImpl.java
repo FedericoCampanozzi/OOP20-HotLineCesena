@@ -24,7 +24,7 @@ import hotlinecesena.model.events.ItemPickUpEvent;
 import hotlinecesena.model.events.WeaponPickUpEvent;
 import hotlinecesena.model.score.Score;
 import hotlinecesena.model.score.ScoreImpl;
-import hotlinecesena.model.score.partials.PartialStrategyFactoryImpl;
+import hotlinecesena.model.score.partials.PartialScoreFactoryImpl;
 import hotlinecesena.view.WorldView;
 import hotlinecesena.view.WorldViewImpl;
 import hotlinecesena.view.camera.CameraView;
@@ -123,7 +123,7 @@ public class WorldControllerImpl implements WorldController {
      * It tracks the match stats.
      */
     private void initScoreModel() {
-        score = new ScoreImpl(new PartialStrategyFactoryImpl());
+        score = new ScoreImpl(new PartialScoreFactoryImpl());
     }
 
     /**
