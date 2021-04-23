@@ -143,8 +143,7 @@ public final class Pathfinder {
     /**
      * Returns a list of points containing all the points traversed
      * to reach the end position.
-     * @param current the current node which coincide with
-     * the last node if the search as been completed successfully
+     * @param last the last node of the pathfinding algorithm
      * @return a list of points that need to be traversed
      * to reach the desired end
      */
