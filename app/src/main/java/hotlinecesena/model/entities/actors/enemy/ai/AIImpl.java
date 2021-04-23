@@ -157,7 +157,7 @@ public final class AIImpl implements AI {
             final Set<Point2D> map) {
 
         this.nextMove = this.strategy.move(this.current, player, pursuit, map);
-        return !this.isInArea(player, PROXYMITY) ? this.nextMove : new Point2D(0,0);
+        return !this.isInArea(player, PROXYMITY) ? this.nextMove : new Point2D(0, 0);
     }
 
     @Override
