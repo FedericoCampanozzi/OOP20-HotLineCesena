@@ -45,8 +45,7 @@ public final class NaiveInventoryImpl implements Inventory {
      */
     public NaiveInventoryImpl(@Nullable final Weapon weapon, @Nonnull final Map<Item, Integer> items) {
         this.weapon = Optional.ofNullable(weapon);
-        Objects.requireNonNull(items);
-        items.forEach(this::add);
+        Objects.requireNonNull(items).forEach(this::add);
     }
 
     /**
