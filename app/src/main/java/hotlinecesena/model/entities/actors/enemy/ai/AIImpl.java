@@ -138,8 +138,8 @@ public final class AIImpl implements AI {
      * of the enemy
      */
     private boolean inLineOfSight(final Point2D target) {
-        double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
-        double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
+        final double negative45DegreesAngle = this.rotation - (FIELD_OF_VIEW / HALF);
+        final double positive45DegreesAngle = this.rotation + (FIELD_OF_VIEW / HALF);
 
         return this.rotationToTarget(target) >= negative45DegreesAngle
                 && this.rotationToTarget(target) <= positive45DegreesAngle
