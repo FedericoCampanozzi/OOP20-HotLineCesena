@@ -3,9 +3,9 @@ package hotlinecesena.model.score.partials;
 import java.util.Set;
 
 /**
- * Models a factory for {@link PartialStrategy}.
+ * Models a factory for {@link PartialScore}.
  */
-public interface PartialStrategyFactory {
+public interface PartialScoreFactory {
 
     /**
      * Creates instances of all algorithms currently available and
@@ -13,5 +13,5 @@ public interface PartialStrategyFactory {
      * @return a Set containing all algorithms currently
      * available.
      */
-    Set<PartialStrategy> createAll();
+    Set<PartialScore> createAll();
 }

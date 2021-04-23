@@ -15,7 +15,7 @@ import hotlinecesena.model.events.Subscriber;
  * least amount of bullets (or even none at all) or by letting
  * enemies kill each other through exploitation of friendly fire.
  */
-public final class CunningStrategy implements PartialStrategy, Subscriber {
+public final class CunningPartial implements PartialScore, Subscriber {
 
     /**
      * Value to be used if the player manages to finish
@@ -30,7 +30,7 @@ public final class CunningStrategy implements PartialStrategy, Subscriber {
      * Instantiates a new CunningStrategy.
      * @param basePoints starting points for this algorithm.
      */
-    public CunningStrategy(final int basePoints) {
+    public CunningPartial(final int basePoints) {
         this.basePoints = basePoints;
         JSONDataAccessLayer.getInstance().getPlayer().getPly().register(this);
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> e.register(this));

@@ -3,27 +3,27 @@ package hotlinecesena.model.score.partials;
 import java.util.Set;
 
 /**
- * {@link PartialStrategyFactory} implementation.
+ * {@link PartialScoreFactory} implementation.
  */
-public final class PartialStrategyFactoryImpl implements PartialStrategyFactory {
+public final class PartialScoreFactoryImpl implements PartialScoreFactory {
 
-    private PartialStrategy createCunning() {
+    private PartialScore createCunning() {
         final int ppu = 500;
-        return new CunningStrategy(ppu);
+        return new CunningPartial(ppu);
     }
 
-    private PartialStrategy createTime() {
+    private PartialScore createTime() {
         final int ppu = 5;
-        return new TimeStrategy(ppu);
+        return new TimePartial(ppu);
     }
 
-    private PartialStrategy createKillCount() {
+    private PartialScore createKillCount() {
         final int ppu = 50;
-        return new KillCountStrategy(ppu);
+        return new KillCountPartial(ppu);
     }
 
     @Override
-    public Set<PartialStrategy> createAll() {
+    public Set<PartialScore> createAll() {
         return Set.of(
                 this.createCunning(),
                 this.createTime(),
