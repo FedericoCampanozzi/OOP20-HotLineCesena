@@ -42,7 +42,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
     private final Map<String, Command> continuousActions = Map.of(
             "attack",       Player::attack
             );
-    private final Map<String, Command> doOnlyOnce = Map.of(
+    private final Map<String, Command> oneTimeActions = Map.of(
             "use",          Player::use,
             "reload",       Player::reload
             );
@@ -64,7 +64,7 @@ public final class PlayerControllerFactoryFX implements PlayerControllerFactory 
         return new PlayerController(
                 Objects.requireNonNull(player),
                 Objects.requireNonNull(sprite),
-                new InputInterpreterImpl(bindings, movements, continuousActions, doOnlyOnce),
+                new InputInterpreterImpl(bindings, movements, continuousActions, oneTimeActions),
                 Objects.requireNonNull(listener)
                 );
     }

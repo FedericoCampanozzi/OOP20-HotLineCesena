@@ -34,8 +34,8 @@ public final class InputInterpreterImpl implements InputInterpreter {
     private final Map<Enum<?>, String> bindings;
     private final Map<String, Direction> movements;
     private final Map<String, Command> continuousActions;
-    private final Map<String, Command> doOnlyOnceActions;
-    private final Set<String> onceBuffer = new HashSet<>();
+    private final Map<String, Command> oneTimeActions;
+    private final Set<String> oneTimeHistory = new HashSet<>();
 
     /**
      * Instantiates a new {@code InputInterpreterImpl} that will
@@ -45,18 +45,18 @@ public final class InputInterpreterImpl implements InputInterpreter {
      * @param movements Map associating strings to player movements.
      * @param continuousActions Map associating strings to player actions
      * that can be executed continuously, excluding movements.
-     * @param doOnlyOnceActions Map associating strings to actions that need to
+     * @param oneTimeActions Map associating strings to actions that need to
      * be executed only once if the user keeps holding the same key.
      * @throws NullPointerException if the given bindings, movementActions
      * or otherActions are null.
      */
     public InputInterpreterImpl(@Nonnull final Map<Enum<?>, String> bindings,
             @Nonnull final Map<String, Direction> movements, @Nonnull final Map<String, Command> continuousActions,
-            @Nonnull final Map<String, Command> doOnlyOnceActions) {
+            @Nonnull final Map<String, Command> oneTimeActions) {
         this.bindings = Objects.requireNonNull(bindings);
         this.movements = Objects.requireNonNull(movements);
         this.continuousActions = Objects.requireNonNull(continuousActions);
-        this.doOnlyOnceActions = Objects.requireNonNull(doOnlyOnceActions);
+        this.oneTimeActions = Objects.requireNonNull(oneTimeActions);
     }
 
     /**
@@ -70,15 +70,15 @@ public final class InputInterpreterImpl implements InputInterpreter {
             @Nonnull final Point2D spritePosition, final double deltaTime) {
         Objects.requireNonNull(inputs);
         Objects.requireNonNull(spritePosition);
-        final List<Command> commandsToDeliver = new ArrayList<>();
+        final List<Command> outList = new ArrayList<>();
         final Set<String> actionNames = this.convertBindings(inputs.getKey());
 
         /*
          * Compute new movement direction
          */
-        final Point2D newMovementDir = this.processMovementDirection(actionNames);
-        if (!newMovementDir.equals(Point2D.ZERO)) {
-            commandsToDeliver.add(new MoveCommand(newMovementDir.multiply(deltaTime)));
+        final Point2D moveDir = this.processMovementDirection(actionNames);
+        if (!moveDir.equals(Point2D.ZERO)) {
+            outList.add(new MoveCommand(moveDir.multiply(deltaTime)));
         }
 
         /*
@@ -86,7 +86,7 @@ public final class InputInterpreterImpl implements InputInterpreter {
          */
         final Point2D newMouseCoords = this.processMouseCoordinates(inputs.getValue(), spritePosition);
         if (!currentMouseCoords.equals(newMouseCoords)) {
-            commandsToDeliver.add(new RotateCommand(MathUtils.mouseToDegrees(newMouseCoords)));
+            outList.add(new RotateCommand(MathUtils.mouseToDegrees(newMouseCoords)));
             currentMouseCoords = newMouseCoords;
         }
 
@@ -94,14 +94,14 @@ public final class InputInterpreterImpl implements InputInterpreter {
          * Compute actions that need to be executed only once if
          * the user keeps holding the assigned key
          */
-        commandsToDeliver.addAll(this.processDoOnlyOnceActions(actionNames));
+        outList.addAll(this.processOneTimeActions(actionNames));
 
         /*
          * Compute actions that can be executed continuously
          */
-        commandsToDeliver.addAll(this.processContinuousActions(actionNames));
+        outList.addAll(this.processContinuousActions(actionNames));
 
-        return commandsToDeliver;
+        return outList;
     }
 
     /*
@@ -136,14 +136,14 @@ public final class InputInterpreterImpl implements InputInterpreter {
         return currentMouseCoords;
     }
 
-    private List<Command> processDoOnlyOnceActions(final Set<String> actions) {
+    private List<Command> processOneTimeActions(final Set<String> actions) {
         final List<Command> outList = new ArrayList<>();
-        doOnlyOnceActions.forEach((actionName, command) -> {
-            if (actions.contains(actionName) && !onceBuffer.contains(actionName)) {
-                onceBuffer.add(actionName);
+        oneTimeActions.forEach((actionName, command) -> {
+            if (actions.contains(actionName) && !oneTimeHistory.contains(actionName)) {
+                oneTimeHistory.add(actionName);
                 outList.add(command);
             } else if (!actions.contains(actionName)) {
-                onceBuffer.remove(actionName);
+                oneTimeHistory.remove(actionName);
             }
         });
         return outList;
