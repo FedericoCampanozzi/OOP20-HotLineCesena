@@ -16,7 +16,7 @@ public class ConverterUtils {
 	 * Convert spatial position in a integer position 
 	 */
 	public static Pair<Integer,Integer> convertPoint2DToPair(Point2D p) {
-		return new Pair<Integer,Integer>((int)p.getX(), (int)p.getY());
+		return new Pair<Integer,Integer>((int)Math.round(p.getX()), (int)Math.round(p.getY()));
 	}
 	
 	/**
