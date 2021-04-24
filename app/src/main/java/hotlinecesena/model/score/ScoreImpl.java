@@ -7,26 +7,26 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
-import hotlinecesena.model.score.partials.PartialStrategy;
-import hotlinecesena.model.score.partials.PartialStrategyFactory;
+import hotlinecesena.model.score.partials.PartialScore;
+import hotlinecesena.model.score.partials.PartialScoreFactory;
 import javafx.util.Pair;
 
 /**
  * Score implementation. Calculations are left to each
- * {@link PartialStrategy} object created by the factory.
+ * {@link PartialScore} object created by the factory.
  */
 public final class ScoreImpl implements Score {
 
-    private final Set<PartialStrategy> partials;
+    private final Set<PartialScore> partials;
 
     /**
      * Instantiates a new {@code ScoreImpl} which will make
      * use of the given {@code factory} to instantiate all
-     * available partials.
+     * available partial scores.
      * @param factory the factory to be used to instantiate
-     * all partials.
+     * all partial scores.
      */
-    public ScoreImpl(@Nonnull final PartialStrategyFactory factory) {
+    public ScoreImpl(@Nonnull final PartialScoreFactory factory) {
         partials = Objects.requireNonNull(factory).createAll();
     }
 
@@ -44,7 +44,7 @@ public final class ScoreImpl implements Score {
     @Override
     public int getTotalScore() {
         return partials.stream()
-                .mapToInt(PartialStrategy::applyFormula)
+                .mapToInt(PartialScore::applyFormula)
                 .sum();
     }
 }

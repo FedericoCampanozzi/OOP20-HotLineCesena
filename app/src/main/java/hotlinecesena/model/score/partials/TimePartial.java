@@ -9,7 +9,7 @@ import hotlinecesena.model.entities.actors.player.Player;
  * manage to win a game within a certain time limit.
  * If the player loses, no points will be awarded.
  */
-public final class TimeStrategy implements PartialStrategy {
+public final class TimePartial implements PartialScore {
 
     private final int basePoints;
     /**
@@ -20,10 +20,10 @@ public final class TimeStrategy implements PartialStrategy {
     private long totalTimeMilliseconds;
 
     /**
-     * Instantiates a new TimeStrategy.
+     * Instantiates a new TimePartial.
      * @param basePoints starting points for this algorithm.
      */
-    public TimeStrategy(final int basePoints) {
+    public TimePartial(final int basePoints) {
         this.basePoints = basePoints;
         final long mapWidth = JSONDataAccessLayer.getInstance().getWorld().getMaxX()
                 - JSONDataAccessLayer.getInstance().getWorld().getMinX() + 1;

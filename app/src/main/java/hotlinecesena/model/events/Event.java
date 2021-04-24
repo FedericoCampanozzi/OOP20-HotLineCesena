@@ -4,7 +4,7 @@ import java.util.Collection;
 
 /**
  * Models an event that game entities may trigger to notify
- * external controllers.
+ * external objects.
  */
 public interface Event {
 

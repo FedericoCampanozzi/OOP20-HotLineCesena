@@ -3,7 +3,7 @@ package hotlinecesena.model.score.partials;
 /**
  * Algorithm for a specific kind of partial score.
  */
-public interface PartialStrategy {
+public interface PartialScore {
 
     /**
      * Applies this algorithm's formula and returns the

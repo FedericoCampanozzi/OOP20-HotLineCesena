@@ -10,16 +10,16 @@ import hotlinecesena.model.events.Subscriber;
  * Implements the "Kill count" algorithm: players are
  * awarded points based on how many enemies are killed.
  */
-public final class KillCountStrategy implements PartialStrategy, Subscriber {
+public final class KillCountPartial implements PartialScore, Subscriber {
 
     private final int basePoints;
     private int killCount = 0;
 
     /**
-     * Instantiates a new KillCountStrategy.
+     * Instantiates a new KillCountPartial.
      * @param basePoints starting points for this algorithm.
      */
-    public KillCountStrategy(final int basePoints) {
+    public KillCountPartial(final int basePoints) {
         this.basePoints = basePoints;
         JSONDataAccessLayer.getInstance().getEnemy().getEnemies().forEach(e -> e.register(this));
     }

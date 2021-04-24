@@ -9,15 +9,15 @@ import com.google.common.eventbus.EventBus;
 /**
  * Implements a {@link Publisher} wrapping Google Guava's {@link EventBus}.
  */
-public class PublisherComponent implements Publisher {
+public final class GameBus implements Publisher {
 
     private final EventBus bus;
 
     /**
-     * Instantiates a new {@code PublisherComponent} which
+     * Instantiates a new {@code GameBus} which
      * other classes may use to publish events.
      */
-    public PublisherComponent() {
+    public GameBus() {
         bus = new EventBus();
     }
 
@@ -25,7 +25,7 @@ public class PublisherComponent implements Publisher {
      * @throws NullPointerException if the given event is null.
      */
     @Override
-    public final void publish(@Nonnull final Event event) {
+    public void publish(@Nonnull final Event event) {
         bus.post(Objects.requireNonNull(event));
     }
 
@@ -33,7 +33,7 @@ public class PublisherComponent implements Publisher {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public final void register(@Nonnull final Subscriber subscriber) {
+    public void register(@Nonnull final Subscriber subscriber) {
         bus.register(Objects.requireNonNull(subscriber));
     }
 
@@ -41,7 +41,7 @@ public class PublisherComponent implements Publisher {
      * @throws NullPointerException if the supplied subscriber is null.
      */
     @Override
-    public final void unregister(@Nonnull final Subscriber subscriber) {
+    public void unregister(@Nonnull final Subscriber subscriber) {
         bus.unregister(Objects.requireNonNull(subscriber));
     }
 }
