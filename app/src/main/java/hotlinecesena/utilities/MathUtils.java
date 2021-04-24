@@ -95,10 +95,12 @@ public final class MathUtils {
     }
 
     /**
-     * Calculates an integer sum between two points.
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return a new {@code Point2D}
+     * Computes the sum between two {@link Point2D}s and returns
+     * a new point with the coordinates rounded to the nearest integers.
+     * @param arg1 the first point
+     * @param arg2 the second point
+     * @return a new point that is the sum between the two given {@code Point2D}s
+     * with the coordinates rounded to the nearest integers.
      */
     public static Point2D roundedSumPoint2D(final Point2D arg1, final Point2D arg2) {
         return new Point2D((int) arg1.getX() + (int) arg2.getX(),
@@ -106,7 +108,8 @@ public final class MathUtils {
     }
 
     /**
-     * Calculates the distance between two points.
+     * Computes the distance between two {@link Point2D}s and rounds it to
+     * the nearest integer.
      * @param arg1 the first argument
      * @param arg2 the second argument
      * @return the integer value of the difference
@@ -115,58 +118,62 @@ public final class MathUtils {
         return (int) (Math.abs(arg1.getX() - arg2.getX())
                 + Math.abs(arg1.getY() - arg2.getY()));
     }
-    
+
     /**
-	 * Get a distance of two integer position
-	 */
-	public static double distance(Pair<Integer,Integer> p1, Pair<Integer, Integer> p2) {
-		return Math.sqrt((p2.getKey() - p1.getKey()) * (p2.getKey() - p1.getKey()) + (p2.getValue() - p1.getValue()) * (p2.getValue() - p1.getValue()));
-	}
-	
+     * Computes the distance between two pairs of integers.
+     * @param p1 the first pair
+     * @param p2 the second pair
+     * @return the distance between the given pairs.
+     */
+    public static double distance(final Pair<Integer, Integer> p1, final Pair<Integer, Integer> p2) {
+        return Math.sqrt((p2.getKey() - p1.getKey()) * (p2.getKey() - p1.getKey())
+                + (p2.getValue() - p1.getValue()) * (p2.getValue() - p1.getValue()));
+    }
+
     /**
-	 * Sum a variable number of positions
-	 * @param points All points to be added together
-	 * @return The final position
-	 */
-	@SafeVarargs
-	public static Pair<Integer,Integer> sum( Pair<Integer,Integer>... points) {
-		int k = 0;
-		int v = 0;
-		for(Pair<Integer,Integer> point : points) {
-			k += point.getKey();
-			v += point.getValue();
-		}
-		return new Pair<>(k, v);
-	}
-	
-	/**
-	 * Subtract to p some points
-	 * @param p The point that have to be subtracted
-	 * @param points All points to be subtracted
-	 * @return The result point
-	 */
-	@SafeVarargs
-	public static Pair<Integer,Integer> subtract(Pair<Integer,Integer> p, Pair<Integer,Integer>... point) {
-		int k = p.getKey();
-		int v = p.getValue();
-		for(Pair<Integer,Integer> points : point) {
-			k -= points.getKey();
-			v -= points.getValue();
-		}
-		return new Pair<>(k, v);
-	}
-	
-	/**
-	 * Generate a number from lowerBound (include) to upperBound (exclude)
-	 * @param rnd instance of random
-	 * @param lowerBound the minimums value possible
-	 * @param upperBound the maximums value possible
-	 * @return a random int
-	 */
-	public static int randomBetween(Random rnd, int lowerBound, int upperBound) {
-		if(upperBound  < lowerBound) {
-			throw new IllegalArgumentException();
-		}
-		return rnd.nextInt(upperBound - lowerBound) + lowerBound;
-	}
+     * Sums a variable number of pairs of integers.
+     * @param points the series of pairs to be summed together.
+     * @return the sum of all given pairs.
+     */
+    @SafeVarargs
+    public static Pair<Integer, Integer> sum(final Pair<Integer, Integer>... points) {
+        int k = 0;
+        int v = 0;
+        for (final Pair<Integer,  Integer> point : points) {
+            k += point.getKey();
+            v += point.getValue();
+        }
+        return new Pair<>(k, v);
+    }
+
+    /**
+     * Subtracts a variable number of pairs of integers from {@code p}.
+     * @param p the subtrahend.
+     * @param points the series of pairs that will be subtracted from p.
+     * @return the result of the subtraction.
+     */
+    @SafeVarargs
+    public static Pair<Integer, Integer> subtract(final Pair<Integer, Integer> p, final Pair<Integer, Integer>... points) {
+        int k = p.getKey();
+        int v = p.getValue();
+        for (final Pair<Integer, Integer> point : points) {
+            k -= point.getKey();
+            v -= point.getValue();
+        }
+        return new Pair<>(k, v);
+    }
+
+    /**
+     * Generates a random number ranging from lowerBound (included) to upperBound (excluded).
+     * @param rnd instance of {@link Random}
+     * @param lowerBound the minimum value
+     * @param upperBound the maximum value
+     * @return a random integer ranging between the given bounds
+     */
+    public static int randomBetween(final Random rnd, final int lowerBound, final int upperBound) {
+        if (upperBound < lowerBound) {
+            throw new IllegalArgumentException("Upper bound must be greater than the lower bound");
+        }
+        return rnd.nextInt(upperBound - lowerBound) + lowerBound;
+    }
 }
