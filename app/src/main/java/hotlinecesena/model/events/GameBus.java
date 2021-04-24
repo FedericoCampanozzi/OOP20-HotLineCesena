@@ -14,7 +14,7 @@ public final class GameBus implements Publisher {
     private final EventBus bus;
 
     /**
-     * Instantiates a new {@code PublisherComponent} which
+     * Instantiates a new {@code GameBus} which
      * other classes may use to publish events.
      */
     public GameBus() {
