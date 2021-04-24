@@ -9,7 +9,7 @@ import com.google.common.eventbus.EventBus;
 /**
  * Implements a {@link Publisher} wrapping Google Guava's {@link EventBus}.
  */
-public final class PublisherComponent implements Publisher {
+public final class GameBus implements Publisher {
 
     private final EventBus bus;
 
@@ -17,7 +17,7 @@ public final class PublisherComponent implements Publisher {
      * Instantiates a new {@code PublisherComponent} which
      * other classes may use to publish events.
      */
-    public PublisherComponent() {
+    public GameBus() {
         bus = new EventBus();
     }
 
