@@ -1,4 +1,4 @@
-package hotlinecesena.controller.physics;
+package hotlinecesena.utilities;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -11,12 +11,12 @@ import javafx.geometry.Point2D;
  * Collection of static methods to check enemy physics.
  * @see Enemy
  */
-public final class EnemyPhysics {
+public final class EnemyPhysicsUtils {
 
     /**
      * Class constructor.
      */
-    private EnemyPhysics() {
+    private EnemyPhysicsUtils() {
 
     }
 
@@ -56,7 +56,7 @@ public final class EnemyPhysics {
                     .getPosition());
         allowedMoveSet.add(current);
 
-        return allowedMoveSet.contains(sum(current, next));
+        return allowedMoveSet.contains(MathUtils.roundedSumPoint2D(current, next));
     }
 
     /**
@@ -99,27 +99,5 @@ public final class EnemyPhysics {
             }
         }
         return false;
-    }
-
-    /**
-     * Calculates an integer sum between two points.
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return a new {@code Point2D}
-     */
-    private static Point2D sum(final Point2D arg1, final Point2D arg2) {
-        return new Point2D((int) arg1.getX() + (int) arg2.getX(),
-                (int) arg1.getY() + (int) arg2.getY());
-    }
-
-    /**
-     * Calculates the distance between two points.
-     * @param arg1 the first argument
-     * @param arg2 the second argument
-     * @return the integer value of the difference
-     */
-    public static int distance(final Point2D arg1, final Point2D arg2) {
-        return (int) (Math.abs(arg1.getX() - arg2.getX())
-                + Math.abs(arg1.getY() - arg2.getY()));
     }
 }

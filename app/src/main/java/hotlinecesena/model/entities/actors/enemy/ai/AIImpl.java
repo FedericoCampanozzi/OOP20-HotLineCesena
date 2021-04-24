@@ -2,11 +2,11 @@ package hotlinecesena.model.entities.actors.enemy.ai;
 
 import java.util.Set;
 
-import hotlinecesena.controller.physics.EnemyPhysics;
 import hotlinecesena.model.entities.actors.DirectionList;
 import hotlinecesena.model.entities.actors.enemy.ai.strategy.MovementStrategy;
 import hotlinecesena.model.entities.actors.enemy.ai.strategy.Idle;
 import hotlinecesena.model.entities.actors.enemy.ai.strategy.RandomMovement;
+import hotlinecesena.utilities.EnemyPhysicsUtils;
 import hotlinecesena.model.entities.actors.enemy.ai.strategy.Patrolling;
 import hotlinecesena.model.entities.actors.enemy.EnemyType;
 import javafx.geometry.Point2D;
@@ -144,7 +144,7 @@ public final class AIImpl implements AI {
 
         return this.rotationToTarget(target) >= negative45DegreesAngle
                 && this.rotationToTarget(target) <= positive45DegreesAngle
-                && !EnemyPhysics.isWallInBetween(target, this.current, this.wallSet);
+                && !EnemyPhysicsUtils.isWallInBetween(target, this.current, this.wallSet);
     }
 
     @Override

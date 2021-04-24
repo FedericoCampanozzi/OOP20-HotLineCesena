@@ -90,4 +90,26 @@ public final class MathUtils {
                 && p2.getX() <= p1.getX() + w1
                 && p2.getY() <= p1.getY() + h1;
     }
+
+    /**
+     * Calculates an integer sum between two points.
+     * @param arg1 the first argument
+     * @param arg2 the second argument
+     * @return a new {@code Point2D}
+     */
+    public static Point2D roundedSumPoint2D(final Point2D arg1, final Point2D arg2) {
+        return new Point2D((int) arg1.getX() + (int) arg2.getX(),
+                (int) arg1.getY() + (int) arg2.getY());
+    }
+
+    /**
+     * Calculates the distance between two points.
+     * @param arg1 the first argument
+     * @param arg2 the second argument
+     * @return the integer value of the difference
+     */
+    public static int distanceBetweenPoint2D(final Point2D arg1, final Point2D arg2) {
+        return (int) (Math.abs(arg1.getX() - arg2.getX())
+                + Math.abs(arg1.getY() - arg2.getY()));
+    }
 }

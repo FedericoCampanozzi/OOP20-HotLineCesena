@@ -6,8 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.Stack;
 
-import hotlinecesena.controller.physics.EnemyPhysics;
 import hotlinecesena.model.entities.actors.DirectionList;
+import hotlinecesena.utilities.EnemyPhysicsUtils;
 import javafx.geometry.Point2D;
 
 /**
@@ -67,11 +67,11 @@ public class Patrolling implements MovementStrategy {
             this.fillStack();
         }
 
-        if (!EnemyPhysics.isMoveAllowed(pos, this.nextMove.get(), map)) {
+        if (!EnemyPhysicsUtils.isMoveAllowed(pos, this.nextMove.get(), map)) {
             this.nextMove = this.newMove();
         }
 
-        return EnemyPhysics.isMoveAllowed(pos, this.nextMove.get(), map) ? this.nextMove : DirectionList.NONE;
+        return EnemyPhysicsUtils.isMoveAllowed(pos, this.nextMove.get(), map) ? this.nextMove : DirectionList.NONE;
     }
 
     /**
@@ -104,7 +104,7 @@ public class Patrolling implements MovementStrategy {
                     this.pathfindingList.get(0).getY() - start.getY()));
         }
 
-        return retval.isPresent() && EnemyPhysics.isMoveAllowed(start, retval.get(), map) ? retval.get() : DirectionList.NONE.get();
+        return retval.isPresent() && EnemyPhysicsUtils.isMoveAllowed(start, retval.get(), map) ? retval.get() : DirectionList.NONE.get();
     }
 
     /**

@@ -3,8 +3,8 @@ package hotlinecesena.model.entities.actors.enemy.ai.strategy;
 import java.util.Random;
 import java.util.Set;
 
-import hotlinecesena.controller.physics.EnemyPhysics;
 import hotlinecesena.model.entities.actors.DirectionList;
+import hotlinecesena.utilities.EnemyPhysicsUtils;
 import javafx.geometry.Point2D;
 
 /**
@@ -22,7 +22,7 @@ public final class RandomMovement implements MovementStrategy {
         final int pick = new Random().nextInt(DirectionList.values().length - 1);
         this.nextMove = DirectionList.values()[pick];
 
-        return EnemyPhysics.isMoveAllowed(enemy, this.nextMove.get(), map)
+        return EnemyPhysicsUtils.isMoveAllowed(enemy, this.nextMove.get(), map)
                 ? this.nextMove.get() : DirectionList.NONE.get();
     }
 }
