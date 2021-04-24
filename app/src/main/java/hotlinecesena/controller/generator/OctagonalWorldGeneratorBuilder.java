@@ -1,8 +1,5 @@
 package hotlinecesena.controller.generator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
 import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
@@ -45,63 +42,6 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 			}
 		}
 		return this;
-	}
-	
-	private boolean canPutRoom(Pair<Integer, Integer> center, Pair<Integer, Integer> doorLink,
-			Pair<Integer, Integer> dir, Room room) {
-		boolean can = true;
-		boolean isNearDoor = false;
-		Pair<Integer, Integer> dd = new Pair<>(doorLink.getKey() + (int) Math.signum(dir.getKey()),
-				doorLink.getValue() + (int) Math.signum(dir.getValue()));
-
-		for (Pair<Integer, Integer> positions : room.getMap().keySet()) {
-			var pii = MathUtils.sum(center, positions);
-			if (this.map.containsKey(pii)) {
-				can = false;
-				break;
-			}
-
-			if (pii.equals(dd) && room.getMap().get(positions).equals(SymbolsType.DOOR)) {
-				isNearDoor = true;
-			}
-		}
-
-		return can && isNearDoor;
-	}
-
-	private void generateRoom(Pair<Integer, Integer> center, Room room) {
-
-		for (Entry<Pair<Integer, Integer>, SymbolsType> p : room.getMap().entrySet()) {
-			Pair<Integer, Integer> position = MathUtils.sum(center, p.getKey());
-
-			this.map.put(position, p.getValue());
-
-			if (position.getKey() < this.xMin) {
-				this.xMin = position.getKey();
-			}
-			if (position.getKey() > this.xMax) {
-				this.xMax = position.getKey();
-			}
-
-			if (position.getValue() < this.yMin) {
-				this.yMin = position.getValue();
-			}
-			if (position.getValue() > this.yMax) {
-				this.yMax = position.getValue();
-			}
-		}
-
-		this.rooms.add(room);
-	}
-
-	private Pair<Integer, Integer> getConnectionsLinking() {
-		List<Pair<Integer, Integer>> allDoors = new ArrayList<>();
-		for (Pair<Integer, Integer> p : this.map.keySet()) {
-			if (this.map.get(p).equals(SymbolsType.DOOR)) {
-				allDoors.add(p);
-			}
-		}
-		return allDoors.get(rnd.nextInt(allDoors.size()));
 	}
 	
 	/**
