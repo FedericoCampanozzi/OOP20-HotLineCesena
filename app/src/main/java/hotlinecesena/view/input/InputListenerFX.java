@@ -56,7 +56,9 @@ public final class InputListenerFX implements InputListener {
         scene.setOnMouseDragged(this.captureMouseCoordinates());
 
         // Add focus change listener to the stage
-        ((Stage) scene.getWindow()).focusedProperty().addListener(this.forgetAllInputs());
+        if (scene.getWindow() instanceof Stage) {
+            ((Stage) scene.getWindow()).focusedProperty().addListener(this.forgetAllInputs());
+        }
     }
 
     /**
@@ -79,7 +81,9 @@ public final class InputListenerFX implements InputListener {
         scene.removeEventHandler(MouseEvent.MOUSE_DRAGGED, this.captureMouseCoordinates());
 
         // Remove focus change listener from the stage
-        ((Stage) scene.getWindow()).focusedProperty().removeListener(this.forgetAllInputs());
+        if (scene.getWindow() instanceof Stage) {
+            ((Stage) scene.getWindow()).focusedProperty().removeListener(this.forgetAllInputs());
+        }
     }
 
     /*
