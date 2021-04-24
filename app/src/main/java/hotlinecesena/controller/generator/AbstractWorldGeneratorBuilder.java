@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.MathUtils;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -115,15 +115,15 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		for (int rIndex = 0; rIndex < this.rooms.size(); rIndex++) {
 			if (rIndex != this.pRoomIndex) {
 				Room r = this.rooms.get(rIndex);
-				int roomObj = Utilities.randomBetween(rnd, minInRoom, maxInRoom);
+				int roomObj = MathUtils.randomBetween(rnd, minInRoom, maxInRoom);
 				final List<Pair<Integer, Integer>> positions = r.getMap().entrySet().stream().map(itm -> itm.getKey())
 						.collect(toList());
 				for (int i = 0; i < roomObj; i++) {
 					Pair<Integer, Integer> pii = positions.get(rnd.nextInt(positions.size()));
-					pii = Utilities.sumPair(pii, r.getCenter());
+					pii = MathUtils.sum(pii, r.getCenter());
 					if (this.map.containsKey(pii) && this.map.get(pii).equals(SymbolsType.WALKABLE)) {
 						this.map.put(pii, type);
-						r.getMap().put(Utilities.subPair(pii, r.getCenter()), type);
+						r.getMap().put(MathUtils.subtract(pii, r.getCenter()), type);
 					}
 				}
 			}

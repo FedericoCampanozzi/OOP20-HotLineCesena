@@ -5,7 +5,7 @@ import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.actors.player.Player;
 import hotlinecesena.model.entities.actors.player.PlayerFactoryImpl;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import static java.util.stream.Collectors.*; 
 
 /**
@@ -22,7 +22,7 @@ public class DataPlayer extends AbstractData {
 				.map((itm)-> itm.getKey())
 				.collect(toList()).get(0);
 		ply = new PlayerFactoryImpl().createPlayer(
-				Utilities.convertPairToPoint2D(pos),
+				ConverterUtils.convertPairToPoint2D(pos),
 				0,
 				physics.getObstacles(),
 				enemy.getEnemies(),

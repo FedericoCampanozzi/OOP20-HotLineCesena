@@ -5,7 +5,7 @@ import java.util.*;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.MathUtils;
 
 /**
  * This class represent an octagonal room
@@ -58,7 +58,7 @@ public class OctagonalRoom extends AbstractRoom {
 
 		for (Pair<Integer, Integer> dir : dirs) {
 			for (int i = 1; i < edge; i++) {
-				start = Utilities.sumPair(start, dir);
+				start = MathUtils.sum(start, dir);
 				walls.add(start);
 			}
 		}
@@ -67,7 +67,7 @@ public class OctagonalRoom extends AbstractRoom {
 		
 		for(int i = 0;i < walls.size();i++)
 		{
-			walls.set(i, Utilities.subPair(start, walls.get(i)));
+			walls.set(i, MathUtils.subtract(start, walls.get(i)));
 			this.map.put(walls.get(i), SymbolsType.WALL);
 		}
 		
@@ -92,7 +92,7 @@ public class OctagonalRoom extends AbstractRoom {
 		for (int i = -width2 + 1; i <= width2 - 1; i++) {
 			for (int j = -width2 + 1; j <= width2 - 1; j++) {
 
-				if (Utilities.distance(new Pair<>(i, j), center) < (((double) this.width - 2) / 2.0d)) {
+				if (MathUtils.distance(new Pair<>(i, j), center) < (((double) this.width - 2) / 2.0d)) {
 					this.map.put(new Pair<>(i, j), SymbolsType.WALKABLE);	
 				}
 			}

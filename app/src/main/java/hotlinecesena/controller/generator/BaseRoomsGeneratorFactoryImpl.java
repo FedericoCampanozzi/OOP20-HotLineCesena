@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.MathUtils;
 
 /**
  * This factory provide to generate some list of rooms
@@ -23,12 +23,12 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		final int nBaseRooms = Utilities.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
+		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
 		final List<Room> baseRooms = new ArrayList<>();
 		for (int i = 0; i < nBaseRooms; i++) {
 			baseRooms.add(new QuadraticRoom(
-					Utilities.randomBetween(rnd, wMin, wMax), 
-					Utilities.randomBetween(rnd, dMin, dMax)
+					MathUtils.randomBetween(rnd, wMin, wMax), 
+					MathUtils.randomBetween(rnd, dMin, dMax)
 			));
 		}
 		
@@ -46,13 +46,13 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		final int nBaseRooms = Utilities.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
+		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
 		final List<Room> baseRooms = new ArrayList<>();
 		for (int i = 0; i < nBaseRooms; i++) {
 			baseRooms.add(new RectangularRoom(
-					Utilities.randomBetween(rnd, wMin, wMax), 
-					Utilities.randomBetween(rnd, hMin, hMax),
-					Utilities.randomBetween(rnd, dMin, dMax)
+					MathUtils.randomBetween(rnd, wMin, wMax), 
+					MathUtils.randomBetween(rnd, hMin, hMax),
+					MathUtils.randomBetween(rnd, dMin, dMax)
 			));
 		}
 		
@@ -69,12 +69,12 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		final int nBaseRooms = Utilities.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
+		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
 		final List<Room> baseRooms = new ArrayList<>();
 		for (int i = 0; i < nBaseRooms; i++) {
 			baseRooms.add(new OctagonalRoom(
-					Utilities.randomBetween(rnd, edgeMin, edgeMax),
-					Utilities.randomBetween(rnd, dMin, dMax)
+					MathUtils.randomBetween(rnd, edgeMin, edgeMax),
+					MathUtils.randomBetween(rnd, dMin, dMax)
 			));
 		}
 		

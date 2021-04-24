@@ -1,7 +1,10 @@
 package hotlinecesena.utilities;
 
+import java.util.Random;
+
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Point2D;
+import javafx.util.Pair;
 
 /**
  * Collection of static methods describing algorithms or mathematical functions.
@@ -112,4 +115,58 @@ public final class MathUtils {
         return (int) (Math.abs(arg1.getX() - arg2.getX())
                 + Math.abs(arg1.getY() - arg2.getY()));
     }
+    
+    /**
+	 * Get a distance of two integer position
+	 */
+	public static double distance(Pair<Integer,Integer> p1, Pair<Integer, Integer> p2) {
+		return Math.sqrt((p2.getKey() - p1.getKey()) * (p2.getKey() - p1.getKey()) + (p2.getValue() - p1.getValue()) * (p2.getValue() - p1.getValue()));
+	}
+	
+    /**
+	 * Sum a variable number of positions
+	 * @param points All points to be added together
+	 * @return The final position
+	 */
+	@SafeVarargs
+	public static Pair<Integer,Integer> sum( Pair<Integer,Integer>... points) {
+		int k = 0;
+		int v = 0;
+		for(Pair<Integer,Integer> point : points) {
+			k += point.getKey();
+			v += point.getValue();
+		}
+		return new Pair<>(k, v);
+	}
+	
+	/**
+	 * Subtract to p some points
+	 * @param p The point that have to be subtracted
+	 * @param points All points to be subtracted
+	 * @return The result point
+	 */
+	@SafeVarargs
+	public static Pair<Integer,Integer> subtract(Pair<Integer,Integer> p, Pair<Integer,Integer>... point) {
+		int k = p.getKey();
+		int v = p.getValue();
+		for(Pair<Integer,Integer> points : point) {
+			k -= points.getKey();
+			v -= points.getValue();
+		}
+		return new Pair<>(k, v);
+	}
+	
+	/**
+	 * Generate a number from lowerBound (include) to upperBound (exclude)
+	 * @param rnd instance of random
+	 * @param lowerBound the minimums value possible
+	 * @param upperBound the maximums value possible
+	 * @return a random int
+	 */
+	public static int randomBetween(Random rnd, int lowerBound, int upperBound) {
+		if(upperBound  < lowerBound) {
+			throw new IllegalArgumentException();
+		}
+		return rnd.nextInt(upperBound - lowerBound) + lowerBound;
+	}
 }

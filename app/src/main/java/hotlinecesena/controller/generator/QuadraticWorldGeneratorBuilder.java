@@ -6,7 +6,7 @@ import java.util.Map.Entry;
 import javafx.util.Pair;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.MathUtils;
 
 /**
  * This class provide to generate a map with {@link QuadraticRoom} 
@@ -25,7 +25,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
 		this.haveInitBaseRoom();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		int nRooms = Utilities.randomBetween(rnd, nRoomsMin, nRoomsMax);
+		int nRooms = MathUtils.randomBetween(rnd, nRoomsMin, nRoomsMax);
 		
 		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
 
@@ -41,7 +41,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 					dirY = (rnd.nextInt(3) - 1) * ((toPut.getWidth() / 2) + 1);
 				}
 				Pair<Integer, Integer> dir = new Pair<>(dirY, dirX);
-				Pair<Integer, Integer> center = Utilities.sumPair(doorLink, dir);
+				Pair<Integer, Integer> center = MathUtils.sum(doorLink, dir);
 				if (canPutRoom(center, doorLink, dir, toPut)) {
 					generateRoom(center, toPut);
 					toPut.setCenter(center);
@@ -59,7 +59,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 				doorLink.getValue() + (int) Math.signum(dir.getValue()));
 
 		for (Pair<Integer, Integer> positions : room.getMap().keySet()) {
-			var pii = Utilities.sumPair(center, positions);
+			var pii = MathUtils.sum(center, positions);
 			if (this.map.containsKey(pii)) {
 				can = false;
 				break;
@@ -76,7 +76,7 @@ public class QuadraticWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 	private void generateRoom(Pair<Integer, Integer> center, Room room) {
 
 		for (Entry<Pair<Integer, Integer>, SymbolsType> p : room.getMap().entrySet()) {
-			Pair<Integer, Integer> position = Utilities.sumPair(center, p.getKey());
+			Pair<Integer, Integer> position = MathUtils.sum(center, p.getKey());
 
 			this.map.put(position, p.getValue());
 
