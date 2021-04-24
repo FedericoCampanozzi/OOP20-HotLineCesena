@@ -1,9 +1,7 @@
 package hotlinecesena.controller.generator;
 
 import javafx.util.Pair;
-import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.MathUtils;
 
 /**
  * This class provide to generate a map with {@link OctagonalRoom} 
@@ -14,36 +12,16 @@ public class OctagonalWorldGeneratorBuilder extends AbstractWorldGeneratorBuilde
 	public OctagonalWorldGeneratorBuilder() {
 		super();
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
-		this.haveInitBaseRoom();
-		rnd.setSeed(JSONDataAccessLayer.SEED);
-		int nRooms = MathUtils.randomBetween(rnd, nRoomsMin, nRoomsMax);
-		
-		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
-
-			OctagonalRoom toPut = (OctagonalRoom) this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
-
-			if (this.rooms.isEmpty()) {
-				generateRoom(new Pair<>(0, 0), toPut);
-			} else {
-				final int w = (toPut.getWidth() - 1) / 2;
-				Pair<Integer, Integer> doorLink = getConnectionsLinking();
-				Pair<Integer, Integer> dir = new Pair<>((rnd.nextInt(3) - 1) * (w + 2), (rnd.nextInt(3) - 1) * (w + 2));
-				Pair<Integer, Integer> center = MathUtils.sum(doorLink, dir);
-				if (canPutRoom(center, doorLink, dir, toPut)) {
-					generateRoom(center, toPut);
-					toPut.setCenter(center);
-				}
-			}
-		}
-		return this;
+	public Pair<Integer, Integer> getDirections(Room room) {
+		OctagonalRoom roomOct = (OctagonalRoom)room;
+		final int w = (roomOct.getWidth() - 1) / 2;
+		return new Pair<>((rnd.nextInt(3) - 1) * (w + 2), (rnd.nextInt(3) - 1) * (w + 2));
 	}
-	
 	/**
 	 * {@inheritDoc}
 	 */

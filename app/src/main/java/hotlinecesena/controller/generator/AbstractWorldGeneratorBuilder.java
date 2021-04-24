@@ -4,6 +4,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import javafx.util.Pair;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.utilities.MathUtils;
 import static java.util.stream.Collectors.*;
@@ -44,11 +45,42 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.baseRooms.addAll(0, list);
 		return this;
 	}
+	
+	/**
+	 * Template method
+	 * @param room the room
+	 * @return the direction to put new room
+	 */
+	public abstract Pair<Integer, Integer> getDirections(Room room);
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public abstract WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax);
+	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
+		this.haveInitBaseRoom();
+		rnd.setSeed(JSONDataAccessLayer.SEED);
+		int nRooms = MathUtils.randomBetween(rnd, nRoomsMin, nRoomsMax);
+		
+		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
+
+			Room toPut = this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
+
+			if (this.rooms.isEmpty()) {
+				generateRoom(new Pair<>(0, 0), toPut);
+			} else {
+				Pair<Integer, Integer> doorLink = getConnectionsLinking();
+				Pair<Integer, Integer> dir = getDirections(toPut);
+				Pair<Integer, Integer> center = MathUtils.sum(doorLink, dir);
+				if (canPutRoom(center, doorLink, dir, toPut)) {
+					generateRoom(center, toPut);
+					toPut.setCenter(center);
+				}
+			}
+		}
+		return this;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
