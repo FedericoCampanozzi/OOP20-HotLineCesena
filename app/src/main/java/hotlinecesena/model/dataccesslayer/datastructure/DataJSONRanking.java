@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 
 /**
  * A data-class that provide to store all results of a game
@@ -43,7 +43,7 @@ public class DataJSONRanking extends AbstractData {
 		public Row(String name, int points, int time, int enemyKilled, int cunning) {
 			this.name = name;
 			this.points = points;
-			this.time = Utilities.convertSecondsToTimeString(time, "%02d:%02d:%02d");
+			this.time = ConverterUtils.convertSecondsToTimeString(time, "%02d:%02d:%02d");
 			this.enemyKilled = enemyKilled;
 			this.cunning = cunning;
 		}

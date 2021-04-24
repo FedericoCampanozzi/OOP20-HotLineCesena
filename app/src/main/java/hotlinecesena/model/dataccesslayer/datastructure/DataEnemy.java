@@ -12,7 +12,7 @@ import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.actors.enemy.Enemy;
 import hotlinecesena.model.entities.actors.enemy.EnemyFactoryImpl;
 import hotlinecesena.model.entities.actors.enemy.EnemyType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -33,15 +33,15 @@ public class DataEnemy extends AbstractData {
 						!itm.getValue().equals(SymbolsType.WALL) && 
 						!itm.getValue().equals(SymbolsType.OBSTACOLES) &&
 						!itm.getValue().equals(SymbolsType.VOID))
-				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
+				.map((itm)-> ConverterUtils.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
 		Set<Point2D> wall = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.WALL))
-				.map((itm)-> Utilities.convertPairToPoint2D(itm.getKey()))
+				.map((itm)-> ConverterUtils.convertPairToPoint2D(itm.getKey()))
 				.collect(toSet());
 		for (Pair<Integer, Integer> pii : world.getWorldMap().keySet()) {
 			if (world.getWorldMap().get(pii).equals(SymbolsType.ENEMY)) {
-				Point2D pos = Utilities.convertPairToPoint2D(pii);
+				Point2D pos = ConverterUtils.convertPairToPoint2D(pii);
 				EnemyType et = EnemyType.values()[rnd.nextInt(EnemyType.values().length)];
 				enemies.add(eFact.getEnemy(pos, et, walkable, wall));
 			}

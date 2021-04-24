@@ -6,7 +6,7 @@ import javafx.geometry.Point2D;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.AbstractEntity;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -21,7 +21,7 @@ public class DataPhysicsCollision extends AbstractData {
         obstacles = world.getWorldMap().entrySet().stream()
                 .filter(itm -> itm.getValue().equals(SymbolsType.WALL) || itm.getValue().equals(SymbolsType.OBSTACOLES))
                 .map(itm -> {
-                    final javafx.geometry.Point2D pt = Utilities.convertPairToPoint2D(itm.getKey());
+                    final javafx.geometry.Point2D pt = ConverterUtils.convertPairToPoint2D(itm.getKey());
                     return new Obstacle(pt, settings.getObstaclesEdge(), settings.getObstaclesEdge());
                 }).collect(toList());
     }

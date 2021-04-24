@@ -9,7 +9,7 @@ import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponImpl;
 import hotlinecesena.model.entities.items.WeaponType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import static java.util.stream.Collectors.*; 
 
 /**
@@ -26,7 +26,7 @@ public class DataWeapons {
 		this.weapons = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.WEAPONS))
 				.collect(toMap(
-						itm -> Utilities.convertPairToPoint2D(itm.getKey()), 
+						itm -> ConverterUtils.convertPairToPoint2D(itm.getKey()), 
 						itm -> new WeaponImpl(WeaponType.values()[rnd.nextInt(WeaponType.values().length)])
 				));
 	}

@@ -14,7 +14,7 @@ import hotlinecesena.controller.generator.WorldGeneratorBuilder;
 import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 
 /**
  * A class that store the main information of gameword, so the 
@@ -77,7 +77,7 @@ public class DataWorldMap extends AbstractData {
 				}
 			}
 			
-			pw.setColor(i, j, Utilities.convertColor(color));
+			pw.setColor(i, j, ConverterUtils.convertColor(color));
 		});
 		oldPlyPos = new Pair<>(0, 0);
 		write();
@@ -88,10 +88,15 @@ public class DataWorldMap extends AbstractData {
 	 * @return the minimap as a image
 	 */
 	public Image getImageVIewUpdated() {
+		Pair<Integer, Integer> curPlayerPos = ConverterUtils
+				.convertPoint2DToPair(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
 		PixelWriter pw = writtableMiniMap.getPixelWriter();
-		pw.setColor(oldPlyPos.getKey()- getMinX(), oldPlyPos.getValue()- getMinY(), Utilities.convertColor(SymbolsType.WALKABLE.getMiniMapColor()));
-		oldPlyPos = Utilities.convertPoint2DToPair(JSONDataAccessLayer.getInstance().getPlayer().getPly().getPosition());
-		pw.setColor(oldPlyPos.getKey()- getMinX(), oldPlyPos.getValue()- getMinY(), Utilities.convertColor(SymbolsType.PLAYER.getMiniMapColor()));
+		pw.setColor(oldPlyPos.getKey() - getMinX(), oldPlyPos.getValue() - getMinY(),
+				ConverterUtils.convertColor(SymbolsType.WALKABLE.getMiniMapColor()));
+		oldPlyPos = curPlayerPos;
+		pw.setColor(oldPlyPos.getKey() - getMinX(), oldPlyPos.getValue() - getMinY(),
+				ConverterUtils.convertColor(SymbolsType.PLAYER.getMiniMapColor()));
+
 		return writtableMiniMap;
 	}
 	

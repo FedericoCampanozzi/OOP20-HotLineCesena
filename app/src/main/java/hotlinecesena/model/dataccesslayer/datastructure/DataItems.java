@@ -7,7 +7,7 @@ import hotlinecesena.model.dataccesslayer.AbstractData;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
 import hotlinecesena.model.entities.items.ItemsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -25,11 +25,11 @@ public class DataItems extends AbstractData {
 		items = world.getWorldMap().entrySet().stream()
 				.filter(itm -> itm.getValue().equals(SymbolsType.ITEM))
 				.collect(toMap(
-						itm -> Utilities.convertPairToPoint2D(itm.getKey()), 
+						itm -> ConverterUtils.convertPairToPoint2D(itm.getKey()), 
 						itm -> ItemsType.values()[rnd.nextInt(ItemsType.values().length - 1)] 
 				));
 		if (world.isKeyObjectPresent()) {
-			items.put(Utilities.convertPairToPoint2D(world.getWorldMap().entrySet()
+			items.put(ConverterUtils.convertPairToPoint2D(world.getWorldMap().entrySet()
 					.stream()
 					.filter(itm -> itm.getValue().equals(SymbolsType.KEY_ITEM))
 					.collect(toList()).get(0).getKey()),

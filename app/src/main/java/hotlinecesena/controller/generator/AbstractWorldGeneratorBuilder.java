@@ -1,10 +1,12 @@
 package hotlinecesena.controller.generator;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.BiConsumer;
 import javafx.util.Pair;
+import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.dataccesslayer.SymbolsType;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.MathUtils;
 import static java.util.stream.Collectors.*;
 
 /**
@@ -43,11 +45,42 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.baseRooms.addAll(0, list);
 		return this;
 	}
+	
+	/**
+	 * Template method
+	 * @param room the room
+	 * @return the direction to put new room
+	 */
+	public abstract Pair<Integer, Integer> getDirections(Room room);
+	
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public abstract WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax);
+	public WorldGeneratorBuilder generateRooms(int nRoomsMin, int nRoomsMax) {
+		this.haveInitBaseRoom();
+		rnd.setSeed(JSONDataAccessLayer.SEED);
+		int nRooms = MathUtils.randomBetween(rnd, nRoomsMin, nRoomsMax);
+		
+		for (int l = 0; l < MAX_POSSIBILITY && this.rooms.size() < nRooms; l++) {
+
+			Room toPut = this.baseRooms.get(rnd.nextInt(this.baseRooms.size())).deepCopy();
+
+			if (this.rooms.isEmpty()) {
+				generateRoom(new Pair<>(0, 0), toPut);
+			} else {
+				Pair<Integer, Integer> doorLink = getConnectionsLinking();
+				Pair<Integer, Integer> dir = getDirections(toPut);
+				Pair<Integer, Integer> center = MathUtils.sum(doorLink, dir);
+				if (canPutRoom(center, doorLink, dir, toPut)) {
+					generateRoom(center, toPut);
+					toPut.setCenter(center);
+				}
+			}
+		}
+		return this;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -115,15 +148,15 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		for (int rIndex = 0; rIndex < this.rooms.size(); rIndex++) {
 			if (rIndex != this.pRoomIndex) {
 				Room r = this.rooms.get(rIndex);
-				int roomObj = Utilities.randomBetween(rnd, minInRoom, maxInRoom);
+				int roomObj = MathUtils.randomBetween(rnd, minInRoom, maxInRoom);
 				final List<Pair<Integer, Integer>> positions = r.getMap().entrySet().stream().map(itm -> itm.getKey())
 						.collect(toList());
 				for (int i = 0; i < roomObj; i++) {
 					Pair<Integer, Integer> pii = positions.get(rnd.nextInt(positions.size()));
-					pii = Utilities.sumPair(pii, r.getCenter());
+					pii = MathUtils.sum(pii, r.getCenter());
 					if (this.map.containsKey(pii) && this.map.get(pii).equals(SymbolsType.WALKABLE)) {
 						this.map.put(pii, type);
-						r.getMap().put(Utilities.subPair(pii, r.getCenter()), type);
+						r.getMap().put(MathUtils.subtract(pii, r.getCenter()), type);
 					}
 				}
 			}
@@ -237,6 +270,64 @@ public abstract class AbstractWorldGeneratorBuilder implements WorldGeneratorBui
 		this.haveInitBaseRoom();
 	}
 
+
+	protected boolean canPutRoom(Pair<Integer, Integer> center, Pair<Integer, Integer> doorLink,
+			Pair<Integer, Integer> dir, Room room) {
+		boolean can = true;
+		boolean isNearDoor = false;
+		Pair<Integer, Integer> dd = new Pair<>(doorLink.getKey() + (int) Math.signum(dir.getKey()),
+				doorLink.getValue() + (int) Math.signum(dir.getValue()));
+
+		for (Pair<Integer, Integer> positions : room.getMap().keySet()) {
+			var pii = MathUtils.sum(center, positions);
+			if (this.map.containsKey(pii)) {
+				can = false;
+				break;
+			}
+
+			if (pii.equals(dd) && room.getMap().get(positions).equals(SymbolsType.DOOR)) {
+				isNearDoor = true;
+			}
+		}
+
+		return can && isNearDoor;
+	}
+
+	protected void generateRoom(Pair<Integer, Integer> center, Room room) {
+
+		for (Entry<Pair<Integer, Integer>, SymbolsType> p : room.getMap().entrySet()) {
+			Pair<Integer, Integer> position = MathUtils.sum(center, p.getKey());
+
+			this.map.put(position, p.getValue());
+
+			if (position.getKey() < this.xMin) {
+				this.xMin = position.getKey();
+			}
+			if (position.getKey() > this.xMax) {
+				this.xMax = position.getKey();
+			}
+
+			if (position.getValue() < this.yMin) {
+				this.yMin = position.getValue();
+			}
+			if (position.getValue() > this.yMax) {
+				this.yMax = position.getValue();
+			}
+		}
+
+		this.rooms.add(room);
+	}
+
+	protected Pair<Integer, Integer> getConnectionsLinking() {
+		List<Pair<Integer, Integer>> allDoors = new ArrayList<>();
+		for (Pair<Integer, Integer> p : this.map.keySet()) {
+			if (this.map.get(p).equals(SymbolsType.DOOR)) {
+				allDoors.add(p);
+			}
+		}
+		return allDoors.get(rnd.nextInt(allDoors.size()));
+	}
+	
 	/**
 	 * check if generate have called 
 	 */
