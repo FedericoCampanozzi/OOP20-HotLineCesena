@@ -19,7 +19,7 @@ import hotlinecesena.model.entities.items.Weapon;
 import hotlinecesena.model.entities.items.WeaponType;
 import hotlinecesena.model.events.ItemPickUpEvent;
 import hotlinecesena.model.events.WeaponPickUpEvent;
-import hotlinecesena.utilities.Utilities;
+import hotlinecesena.utilities.ConverterUtils;
 import hotlinecesena.view.entities.Sprite;
 import hotlinecesena.view.entities.SpriteImpl;
 import hotlinecesena.view.loader.ImageLoader;
@@ -122,7 +122,7 @@ public class WorldViewImpl implements WorldView {
     private void initMap() {
     	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
-            final Point2D point = Utilities.convertPairToPoint2D(p);
+            final Point2D point = ConverterUtils.convertPairToPoint2D(p);
             switch (s) {
             case WALL:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.WALL));
@@ -144,7 +144,7 @@ public class WorldViewImpl implements WorldView {
     private void initItemsAndObstacles() {
     	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
-            final Point2D point = Utilities.convertPairToPoint2D(p);
+            final Point2D point = ConverterUtils.convertPairToPoint2D(p);
             switch (s) {
             case ITEM:
                 tile.setImage(this.pickItemImage(
@@ -180,7 +180,7 @@ public class WorldViewImpl implements WorldView {
     private void initEnemiesAndPlayer() {
     	worldMap.forEach((p, s) -> {
             final ImageView tile = new ImageView();
-            final Point2D point = Utilities.convertPairToPoint2D(p);
+            final Point2D point = ConverterUtils.convertPairToPoint2D(p);
             switch (s) {
             case PLAYER:
                 tile.setImage(proxyImage.getImage(SceneType.GAME, ImageType.PLAYER_RIFLE));
