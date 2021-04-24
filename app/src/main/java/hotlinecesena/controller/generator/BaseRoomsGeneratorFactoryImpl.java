@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.base.Supplier;
+
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.utilities.MathUtils;
 
@@ -21,18 +23,13 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int wMin, final int wMax,
 			final int dMin, final int dMax,
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
+		
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
-		final List<Room> baseRooms = new ArrayList<>();
-		for (int i = 0; i < nBaseRooms; i++) {
-			baseRooms.add(new QuadraticRoom(
+		return this.generateGenericList(nBaseRoomsMin, nBaseRoomsMax, () -> new QuadraticRoom(
 					MathUtils.randomBetween(rnd, wMin, wMax), 
 					MathUtils.randomBetween(rnd, dMin, dMax)
-			));
-		}
-		
-		return baseRooms;
+				));
 	}
 
 	/**
@@ -44,19 +41,14 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int hMin, final int hMax,
 			final int dMin, final int dMax,
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
+		
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
-		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
-		final List<Room> baseRooms = new ArrayList<>();
-		for (int i = 0; i < nBaseRooms; i++) {
-			baseRooms.add(new RectangularRoom(
+		return this.generateGenericList(nBaseRoomsMin, nBaseRoomsMax, () -> new RectangularRoom(
 					MathUtils.randomBetween(rnd, wMin, wMax), 
 					MathUtils.randomBetween(rnd, hMin, hMax),
 					MathUtils.randomBetween(rnd, dMin, dMax)
-			));
-		}
-		
-		return baseRooms;
+				));
 	}
 	
 	/**
@@ -67,15 +59,23 @@ public final class BaseRoomsGeneratorFactoryImpl implements BaseRoomsGeneratorFa
 			final int edgeMin, final int edgeMax,
 			final int dMin, final int dMax,
 			final int nBaseRoomsMin, final int nBaseRoomsMax){
+		
+		Random rnd = new Random();
+		rnd.setSeed(JSONDataAccessLayer.SEED);
+		return this.generateGenericList(nBaseRoomsMin, nBaseRoomsMax, () -> new OctagonalRoom(
+					MathUtils.randomBetween(rnd, edgeMin, edgeMax),
+					MathUtils.randomBetween(rnd, dMin, dMax)
+				));
+	}
+	
+	private <X> List<X> generateGenericList(final int nBaseRoomsMin, final int nBaseRoomsMax, final Supplier<X> add){
+		
 		Random rnd = new Random();
 		rnd.setSeed(JSONDataAccessLayer.SEED);
 		final int nBaseRooms = MathUtils.randomBetween(rnd, nBaseRoomsMin, nBaseRoomsMax);
-		final List<Room> baseRooms = new ArrayList<>();
+		final List<X> baseRooms = new ArrayList<>();
 		for (int i = 0; i < nBaseRooms; i++) {
-			baseRooms.add(new OctagonalRoom(
-					MathUtils.randomBetween(rnd, edgeMin, edgeMax),
-					MathUtils.randomBetween(rnd, dMin, dMax)
-			));
+			baseRooms.add(add.get());
 		}
 		
 		return baseRooms;
