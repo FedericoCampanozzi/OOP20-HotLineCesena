@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import hotlinecesena.model.dataccesslayer.DataAccessLayer;
 import hotlinecesena.model.dataccesslayer.JSONDataAccessLayer;
 import hotlinecesena.model.events.Event;
+import hotlinecesena.model.events.GameBus;
 import hotlinecesena.model.events.Publisher;
-import hotlinecesena.model.events.PublisherComponent;
 import hotlinecesena.model.events.Subscriber;
 import javafx.geometry.Point2D;
 
@@ -35,7 +35,7 @@ public abstract class AbstractEntity implements Entity {
         this.position = Objects.requireNonNull(position);
         this.width = width;
         this.height = height;
-        publisher = new PublisherComponent();
+        publisher = new GameBus();
     }
 
     @Override

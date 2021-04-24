@@ -1,7 +1,8 @@
 package hotlinecesena.model.events;
 
-import java.util.Arrays;
 import java.util.List;
+
+import org.apache.commons.lang3.ClassUtils;
 
 import hotlinecesena.model.entities.Entity;
 
@@ -20,7 +21,7 @@ public abstract class AbstractEvent implements Event {
      * @param source the entity that has triggered this event.
      */
     protected <E extends Entity> AbstractEvent(final E source) {
-        sourceInterfaces = Arrays.asList(source.getClass().getInterfaces());
+        sourceInterfaces = ClassUtils.getAllInterfaces(source.getClass());
     }
 
     @Override
