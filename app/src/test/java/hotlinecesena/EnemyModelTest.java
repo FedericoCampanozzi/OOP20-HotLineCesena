@@ -19,16 +19,17 @@ import javafx.geometry.Point2D;
 
 class EnemyModelTest {
 
-    private static final int OUT_OF_RANGE = 9;
+    private static final int OUT_OF_RANGE = 100;
 
     @Test
     void enemyIdle() {
         final Enemy idle = new EnemyImpl(new Point2D(0, 0), new NaiveInventoryImpl(), 0, EnemyType.IDLE, Set.of(), Set.of());
+        final Point2D target = new Point2D(OUT_OF_RANGE, OUT_OF_RANGE);
 
         Point2D current = idle.getPosition();
 
         // enemy remains stationary
-        idle.move(idle.getAI().getNextMove(null, false, null));
+        idle.move(idle.getAI().getNextMove(target, false, Set.of()));
         assertEquals(current, idle.getPosition());
 
     }
@@ -41,24 +42,25 @@ class EnemyModelTest {
             private static final long serialVersionUID = 1L;
 
         { add(new Point2D(0, 0)); add(new Point2D(1, 0)); add(new Point2D(1, 1)); add(new Point2D(0, 1)); }};
+        final Point2D target = new Point2D(OUT_OF_RANGE, OUT_OF_RANGE);
         final Enemy patrol = new EnemyImpl(new Point2D(0, 0), new NaiveInventoryImpl(), 0, EnemyType.PATROLLING, walkable, Set.of());
 
-        assertEquals(DirectionList.EAST.get(), patrol.getAI().getNextMove(null, false, walkable));
+        assertEquals(DirectionList.EAST.get(), patrol.getAI().getNextMove(target, false, walkable));
 
         // moves clockwise
-        patrol.move(patrol.getAI().getNextMove(null, false, walkable));
+        patrol.move(patrol.getAI().getNextMove(target, false, walkable));
         assertEquals(new Point2D(1, 0), patrol.getPosition());
 
         // moves clockwise
-        patrol.move(patrol.getAI().getNextMove(null, false, walkable));
+        patrol.move(patrol.getAI().getNextMove(target, false, walkable));
         assertEquals(new Point2D(1, 1), patrol.getPosition());
 
         // moves clockwise
-        patrol.move(patrol.getAI().getNextMove(null, false, walkable));
+        patrol.move(patrol.getAI().getNextMove(target, false, walkable));
         assertEquals(new Point2D(0, 1), patrol.getPosition());
 
         // moves clockwise
-        patrol.move(patrol.getAI().getNextMove(null, false, walkable));
+        patrol.move(patrol.getAI().getNextMove(target, false, walkable));
         assertEquals(new Point2D(0, 0), patrol.getPosition());
     }
 
